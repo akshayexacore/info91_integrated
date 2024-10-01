@@ -1,0 +1,3 @@
+
+
+extension EnumParser on String {}

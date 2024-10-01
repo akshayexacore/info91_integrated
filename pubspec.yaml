@@ -1,0 +1,99 @@
+name: info91
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.0
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  intl: ^0.17.0
+  get: ^4.6.6
+  flutter_svg: ^1.1.4
+  cached_network_image: ^3.3.1
+  shared_preferences: ^2.0.15
+  image_picker: ^0.8.5+3
+  fluttertoast: ^8.0.9
+  path_provider: ^2.0.11
+  progress_dialog_null_safe: ^1.0.7
+  image_cropper: ^5.0.1
+  dio: ^4.0.6
+  advance_animated_progress_indicator: ^0.0.1
+  flutter_image_compress: ^2.1.0
+  country_picker: ^2.0.25
+  phone_numbers_parser: ^8.2.1
+  pinput: ^4.0.0
+  file_picker: ^6.2.0
+  http_interceptor: ^2.0.0-beta.8
+  emoji_picker_flutter: ^2.2.0
+  logger:
+  story: ^1.1.0
+  dismissible_page: ^1.0.2
+  visibility_detector: ^0.4.0+2
+  flutter_screenutil: ^5.9.3
+  google_fonts: ^6.2.1
+  
+  xid: ^1.2.1
+  flutter_linkify: ^6.0.0
+  blurrycontainer: ^2.1.0
+
+  permission_handler: ^11.3.1
+  url_launcher: ^6.3.0
+  toggle_switch: ^2.3.0
+  readmore: ^3.0.0
+ 
+
+
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.11.0
+  win32: ^5.5.4
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: false
+  image_path: "assets/images/app_new_icon.png"
+
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    # Add assets from the images directory to the application.
+    - assets/images/
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/poppins/Poppins-Black.ttf
+        - asset: assets/fonts/poppins/Poppins-Bold.ttf
+        - asset: assets/fonts/poppins/Poppins-ExtraBold.ttf
+        - asset: assets/fonts/poppins/Poppins-Medium.ttf
+        - asset: assets/fonts/poppins/Poppins-Regular.ttf
+        - asset: assets/fonts/poppins/Poppins-SemiBold.ttf
