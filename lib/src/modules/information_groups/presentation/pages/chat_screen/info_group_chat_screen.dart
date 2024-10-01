@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -218,8 +219,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                 Positioned.fill(
                                   child: Container(
                                       color:
-                                          const Color.fromRGBO(76, 175, 80, 1)
-                                              .withOpacity(.3)),
+                                          AppColors.primary.withOpacity(0.1)),
                                 )
                             ],
                           ),
@@ -349,18 +349,18 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               ),
               InkWell(
                 onTap: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => ContactList(
-                  //         contacts: [],
-                  //         onSubmitFunction: (contactList) {
-                  //           print("contactlist$contactList");
-                  //           chatController.sendMessage(MessageType.contact,
-                  //               contactList: contactList);
-                  //         },
-                  //       ),
-                  //     ));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ContactList(
+                          contacts: Variables.userContact,
+                          onSubmitFunction: (contactList) {
+                            print("contactlist$contactList");
+                            chatController.sendMessage(MessageType.contact,
+                                contactList: contactList);
+                          },
+                        ),
+                      ));
 
                   // pickFiles("Video", context, "");
                 },
@@ -514,7 +514,7 @@ class ChatMessage {
   final String? filePath;
   final bool isSelcted;
   final bool? isReplay;
-  final List<dynamic>? contactList;
+  final List<Contact>? contactList;
 
   ChatMessage({
     this.isReplay,
@@ -542,7 +542,7 @@ class ChatMessage {
     String? filePath,
     bool? isSelcted,
     bool? isReplay,
-    List<dynamic>? contactList,
+    List<Contact>? contactList,
   }) {
     return ChatMessage(
       message: message ?? this.message,

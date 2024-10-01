@@ -2,6 +2,7 @@ import 'dart:io';
 
 
 import 'package:flutter/services.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,7 @@ class ChatScreenController extends GetxController {
     isGalleryVisible.value = false;
   } //imageanddocumenandvideoselctionfunction var imageFile = Rx<File?>(null);
 
-  void sendMessage(MessageType type, {List<dynamic>? contactList}) {
+  void sendMessage(MessageType type, {List<Contact>? contactList}) {
     var xid = Xid();
     print(xid);
     messages.insert(

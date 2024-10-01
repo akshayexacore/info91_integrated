@@ -73,7 +73,7 @@ class Chat {
 }
 
 class ContactListCard extends StatelessWidget {
-  final Uint8List avatar;
+  final Uint8List? avatar;
   final String contactName;
   final bool value;
   final VoidCallback onCange;
@@ -89,10 +89,8 @@ class ContactListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     print("cccccccccccccc$avatar");
     return ListTile(
-        leading: AppCustomCirleProfileIamge(
-          isStringImag: false,
-          memoryImage: avatar,
-          radius: 25.r,
+        leading: buildContactAvatar(avatar,contactName
+          
         ),
         title: Text(
           contactName,
@@ -105,6 +103,7 @@ class ContactListCard extends StatelessWidget {
               radius: 12.5,
               iconColor: value ? AppColors.white : Colors.transparent,
             ),
-        onTap: onCange);
+        onTap: onCange
+        );
   }
 }

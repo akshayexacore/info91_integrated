@@ -66,6 +66,7 @@ dependencies:
   url_launcher: ^6.3.0
   toggle_switch: ^2.3.0
   readmore: ^3.0.0
+  flutter_contacts: 
  
 
 

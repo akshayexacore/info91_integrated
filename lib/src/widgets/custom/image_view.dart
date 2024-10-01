@@ -3,7 +3,9 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:info91/src/configs/app_styles.dart';
 
 class AppNetworkImage extends StatelessWidget {
   const AppNetworkImage(this.url,
@@ -133,7 +135,7 @@ class AppCustomCirleProfileIamge extends StatelessWidget {
   radius: radius,
   backgroundImage:(isStringImag!=true && memoryImage?.isNotEmpty==true && memoryImage!=null)
       ? MemoryImage(memoryImage!)
-      :imagePath!=null?NetworkImage(imagePath!):null as ImageProvider, // Set backgroundImage to null if avatar is empty
+      :imagePath!=null?NetworkImage(imagePath!):null , // Set backgroundImage to null if avatar is empty
   child: memoryImage?.isEmpty==true &&isStringImag==false
       ? ClipOval(
           child: Image.asset(
@@ -152,5 +154,31 @@ class AppCustomCirleProfileIamge extends StatelessWidget {
           ),
         ):null, )// Show image if avatar is not empty
 ;
+  }
+}
+Widget buildContactAvatar(Uint8List? memoryImag,String contactName) {
+  if (memoryImag != null && memoryImag.isNotEmpty) {
+   
+    return CircleAvatar(
+      backgroundImage: MemoryImage(memoryImag),
+    );
+  } 
+  // else if (contact.photo != null && contact.photo!.isNotEmpty) {
+    
+  //   return CircleAvatar(
+  //     backgroundImage: MemoryImage(contact.photo!),
+  //   );
+  // }
+   else {
+    
+    return CircleAvatar(
+      child: Text(
+        contactName != null && contactName!.isNotEmpty
+            ? contactName![0].toUpperCase()  // First letter of name
+            : '?',  // Placeholder if no name
+        style: TextStyle(fontSize: 20),
+      ),
+      backgroundColor: AppColors.appBarBackgroundColor 
+    );
   }
 }
