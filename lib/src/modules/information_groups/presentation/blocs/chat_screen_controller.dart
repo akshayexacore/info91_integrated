@@ -1,16 +1,19 @@
 import 'dart:io';
 
-
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
+import 'package:info91/src/widgets/custom/app_ink_well.dart';
 
 import 'package:intl/intl.dart';
 import 'package:xid/xid.dart';
+import 'dart:math';
 
 class ChatScreenController extends GetxController {
   var isEmojiVisible = false.obs;
@@ -18,6 +21,29 @@ class ChatScreenController extends GetxController {
   final ScrollController scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
   var selectedMessage = <ChatMessage>[].obs;
+
+  OverlayEntry? _overlayEntry;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _disposeOverlayEntry();
+  }
+
+  void _disposeOverlayEntry() {
+    _overlayEntry
+      ?..remove()
+      ..dispose();
+    _overlayEntry = null;
+  }
+
+  final emojis = const [
+    Emoji('👍', 'Thumbs Up', hasSkinTone: true),
+    Emoji('❤️', 'Red Heart'),
+    Emoji('😂', 'Face With Tears of Joy'),
+    Emoji('😭', 'Loudly Crying Face'),
+    Emoji('👎', 'Thumbs Down', hasSkinTone: true),
+  ];
 
   RxList<ChatMessage> messages = [
     ChatMessage(
@@ -93,6 +119,7 @@ class ChatScreenController extends GetxController {
   } //imageanddocumenandvideoselctionfunction var imageFile = Rx<File?>(null);
 
   void sendMessage(MessageType type, {List<Contact>? contactList}) {
+    _disposeOverlayEntry();
     var xid = Xid();
     print(xid);
     messages.insert(
@@ -121,8 +148,9 @@ class ChatScreenController extends GetxController {
   }
 
 //handling both selction and deltion and tap and long press in sllection method
-  messageOntapfunction(int index, {bool isOntap = false}) {
+  messageOntapfunction(int index, {bool isOntap = false, Offset? position}) {
     if (isOntap) {
+      _disposeOverlayEntry();
       if (messages[index].isSelcted == true) {
         selectedMessage.removeWhere((message) {
           return messages[index].id == message.id;
@@ -131,16 +159,28 @@ class ChatScreenController extends GetxController {
         selectedMessage.add(messages[index]);
       }
     } else {
-      if (selectedMessage.contains(messages[index].id)) {
+      if (selectedMessage.isEmpty) {
+        _showOverlay(position!, index);
+      } else {
+        _disposeOverlayEntry();
+      }
+   
+          
+      if (selectedMessage.any((message) => message.id == messages[index].id)) {
         selectedMessage
-            .removeWhere((message) => messages[index].id == message.id);
+            .removeWhere((message) => message.id == messages[index].id);
       } else {
         selectedMessage.add(messages[index]);
       }
     }
-    messages[index] = messages[index]
-        .copyWith(isSelcted: isOntap ?checkSelcetionExist()? !messages[index].isSelcted: false : !messages[index].isSelcted);
-    print(selectedMessage);
+    messages[index] = messages[index].copyWith(
+        isSelcted: isOntap
+            ? checkSelcetionExist()
+                ? !messages[index].isSelcted
+                : false
+            : !messages[index].isSelcted);
+
+    print("selectedMessage$selectedMessage");
   }
 
   int messageSelectedcount() {
@@ -170,7 +210,7 @@ class ChatScreenController extends GetxController {
   }
 
   void copySelectedMessages(BuildContext context) {
-    print("object${checkOnlySelectedMessageIsText()}");
+    _disposeOverlayEntry();
     if (checkOnlySelectedMessageIsText()) {
       String copiedText = selectedMessage.map((id) => id.message).join('\n');
       print("object$copiedText");
@@ -184,5 +224,70 @@ class ChatScreenController extends GetxController {
         messages[i] = messages[i].copyWith(isSelcted: false);
       }
     }
+  }
+
+  void _showOverlay(Offset position, int index) {
+    double height = 40.0;
+
+    double dx = min(Get.mediaQuery.size.width - 180, position.dx);
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Stack(
+        children: [
+          Positioned(
+            top: position.dy - (height - 4),
+            left: dx,
+            child: SizedBox(
+              height: height,
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(AppRadii.medium),
+                    color: AppColors.white,
+                  ),
+                  child: Row(
+                    children: emojis
+                        .map(
+                          (e) => Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: AppInkWell(
+                              borderRadius: 10,
+                              onTap: () {
+                                if (messages[index].reaction == e.emoji) {
+                                  messages[index].reaction = '';
+                                } else {
+                                  messages[index].reaction = e.emoji;
+                                }
+                                //chats.refresh();
+                                selectedMessage.clear();
+                                _disposeOverlayEntry();
+                              },
+                              child: SizedBox(
+                                height: 26,
+                                width: 26,
+                                child: Center(
+                                  child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: Text(
+                                      e.emoji,
+                                      style: const TextStyle(fontSize: 26),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    Overlay.of(Get.overlayContext!).insert(_overlayEntry!);
   }
 }

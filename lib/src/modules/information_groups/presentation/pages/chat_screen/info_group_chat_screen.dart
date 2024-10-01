@@ -196,33 +196,42 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         msgdate =
                             formatMessageTimestamp(message.dateTime, index);
 
-                        return InkWell(
-                          highlightColor: AppColors.transparent,
-                          splashColor: AppColors.transparent,
-                          onTap: () {
-                            chatController.messageOntapfunction(index,
-                                isOntap: true);
-                          },
-                          onLongPress: () {
-                            chatController.messageOntapfunction(index);
-                          },
-                          child: Stack(
-                            children: [
-                              Align(
-                                  alignment: isMe
-                                      ? Alignment.centerRight
-                                      : Alignment.centerLeft,
-                                  child: BuildMessageWidget(
-                                    messageModel: message,
-                                  )),
-                              if (chatController.messages[index].isSelcted)
-                                Positioned.fill(
-                                  child: Container(
-                                      color:
-                                          AppColors.primary.withOpacity(0.1)),
-                                )
-                            ],
-                          ),
+                        return  LayoutBuilder(builder: (context, constraints) {
+                            return InkWell(
+                              highlightColor: AppColors.transparent,
+                              splashColor: AppColors.transparent,
+                              onTap: () {
+                                chatController.messageOntapfunction(index,
+                                    isOntap: true);
+                              },
+                              onLongPress: () {
+                                var position ;
+                                RenderBox? box = context.findRenderObject() as RenderBox?;
+                                      if (box != null) {
+                                         position = box.localToGlobal(Offset.zero);
+                                         
+                                      }
+                                    chatController.messageOntapfunction(index,position: position);                
+                              },
+                              child: Stack(
+                                children: [
+                                  Align(
+                                      alignment: isMe
+                                          ? Alignment.centerRight
+                                          : Alignment.centerLeft,
+                                      child: BuildMessageWidget(
+                                        messageModel: message,
+                                      )),
+                                  if (chatController.messages[index].isSelcted)
+                                    Positioned.fill(
+                                      child: Container(
+                                          color:
+                                              AppColors.primary.withOpacity(0.1)),
+                                    )
+                                ],
+                              ),
+                            );
+                          }
                         );
                       },
                     ),
@@ -514,6 +523,7 @@ class ChatMessage {
   final String? filePath;
   final bool isSelcted;
   final bool? isReplay;
+   String reaction;
   final List<Contact>? contactList;
 
   ChatMessage({
@@ -524,6 +534,7 @@ class ChatMessage {
     this.filePath,
     this.contactList,
     required this.time,
+    this.reaction='',
     this.isSelcted = false,
     required this.message,
     required this.senderId,
@@ -541,6 +552,7 @@ class ChatMessage {
     MessageStatus? status,
     String? filePath,
     bool? isSelcted,
+    String ? reaction,
     bool? isReplay,
     List<Contact>? contactList,
   }) {
@@ -549,6 +561,7 @@ class ChatMessage {
       senderId: senderId ?? this.senderId,
       isRead: isRead ?? this.isRead,
       id: id ?? this.id,
+      reaction: reaction??this.reaction,
       isReplay: isReplay ?? this.isReplay,
       time: time ?? this.time,
       dateTime: dateTime ?? this.dateTime,
