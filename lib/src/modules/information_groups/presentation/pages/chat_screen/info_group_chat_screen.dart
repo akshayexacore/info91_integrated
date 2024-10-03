@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 
@@ -18,7 +16,6 @@ import 'package:info91/src/modules/information_groups/presentation/pages/chat_sc
 import 'package:info91/src/modules/information_groups/presentation/pages/profile_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
-
 
 import 'package:intl/intl.dart';
 
@@ -140,7 +137,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               children: [
                 //AppBAr
                 CustomAppBar(
-                  onBackButtonPress: chatController.onBackButtonPress,
+                  onBackButtonPress: (){
+                    chatController.onBackButtonPress();
+                  },
                   isPic:
                       chatController.messageSelectedcount() != 0 ? false : true,
                   imageUrl: "",
@@ -156,9 +155,14 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       : "Information Groups",
                   actionWidget: [
                     if (chatController.messageSelectedcount() != 0) ...[
-                      if(chatController.checkOnlySelectedMessageIsText())IconButton(onPressed: (){
-                        chatController.copySelectedMessages(context);
-                      }, icon:Icon(Icons.copy),color: AppColors.white, ),
+                      if (chatController.checkOnlySelectedMessageIsText())
+                        IconButton(
+                          onPressed: () {
+                            chatController.copySelectedMessages(context);
+                          },
+                          icon: Icon(Icons.copy),
+                          color: AppColors.white,
+                        ),
                       CustomPopupmenu(
                           onSelected: (value) {
                             if (value == 1) {}
@@ -197,43 +201,44 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         msgdate =
                             formatMessageTimestamp(message.dateTime, index);
 
-                        return  LayoutBuilder(builder: (context, constraints) {
-                            return InkWell(
-                              highlightColor: AppColors.transparent,
-                              splashColor: AppColors.transparent,
-                              onTap: () {
-                                chatController.messageOntapfunction(index,
-                                    isOntap: true);
-                              },
-                              onLongPress: () {
-                                var position ;
-                                RenderBox? box = context.findRenderObject() as RenderBox?;
-                                      if (box != null) {
-                                         position = box.localToGlobal(Offset.zero);
-                                         
-                                      }
-                                    chatController.messageOntapfunction(index,position: position);                
-                              },
-                              child: Stack(
-                                children: [
-                                  Align(
-                                      alignment: isMe
-                                          ? Alignment.centerRight
-                                          : Alignment.centerLeft,
-                                      child: BuildMessageWidget(
-                                        messageModel: message,
-                                      )),
-                                  if (chatController.messages[index].isSelcted)
-                                    Positioned.fill(
-                                      child: Container(
-                                          color:
-                                              AppColors.primary.withOpacity(0.1)),
-                                    )
-                                ],
-                              ),
-                            );
-                          }
-                        );
+                        return LayoutBuilder(builder: (context, constraints) {
+                          return InkWell(
+                            highlightColor: AppColors.transparent,
+                            splashColor: AppColors.transparent,
+                            onTap: () {
+                              chatController.messageOntapfunction(index,
+                                  isOntap: true);
+                            },
+                            onLongPress: () {
+                              var position;
+                              RenderBox? box =
+                                  context.findRenderObject() as RenderBox?;
+                              if (box != null) {
+                                position = box.localToGlobal(Offset.zero);
+                              }
+                              chatController.messageOntapfunction(index,
+                                  position: position);
+                            },
+                            child: Stack(
+                              children: [
+                                Align(
+                                    alignment: isMe
+                                        ? Alignment.centerRight
+                                        : Alignment.centerLeft,
+                                    child: BuildMessageWidget(
+                                      messageModel: message,
+                                    )),
+                          
+                                if (chatController.messages[index].isSelcted)
+                                  Positioned.fill(
+                                    child: Container(
+                                        color:
+                                            AppColors.primary.withOpacity(0.1)),
+                                  )
+                              ],
+                            ),
+                          );
+                        });
                       },
                     ),
                   ),
@@ -524,7 +529,7 @@ class ChatMessage {
   final String? filePath;
   final bool isSelcted;
   final bool? isReplay;
-   String reaction;
+  String reaction;
   final List<Contact>? contactList;
 
   ChatMessage({
@@ -535,7 +540,7 @@ class ChatMessage {
     this.filePath,
     this.contactList,
     required this.time,
-    this.reaction='',
+    this.reaction = '',
     this.isSelcted = false,
     required this.message,
     required this.senderId,
@@ -553,7 +558,7 @@ class ChatMessage {
     MessageStatus? status,
     String? filePath,
     bool? isSelcted,
-    String ? reaction,
+    String? reaction,
     bool? isReplay,
     List<Contact>? contactList,
   }) {
@@ -562,7 +567,7 @@ class ChatMessage {
       senderId: senderId ?? this.senderId,
       isRead: isRead ?? this.isRead,
       id: id ?? this.id,
-      reaction: reaction??this.reaction,
+      reaction: reaction ?? this.reaction,
       isReplay: isReplay ?? this.isReplay,
       time: time ?? this.time,
       dateTime: dateTime ?? this.dateTime,

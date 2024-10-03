@@ -262,6 +262,7 @@ class ChatScreenController extends GetxController {
                                 //chats.refresh();
                                 selectedMessage.clear();
                                 _disposeOverlayEntry();
+                                reSetSelctionMessageList();
                               },
                               child: SizedBox(
                                 height: 26,
@@ -297,15 +298,18 @@ class ChatScreenController extends GetxController {
     }
     else{
       selectedMessage.clear();
-      for(int i=0;i<messages.length;i++){
+     reSetSelctionMessageList();
+
+          }
+    
+  }
+ void  reSetSelctionMessageList(){
+     for(int i=0;i<messages.length;i++){
         if(messages[i].isSelcted){
           messages[i]=messages[i].copyWith(isSelcted: false);
         }
 
 
       }
-
-          }
-    
   }
 }

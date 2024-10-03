@@ -14,6 +14,7 @@ import 'package:info91/src/modules/information_groups/presentation/widgets/texts
 import 'package:info91/src/widgets/custom/custom_divider.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
+import 'package:info91/src/widgets/tiny/app_check_box.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -51,6 +52,7 @@ class BuildMessageWidget extends StatelessWidget {
   Widget _buildTextMessage(ChatMessage message, BuildContext context) {
     bool isMe = message.senderId == "1";
     return commonBuildMessageOuter(
+      message: message,
       context: context,
       isMe: isMe,
       child: Column(
@@ -59,7 +61,6 @@ class BuildMessageWidget extends StatelessWidget {
           Linkify(
             linkStyle: GoogleFonts.poppins(decorationColor: Colors.blue),
             onOpen: (link) async {
-           
               if (!await launchUrl(Uri.parse(link.url))) {
                 throw Exception('Could not launch ${link.url}');
               }
@@ -126,6 +127,7 @@ class BuildMessageWidget extends StatelessWidget {
     return commonBuildMessageOuter(
       context: context,
       isMe: isMe,
+      message: message,
       child: Column(
         children: [
           ListTile(
@@ -340,6 +342,7 @@ class _BuildChatImageState extends State<BuildChatImage> {
 
     return commonBuildMessageOuter(
         context: context,
+        message: widget.message,
         isMe: isMe,
         child: SizedBox(
           width: 250.w,
@@ -480,17 +483,57 @@ Widget _buildMessageStatus(MessageStatus status) {
 Widget commonBuildMessageOuter(
     {required Widget child,
     required BuildContext context,
+    required ChatMessage message,
     required bool isMe}) {
-  return Container(
-      constraints: BoxConstraints(
-        minWidth: MediaQuery.of(context).size.width - 300,
-        maxWidth: MediaQuery.of(context).size.width - 100,
-      ),
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      decoration: BoxDecoration(
-        color: isMe ? AppColors.lightChat : AppColors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: IntrinsicWidth(child: child));
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: message.isSelcted ? 5 : 0),
+    child: Row(
+      mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        if (!isMe && message.isSelcted)
+          AppCheckBox(
+            value: message.isSelcted,
+          ),
+        const SizedBox(
+          width: 5,
+        ),
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+                constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width - 300,
+                  maxWidth: MediaQuery.of(context).size.width - 100,
+                ),
+                padding:const EdgeInsets.all(5),
+                margin: EdgeInsets.symmetric(vertical:message.reaction!=null && message.reaction.isNotEmpty?15: 5, horizontal: 10),
+                decoration: BoxDecoration(
+                  color: isMe ? AppColors.lightChat : AppColors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: IntrinsicWidth(child: child)),
+            Positioned(
+              bottom: -4,
+              right: isMe ? null : AppSpacings.xxSmall2,
+              left: isMe ? AppSpacings.xxSmall2 : null,
+              child: Text(
+                message.reaction,
+                style: const TextStyle(fontSize: 20),
+              ),
+            )
+          ],
+        ),
+        SizedBox(
+          width: 5,
+        ),
+        if (isMe && message.isSelcted)
+          AppCheckBox(
+            value: message.isSelcted,
+          ),
+        const SizedBox(
+          width: 5,
+        ),
+      ],
+    ),
+  );
 }
