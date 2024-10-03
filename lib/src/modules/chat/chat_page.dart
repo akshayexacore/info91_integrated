@@ -41,7 +41,7 @@ class ChatPage extends StatelessWidget {
                     ? _buildPrimaryAppBar(
                         canPop: canPop, key: const Key('_buildPrimaryAppBar'))
                     : _buildSelectedAppBar(
-                        canPop: canPop, key: const Key('_buildSelectedAppBar')),
+                        canPop: canPop, key: const Key('_buildSelectedAppBar'),selectedCount: _controller.selectedChatIndexes.length.toString()),
               ),
               Expanded(
                 child: Obx(() {
@@ -220,11 +220,12 @@ class ChatPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSelectedAppBar({required bool canPop, Key? key}) {
+  Widget _buildSelectedAppBar({required bool canPop, Key? key,required String selectedCount}) {
     return AppAppBar(
       showSearch: false,
       leadingLeftPadding: false,
       leadingPadding: 10,
+
       leading: Row(
         children: [
           AppBackButton(
@@ -234,27 +235,25 @@ class ChatPage extends StatelessWidget {
           const SizedBox(
             width: 15,
           ),
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Arya',
-                  style: TextStyle(
+        
+              Text(selectedCount,
+                  style:const  TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: AppColors.white,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis),
-              if (true)
-                Text(
-                  'Online',
-                  style: TextStyle(
-                    color: AppColors.greenAccent,
-                    fontSize: AppFontSizes.xxxSmall,
-                  ),
-                ),
-            ],
-          ),
+              // if (true)
+              //   Text(
+              //     'Online',
+              //     style: TextStyle(
+              //       color: AppColors.greenAccent,
+              //       fontSize: AppFontSizes.xxxSmall,
+              //     ),
+              //   ),
+           
+          
           const SizedBox(
             width: 8,
           ),
