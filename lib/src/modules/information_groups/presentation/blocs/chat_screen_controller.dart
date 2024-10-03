@@ -290,4 +290,22 @@ class ChatScreenController extends GetxController {
     );
     Overlay.of(Get.overlayContext!).insert(_overlayEntry!);
   }
+  void onBackButtonPress(){
+    _disposeOverlayEntry();
+    if(selectedMessage.isEmpty){
+      Get.back();
+    }
+    else{
+      selectedMessage.clear();
+      for(int i=0;i<messages.length;i++){
+        if(messages[i].isSelcted){
+          messages[i]=messages[i].copyWith(isSelcted: false);
+        }
+
+
+      }
+
+          }
+    
+  }
 }

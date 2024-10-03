@@ -16,6 +16,7 @@ class CustomAppBar extends StatelessWidget {
 
   final Function? onChangeFunction;
   final List<Widget>? actionWidget;
+  final VoidCallback? onBackButtonPress; 
   const CustomAppBar({
     required this.appBarName,
     this.onChangeFunction,
@@ -24,7 +25,7 @@ class CustomAppBar extends StatelessWidget {
     this.isTextield = false,
     super.key,
     this.imageUrl,
-    this.imageOntap, this.textEditingController,
+    this.imageOntap, this.textEditingController, this.onBackButtonPress,
   });
 
   @override
@@ -54,7 +55,12 @@ class CustomAppBar extends StatelessWidget {
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  onWillPop();
+                  if(onBackButtonPress!=null){
+                    onBackButtonPress!();
+                  }else{
+                     onWillPop();
+                  }
+                 
                 },
               ),
               SizedBox(

@@ -140,6 +140,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               children: [
                 //AppBAr
                 CustomAppBar(
+                  onBackButtonPress: chatController.onBackButtonPress,
                   isPic:
                       chatController.messageSelectedcount() != 0 ? false : true,
                   imageUrl: "",
