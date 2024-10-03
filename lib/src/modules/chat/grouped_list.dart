@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -87,6 +88,8 @@ class _GroupedListState<T, E> extends State<GroupedList<T, E>> {
     return Stack(
       children: [
         ListView.builder(
+          physics: AlwaysScrollableScrollPhysics(),
+                      shrinkWrap: true,
           controller: _controller,
           itemBuilder: (context, index) {
             return Column(
@@ -126,7 +129,8 @@ class _GroupedListState<T, E> extends State<GroupedList<T, E>> {
     if (index < widget.elements.length - 1 &&
         widget.groupHeaderBuilder != null) {
       final cur = widget.elements[index];
-      final next = widget.elements[index + 1];
+      final next = widget.elements[index + 1];print("the difrrents$next  $next");
+      print("the difrrents${widget.groupComparator!(widget.groupBy(cur), widget.groupBy(next))}");
       if (widget.groupComparator!(widget.groupBy(cur), widget.groupBy(next)) >
           0) {
         return VisibilityDetector(

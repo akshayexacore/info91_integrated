@@ -45,7 +45,7 @@ class ChatScreenController extends GetxController {
     Emoji('👎', 'Thumbs Down', hasSkinTone: true),
   ];
 
-  RxList<ChatMessage> messages = [
+  RxList<ChatMessage> messages = <ChatMessage>[
     ChatMessage(
         message: "Good Morning, Have a Good Day!",
         id: "1",
@@ -54,7 +54,7 @@ class ChatScreenController extends GetxController {
         status: MessageStatus.read,
         messageType: MessageType.image,
         isRead: true,
-        dateTime: DateTime.now()),
+        dateTime:   DateTime.parse('2024-06-20'),),
     ChatMessage(
         message: "Good Morning !",
         senderId: "1",
@@ -63,7 +63,7 @@ class ChatScreenController extends GetxController {
         isRead: false,
         status: MessageStatus.read,
         messageType: MessageType.text,
-        dateTime: DateTime.now()),
+        dateTime: DateTime.parse('2024-04-20'),),
     ChatMessage(
         message: "https://pub.dev/packages/linkify!",
         senderId: "2",
@@ -72,7 +72,7 @@ class ChatScreenController extends GetxController {
         status: MessageStatus.delivered,
         time: "1:00 PM",
         messageType: MessageType.text,
-        dateTime: DateTime.now()),
+        dateTime: DateTime.parse('2024-03-20')),
     ChatMessage(
         message: "https://chatgpt.com/c/a49ae773-f7cd-477c-a7ab-5cca063d47d7",
         senderId: "1",
@@ -81,7 +81,8 @@ class ChatScreenController extends GetxController {
         id: "4",
         isRead: false,
         status: MessageStatus.delivered,
-        dateTime: DateTime.now())
+        dateTime:  DateTime.parse('2024-02-20')
+        )
   ].obs;
 
   final picker = ImagePicker();
@@ -132,7 +133,7 @@ class ChatScreenController extends GetxController {
             contactList: contactList,
             time: getCurrentTime(),
             status: MessageStatus.sent,
-            dateTime: DateTime.now()));
+            dateTime: DateTime.parse(getCurrentDate())));
     scrollController.animateTo(
       0.0,
       duration: Duration(milliseconds: 300),
@@ -312,4 +313,13 @@ class ChatScreenController extends GetxController {
 
       }
   }
+ 
+
+String getCurrentDate() {
+  DateTime now = DateTime.now();
+  DateFormat formatter = DateFormat('yyyy-MM-dd');
+  String formattedDate = formatter.format(now);
+  return formattedDate;
+}
+
 }

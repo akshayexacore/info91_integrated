@@ -37,4 +37,4 @@ Widget greynonBoldText(String name, {double? size}) {
   );
 }
  TextStyle chatTextstyle= GoogleFonts.poppins(
-                                  fontSize: 15.sp, color: AppColors.text,fontWeight: FontWeight.w400);
+                                  fontSize: 14.sp, color: AppColors.text,fontWeight: FontWeight.w400);

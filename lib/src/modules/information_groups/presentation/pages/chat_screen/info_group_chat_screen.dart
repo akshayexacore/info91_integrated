@@ -10,10 +10,12 @@ import 'package:flutter/foundation.dart' as foundation;
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/configs/filepicker.dart';
 import 'package:info91/src/configs/variables.dart';
+import 'package:info91/src/modules/chat/grouped_list.dart';
 import 'package:info91/src/modules/information_groups/presentation/blocs/chat_screen_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/build_message_widget.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/contact_list.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/profile_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/widgets/chat_list_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 
@@ -184,19 +186,44 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     ]
                   ],
                 ),
-                Expanded(
-                  child:
-                      // Container(color: Colors.red,)
-                      Align(
-                    alignment: Alignment.topCenter,
-                    child: ListView.builder(
-                      controller: chatController.scrollController,
-                      itemCount: chatController.messages.length,
-                      reverse: true,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final message = chatController.messages[index];
+
+                  Expanded(
+                child: Obx(() {
+                  debugPrint(chatController.messages.isEmpty.toString());
+                  return GroupedList<ChatMessage , DateTime>(
+                    controller: chatController.scrollController,
+                    elements: chatController.messages,
+                    groupBy: (element) => element.dateTime,
+                    groupComparator: (value1, value2) =>
+                        value1.compareTo(value2),
+                    groupHeaderBuilder: (index) => Column(
+                      children: [
+                        const SizedBox(
+                          height: AppSpacings.small10,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius: BorderRadius.circular(20)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppPaddings.xSmall,
+                            vertical: AppPaddings.xxxSmall4,
+                          ),
+                          child: Text(
+                            DateFormat("MMM dd, yyyy")
+                                .format(chatController.messages[index].dateTime),
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: AppSpacings.small10,
+                        ),
+                      ],
+                    ),
+                    indexedItemBuilder: (context, index) {final message = chatController.messages[index];
                         bool isMe = message.senderId == "1";
                         msgdate =
                             formatMessageTimestamp(message.dateTime, index);
@@ -238,11 +265,70 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                               ],
                             ),
                           );
-                        });
-                      },
-                    ),
-                  ),
-                ),
+                        });}
+                  );
+                }),
+              ),
+                
+                // Expanded(
+                //   child:
+                //       // Container(color: Colors.red,)
+                //       Align(
+                //     alignment: Alignment.topCenter,
+                //     child: ListView.builder(
+                //       controller: chatController.scrollController,
+                //       itemCount: chatController.messages.length,
+                //       reverse: true,
+                //       physics: AlwaysScrollableScrollPhysics(),
+                //       shrinkWrap: true,
+                //       itemBuilder: (context, index) {
+                //         final message = chatController.messages[index];
+                //         bool isMe = message.senderId == "1";
+                //         msgdate =
+                //             formatMessageTimestamp(message.dateTime, index);
+
+                //         return LayoutBuilder(builder: (context, constraints) {
+                //           return InkWell(
+                //             highlightColor: AppColors.transparent,
+                //             splashColor: AppColors.transparent,
+                //             onTap: () {
+                //               chatController.messageOntapfunction(index,
+                //                   isOntap: true);
+                //             },
+                //             onLongPress: () {
+                //               var position;
+                //               RenderBox? box =
+                //                   context.findRenderObject() as RenderBox?;
+                //               if (box != null) {
+                //                 position = box.localToGlobal(Offset.zero);
+                //               }
+                //               chatController.messageOntapfunction(index,
+                //                   position: position);
+                //             },
+                //             child: Stack(
+                //               children: [
+                //                 Align(
+                //                     alignment: isMe
+                //                         ? Alignment.centerRight
+                //                         : Alignment.centerLeft,
+                //                     child: BuildMessageWidget(
+                //                       messageModel: message,
+                //                     )),
+                          
+                //                 if (chatController.messages[index].isSelcted)
+                //                   Positioned.fill(
+                //                     child: Container(
+                //                         color:
+                //                             AppColors.primary.withOpacity(0.1)),
+                //                   )
+                //               ],
+                //             ),
+                //           );
+                //         });
+                //       },
+                //     ),
+                //   ),
+                // ),
                 Container(
                   padding: EdgeInsets.all(5),
                   width: MediaQuery.of(context).size.width,
