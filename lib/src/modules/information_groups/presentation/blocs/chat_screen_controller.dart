@@ -8,7 +8,10 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/chat_info/chat_info_page.dart';
+import 'package:info91/src/modules/forward/forward_page.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
+import 'package:info91/src/widgets/custom/app_dialog.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 
 import 'package:intl/intl.dart';
@@ -20,6 +23,8 @@ class ChatScreenController extends GetxController {
   RxBool isGalleryVisible = false.obs;
   final ScrollController scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
+  get selectedMoreThanOne => selectedMessage.length != 1;
+
   var selectedMessage = <ChatMessage>[].obs;
 
   OverlayEntry? _overlayEntry;
@@ -47,23 +52,25 @@ class ChatScreenController extends GetxController {
 
   RxList<ChatMessage> messages = <ChatMessage>[
     ChatMessage(
-        message: "Good Morning, Have a Good Day!",
-        id: "1",
-        senderId: "2",
-        time: "1:00 PM",
-        status: MessageStatus.read,
-        messageType: MessageType.image,
-        isRead: true,
-        dateTime:   DateTime.parse('2024-06-20'),),
+      message: "Good Morning, Have a Good Day!",
+      id: "1",
+      senderId: "2",
+      time: "1:00 PM",
+      status: MessageStatus.read,
+      messageType: MessageType.image,
+      isRead: true,
+      dateTime: DateTime.parse('2024-06-20'),
+    ),
     ChatMessage(
-        message: "Good Morning !",
-        senderId: "1",
-        id: " 2",
-        time: "1:00 PM",
-        isRead: false,
-        status: MessageStatus.read,
-        messageType: MessageType.text,
-        dateTime: DateTime.parse('2024-04-20'),),
+      message: "Good Morning !",
+      senderId: "1",
+      id: " 2",
+      time: "1:00 PM",
+      isRead: false,
+      status: MessageStatus.read,
+      messageType: MessageType.text,
+      dateTime: DateTime.parse('2024-04-20'),
+    ),
     ChatMessage(
         message: "https://pub.dev/packages/linkify!",
         senderId: "2",
@@ -81,8 +88,7 @@ class ChatScreenController extends GetxController {
         id: "4",
         isRead: false,
         status: MessageStatus.delivered,
-        dateTime:  DateTime.parse('2024-02-20')
-        )
+        dateTime: DateTime.parse('2024-02-20'))
   ].obs;
 
   final picker = ImagePicker();
@@ -165,8 +171,7 @@ class ChatScreenController extends GetxController {
       } else {
         _disposeOverlayEntry();
       }
-   
-          
+
       if (selectedMessage.any((message) => message.id == messages[index].id)) {
         selectedMessage
             .removeWhere((message) => message.id == messages[index].id);
@@ -210,6 +215,19 @@ class ChatScreenController extends GetxController {
     return false;
   }
 
+
+
+    void onForwardPressed() {
+    _disposeOverlayEntry();
+    Get.toNamed(ForwardPage.routeName)?.then((value) {
+      if (value is bool && value) {
+        selectedMessage.clear();
+      reSetSelctionMessageList();
+      }
+    });
+  }
+  
+
   void copySelectedMessages(BuildContext context) {
     _disposeOverlayEntry();
     if (checkOnlySelectedMessageIsText()) {
@@ -225,6 +243,45 @@ class ChatScreenController extends GetxController {
         messages[i] = messages[i].copyWith(isSelcted: false);
       }
     }
+  }
+
+   deleteSelectedMessage() {
+
+      AppDialog.showDialog(
+      title: 'Delete selected messages?',
+      primaryText: 'Delete for me',
+      secondaryText:"Delete for me",
+      tertiaryText: 'Cancel',
+      arrangeButtonVertically: true,
+      onPrimaryPressed: () {
+        _deleteSelected();
+        Get.back();
+      },
+      onSecondaryPressed: () {
+        _deleteSelected();
+        Get.back();
+      },
+      onTertiaryPressed: () {
+        Get.back();
+      },
+    );
+   
+  }
+   _deleteSelected(){
+   _disposeOverlayEntry();
+ messages.removeWhere((item) => item?.isSelcted == true);
+ selectedMessage.clear();
+   }
+
+  void onInfoPressed() {
+    _disposeOverlayEntry();
+    final chat = messages.firstWhere(
+      (element) => element.id == selectedMessage.first.id,
+    );
+    Get.toNamed(
+      ChatInfoPage.routeName,
+      arguments: chat,
+    );
   }
 
   void _showOverlay(Offset position, int index) {
@@ -292,34 +349,29 @@ class ChatScreenController extends GetxController {
     );
     Overlay.of(Get.overlayContext!).insert(_overlayEntry!);
   }
-  void onBackButtonPress(){
+
+  void onBackButtonPress() {
     _disposeOverlayEntry();
-    if(selectedMessage.isEmpty){
+    if (selectedMessage.isEmpty) {
       Get.back();
-    }
-    else{
+    } else {
       selectedMessage.clear();
-     reSetSelctionMessageList();
-
-          }
-    
+      reSetSelctionMessageList();
+    }
   }
- void  reSetSelctionMessageList(){
-     for(int i=0;i<messages.length;i++){
-        if(messages[i].isSelcted){
-          messages[i]=messages[i].copyWith(isSelcted: false);
-        }
 
-
+  void reSetSelctionMessageList() {
+    for (int i = 0; i < messages.length; i++) {
+      if (messages[i].isSelcted) {
+        messages[i] = messages[i].copyWith(isSelcted: false);
       }
+    }
   }
- 
 
-String getCurrentDate() {
-  DateTime now = DateTime.now();
-  DateFormat formatter = DateFormat('yyyy-MM-dd');
-  String formattedDate = formatter.format(now);
-  return formattedDate;
-}
-
+  String getCurrentDate() {
+    DateTime now = DateTime.now();
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+    String formattedDate = formatter.format(now);
+    return formattedDate;
+  }
 }

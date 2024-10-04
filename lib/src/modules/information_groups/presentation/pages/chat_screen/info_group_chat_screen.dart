@@ -17,7 +17,10 @@ import 'package:info91/src/modules/information_groups/presentation/pages/chat_sc
 import 'package:info91/src/modules/information_groups/presentation/pages/profile_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/chat_list_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
+import 'package:info91/src/widgets/custom/app_app_bar.dart';
+import 'package:info91/src/widgets/custom/build_appbar_widgets.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
+import 'package:info91/src/widgets/tiny/app_back_button.dart';
 
 import 'package:intl/intl.dart';
 
@@ -118,6 +121,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final bool canPop = ModalRoute.of(context)?.canPop ?? false;
     double h = MediaQuery.of(context).size.height;
     return SafeArea(
       child: WillPopScope(
@@ -138,138 +142,152 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             body: Column(
               children: [
                 //AppBAr
-                CustomAppBar(
-                  onBackButtonPress: (){
-                    chatController.onBackButtonPress();
-                  },
-                  isPic:
-                      chatController.messageSelectedcount() != 0 ? false : true,
-                  imageUrl: "",
-                  imageOntap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfileScreen(),
-                        ));
-                  },
-                  appBarName: chatController.messageSelectedcount() != 0
-                      ? chatController.messageSelectedcount().toString()
-                      : "Information Groups",
-                  actionWidget: [
-                    if (chatController.messageSelectedcount() != 0) ...[
-                      if (chatController.checkOnlySelectedMessageIsText())
-                        IconButton(
-                          onPressed: () {
-                            chatController.copySelectedMessages(context);
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: chatController.selectedMessage.isEmpty
+                      ? CustomAppBar(
+                          onBackButtonPress: () {
+                            chatController.onBackButtonPress();
                           },
-                          icon: Icon(Icons.copy),
-                          color: AppColors.white,
-                        ),
-                      CustomPopupmenu(
-                          onSelected: (value) {
-                            if (value == 1) {}
-                            if (value == 2) {
-                              chatController.messages.removeWhere(
-                                  (item) => item?.isSelcted == true);
-                            }
+                          isPic: chatController.messageSelectedcount() != 0
+                              ? false
+                              : true,
+                          imageUrl: "",
+                          imageOntap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfileScreen(),
+                                ));
                           },
-                          itemList: [
-                            popupMenuModel(
-                                name: chatController.messageSelectedcount() == 1
-                                    ? "Copy"
-                                    : "Delete",
-                                value:
-                                    chatController.messageSelectedcount() == 1
-                                        ? 1
-                                        : 2)
-                          ])
-                    ]
-                  ],
+                          appBarName: "Information Groups",
+                          actionWidget: [
+                            if (chatController.messageSelectedcount() != 0) ...[
+                              if (chatController
+                                  .checkOnlySelectedMessageIsText())
+                                IconButton(
+                                  onPressed: () {
+                                    chatController
+                                        .copySelectedMessages(context);
+                                  },
+                                  icon: Icon(Icons.copy),
+                                  color: AppColors.white,
+                                ),
+                              CustomPopupmenu(
+                                  onSelected: (value) {
+                                    if (value == 1) {}
+                                    if (value == 2) {
+                                      chatController.messages.removeWhere(
+                                          (item) => item?.isSelcted == true);
+                                    }
+                                  },
+                                  itemList: [
+                                    popupMenuModel(
+                                        name: chatController
+                                                    .messageSelectedcount() ==
+                                                1
+                                            ? "Copy"
+                                            : "Delete",
+                                        value: chatController
+                                                    .messageSelectedcount() ==
+                                                1
+                                            ? 1
+                                            : 2)
+                                  ])
+                            ]
+                          ],
+                        )
+                      : _buildSelectedAppBar(
+                          canPop: canPop,
+                          key: const Key('_buildInfoSelectedAppBar'),
+                          selectedCount:
+                              chatController.selectedMessage.length.toString()),
                 ),
 
-                  Expanded(
-                child: Obx(() {
-                  debugPrint(chatController.messages.isEmpty.toString());
-                  return GroupedList<ChatMessage , DateTime>(
-                    controller: chatController.scrollController,
-                    elements: chatController.messages,
-                    groupBy: (element) => element.dateTime,
-                    groupComparator: (value1, value2) =>
-                        value1.compareTo(value2),
-                    groupHeaderBuilder: (index) => Column(
-                      children: [
-                        const SizedBox(
-                          height: AppSpacings.small10,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(20)),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppPaddings.xSmall,
-                            vertical: AppPaddings.xxxSmall4,
-                          ),
-                          child: Text(
-                            DateFormat("MMM dd, yyyy")
-                                .format(chatController.messages[index].dateTime),
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: AppSpacings.small10,
-                        ),
-                      ],
-                    ),
-                    indexedItemBuilder: (context, index) {final message = chatController.messages[index];
-                        bool isMe = message.senderId == "1";
-                        msgdate =
-                            formatMessageTimestamp(message.dateTime, index);
-
-                        return LayoutBuilder(builder: (context, constraints) {
-                          return InkWell(
-                            highlightColor: AppColors.transparent,
-                            splashColor: AppColors.transparent,
-                            onTap: () {
-                              chatController.messageOntapfunction(index,
-                                  isOntap: true);
-                            },
-                            onLongPress: () {
-                              var position;
-                              RenderBox? box =
-                                  context.findRenderObject() as RenderBox?;
-                              if (box != null) {
-                                position = box.localToGlobal(Offset.zero);
-                              }
-                              chatController.messageOntapfunction(index,
-                                  position: position);
-                            },
-                            child: Stack(
+                Expanded(
+                  child: Obx(() {
+                    debugPrint(chatController.messages.isEmpty.toString());
+                    return GroupedList<ChatMessage, DateTime>(
+                        controller: chatController.scrollController,
+                        elements: chatController.messages,
+                        groupBy: (element) => element.dateTime,
+                        groupComparator: (value1, value2) =>
+                            value1.compareTo(value2),
+                        groupHeaderBuilder: (index) => Column(
                               children: [
-                                Align(
-                                    alignment: isMe
-                                        ? Alignment.centerRight
-                                        : Alignment.centerLeft,
-                                    child: BuildMessageWidget(
-                                      messageModel: message,
-                                    )),
-                          
-                                if (chatController.messages[index].isSelcted)
-                                  Positioned.fill(
-                                    child: Container(
-                                        color:
-                                            AppColors.primary.withOpacity(0.1)),
-                                  )
+                                const SizedBox(
+                                  height: AppSpacings.small10,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: AppPaddings.xSmall,
+                                    vertical: AppPaddings.xxxSmall4,
+                                  ),
+                                  child: Text(
+                                    DateFormat("MMM dd, yyyy").format(
+                                        chatController
+                                            .messages[index].dateTime),
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: AppSpacings.small10,
+                                ),
                               ],
                             ),
-                          );
-                        });}
-                  );
-                }),
-              ),
-                
+                        indexedItemBuilder: (context, index) {
+                          final message = chatController.messages[index];
+                          bool isMe = message.senderId == "1";
+                          msgdate =
+                              formatMessageTimestamp(message.dateTime, index);
+
+                          return LayoutBuilder(builder: (context, constraints) {
+                            return InkWell(
+                              highlightColor: AppColors.transparent,
+                              splashColor: AppColors.transparent,
+                              onTap: () {
+                                chatController.messageOntapfunction(index,
+                                    isOntap: true);
+                              },
+                              onLongPress: () {
+                                var position;
+                                RenderBox? box =
+                                    context.findRenderObject() as RenderBox?;
+                                if (box != null) {
+                                  position = box.localToGlobal(Offset.zero);
+                                }
+                                chatController.messageOntapfunction(index,
+                                    position: position);
+                              },
+                              child: Stack(
+                                children: [
+                                  Align(
+                                      alignment: isMe
+                                          ? Alignment.centerRight
+                                          : Alignment.centerLeft,
+                                      child: BuildMessageWidget(
+                                        messageModel: message,
+                                      )),
+                                  if (chatController.messages[index].isSelcted)
+                                    Positioned.fill(
+                                      child: Container(
+                                          color: AppColors.primary
+                                              .withOpacity(0.1)),
+                                    )
+                                ],
+                              ),
+                            );
+                          });
+                        });
+                  }),
+                ),
+
                 // Expanded(
                 //   child:
                 //       // Container(color: Colors.red,)
@@ -314,7 +332,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 //                     child: BuildMessageWidget(
                 //                       messageModel: message,
                 //                     )),
-                          
+
                 //                 if (chatController.messages[index].isSelcted)
                 //                   Positioned.fill(
                 //                     child: Container(
@@ -476,6 +494,100 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   color: AppColors.secondary),
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSelectedAppBar(
+      {required bool canPop, Key? key, required String selectedCount}) {
+    return AppAppBar(
+      showSearch: false,
+      leadingLeftPadding: false,
+      leadingPadding: 10,
+      leading: Row(
+        children: [
+          AppBackButton(
+              color: AppColors.white,
+              onPressed: () {
+                chatController.onBackButtonPress();
+              }),
+          const SizedBox(
+            width: 15,
+          ),
+
+          Text(selectedCount,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: AppColors.white,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis),
+          // if (true)
+          //   Text(
+          //     'Online',
+          //     style: TextStyle(
+          //       color: AppColors.greenAccent,
+          //       fontSize: AppFontSizes.xxxSmall,
+          //     ),
+          //   ),
+
+          // const SizedBox(
+          //   width: 8,
+          // ),
+          // Container(
+          //   width: 1,
+          //   color: AppColors.white,
+          //   height: 20,
+          // ),
+        ],
+      ),
+      autoImplyLeading: false,
+      action: Row(
+        key: key,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          buildOption('ic_forward.svg', onPressed: () {
+            chatController.onForwardPressed();
+          }
+              // _controller.onForwardPressed,
+              ),
+
+          buildOption('ic_reply.svg', onPressed: () {}
+              //  _controller.onReplyPressed,
+
+              ),
+
+          Obx(() {
+            if (chatController.checkOnlySelectedMessageIsText()) {
+              return buildOption('ic_content_copy.svg', onPressed: () {
+                chatController.copySelectedMessages(context);
+              });
+            }
+            return SizedBox();
+          }),
+          // Obx(() {
+          //   return
+          buildOption('ic_star.svg', onPressed: () {}
+              //  _controller.onStarPressed,
+              ),
+          // }),
+
+          buildOption(
+            'ic_delete.svg',
+            onPressed: () {
+              chatController.deleteSelectedMessage();
+            }, // _controller.onDeletePressed,
+          ),
+          Obx(() {
+            if (!chatController.selectedMoreThanOne) {
+              return buildOption('ic_info.svg',
+                  onPressed: chatController.onInfoPressed);
+            }
+            return const SizedBox();
+          }),
         ],
       ),
     );

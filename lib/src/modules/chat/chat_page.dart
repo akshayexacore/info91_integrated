@@ -8,6 +8,7 @@ import 'package:info91/src/widgets/custom/app_app_bar.dart';
 import 'package:info91/src/widgets/custom/app_emoji_picker.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/custom/app_popup_menu_button.dart';
+import 'package:info91/src/widgets/custom/build_appbar_widgets.dart';
 import 'package:info91/src/widgets/custom/chat_input_widget.dart';
 import 'package:info91/src/widgets/custom/chat_message_tile.dart';
 import 'package:info91/src/widgets/tiny/app_back_button.dart';
@@ -254,14 +255,14 @@ class ChatPage extends StatelessWidget {
               //   ),
            
           
-          const SizedBox(
-            width: 8,
-          ),
-          Container(
-            width: 1,
-            color: AppColors.white,
-            height: 20,
-          ),
+          // const SizedBox(
+          //   width: 8,
+          // ),
+          // Container(
+          //   width: 1,
+          //   color: AppColors.white,
+          //   height: 20,
+          // ),
         ],
       ),
       autoImplyLeading: false,
@@ -270,32 +271,32 @@ class ChatPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildOption(
+          buildOption(
             'ic_forward.svg',
             onPressed: _controller.onForwardPressed,
           ),
           Obx(() {
             if (!_controller.selectedMoreThanOne) {
-              return _buildOption(
+              return buildOption(
                 'ic_reply.svg',
                 onPressed: _controller.onReplyPressed,
               );
             }
             return const SizedBox();
           }),
-          _buildOption(
+          buildOption(
             'ic_content_copy.svg',
             onPressed: _controller.onCopyPressed,
           ),
           Obx(() {
-            return _buildOption(
+            return buildOption(
               _controller.containsOnlyStarredMessage.isTrue
                   ? 'ic_star_outline.svg'
                   : 'ic_star.svg',
               onPressed: _controller.onStarPressed,
             );
           }),
-          _buildOption(
+          buildOption(
             'ic_delete.svg',
             onPressed: _controller.onDeletePressed,
           ),
@@ -305,7 +306,7 @@ class ChatPage extends StatelessWidget {
                     .firstWhere((element) =>
                         element.id == _controller.selectedChatIndexes.first)
                     .own) {
-              return _buildOption(
+              return buildOption(
                 'ic_info.svg',
                 onPressed: _controller.onInfoPressed,
               );
@@ -317,28 +318,7 @@ class ChatPage extends StatelessWidget {
     );
   }
 
-  Widget _buildOption(
-    String s, {
-    VoidCallback? onPressed,
-  }) {
-    return AppInkWell(
-      borderRadius: 24,
-      onTap: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.all(
-          AppPaddings.small / 2,
-        ),
-        child: SizedBox(
-            height: 24,
-            width: 24,
-            child: Center(
-                child: AppSvgAsset(
-              'assets/images/$s',
-              color: AppColors.white,
-            ))),
-      ),
-    );
-  }
+
 
   Widget _buildAttachmentsMenu({
     VoidCallback? onGalleryPressed,

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/models/chat.dart';
 import 'package:info91/src/modules/chat_info/controllers/chat_info_controller.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/build_message_widget.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/custom/app_message_status.dart';
 import 'package:info91/src/widgets/custom/app_popup_menu_button.dart';
@@ -31,7 +32,8 @@ class ChatInfoPage extends StatelessWidget {
         leadingWidth: 0,
         title: AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
-          child: _buildPrimaryAppBar(canPop: canPop, key: UniqueKey()),
+          child: _buildPrimaryAppBar(
+              canPop: canPop, key: UniqueKey(), name: "Messaeg Info"),
         ),
       ),
       body: Column(
@@ -40,9 +42,23 @@ class ChatInfoPage extends StatelessWidget {
             height: AppSpacings.medium,
           ),
           Obx(() {
-            return ChatMessageTile(
-              chat: _controller.chat.value,
-            );
+            if (_controller.isChatType.value) {
+              return ChatMessageTile(
+                chat: _controller.chat.value,
+              );
+            } else {
+              bool isMe = _controller.chatMessage.senderId == "1";
+              return Stack(
+                children: [
+                  Align(
+                      alignment:
+                          isMe ? Alignment.centerRight : Alignment.centerLeft,
+                      child: BuildMessageWidget(
+                        messageModel: _controller.chatMessage,
+                      )),
+                ],
+              );
+            }
           }),
           const SizedBox(
             height: AppSpacings.small10,
@@ -85,6 +101,7 @@ class ChatInfoPage extends StatelessWidget {
 
   Widget _buildPrimaryAppBar({
     required bool canPop,
+    required String name,
     Key? key,
   }) {
     return Row(
@@ -104,26 +121,26 @@ class ChatInfoPage extends StatelessWidget {
         AppInkWell(
           borderRadius: 100,
           onTap: () {},
-          child: const Row(children: [
-            AppCircleImage(
+          child: Row(children: [
+            const AppCircleImage(
               radius: 22,
               image:
                   'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Arya',
+                Text(name,
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis),
-                if (true)
+                if (false)
                   Text(
                     'Online',
                     style: TextStyle(
