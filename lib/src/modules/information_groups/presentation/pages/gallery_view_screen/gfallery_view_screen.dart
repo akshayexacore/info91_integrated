@@ -67,8 +67,8 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
         Expanded(
           child: TabBarView(controller: _controller, children: [
             imageViewSection(),
-            imageViewSection(),
-            imageViewSection(),
+            imageViewSection(isVideo: true),
+            linksViewSection(),
             docsViewSection(),
           ]),
         )
@@ -76,7 +76,7 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
     );
   }
 
-  Widget imageViewSection() {
+  Widget imageViewSection({bool isVideo=false}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: marginWidth, vertical: 15.h),
       child: GridView.builder(
@@ -88,10 +88,51 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
           mainAxisSpacing: 10.w,
         ),
         itemBuilder: (context, index) => customImageCard(
-          imageUrl: widget.imageList[index],
+          imageUrl: widget.imageList[index],isVideo: isVideo,
           onImageTap: () {},
         ),
       ),
+    );
+  }
+
+  Widget linksViewSection() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: marginWidth, vertical: 15.h),
+      child: ListView.builder(
+          physics: AlwaysScrollableScrollPhysics(),
+          itemCount: 100,
+          itemBuilder: (context, index) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (index == 0)
+                    Text(
+                      "Today",
+                      style: chatTextstyle,
+                    ),
+                  if (index == 3)
+                    Text(
+                      "Yesterday",
+                      style: chatTextstyle,
+                    ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Container(
+                      width: 55.w,
+                      height: 40.h,
+                      color: AppColors.dividerlight,
+                      child:const Center(
+                        child: Icon(Icons.link,color: AppColors.text,)
+                      ),
+                    ),
+                    title: SizedBox(
+                        width: 300.w,
+                        child: Text(
+                          "https://www.example.com",
+                          style: TextStyle(overflow: TextOverflow.ellipsis),
+                        )),
+                  ),
+                ],
+              )),
     );
   }
 
@@ -102,20 +143,29 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
           physics: AlwaysScrollableScrollPhysics(),
           itemCount: 100,
           itemBuilder: (context, index) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if(index==0)Text("Today",style: chatTextstyle,),
-                  if(index==2)Text("Yesterday",style: chatTextstyle,),
+                  if (index == 0)
+                    Text(
+                      "Today",
+                      style: chatTextstyle,
+                    ),
+                  if (index == 2)
+                    Text(
+                      "Yesterday",
+                      style: chatTextstyle,
+                    ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading: Image.asset("assets/images/docs.png",height: 45.sp,fit: BoxFit.fitHeight,),
+                    leading:Image.asset("assets/images/docs.png"),
                     title: SizedBox(
-                    
-                      width: 300.w,
-                      child: Text("File.pdf",style: TextStyle(overflow:TextOverflow.ellipsis ),)),
-                    subtitle:const Text("2.9 MB"),
+                        width: 300.w,
+                        child: Text(
+                          "File.pdf",
+                          style: TextStyle(overflow: TextOverflow.ellipsis),
+                        )),
+                    subtitle: const Text("2.9 MB"),
                   ),
-                  
                 ],
               )),
     );

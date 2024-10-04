@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
@@ -151,7 +152,7 @@ class FilePickerHelper {
                             height: MediaQuery.of(context).size.height / 1.2,
                             child: Center(
                                 child: Image.file(
-                              imageFile,
+                              imageFile,width:  250.w,
                               fit: BoxFit.fitHeight,
                             ))),
                   ),
@@ -284,15 +285,23 @@ class _VideoPlayerWidget extends StatefulWidget {
 
 class _VideoPlayerWidgetState extends State<_VideoPlayerWidget> {
   late VideoPlayerController _controller;
+  late String _formattedDuration;
 
   @override
   void initState() {
     super.initState();
     _controller = VideoPlayerController.file(widget.file)
       ..initialize().then((_) {
-         _controller.play();
-        setState(() {});
+        setState(() {}); 
+        _controller.addListener(() {
+          setState(() {
+            _formattedDuration = _formatDuration(_controller.value.position);
+          });
+        });
       });
+    
+    // Initial formatted duration
+    _formattedDuration = _formatDuration(Duration.zero);
   }
 
   @override
@@ -300,16 +309,38 @@ class _VideoPlayerWidgetState extends State<_VideoPlayerWidget> {
     _controller.dispose();
     super.dispose();
   }
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$minutes:$seconds";
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: _controller.value.isInitialized
-          ? AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: VideoPlayer(_controller),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _controller.value.isInitialized
+            ? SizedBox(
+              width: 250.w,
+              child: AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller),
+                ),
             )
-          : CircularProgressIndicator(), // Show loading indicator while initializing
+            : CircularProgressIndicator(),
+            Slider(
+                  value: _controller.value.position.inSeconds.toDouble(),
+                  min: 0.0,
+                  max: _controller.value.duration.inSeconds.toDouble(),
+                  onChanged: (value) {
+                    setState(() {
+                      _controller.seekTo(Duration(seconds: value.toInt()));
+                    });
+                  },
+                ),
+      ],
     );
   }
 }
