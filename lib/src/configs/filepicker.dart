@@ -140,108 +140,99 @@ class FilePickerHelper {
             // This ensures the material context is available
             color: Colors.transparent,
             child: Container(
+              padding: EdgeInsets.only(
+                bottom:
+                    MediaQuery.of(context).viewInsets.bottom, // Add this line
+              ),
               color: Colors.black,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              child: Stack(
-                children: [
-                  Center(
-                    child: _isVideo(imageFile) // Check if it's a video
-                        ? _VideoPlayerWidget(file: imageFile)
-                        : Container(
-                            height: MediaQuery.of(context).size.height / 1.2,
-                            child: Center(
-                                child: Image.file(
-                              imageFile,width:  250.w,
-                              fit: BoxFit.fitHeight,
-                            ))),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height,
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context)
-                            .viewInsets
-                            .bottom, // Add this line
-                      ),
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 30),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                      size: 30,
-                                    )),
-                              ],
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: marginWidth),
-                                child: TextFormField(
-                                    decoration: InputDecoration(
-                                        fillColor: AppColors.white,
-                                        hintText: "Add a caption.....",
-                                        hintStyle: GoogleFonts.poppins(
-                                            color: AppColors.black,
-                                            fontWeight: FontWeight.w400),
-                                        filled: true,
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                vertical: 10, horizontal: 4),
-                                        border: borderStyle(),
-                                        errorBorder: borderStyle(),
-                                        focusedBorder: borderStyle(),
-                                        enabledBorder: borderStyle(),
-                                        disabledBorder: borderStyle())),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 20),
-                                child: ListTile(
-                                  focusColor: Colors.red,
-                                  title: Text("Akshay",
-                                      style: GoogleFonts.poppins(
-                                        color: AppColors.white,
-                                      )),
-                                  trailing: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        // Handle file upload
-                                        Navigator.pop(context);
-                                      },
-                                      icon: Icon(Icons.send),
-                                      color: Colors.blue,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
+                          IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon:  Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 25.sp,
+                              )),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    Center(
+                      child: _isVideo(imageFile) // Check if it's a video
+                          ? _VideoPlayerWidget(file: imageFile)
+                          : SizedBox(
+                              height: MediaQuery.of(context).size.height / 1.6,
+                              child: Center(
+                                  child: Image.file(
+                                imageFile,
+                                width: MediaQuery.of(context).size.width,
+                                height: 500.h,
+                                fit: BoxFit.fitHeight,
+                              ))),
+                    ),
+                    SizedBox(
+                      height: 60.h,
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: marginWidth),
+                          child: TextFormField(
+                              decoration: InputDecoration(
+                                  fillColor: AppColors.white,
+                                  hintText: "Add a caption.....",
+                                  hintStyle: GoogleFonts.poppins(
+                                      color: AppColors.black,
+                                      fontWeight: FontWeight.w400),
+                                  filled: true,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 4),
+                                  border: borderStyle(),
+                                  errorBorder: borderStyle(),
+                                  focusedBorder: borderStyle(),
+                                  enabledBorder: borderStyle(),
+                                  disabledBorder: borderStyle())),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: ListTile(
+                            focusColor: Colors.red,
+                            title: Text("Akshay",
+                                style: GoogleFonts.poppins(
+                                  color: AppColors.white,
+                                )),
+                            trailing: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: IconButton(
+                                onPressed: () {
+                                  // Handle file upload
+                                  Navigator.pop(context);
+                                },
+                                icon: Icon(Icons.send),
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -292,15 +283,16 @@ class _VideoPlayerWidgetState extends State<_VideoPlayerWidget> {
     super.initState();
     _controller = VideoPlayerController.file(widget.file)
       ..initialize().then((_) {
-        setState(() {}); 
+        setState(() {});
         _controller.addListener(() {
           setState(() {
             _formattedDuration = _formatDuration(_controller.value.position);
           });
         });
       });
-    
+
     // Initial formatted duration
+
     _formattedDuration = _formatDuration(Duration.zero);
   }
 
@@ -309,6 +301,7 @@ class _VideoPlayerWidgetState extends State<_VideoPlayerWidget> {
     _controller.dispose();
     super.dispose();
   }
+
   String _formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     final minutes = twoDigits(duration.inMinutes.remainder(60));
@@ -318,19 +311,46 @@ class _VideoPlayerWidgetState extends State<_VideoPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _controller.value.isInitialized
-            ? SizedBox(
-              width: 250.w,
-              child: AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: marginWidth),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _controller.value.isInitialized
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 500.h,
                   child: VideoPlayer(_controller),
+                )
+              : CircularProgressIndicator(),
+          SizedBox(
+            height: 5.h,
+          ),
+          Row(
+            children: [
+              Text(
+                _formattedDuration,
+                style: TextStyle(color: AppColors.white),
+              ),
+              IconButton(
+                icon: Icon(
+                  _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                  color: AppColors.white,
+                  size: 30.sp,
                 ),
-            )
-            : CircularProgressIndicator(),
-            Slider(
+                onPressed: () {
+                  print("tyes is prsse");
+                  setState(() {
+                    if (_controller.value.isPlaying) {
+                      _controller.pause();
+                    } else {
+                      _controller.play();
+                    }
+                  });
+                },
+              ),
+              Expanded(
+                child: Slider(
                   value: _controller.value.position.inSeconds.toDouble(),
                   min: 0.0,
                   max: _controller.value.duration.inSeconds.toDouble(),
@@ -340,7 +360,15 @@ class _VideoPlayerWidgetState extends State<_VideoPlayerWidget> {
                     });
                   },
                 ),
-      ],
+              ),
+              Text(
+                _formatDuration(_controller.value.duration),
+                style: TextStyle(color: AppColors.white),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

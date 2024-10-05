@@ -24,24 +24,11 @@ class ChatScreenController extends GetxController {
   final ScrollController scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
   get selectedMoreThanOne => selectedMessage.length != 1;
-
+  late ChatMessage replyChat;
+  var isReplay = false.obs;
   var selectedMessage = <ChatMessage>[].obs;
 
   OverlayEntry? _overlayEntry;
-
-  @override
-  void dispose() {
-    super.dispose();
-    _disposeOverlayEntry();
-  }
-
-  void _disposeOverlayEntry() {
-    _overlayEntry
-      ?..remove()
-      ..dispose();
-    _overlayEntry = null;
-  }
-
   final emojis = const [
     Emoji('👍', 'Thumbs Up', hasSkinTone: true),
     Emoji('❤️', 'Red Heart'),
@@ -93,6 +80,19 @@ class ChatScreenController extends GetxController {
 
   final picker = ImagePicker();
   var isTextFieldEmpty = true.obs;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _disposeOverlayEntry();
+  }
+
+  void _disposeOverlayEntry() {
+    _overlayEntry
+      ?..remove()
+      ..dispose();
+    _overlayEntry = null;
+  }
 
   void toggleEmojiPicker() {
     isEmojiVisible.value = !isEmojiVisible.value;
@@ -206,6 +206,27 @@ class ChatScreenController extends GetxController {
     return true;
   }
 
+  void onReplyPressed() {
+    _disposeOverlayEntry();
+    try {
+      final chat = messages.firstWhere(
+        (element) => element.id == selectedMessage.first.id,
+      );
+      isReplay.value = true;
+      selectedMessage.clear();
+      reSetSelctionMessageList();
+      replyChat = chat;
+    } catch (_) {}
+  }
+
+  void onCloseReply() {
+
+    debugPrint("sssssssssssssss");
+    _disposeOverlayEntry();
+   
+    isReplay.value = false;
+  }
+
   bool checkSelcetionExist() {
     for (var message in messages) {
       if (message.isSelcted) {
@@ -215,18 +236,15 @@ class ChatScreenController extends GetxController {
     return false;
   }
 
-
-
-    void onForwardPressed() {
+  void onForwardPressed() {
     _disposeOverlayEntry();
     Get.toNamed(ForwardPage.routeName)?.then((value) {
       if (value is bool && value) {
         selectedMessage.clear();
-      reSetSelctionMessageList();
+        reSetSelctionMessageList();
       }
     });
   }
-  
 
   void copySelectedMessages(BuildContext context) {
     _disposeOverlayEntry();
@@ -245,12 +263,11 @@ class ChatScreenController extends GetxController {
     }
   }
 
-   deleteSelectedMessage() {
-
-      AppDialog.showDialog(
+  deleteSelectedMessage() {
+    AppDialog.showDialog(
       title: 'Delete selected messages?',
       primaryText: 'Delete for me',
-      secondaryText:"Delete for me",
+      secondaryText: "Delete for me",
       tertiaryText: 'Cancel',
       arrangeButtonVertically: true,
       onPrimaryPressed: () {
@@ -265,13 +282,13 @@ class ChatScreenController extends GetxController {
         Get.back();
       },
     );
-   
   }
-   _deleteSelected(){
-   _disposeOverlayEntry();
- messages.removeWhere((item) => item?.isSelcted == true);
- selectedMessage.clear();
-   }
+
+  _deleteSelected() {
+    _disposeOverlayEntry();
+    messages.removeWhere((item) => item?.isSelcted == true);
+    selectedMessage.clear();
+  }
 
   void onInfoPressed() {
     _disposeOverlayEntry();

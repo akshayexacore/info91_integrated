@@ -20,6 +20,7 @@ import 'package:info91/src/modules/information_groups/presentation/widgets/custo
 import 'package:info91/src/widgets/custom/app_app_bar.dart';
 import 'package:info91/src/widgets/custom/build_appbar_widgets.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
+import 'package:info91/src/widgets/custom/reply_chat_message_tile.dart';
 import 'package:info91/src/widgets/tiny/app_back_button.dart';
 
 import 'package:intl/intl.dart';
@@ -355,13 +356,18 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        child: _buildInputField(
-                            chatController.searchController, searchFocusnOde,
+                        child: Obx(() {
+                          return _buildInputField(
+                            chatController.searchController,
+                            searchFocusnOde,
                             () {
-                          chatController.sendMessage(MessageType.text);
-                          chatController.searchController.clear();
+                              chatController.sendMessage(MessageType.text);
+                              chatController.searchController.clear();
 
-                          setState(() {});
+                              setState(() {});
+                            },
+                            showReply: chatController.isReplay.value,
+                          );
                         }),
                       ),
                       Obx(() => chatController.isEmojiVisible.value
@@ -554,12 +560,14 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           }
               // _controller.onForwardPressed,
               ),
-
-          buildOption('ic_reply.svg', onPressed: () {}
-              //  _controller.onReplyPressed,
-
-              ),
-
+          Obx(() {
+            if (!chatController.selectedMoreThanOne) {
+              return buildOption('ic_reply.svg', onPressed: () {
+                chatController.onReplyPressed();
+              });
+            }
+            return const SizedBox();
+          }),
           Obx(() {
             if (chatController.checkOnlySelectedMessageIsText()) {
               return buildOption('ic_content_copy.svg', onPressed: () {
@@ -568,13 +576,14 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             }
             return SizedBox();
           }),
-          // Obx(() {
-          //   return
-          buildOption('ic_star.svg', onPressed: () {}
-              //  _controller.onStarPressed,
-              ),
-          // }),
-
+          Obx(() {
+            if (!chatController.selectedMoreThanOne) {
+              return buildOption('ic_star.svg', onPressed: () {}
+                  //  _controller.onStarPressed,
+                  );
+            }
+            return SizedBox();
+          }),
           buildOption(
             'ic_delete.svg',
             onPressed: () {
@@ -618,90 +627,104 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildInputField(
-      TextEditingController controller, FocusNode focusnode, Function onSend) {
+      TextEditingController controller, FocusNode focusnode, Function onSend,
+      {required bool showReply}) {
     var border = OutlineInputBorder(
       borderSide: BorderSide(color: Colors.transparent),
       borderRadius: BorderRadius.circular(15),
     );
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: SizedBox(
-              height: 50.h,
-              child: TextField(
-                controller: controller,
-                focusNode: focusnode,
-                onTap: () {
-                  chatController.hideEmojiPicker();
-                  chatController.hideGallery();
-                },
-                onChanged: (val) {
-                  chatController.checkTextFieldEmpty(val);
-                },
-                decoration: InputDecoration(
-                  hintText: 'Type your message here',
-                  hintStyle: GoogleFonts.poppins(
-                      fontSize: 12.5.sp,
-                      color: AppColors.text.withOpacity(.75)),
-                  filled: true,
-                  fillColor: AppColors.google,
-                  border: border,
-                  errorBorder: border,
-                  enabledBorder: border,
-                  focusedBorder: border,
-                  prefixIcon: Obx(() => IconButton(
+    return Column(
+      children: [
+        if (showReply)
+          ReplyChatMessageTile(
+            onClose: (){
+              chatController.onCloseReply();
+            },
+            message: chatController.replyChat.message,
+          ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: SizedBox(
+                  height: 50.h,
+                  child: TextField(
+                    controller: controller,
+                    focusNode: focusnode,
+                    onTap: () {
+                      chatController.hideEmojiPicker();
+                      chatController.hideGallery();
+                    },
+                    onChanged: (val) {
+                      chatController.checkTextFieldEmpty(val);
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Type your message here',
+                      hintStyle: GoogleFonts.poppins(
+                          fontSize: 12.5.sp,
+                          color: AppColors.text.withOpacity(.75)),
+                      filled: true,
+                      fillColor: AppColors.google,
+                      border: border,
+                      errorBorder: border,
+                      enabledBorder: border,
+                      focusedBorder: border,
+                      prefixIcon: Obx(() => IconButton(
+                            icon: Icon(
+                              chatController.isEmojiVisible.value
+                                  ? Icons.keyboard
+                                  : Icons.sentiment_satisfied_outlined,
+                              color: AppColors.primary,
+                              size: 24.sp,
+                            ),
+                            onPressed: () {
+                              chatController.toggleEmojiPicker();
+                              print(chatController.isEmojiVisible.value);
+                              if (chatController.isEmojiVisible.isTrue) {
+                                searchFocusnOde.unfocus(); // Hide the keyboard
+                              } else {
+                                searchFocusnOde
+                                    .requestFocus(); // Show the keyboard
+                              }
+                            },
+                          )),
+                      suffixIcon: IconButton(
                         icon: Icon(
-                          chatController.isEmojiVisible.value
-                              ? Icons.keyboard
-                              : Icons.sentiment_satisfied_outlined,
+                          Icons.attach_file,
                           color: AppColors.primary,
                           size: 24.sp,
                         ),
-                        onPressed: () {
-                          chatController.toggleEmojiPicker();
-                          print(chatController.isEmojiVisible.value);
-                          if (chatController.isEmojiVisible.isTrue) {
-                            searchFocusnOde.unfocus(); // Hide the keyboard
-                          } else {
-                            searchFocusnOde.requestFocus(); // Show the keyboard
-                          }
-                        },
-                      )),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      Icons.attach_file,
-                      color: AppColors.primary,
-                      size: 24.sp,
+                        onPressed: chatController.toggleGallery,
+                      ),
                     ),
-                    onPressed: chatController.toggleGallery,
                   ),
                 ),
               ),
-            ),
+              Obx(() => IconButton(
+                    icon: chatController.isTextFieldEmpty.value
+                        ? Icon(
+                            Icons.photo_camera_outlined,
+                            color: AppColors.primary,
+                            size: 24.sp,
+                          )
+                        : Icon(
+                            Icons.send,
+                            color: AppColors.primary,
+                            size: 24.sp,
+                          ),
+                    onPressed: () {
+                      chatController.isTextFieldEmpty.value
+                          ? filePickerHelper.pickFiles("image", context, "")
+                          : onSend();
+                      chatController
+                          .checkTextFieldEmpty(controller.text.trim());
+                    },
+                  )),
+            ],
           ),
-          Obx(() => IconButton(
-                icon: chatController.isTextFieldEmpty.value
-                    ? Icon(
-                        Icons.photo_camera_outlined,
-                        color: AppColors.primary,
-                        size: 24.sp,
-                      )
-                    : Icon(
-                        Icons.send,
-                        color: AppColors.primary,
-                        size: 24.sp,
-                      ),
-                onPressed: () {
-                  chatController.isTextFieldEmpty.value
-                      ? filePickerHelper.pickFiles("image", context, "")
-                      : onSend();
-                  chatController.checkTextFieldEmpty(controller.text.trim());
-                },
-              )),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -728,6 +751,7 @@ class ChatMessage {
   final bool isSelcted;
   final bool? isReplay;
   String reaction;
+  final ChatMessage? replyModel;
   final List<Contact>? contactList;
 
   ChatMessage({
@@ -736,6 +760,7 @@ class ChatMessage {
     required this.dateTime,
     required this.messageType,
     this.filePath,
+    this.replyModel,
     this.contactList,
     required this.time,
     this.reaction = '',

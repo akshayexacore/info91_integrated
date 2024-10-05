@@ -229,13 +229,13 @@ class BannersImageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 200.h,
+        height: 210.h,
         child: PageView.builder(
           controller: _pageController,
           scrollDirection: Axis.horizontal,
           itemCount: imageList.length,
           itemBuilder: (context, index) => Padding(
-            padding: EdgeInsets.only(right: 10.0),
+            padding: EdgeInsets.only(right: 10.0.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
