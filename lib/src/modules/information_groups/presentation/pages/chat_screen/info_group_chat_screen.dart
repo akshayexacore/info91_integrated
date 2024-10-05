@@ -640,6 +640,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             onClose: (){
               chatController.onCloseReply();
             },
+            chatMessage: chatController.replyChat,
+            isChatMessage: true,
             message: chatController.replyChat.message,
           ),
         Padding(
@@ -800,8 +802,8 @@ class ChatMessage {
       isSelcted: isSelcted ?? this.isSelcted,
       contactList: contactList ?? this.contactList,
     );
-  }
 
+  }
   // Method to mark the message as read
   ChatMessage markAsRead() {
     return ChatMessage(

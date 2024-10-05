@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/tiny/image_view.dart';
 
@@ -7,10 +9,14 @@ class ReplyChatMessageTile extends StatelessWidget {
   const ReplyChatMessageTile({
     super.key,
     this.onClose,
+    this.isChatMessage = false,
     required this.message,
+    this.chatMessage,
   });
 
   final String message;
+  final bool isChatMessage;
+  final ChatMessage? chatMessage;
 
   final VoidCallback? onClose;
 
@@ -47,11 +53,12 @@ class ReplyChatMessageTile extends StatelessWidget {
               vertical: AppPaddings.xSmall,
             ),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const Text(
                         'Arya',
@@ -60,12 +67,16 @@ class ReplyChatMessageTile extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Text(
-                        message,
-                        style: const TextStyle(
-                          fontSize: AppFontSizes.small,
-                        ),
-                      ),
+                      if (isChatMessage) ...[
+                        if (chatMessage!.messageType == MessageType.image)
+                          _imageDesign(),
+                        if (chatMessage!.messageType == MessageType.text)
+                          textMsaageType(),
+                        if (chatMessage!.messageType == MessageType.document)
+                          textMsaageType(),
+                      ] else ...[
+                        textMsaageType(),
+                      ]
                     ],
                   ),
                 ),
@@ -79,5 +90,113 @@ class ReplyChatMessageTile extends StatelessWidget {
                 )
               ],
             )));
+  }
+
+  Widget textMsaageType() {
+    return SizedBox(
+      width: 300.w,
+      child: Text(
+        message,
+        style: const TextStyle(
+          overflow: TextOverflow.ellipsis,
+          fontSize: AppFontSizes.small,
+        ),
+      ),
+    );
+  }
+
+  Row _imageDesign() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Icon(
+          Icons.image,
+          size: 27.sp,
+        ),
+        SizedBox(
+          width: 2.w,
+        ),
+        Text(
+          "Photo",
+          style: TextStyle(
+            fontSize: AppFontSizes.small,
+          ),
+        ),
+        Expanded(child: Container()),
+        Image.network(
+          chatMessage?.message ?? "",
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            // Return default widget or image when the URL fails
+            return Icon(
+              Icons.image,
+              size: 27.sp,
+            );
+          },
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) {
+              return child;
+            }
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        (loadingProgress.expectedTotalBytes!)
+                    : null,
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+
+    Row _docDesign() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Icon(
+          Icons.document_scanner,
+          size: 27.sp,
+        ),
+        SizedBox(
+          width: 2.w,
+        ),
+     const Text(
+          "document name",
+          style: TextStyle(
+            fontSize: AppFontSizes.small,
+          ),
+        ),
+        Expanded(child: Container()),
+        Image.network(
+          chatMessage?.message ?? "",
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            // Return default widget or image when the URL fails
+            return Icon(
+              Icons.image,
+              size: 27.sp,
+            );
+          },
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) {
+              return child;
+            }
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        (loadingProgress.expectedTotalBytes!)
+                    : null,
+              ),
+            );
+          },
+        ),
+      ],
+    );
   }
 }
