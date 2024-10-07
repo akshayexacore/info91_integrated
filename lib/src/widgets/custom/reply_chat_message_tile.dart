@@ -123,37 +123,12 @@ class ReplyChatMessageTile extends StatelessWidget {
           ),
         ),
         Expanded(child: Container()),
-        Image.network(
-          chatMessage?.message ?? "",
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            // Return default widget or image when the URL fails
-            return Icon(
-              Icons.image,
-              size: 27.sp,
-            );
-          },
-          loadingBuilder: (BuildContext context, Widget child,
-              ImageChunkEvent? loadingProgress) {
-            if (loadingProgress == null) {
-              return child;
-            }
-            return Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                        (loadingProgress.expectedTotalBytes!)
-                    : null,
-              ),
-            );
-          },
-        ),
+        imageErrorHandling(chatMessage?.message ?? ""),
       ],
     );
   }
 
-
-    Row _docDesign() {
+  Row _docDesign() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -164,39 +139,42 @@ class ReplyChatMessageTile extends StatelessWidget {
         SizedBox(
           width: 2.w,
         ),
-     const Text(
+        const Text(
           "document name",
           style: TextStyle(
             fontSize: AppFontSizes.small,
           ),
         ),
         Expanded(child: Container()),
-        Image.network(
-          chatMessage?.message ?? "",
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            // Return default widget or image when the URL fails
-            return Icon(
-              Icons.image,
-              size: 27.sp,
-            );
-          },
-          loadingBuilder: (BuildContext context, Widget child,
-              ImageChunkEvent? loadingProgress) {
-            if (loadingProgress == null) {
-              return child;
-            }
-            return Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                        (loadingProgress.expectedTotalBytes!)
-                    : null,
-              ),
-            );
-          },
-        ),
       ],
+    );
+  }
+
+  Image imageErrorHandling(String imageUrl) {
+    return Image.network(
+      imageUrl ?? "",
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        // Return default widget or image when the URL fails
+        return Icon(
+          Icons.image,
+          size: 27.sp,
+        );
+      },
+      loadingBuilder: (BuildContext context, Widget child,
+          ImageChunkEvent? loadingProgress) {
+        if (loadingProgress == null) {
+          return child;
+        }
+        return Center(
+          child: CircularProgressIndicator(
+            value: loadingProgress.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded /
+                    (loadingProgress.expectedTotalBytes!)
+                : null,
+          ),
+        );
+      },
     );
   }
 }

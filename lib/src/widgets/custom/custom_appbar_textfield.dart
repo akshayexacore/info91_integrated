@@ -12,7 +12,7 @@ class CustomAppBatTexField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(5),
+        
         decoration: BoxDecoration(
             color: Colors.white.withOpacity(.1),
             borderRadius: BorderRadius.circular(12)),
@@ -26,6 +26,8 @@ class CustomAppBatTexField extends StatelessWidget {
           },
           decoration: InputDecoration(
               border: InputBorder.none,
+                 contentPadding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
               labelStyle: TextStyle(color: Colors.white),
               prefixIcon: Icon(
                 Icons.search_rounded,

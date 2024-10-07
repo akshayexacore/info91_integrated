@@ -42,6 +42,7 @@ class ChatScreenController extends GetxController {
       message: "Good Morning, Have a Good Day!",
       id: "1",
       senderId: "2",
+      userName: "Akshay",
       time: "1:00 PM",
       status: MessageStatus.read,
       messageType: MessageType.image,
@@ -53,6 +54,7 @@ class ChatScreenController extends GetxController {
       senderId: "1",
       id: " 2",
       time: "1:00 PM",
+      userName: "Akshay",
       isRead: false,
       status: MessageStatus.read,
       messageType: MessageType.text,
@@ -63,6 +65,7 @@ class ChatScreenController extends GetxController {
         senderId: "2",
         isRead: true,
         id: "3",
+        userName: "Anvar",
         status: MessageStatus.delivered,
         time: "1:00 PM",
         messageType: MessageType.text,
@@ -71,6 +74,7 @@ class ChatScreenController extends GetxController {
         message: "https://chatgpt.com/c/a49ae773-f7cd-477c-a7ab-5cca063d47d7",
         senderId: "1",
         messageType: MessageType.text,
+        userName: "Akshay",
         time: "1:00 PM",
         id: "4",
         isRead: false,
@@ -134,12 +138,17 @@ class ChatScreenController extends GetxController {
         ChatMessage(
             messageType: type,
             message: searchController.text,
+            isReplay: isReplay.value,
+            replyModel: isReplay.value ? replyChat : null,
             senderId: "1",
+            userName: "",
             id: "$xid",
             contactList: contactList,
             time: getCurrentTime(),
             status: MessageStatus.sent,
             dateTime: DateTime.parse(getCurrentDate())));
+
+    isReplay.value = false;
     scrollController.animateTo(
       0.0,
       duration: Duration(milliseconds: 300),
@@ -220,10 +229,8 @@ class ChatScreenController extends GetxController {
   }
 
   void onCloseReply() {
-
-    debugPrint("sssssssssssssss");
     _disposeOverlayEntry();
-   
+
     isReplay.value = false;
   }
 

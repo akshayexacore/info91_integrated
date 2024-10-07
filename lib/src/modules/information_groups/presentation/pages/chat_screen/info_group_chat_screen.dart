@@ -637,7 +637,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       children: [
         if (showReply)
           ReplyChatMessageTile(
-            onClose: (){
+            onClose: () {
               chatController.onCloseReply();
             },
             chatMessage: chatController.replyChat,
@@ -649,56 +649,55 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           child: Row(
             children: <Widget>[
               Expanded(
-                child: SizedBox(
-                  height: 50.h,
-                  child: TextField(
-                    controller: controller,
-                    focusNode: focusnode,
-                    onTap: () {
-                      chatController.hideEmojiPicker();
-                      chatController.hideGallery();
-                    },
-                    onChanged: (val) {
-                      chatController.checkTextFieldEmpty(val);
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Type your message here',
-                      hintStyle: GoogleFonts.poppins(
-                          fontSize: 12.5.sp,
-                          color: AppColors.text.withOpacity(.75)),
-                      filled: true,
-                      fillColor: AppColors.google,
-                      border: border,
-                      errorBorder: border,
-                      enabledBorder: border,
-                      focusedBorder: border,
-                      prefixIcon: Obx(() => IconButton(
-                            icon: Icon(
-                              chatController.isEmojiVisible.value
-                                  ? Icons.keyboard
-                                  : Icons.sentiment_satisfied_outlined,
-                              color: AppColors.primary,
-                              size: 24.sp,
-                            ),
-                            onPressed: () {
-                              chatController.toggleEmojiPicker();
-                              print(chatController.isEmojiVisible.value);
-                              if (chatController.isEmojiVisible.isTrue) {
-                                searchFocusnOde.unfocus(); // Hide the keyboard
-                              } else {
-                                searchFocusnOde
-                                    .requestFocus(); // Show the keyboard
-                              }
-                            },
-                          )),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          Icons.attach_file,
-                          color: AppColors.primary,
-                          size: 24.sp,
-                        ),
-                        onPressed: chatController.toggleGallery,
+                child: TextField(
+                  controller: controller,
+                  focusNode: focusnode,
+                  onTap: () {
+                    chatController.hideEmojiPicker();
+                    chatController.hideGallery();
+                  },
+                  onChanged: (val) {
+                    chatController.checkTextFieldEmpty(val);
+                  },
+                  decoration: InputDecoration(
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+                    hintText: 'Type your message here',
+                    hintStyle: GoogleFonts.poppins(
+                        fontSize: 12.5.sp,
+                        color: AppColors.text.withOpacity(.75)),
+                    filled: true,
+                    fillColor: AppColors.google,
+                    border: border,
+                    errorBorder: border,
+                    enabledBorder: border,
+                    focusedBorder: border,
+                    prefixIcon: Obx(() => IconButton(
+                          icon: Icon(
+                            chatController.isEmojiVisible.value
+                                ? Icons.keyboard
+                                : Icons.sentiment_satisfied_outlined,
+                            color: AppColors.primary,
+                            size: 24.sp,
+                          ),
+                          onPressed: () {
+                            chatController.toggleEmojiPicker();
+                            print(chatController.isEmojiVisible.value);
+                            if (chatController.isEmojiVisible.isTrue) {
+                              searchFocusnOde.unfocus(); // Hide the keyboard
+                            } else {
+                              searchFocusnOde
+                                  .requestFocus(); // Show the keyboard
+                            }
+                          },
+                        )),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        Icons.attach_file,
+                        color: AppColors.primary,
+                        size: 24.sp,
                       ),
+                      onPressed: chatController.toggleGallery,
                     ),
                   ),
                 ),
@@ -731,7 +730,16 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 }
 
-enum MessageType { text, image, document, audio, video, reply, contact }
+enum MessageType {
+  text,
+  image,
+  document,
+  audio,
+  video,
+  reply,
+  contact,
+  mention,
+}
 
 enum MessageStatus {
   sent,
@@ -745,6 +753,7 @@ class ChatMessage {
   final String senderId;
   final bool isRead;
   final String time;
+  final String userName;
   final DateTime dateTime;
 
   final MessageType messageType;
@@ -760,6 +769,7 @@ class ChatMessage {
     this.isReplay,
     required this.id,
     required this.dateTime,
+    required this.userName,
     required this.messageType,
     this.filePath,
     this.replyModel,
@@ -786,12 +796,14 @@ class ChatMessage {
     String? reaction,
     bool? isReplay,
     List<Contact>? contactList,
+    String? userNAme,
   }) {
     return ChatMessage(
       message: message ?? this.message,
       senderId: senderId ?? this.senderId,
       isRead: isRead ?? this.isRead,
       id: id ?? this.id,
+      userName: userNAme ?? this.userName,
       reaction: reaction ?? this.reaction,
       isReplay: isReplay ?? this.isReplay,
       time: time ?? this.time,
@@ -802,14 +814,15 @@ class ChatMessage {
       isSelcted: isSelcted ?? this.isSelcted,
       contactList: contactList ?? this.contactList,
     );
-
   }
+
   // Method to mark the message as read
   ChatMessage markAsRead() {
     return ChatMessage(
         message: message,
         senderId: senderId,
         isRead: true,
+        userName: userName,
         dateTime: dateTime,
         id: id,
         messageType: messageType,
