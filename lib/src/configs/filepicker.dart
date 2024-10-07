@@ -43,8 +43,9 @@ class FilePickerHelper {
     );
 
     if (FilePickerResult == null) {
-      // User canceled the file picking
-      Navigator.pop(context);
+  //  if (Navigator.canPop(context)) {
+  //     Navigator.pop(context); // Only pop if the dialog is open
+  //   }
       return;
     }
     List<File> files =

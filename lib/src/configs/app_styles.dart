@@ -200,6 +200,7 @@ class AppColors {
   static const lightText = Color(0xFF666666);
   static const border = Color.fromRGBO(0, 0, 0, 0.25);
   static const textContent = Color(0xFF848484);
+  static const replyWhite = Color(0xFFF1F0FC);
   static const textSubtitle = Color(0xFF2D2D2D);
   static const textCategory = Color(0xFF3E3E3E);
   static const textMainSubtitle = Color(0xFF737373);

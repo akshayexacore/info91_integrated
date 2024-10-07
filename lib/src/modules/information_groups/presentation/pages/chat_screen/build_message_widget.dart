@@ -13,6 +13,7 @@ import 'package:info91/src/modules/information_groups/presentation/pages/contact
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 import 'package:info91/src/widgets/custom/custom_divider.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
+import 'package:info91/src/widgets/custom/string_extensions.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
 import 'package:info91/src/widgets/tiny/app_check_box.dart';
 
@@ -50,7 +51,10 @@ class BuildMessageWidget extends StatelessWidget {
   }
 
   Widget _buildTextMessage(ChatMessage message, BuildContext context) {
+    double w1 = MediaQuery.of(context).size.width;
+    double w = w1 > 700 ? 400 : w1;
     bool isMe = message.senderId == "1";
+       bool isReplyMe = message.replyModel?.senderId == "1";
     return commonBuildMessageOuter(
       message: message,
       context: context,
@@ -58,6 +62,79 @@ class BuildMessageWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          message.isReplay == true
+              ? Container(
+                  width: w,
+                  padding:
+                      EdgeInsets.only(top: 5, right: 5, bottom: 5, left: 7),
+                  decoration: BoxDecoration(
+                      // border: Border.all(color: ColorPalette.primary),
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(7),
+                          topLeft: Radius.circular(7)),
+                      color: isMe?AppColors.replyWhite:Color(0xff666666)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          isReplyMe
+                              ? "you"
+                              : "${message.replyModel?.userName.toString().toTitleCase()}",
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary)),
+                      Container(
+                          child: Stack(
+                        children: [
+                          Positioned(
+                              left: -1,
+                              top: 2,
+                              child: message.replyModel?.messageType ==
+                                      MessageType.image
+                                  ? Icon(
+                                      Icons.image,
+                                      size: 16,
+                                    )
+                                  : message.replyModel?.messageType ==
+                                          MessageType.video
+                                      ? Icon(
+                                          Icons.video_library,
+                                          size: 16,
+                                        )
+                                      : message.replyModel?.messageType ==
+                                              MessageType.audio
+                                          ? Icon(Icons.mic, size: 16)
+                                          : message.replyModel?.messageType ==
+                                                  MessageType.document
+                                              ? Icon(Icons.file_copy, size: 16)
+                                              : SizedBox()),
+                          message.replyModel?.messageType == MessageType.text ||
+                                  message.replyModel?.messageType ==
+                                      MessageType.mention
+                              ? Text(
+                                  message.replyModel?.message ?? "",
+                                  softWrap: true,
+                                  textScaler: TextScaler.linear(1),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: Text(
+                                    message.replyModel?.message ?? "",
+                                    softWrap: true,
+                                    textScaler: TextScaler.linear(1),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                        ],
+                      ))
+                    ],
+                  ),
+                )
+              : SizedBox(),
           Linkify(
             linkStyle: GoogleFonts.poppins(decorationColor: Colors.blue),
             onOpen: (link) async {
@@ -505,8 +582,13 @@ Widget commonBuildMessageOuter(
                   minWidth: MediaQuery.of(context).size.width - 300,
                   maxWidth: MediaQuery.of(context).size.width - 100,
                 ),
-                padding:const EdgeInsets.all(5),
-                margin: EdgeInsets.symmetric(vertical:message.reaction!=null && message.reaction.isNotEmpty?15: 5, horizontal: 10),
+                padding: const EdgeInsets.all(5),
+                margin: EdgeInsets.symmetric(
+                    vertical:
+                        message.reaction != null && message.reaction.isNotEmpty
+                            ? 15
+                            : 5,
+                    horizontal: 10),
                 decoration: BoxDecoration(
                   color: isMe ? AppColors.lightChat : AppColors.white,
                   borderRadius: BorderRadius.circular(15),
