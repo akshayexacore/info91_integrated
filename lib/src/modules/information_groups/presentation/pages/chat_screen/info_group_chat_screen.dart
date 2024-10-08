@@ -124,262 +124,265 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final bool canPop = ModalRoute.of(context)?.canPop ?? false;
     double h = MediaQuery.of(context).size.height;
-    return SafeArea(
-      child: WillPopScope(
-        onWillPop: () {
-          if (chatController.isEmojiVisible.value ||
-              chatController.isGalleryVisible.value) {
-            chatController.hideEmojiPicker();
-            chatController.hideGallery();
-          } else {
-            Navigator.pop(context);
-          }
-          ;
-          return Future.value(false);
-        },
-        child: Obx(
-          () => Scaffold(
-            backgroundColor: AppColors.offWhite,
-            body: Column(
-              children: [
-                //AppBAr
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: chatController.selectedMessage.isEmpty
-                      ? CustomAppBar(
-                          onBackButtonPress: () {
-                            chatController.onBackButtonPress();
-                          },
-                          isPic: chatController.messageSelectedcount() != 0
-                              ? false
-                              : true,
-                          imageUrl: "",
-                          imageOntap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProfileScreen(),
-                                ));
-                          },
-                          appBarName: "Information Groups",
-                          actionWidget: [
-                            if (chatController.messageSelectedcount() != 0) ...[
-                              if (chatController
-                                  .checkOnlySelectedMessageIsText())
-                                IconButton(
-                                  onPressed: () {
-                                    chatController
-                                        .copySelectedMessages(context);
-                                  },
-                                  icon: Icon(Icons.copy),
-                                  color: AppColors.white,
+    return WillPopScope(
+      onWillPop: () {
+        if (chatController.isEmojiVisible.value ||
+            chatController.isGalleryVisible.value) {
+          chatController.hideEmojiPicker();
+          chatController.hideGallery();
+        } else {
+          Navigator.pop(context);
+        }
+        ;
+        return Future.value(false);
+      },
+      child: Obx(
+        () => Scaffold(
+          backgroundColor: AppColors.offWhite,
+          body: Column(
+            children: [
+              //AppBAr
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: chatController.selectedMessage.isEmpty
+                    ? CustomAppBar(
+                        onBackButtonPress: () {
+                          chatController.onBackButtonPress();
+                        },
+                        isPic: chatController.messageSelectedcount() != 0
+                            ? false
+                            : true,
+                        imageUrl: "",
+                        imageOntap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfileScreen(),
+                              ));
+                        },
+                        appBarName: "Information Groups",
+                        actionWidget: [
+                          if (chatController.messageSelectedcount() != 0) ...[
+                            if (chatController
+                                .checkOnlySelectedMessageIsText())
+                              IconButton(
+                                onPressed: () {
+                                  chatController
+                                      .copySelectedMessages(context);
+                                },
+                                icon: Icon(Icons.copy),
+                                color: AppColors.white,
+                              ),
+                            CustomPopupmenu(
+                                onSelected: (value) {
+                                  if (value == 1) {}
+                                  if (value == 2) {
+                                    chatController.messages.removeWhere(
+                                        (item) => item?.isSelcted == true);
+                                  }
+                                },
+                                itemList: [
+                                  popupMenuModel(
+                                      name: chatController
+                                                  .messageSelectedcount() ==
+                                              1
+                                          ? "Copy"
+                                          : "Delete",
+                                      value: chatController
+                                                  .messageSelectedcount() ==
+                                              1
+                                          ? 1
+                                          : 2)
+                                ])
+                          ]
+                        ],
+                      )
+                    : _buildSelectedAppBar(
+                        canPop: canPop,
+                        key: const Key('_buildInfoSelectedAppBar'),
+                        selectedCount:
+                            chatController.selectedMessage.length.toString()),
+              ),
+    
+              Expanded(
+                child: Obx(() {
+                  debugPrint(chatController.messages.isEmpty.toString());
+                  return GroupedList<ChatMessage, DateTime>(
+                      controller: chatController.scrollController,
+                      elements: chatController.messages,
+                      groupBy: (element) => element.dateTime,
+                      groupComparator: (value1, value2) =>
+                          value1.compareTo(value2),
+                      groupHeaderBuilder: (index) => Column(
+                            children: [
+                              const SizedBox(
+                                height: AppSpacings.small10,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: AppColors.white,
+                                    borderRadius: BorderRadius.circular(20)),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppPaddings.xSmall,
+                                  vertical: AppPaddings.xxxSmall4,
                                 ),
-                              CustomPopupmenu(
-                                  onSelected: (value) {
-                                    if (value == 1) {}
-                                    if (value == 2) {
-                                      chatController.messages.removeWhere(
-                                          (item) => item?.isSelcted == true);
-                                    }
-                                  },
-                                  itemList: [
-                                    popupMenuModel(
-                                        name: chatController
-                                                    .messageSelectedcount() ==
-                                                1
-                                            ? "Copy"
-                                            : "Delete",
-                                        value: chatController
-                                                    .messageSelectedcount() ==
-                                                1
-                                            ? 1
-                                            : 2)
-                                  ])
-                            ]
-                          ],
-                        )
-                      : _buildSelectedAppBar(
-                          canPop: canPop,
-                          key: const Key('_buildInfoSelectedAppBar'),
-                          selectedCount:
-                              chatController.selectedMessage.length.toString()),
-                ),
-
-                Expanded(
-                  child: Obx(() {
-                    debugPrint(chatController.messages.isEmpty.toString());
-                    return GroupedList<ChatMessage, DateTime>(
-                        controller: chatController.scrollController,
-                        elements: chatController.messages,
-                        groupBy: (element) => element.dateTime,
-                        groupComparator: (value1, value2) =>
-                            value1.compareTo(value2),
-                        groupHeaderBuilder: (index) => Column(
+                                child: Text(
+                                  DateFormat("MMM dd, yyyy").format(
+                                      chatController
+                                          .messages[index].dateTime),
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: AppSpacings.small10,
+                              ),
+                            ],
+                          ),
+                      indexedItemBuilder: (context, index) {
+    
+    
+    
+                        debugPrint("chatController.messages[index]${chatController.messages[index].message}$index");
+                        final message = chatController.messages[index];
+                        bool isMe = message.senderId == "1";
+                        msgdate = formatMessageTimestamp(message.dateTime, index);
+                        bool isSameUser=index+1<=chatController.messages.length-1?message.id!=chatController.messages[index+1].id?false:true:false;
+    
+                        return LayoutBuilder(builder: (context, constraints) {
+                          return InkWell(
+                            highlightColor: AppColors.transparent,
+                            splashColor: AppColors.transparent,
+                            onTap: () {
+                              chatController.messageOntapfunction(index,
+                                  isOntap: true);
+                            },
+                            onLongPress: () {
+                              var position;
+                              RenderBox? box =
+                                  context.findRenderObject() as RenderBox?;
+                              if (box != null) {
+                                position = box.localToGlobal(Offset.zero);
+                              }
+                              chatController.messageOntapfunction(index,
+                                  position: position);
+                            },
+                            child: Stack(
                               children: [
-                                const SizedBox(
-                                  height: AppSpacings.small10,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: AppColors.white,
-                                      borderRadius: BorderRadius.circular(20)),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: AppPaddings.xSmall,
-                                    vertical: AppPaddings.xxxSmall4,
-                                  ),
-                                  child: Text(
-                                    DateFormat("MMM dd, yyyy").format(
-                                        chatController
-                                            .messages[index].dateTime),
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: AppSpacings.small10,
-                                ),
+                                Align(
+                                    alignment: isMe
+                                        ? Alignment.centerRight
+                                        : Alignment.centerLeft,
+                                    child: BuildMessageWidget(
+                                      messageModel: message,
+                                      isSameUser: isSameUser,
+                                    )),
+                                if (chatController.messages[index].isSelcted)
+                                  Positioned.fill(
+                                    child: Container(
+                                        color: AppColors.primary
+                                            .withOpacity(0.1)),
+                                  )
                               ],
                             ),
-                        indexedItemBuilder: (context, index) {
-                          final message = chatController.messages[index];
-                          bool isMe = message.senderId == "1";
-                          msgdate =
-                              formatMessageTimestamp(message.dateTime, index);
-
-                          return LayoutBuilder(builder: (context, constraints) {
-                            return InkWell(
-                              highlightColor: AppColors.transparent,
-                              splashColor: AppColors.transparent,
-                              onTap: () {
-                                chatController.messageOntapfunction(index,
-                                    isOntap: true);
-                              },
-                              onLongPress: () {
-                                var position;
-                                RenderBox? box =
-                                    context.findRenderObject() as RenderBox?;
-                                if (box != null) {
-                                  position = box.localToGlobal(Offset.zero);
-                                }
-                                chatController.messageOntapfunction(index,
-                                    position: position);
-                              },
-                              child: Stack(
-                                children: [
-                                  Align(
-                                      alignment: isMe
-                                          ? Alignment.centerRight
-                                          : Alignment.centerLeft,
-                                      child: BuildMessageWidget(
-                                        messageModel: message,
-                                      )),
-                                  if (chatController.messages[index].isSelcted)
-                                    Positioned.fill(
-                                      child: Container(
-                                          color: AppColors.primary
-                                              .withOpacity(0.1)),
-                                    )
-                                ],
-                              ),
-                            );
-                          });
-                        });
-                  }),
-                ),
-
-                // Expanded(
-                //   child:
-                //       // Container(color: Colors.red,)
-                //       Align(
-                //     alignment: Alignment.topCenter,
-                //     child: ListView.builder(
-                //       controller: chatController.scrollController,
-                //       itemCount: chatController.messages.length,
-                //       reverse: true,
-                //       physics: AlwaysScrollableScrollPhysics(),
-                //       shrinkWrap: true,
-                //       itemBuilder: (context, index) {
-                //         final message = chatController.messages[index];
-                //         bool isMe = message.senderId == "1";
-                //         msgdate =
-                //             formatMessageTimestamp(message.dateTime, index);
-
-                //         return LayoutBuilder(builder: (context, constraints) {
-                //           return InkWell(
-                //             highlightColor: AppColors.transparent,
-                //             splashColor: AppColors.transparent,
-                //             onTap: () {
-                //               chatController.messageOntapfunction(index,
-                //                   isOntap: true);
-                //             },
-                //             onLongPress: () {
-                //               var position;
-                //               RenderBox? box =
-                //                   context.findRenderObject() as RenderBox?;
-                //               if (box != null) {
-                //                 position = box.localToGlobal(Offset.zero);
-                //               }
-                //               chatController.messageOntapfunction(index,
-                //                   position: position);
-                //             },
-                //             child: Stack(
-                //               children: [
-                //                 Align(
-                //                     alignment: isMe
-                //                         ? Alignment.centerRight
-                //                         : Alignment.centerLeft,
-                //                     child: BuildMessageWidget(
-                //                       messageModel: message,
-                //                     )),
-
-                //                 if (chatController.messages[index].isSelcted)
-                //                   Positioned.fill(
-                //                     child: Container(
-                //                         color:
-                //                             AppColors.primary.withOpacity(0.1)),
-                //                   )
-                //               ],
-                //             ),
-                //           );
-                //         });
-                //       },
-                //     ),
-                //   ),
-                // ),
-                Container(
-                  padding: EdgeInsets.all(5),
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(color: AppColors.white),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Obx(() {
-                          return _buildInputField(
-                            chatController.searchController,
-                            searchFocusnOde,
-                            () {
-                              chatController.sendMessage(MessageType.text);
-                              chatController.searchController.clear();
-
-                              setState(() {});
-                            },
-                            showReply: chatController.isReplay.value,
                           );
-                        }),
-                      ),
-                      Obx(() => chatController.isEmojiVisible.value
-                          ? _buildEmojiPicker()
-                          : chatController.isGalleryVisible.value
-                              ? bottomSheet(context)
-                              : Container()),
-                    ],
-                  ),
+                        });
+                      });
+                }),
+              ),
+    
+              // Expanded(
+              //   child:
+              //       // Container(color: Colors.red,)
+              //       Align(
+              //     alignment: Alignment.topCenter,
+              //     child: ListView.builder(
+              //       controller: chatController.scrollController,
+              //       itemCount: chatController.messages.length,
+              //       reverse: true,
+              //       physics: AlwaysScrollableScrollPhysics(),
+              //       shrinkWrap: true,
+              //       itemBuilder: (context, index) {
+              //         final message = chatController.messages[index];
+              //         bool isMe = message.senderId == "1";
+              //         msgdate =
+              //             formatMessageTimestamp(message.dateTime, index);
+    
+              //         return LayoutBuilder(builder: (context, constraints) {
+              //           return InkWell(
+              //             highlightColor: AppColors.transparent,
+              //             splashColor: AppColors.transparent,
+              //             onTap: () {
+              //               chatController.messageOntapfunction(index,
+              //                   isOntap: true);
+              //             },
+              //             onLongPress: () {
+              //               var position;
+              //               RenderBox? box =
+              //                   context.findRenderObject() as RenderBox?;
+              //               if (box != null) {
+              //                 position = box.localToGlobal(Offset.zero);
+              //               }
+              //               chatController.messageOntapfunction(index,
+              //                   position: position);
+              //             },
+              //             child: Stack(
+              //               children: [
+              //                 Align(
+              //                     alignment: isMe
+              //                         ? Alignment.centerRight
+              //                         : Alignment.centerLeft,
+              //                     child: BuildMessageWidget(
+              //                       messageModel: message,
+              //                     )),
+    
+              //                 if (chatController.messages[index].isSelcted)
+              //                   Positioned.fill(
+              //                     child: Container(
+              //                         color:
+              //                             AppColors.primary.withOpacity(0.1)),
+              //                   )
+              //               ],
+              //             ),
+              //           );
+              //         });
+              //       },
+              //     ),
+              //   ),
+              // ),
+              Container(
+                padding: EdgeInsets.all(5),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(color: AppColors.white),
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Obx(() {
+                        return _buildInputField(
+                          chatController.searchController,
+                          searchFocusnOde,
+                          () {
+                            chatController.sendMessage(MessageType.text);
+                            chatController.searchController.clear();
+    
+                            setState(() {});
+                          },
+                          showReply: chatController.isReplay.value,
+                        );
+                      }),
+                    ),
+                    Obx(() => chatController.isEmojiVisible.value
+                        ? _buildEmojiPicker()
+                        : chatController.isGalleryVisible.value
+                            ? bottomSheet(context)
+                            : Container()),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -755,6 +758,7 @@ class ChatMessage {
   final String time;
   final String userName;
   final DateTime dateTime;
+  final String? userProfile;
 
   final MessageType messageType;
   MessageStatus status;
@@ -772,6 +776,7 @@ class ChatMessage {
     required this.userName,
     required this.messageType,
     this.filePath,
+    this.userProfile,
     this.replyModel,
     this.contactList,
     required this.time,
@@ -797,6 +802,7 @@ class ChatMessage {
     bool? isReplay,
     List<Contact>? contactList,
     String? userNAme,
+    String? userProfile,
   }) {
     return ChatMessage(
       message: message ?? this.message,
@@ -810,6 +816,7 @@ class ChatMessage {
       dateTime: dateTime ?? this.dateTime,
       messageType: messageType ?? this.messageType,
       status: status ?? this.status,
+      userProfile:userProfile??this.userProfile ,
       filePath: filePath ?? this.filePath,
       isSelcted: isSelcted ?? this.isSelcted,
       contactList: contactList ?? this.contactList,
@@ -824,6 +831,7 @@ class ChatMessage {
         isRead: true,
         userName: userName,
         dateTime: dateTime,
+        userProfile: userProfile,
         id: id,
         messageType: messageType,
         isSelcted: this.isSelcted,

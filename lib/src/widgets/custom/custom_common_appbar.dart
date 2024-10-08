@@ -12,6 +12,8 @@ class CustomAppBar extends StatelessWidget {
   final bool isPic;
   final Function? imageOntap;
   final String? imageUrl;
+
+
   final TextEditingController? textEditingController;
 
   final Function? onChangeFunction;
@@ -21,6 +23,7 @@ class CustomAppBar extends StatelessWidget {
     required this.appBarName,
     this.onChangeFunction,
     this.actionWidget,
+    
     this.isPic = false,
     this.isTextield = false,
     super.key,
@@ -43,7 +46,11 @@ class CustomAppBar extends StatelessWidget {
     }
 
     return Container(
-      padding:  EdgeInsets.symmetric(vertical: 10.h,horizontal: 8.w),
+     padding: EdgeInsets.only(
+              left:  20,
+              top: 25,
+              bottom: 12,
+              right: 20),
       color: AppColors.primaryAccent,
       child: Column(
         children: [
@@ -82,7 +89,7 @@ class CustomAppBar extends StatelessWidget {
               if (actionWidget != null && actionWidget?.isNotEmpty == true)
                 ...List.generate(
                     actionWidget!.length, (index) => actionWidget![index]),
-
+      
               // actionWidget != null
               //     ? actionWidget.runtimeType == String
               //         ? TextButton(

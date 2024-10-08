@@ -54,6 +54,7 @@ class ChatInfoPage extends StatelessWidget {
                       alignment:
                           isMe ? Alignment.centerRight : Alignment.centerLeft,
                       child: BuildMessageWidget(
+                        isSameUser: true,
                         messageModel: _controller.chatMessage,
                       )),
                 ],

@@ -59,53 +59,52 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColors.splashBackground,
-        body: SafeArea(
-          child: Column(
-            children: [
-              CustomAppBar(
-                appBarName: "Information Groups",
-                isTextield: true,
-                actionWidget: [
-                  CustomPopupmenu(
-                    onSelected: (val) {
-                      if (val == 1) {
-                        // Get.off(InformGroupCreationScreen);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => InformGroupCreationScreen(),
-                            ));
-                      }
-                    },
-                    itemList: [popupMenuModel(name: "Create group", value: 1)],
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              toggleSwitch(onToggle: (val) {}),
-              SizedBox(
-                height: 10.h,
-              ),
-              Expanded(
-                child: ListView.separated(
-                  itemCount: 2,
-                  itemBuilder: (context, index) => ChatListItem(
-                    chat: chats[index],
-                    onTap: () {
+         resizeToAvoidBottomInset: true,
+        body: Column(
+          children: [
+            CustomAppBar(
+              appBarName: "Information Groups",
+              isTextield: true,
+              actionWidget: [
+                CustomPopupmenu(
+                  onSelected: (val) {
+                    if (val == 1) {
+                      // Get.off(InformGroupCreationScreen);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>  StartScreen(),
+                            builder: (context) => InformGroupCreationScreen(),
                           ));
-                    },
-                  ),
-                  separatorBuilder: (context, index) => customDivider(),
+                    }
+                  },
+                  itemList: [popupMenuModel(name: "Create group", value: 1)],
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            toggleSwitch(onToggle: (val) {}),
+            SizedBox(
+              height: 10.h,
+            ),
+            Expanded(
+              child: ListView.separated(
+                itemCount: 2,
+                itemBuilder: (context, index) => ChatListItem(
+                  chat: chats[index],
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>  StartScreen(),
+                        ));
+                  },
                 ),
-              )
-            ],
-          ),
+                separatorBuilder: (context, index) => customDivider(),
+              ),
+            )
+          ],
         ));
   }
 
