@@ -9,12 +9,10 @@ class CustomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: Column(
-            children: children,
-          ),
+      body: Padding(
+        padding: EdgeInsets.only(bottom: 15.h),
+        child: Column(
+          children: children,
         ),
       ),
     );

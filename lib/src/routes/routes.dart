@@ -11,6 +11,7 @@ import 'package:info91/src/modules/chat_info/chat_info_page.dart';
 import 'package:info91/src/modules/chat_info/controllers/chat_info_controller.dart';
 import 'package:info91/src/modules/contact_select/contact_select_page.dart';
 import 'package:info91/src/modules/contact_select/controllers/contact_select_controller.dart';
+import 'package:info91/src/modules/emergency_alaram_update/pages/emergeny_main_page.dart';
 import 'package:info91/src/modules/emergency_alarm/controllers/emergency_alarm_controller.dart';
 import 'package:info91/src/modules/emergency_alarm/emergency_alarm_page.dart';
 import 'package:info91/src/modules/forward/controllers/forward_controller.dart';
@@ -140,6 +141,10 @@ class Routes {
         binding: BindingsBuilder(() {
           Get.lazyPut(() => EmergencyAlarmController());
         })),
+        GetPage(
+        name: EmergencyMainPage.routeName,
+        page: () => EmergencyMainPage(),
+     ),
     GetPage(
         name: RecipientsAddPage.routeName,
         page: () => RecipientsAddPage(),

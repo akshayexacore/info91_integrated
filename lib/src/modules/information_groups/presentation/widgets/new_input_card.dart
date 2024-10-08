@@ -57,7 +57,7 @@ class _NewInputCardState extends State<NewInputCard> {
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(
             color: widget.isBorder
-                ? AppColors.divider.withOpacity(.5)
+                ? AppColors.text.withOpacity(.5)
                 : Colors.transparent));
   }
 
@@ -165,7 +165,7 @@ class _NewInputCardState extends State<NewInputCard> {
 
                           fillColor: widget.readOnly
                               ? const Color(0xffF2F3F5).withOpacity(.2)
-                              : Colors.white,
+                              : Colors.transparent,
                           suffixIcon: widget.password
                               ? IconButton(
                                   icon: show
@@ -191,8 +191,8 @@ class _NewInputCardState extends State<NewInputCard> {
                           //   widget.label,
                           // ),
                           hintStyle: GoogleFonts.poppins(
-                              fontSize: 15.sp,
-                              color: AppColors.black.withOpacity(.25)),
+                              fontSize: 14.sp,
+                              color: AppColors.text.withOpacity(.8),fontWeight: FontWeight.w400),
                           hintText: widget.label,
                           disabledBorder: borderStyle(),
                           enabledBorder: borderStyle(),
