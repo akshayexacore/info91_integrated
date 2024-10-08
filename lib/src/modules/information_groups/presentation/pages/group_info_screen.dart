@@ -14,54 +14,52 @@ class GroupInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomAppBar(
-              appBarName: "Group Info",
-              actionWidget: [
-                CustomPopupmenu(
-                  onSelected: (val) {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           const InformGroupCreationScreen(),
-                    //     ));
-                  },
-                  itemList: [popupMenuModel(name: "Edit", value: 1)],
-                ),
-              ],
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: marginWidth),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      commonGap,
-                      blusHeading("Contact Details"),
-                      commonGap,
-                      groupInfoDoubleText("Contact No. 1", "9988665533"),
-                      groupInfoDoubleText("Contact No. 1", "9988665533"),
-                      groupInfoDoubleText("Contact No. 1", "9988665533"),
-                      blusHeading("Timings and Holidays"),
-                      commonGap,
-                      groupInfoDoubleText("Contact Time", "9:00 AM to 5:00 PM"),
-                      blusHeading("Website link"),
-                      commonGap,
-                      groupInfoDoubleText("Website link", "www.loremipsim.c"),
-                      groupInfoDoubleText("Website link", "www.loremipsim.c"),
-                      groupInfoDoubleText("Website link", "www.loremipsim.c"),
-                    ],
-                  ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomAppBar(
+            appBarName: "Group Info",
+            actionWidget: [
+              CustomPopupmenu(
+                onSelected: (val) {
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) =>
+                  //           const InformGroupCreationScreen(),
+                  //     ));
+                },
+                itemList: [popupMenuModel(name: "Edit", value: 1)],
+              ),
+            ],
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: marginWidth),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    commonGap,
+                    blusHeading("Contact Details"),
+                    commonGap,
+                    groupInfoDoubleText("Contact No. 1", "9988665533"),
+                    groupInfoDoubleText("Contact No. 1", "9988665533"),
+                    groupInfoDoubleText("Contact No. 1", "9988665533"),
+                    blusHeading("Timings and Holidays"),
+                    commonGap,
+                    groupInfoDoubleText("Contact Time", "9:00 AM to 5:00 PM"),
+                    blusHeading("Website link"),
+                    commonGap,
+                    groupInfoDoubleText("Website link", "www.loremipsim.c"),
+                    groupInfoDoubleText("Website link", "www.loremipsim.c"),
+                    groupInfoDoubleText("Website link", "www.loremipsim.c"),
+                  ],
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

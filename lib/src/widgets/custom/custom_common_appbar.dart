@@ -12,6 +12,8 @@ class CustomAppBar extends StatelessWidget {
   final bool isPic;
   final Function? imageOntap;
   final String? imageUrl;
+
+
   final TextEditingController? textEditingController;
 
   final Function? onChangeFunction;
@@ -21,6 +23,7 @@ class CustomAppBar extends StatelessWidget {
     required this.appBarName,
     this.onChangeFunction,
     this.actionWidget,
+    
     this.isPic = false,
     this.isTextield = false,
     super.key,
@@ -43,71 +46,77 @@ class CustomAppBar extends StatelessWidget {
     }
 
     return Container(
-      padding:  EdgeInsets.symmetric(vertical: 10.h,horizontal: 8.w),
+     padding: EdgeInsets.only(
+              left:  20,
+              top: 25,
+              bottom: 12,
+              right: 20),
       color: AppColors.primaryAccent,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
+      child: SafeArea(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    if(onBackButtonPress!=null){
+                      onBackButtonPress!();
+                    }else{
+                       onWillPop();
+                    }
+                   
+                  },
                 ),
-                onPressed: () {
-                  if(onBackButtonPress!=null){
-                    onBackButtonPress!();
-                  }else{
-                     onWillPop();
-                  }
-                 
-                },
-              ),
-              SizedBox(
-                width: 5.w,
-              ),
-              if (isPic) ...[
-                circle_image("https://randomuser.me/api/portraits/women/1.jpg",
-                    onTap: imageOntap),
-                 SizedBox(
-                  width: 10.w,
+                SizedBox(
+                  width: 5.w,
                 ),
+                if (isPic) ...[
+                  circle_image("https://randomuser.me/api/portraits/women/1.jpg",
+                      onTap: imageOntap),
+                   SizedBox(
+                    width: 10.w,
+                  ),
+                ],
+                Text(appBarName,
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.white,
+                        fontSize: 15.sp)),
+                const Spacer(),
+                if (actionWidget != null && actionWidget?.isNotEmpty == true)
+                  ...List.generate(
+                      actionWidget!.length, (index) => actionWidget![index]),
+        
+                // actionWidget != null
+                //     ? actionWidget.runtimeType == String
+                //         ? TextButton(
+                //             onPressed: () {
+                //               if (actionFunctions != null) {
+                //                 actionFunctions!();
+                //               }
+                //             },
+                //             child: Text(
+                //               actionWidget,
+                //               style: TextStyle(
+                //                   color: Colors.white,
+                //                   fontWeight: FontWeight.bold),
+                //             ))
+                //         : IconButton(
+                //             onPressed: () {},
+                //             icon: actionWidget,
+                //             color: Colors.white,
+                //           )
+                //     : SizedBox()
               ],
-              Text(appBarName,
-                  style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.white,
-                      fontSize: 15.sp)),
-              const Spacer(),
-              if (actionWidget != null && actionWidget?.isNotEmpty == true)
-                ...List.generate(
-                    actionWidget!.length, (index) => actionWidget![index]),
-
-              // actionWidget != null
-              //     ? actionWidget.runtimeType == String
-              //         ? TextButton(
-              //             onPressed: () {
-              //               if (actionFunctions != null) {
-              //                 actionFunctions!();
-              //               }
-              //             },
-              //             child: Text(
-              //               actionWidget,
-              //               style: TextStyle(
-              //                   color: Colors.white,
-              //                   fontWeight: FontWeight.bold),
-              //             ))
-              //         : IconButton(
-              //             onPressed: () {},
-              //             icon: actionWidget,
-              //             color: Colors.white,
-              //           )
-              //     : SizedBox()
-            ],
-          ),
-          if (isTextield)
-            CustomAppBatTexField(onChangeFunction: onChangeFunction,cntroler: textEditingController??TextEditingController(),)
-        ],
+            ),
+            if (isTextield)
+              CustomAppBatTexField(onChangeFunction: onChangeFunction,cntroler: textEditingController??TextEditingController(),)
+          ],
+        ),
       ),
     );
   }

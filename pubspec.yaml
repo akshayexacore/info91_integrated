@@ -68,6 +68,7 @@ dependencies:
   readmore: ^3.0.0
   flutter_contacts: 
   video_player: ^2.9.2
+  colorize_text_avatar: ^1.0.2
  
 
 

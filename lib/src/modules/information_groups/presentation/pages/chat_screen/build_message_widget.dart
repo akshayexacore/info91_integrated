@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:blurrycontainer/blurrycontainer.dart';
+import 'package:colorize_text_avatar/colorize_text_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,6 +13,7 @@ import 'package:info91/src/modules/information_groups/presentation/pages/chat_sc
 import 'package:info91/src/modules/information_groups/presentation/pages/contactSelected_view_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 import 'package:info91/src/widgets/custom/custom_divider.dart';
+import 'package:info91/src/widgets/custom/custom_image_popup.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
 import 'package:info91/src/widgets/custom/string_extensions.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
@@ -24,16 +26,18 @@ import 'package:http/http.dart' as http;
 
 class BuildMessageWidget extends StatelessWidget {
   final ChatMessage messageModel;
-  BuildMessageWidget({super.key, required this.messageModel});
+  final bool isSameUser;
+  BuildMessageWidget({super.key, required this.messageModel,required this.isSameUser});
 
   @override
   Widget build(BuildContext context) {
     switch (messageModel.messageType) {
       case MessageType.text:
-        return _buildTextMessage(messageModel, context);
+        return _buildTextMessage(messageModel, context,isSameUser: isSameUser);
       case MessageType.image:
         return BuildChatImage(
           message: messageModel,
+          isSameUser: isSameUser,
         );
       case MessageType.document:
         return _buildDocumentMessage(messageModel);
@@ -44,13 +48,13 @@ class BuildMessageWidget extends StatelessWidget {
       case MessageType.reply:
         return _buildReplyMessage(messageModel);
       case MessageType.contact:
-        return _buildConatctMessage(messageModel, context);
+        return _buildConatctMessage(messageModel, context,isSameUser: isSameUser);
       default:
         return SizedBox.shrink();
     }
   }
 
-  Widget _buildTextMessage(ChatMessage message, BuildContext context) {
+  Widget _buildTextMessage(ChatMessage message, BuildContext context,{required bool isSameUser}) {
     double w1 = MediaQuery.of(context).size.width;
     double w = w1 > 700 ? 400 : w1;
     bool isMe = message.senderId == "1";
@@ -58,6 +62,7 @@ class BuildMessageWidget extends StatelessWidget {
     return commonBuildMessageOuter(
       message: message,
       context: context,
+      isSameUser: isSameUser,
       isMe: isMe,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,13 +203,14 @@ class BuildMessageWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildConatctMessage(ChatMessage message, BuildContext context) {
+  Widget _buildConatctMessage(ChatMessage message, BuildContext context,{required bool isSameUser}) {
     int contactListCount = message.contactList?.length ?? 0;
     bool isMe = message.senderId == "1";
     return commonBuildMessageOuter(
       context: context,
       isMe: isMe,
       message: message,
+    isSameUser: isSameUser,
       child: Column(
         children: [
           ListTile(
@@ -258,7 +264,8 @@ class BuildMessageWidget extends StatelessWidget {
 
 class BuildChatImage extends StatefulWidget {
   final ChatMessage message;
-  BuildChatImage({super.key, required this.message});
+  final bool isSameUser;
+  BuildChatImage({super.key, required this.message,required this.isSameUser});
 
   @override
   State<BuildChatImage> createState() => _BuildChatImageState();
@@ -421,6 +428,7 @@ class _BuildChatImageState extends State<BuildChatImage> {
         context: context,
         message: widget.message,
         isMe: isMe,
+        isSameUser: widget.isSameUser,
         child: SizedBox(
           width: 250.w,
           child: Column(
@@ -561,11 +569,12 @@ Widget commonBuildMessageOuter(
     {required Widget child,
     required BuildContext context,
     required ChatMessage message,
-    required bool isMe}) {
+    required bool isMe,required bool isSameUser}) {
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: message.isSelcted ? 5 : 0),
     child: Row(
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (!isMe && message.isSelcted)
           AppCheckBox(
@@ -573,7 +582,43 @@ Widget commonBuildMessageOuter(
           ),
         const SizedBox(
           width: 5,
-        ),
+        ),if (!isSameUser &&!isMe)
+                    GestureDetector(
+                      onTap: () async {
+                        await showDialog(
+                            context: context,
+                            builder: (_) => imageDialog(
+                                message.userName,
+                                 message.userProfile,
+                                context));
+                      },
+                      child: Align(
+                          alignment: Alignment.topLeft,
+                          child: message.userProfile== null ||
+                                 message.userProfile?.isEmpty==true
+                              ? CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: 13.r,
+                                  child: TextAvatar(
+                                    shape: Shape.Circular,
+                                    size: 14,
+                                    numberLetters: 2,
+                                    fontSize: 13.sp,
+                                    textColor: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    text:
+                                        "${message.userName.toString().toTitleCase()}",
+                                  ))
+                              : CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: 18,
+                                  backgroundImage: NetworkImage(
+                                      message.userProfile ??
+                                          ""),
+                                )),
+                    ),
+                  SizedBox(
+                      width: !isSameUser? 5 : 35),
         Stack(
           clipBehavior: Clip.none,
           children: [
@@ -587,7 +632,7 @@ Widget commonBuildMessageOuter(
                     vertical:
                         message.reaction != null && message.reaction.isNotEmpty
                             ? 15
-                            : 5,
+                            : isSameUser?3:6,
                     horizontal: 10),
                 decoration: BoxDecoration(
                   color: isMe ? AppColors.lightChat : AppColors.white,
