@@ -48,6 +48,8 @@ dependencies:
   country_picker: ^2.0.25
   phone_numbers_parser: ^8.2.1
   pinput: ^4.0.0
+  path: ^1.9.0
+  record: ^5.1.2
   file_picker: ^6.2.0
   http_interceptor: ^2.0.0-beta.8
   emoji_picker_flutter: ^2.2.0
@@ -69,6 +71,9 @@ dependencies:
   flutter_contacts: 
   video_player: ^2.9.2
   colorize_text_avatar: ^1.0.2
+  audioplayers: ^6.1.0
+  flutter_sound: 
+  just_audio: ^0.9.41
  
 
 
