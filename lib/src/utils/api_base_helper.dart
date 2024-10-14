@@ -52,6 +52,7 @@ class ApiBaseHelper {
       {Map<String, dynamic> body = const {},
       Map<String, String>? headers}) async {
     dynamic responseJson;
+    print("the body$body$headers");
     try {
       if (headers != null) {
         headers.addAll(_headers);

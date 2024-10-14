@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/info_chatlist/info_chatlist_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/profile_creation.page.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/start_screen.dart';
@@ -60,6 +61,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
               height: 40,
             ),
             toggleSwitch(onToggle: (val) {
+              controller.toggleValue.value=val;
 
             }),
             SizedBox(
@@ -73,11 +75,12 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
                   chat:controller .chats[index],
                   onTap: () {
 
-                    
+
+                   
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>  StartScreen(),
+                          builder: (context) =>controller.toggleValue.value==0?const  StartScreen(): ChatScreen(),
                         ));
                   },
                 ),
