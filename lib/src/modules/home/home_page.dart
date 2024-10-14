@@ -5,7 +5,7 @@ import 'package:info91/src/modules/home/controllers/chats_controller.dart';
 import 'package:info91/src/modules/home/controllers/home_controller.dart';
 import 'package:info91/src/modules/home/widgets/category_icon.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/banners_screen.dart';
-import 'package:info91/src/modules/information_groups/presentation/pages/inform_group_chatlist_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/info_chatlist/inform_group_chatlist_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/profile_creation.page.dart';
 import 'package:info91/src/widgets/custom/app_message_profile_tile.dart';
 

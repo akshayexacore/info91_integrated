@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/info_chatlist/info_chatlist_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/profile_creation.page.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/start_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/chat_list_card.dart';
@@ -21,39 +23,13 @@ class InfoGroupChatListScreen extends StatefulWidget {
 }
 
 class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
-    with TickerProviderStateMixin {
-  late TabController tabController;
-  final List<Chat> chats = [
-    Chat(
-      name: "John Doe",
-      itemcount: 5,
-      message: "Hey! How's it going?",
-      time: "12:45 PM",
-      avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg",
-    ),
-    Chat(
-      name: "Jane Smith",
-      message: "Can we meet tomorrow?",
-      time: "11:30 AM",
-      avatarUrl: "https://randomuser.me/api/portraits/women/1.jpg",
-    ),
-    // Add more chats here
-  ];
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(
-      length: 2, // Number of tabs
-      vsync:
-          this, // 'this' works here because the class mixes in SingleTickerProviderStateMixin
-    );
-  }
+    {
+      final InfoChatListController controller=Get.put(InfoChatListController());
+  
 
-  @override
-  void dispose() {
-    tabController
-        .dispose(); // Dispose the controller when the widget is removed
-  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,20 +60,27 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
             const SizedBox(
               height: 40,
             ),
-            toggleSwitch(onToggle: (val) {}),
+            toggleSwitch(onToggle: (val) {
+              controller.toggleValue.value=val;
+
+            }),
             SizedBox(
               height: 10.h,
             ),
             Expanded(
               child: ListView.separated(
-                itemCount: 2,
+                itemCount:controller.chats.length,
+                
                 itemBuilder: (context, index) => ChatListItem(
-                  chat: chats[index],
+                  chat:controller .chats[index],
                   onTap: () {
+
+
+                   
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>  StartScreen(),
+                          builder: (context) =>controller.toggleValue.value==0?const  StartScreen(): ChatScreen(),
                         ));
                   },
                 ),

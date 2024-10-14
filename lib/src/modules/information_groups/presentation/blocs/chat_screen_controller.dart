@@ -27,7 +27,7 @@ class ChatScreenController extends GetxController {
   late ChatMessage replyChat;
   var isReplay = false.obs;
   var selectedMessage = <ChatMessage>[].obs;
-
+ Map<String, GlobalKey> messageKeys = {};
   OverlayEntry? _overlayEntry;
   final emojis = const [
     Emoji('👍', 'Thumbs Up', hasSkinTone: true),
@@ -97,7 +97,13 @@ class ChatScreenController extends GetxController {
 
   final picker = ImagePicker();
   var isTextFieldEmpty = true.obs;
-
+@override
+  void onInit() {
+messages.forEach((msg) {
+      messageKeys[msg.id] = GlobalKey();
+    });
+    super.onInit();
+  }
   @override
   void dispose() {
     super.dispose();
@@ -141,6 +147,24 @@ class ChatScreenController extends GetxController {
   void hideGallery() {
     isGalleryVisible.value = false;
   } //imageanddocumenandvideoselctionfunction var imageFile = Rx<File?>(null);
+
+
+
+     void scrollToMessage(String messageId) {
+      print("messag id$messageId");
+    final key = messageKeys[messageId];
+     print("messag key$key");
+    if (key != null) {
+      final context = key.currentContext;
+      if (context != null) {
+        Scrollable.ensureVisible(
+          context,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    }
+  }
 
   void sendMessage(MessageType type, {List<Contact>? contactList}) {
     _disposeOverlayEntry();

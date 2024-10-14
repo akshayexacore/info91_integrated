@@ -163,12 +163,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         appBarName: "Information Groups",
                         actionWidget: [
                           if (chatController.messageSelectedcount() != 0) ...[
-                            if (chatController
-                                .checkOnlySelectedMessageIsText())
+                            if (chatController.checkOnlySelectedMessageIsText())
                               IconButton(
                                 onPressed: () {
-                                  chatController
-                                      .copySelectedMessages(context);
+                                  chatController.copySelectedMessages(context);
                                 },
                                 icon: Icon(Icons.copy),
                                 color: AppColors.white,
@@ -203,7 +201,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         selectedCount:
                             chatController.selectedMessage.length.toString()),
               ),
-    
+
               Expanded(
                 child: Obx(() {
                   debugPrint(chatController.messages.isEmpty.toString());
@@ -228,8 +226,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                 ),
                                 child: Text(
                                   DateFormat("MMM dd, yyyy").format(
-                                      chatController
-                                          .messages[index].dateTime),
+                                      chatController.messages[index].dateTime),
                                   style: const TextStyle(
                                     fontSize: 10,
                                     color: AppColors.primary,
@@ -242,22 +239,37 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                             ],
                           ),
                       indexedItemBuilder: (context, index) {
-    
-    
-    
-                        debugPrint("chatController.messages[index]${chatController.messages[index].message}$index");
+                        debugPrint(
+                            "chatController.messages[index]${chatController.messages[index].message}$index");
                         final message = chatController.messages[index];
                         bool isMe = message.senderId == "1";
-                        msgdate = formatMessageTimestamp(message.dateTime, index);
-                        bool isSameUser=index+1<=chatController.messages.length-1?message.id!=chatController.messages[index+1].id?false:true:false;
-    
+                        msgdate =
+                            formatMessageTimestamp(message.dateTime, index);
+                        bool isSameUser =
+                            index + 1 <= chatController.messages.length - 1
+                                ? message.id !=
+                                        chatController.messages[index + 1].id
+                                    ? false
+                                    : true
+                                : false;
+
                         return LayoutBuilder(builder: (context, constraints) {
                           return InkWell(
                             highlightColor: AppColors.transparent,
                             splashColor: AppColors.transparent,
                             onTap: () {
-                              chatController.messageOntapfunction(index,
-                                  isOntap: true);
+                              print(
+                                  "message.isReplay${!chatController.checkSelcetionExist()}");
+
+                              if (!chatController.checkSelcetionExist()) {
+                                if (message.isReplay == true) {
+                                  chatController.scrollToMessage(
+                                      message.replyModel?.id ?? "0");
+                                }
+                              } else {
+                                chatController.messageOntapfunction(index,
+                                    isOntap: true);
+                              }
                             },
                             onLongPress: () {
                               var position;
@@ -282,8 +294,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                 if (chatController.messages[index].isSelcted)
                                   Positioned.fill(
                                     child: Container(
-                                        color: AppColors.primary
-                                            .withOpacity(0.1)),
+                                        color:
+                                            AppColors.primary.withOpacity(0.1)),
                                   )
                               ],
                             ),
@@ -292,7 +304,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       });
                 }),
               ),
-    
+
               // Expanded(
               //   child:
               //       // Container(color: Colors.red,)
@@ -309,7 +321,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               //         bool isMe = message.senderId == "1";
               //         msgdate =
               //             formatMessageTimestamp(message.dateTime, index);
-    
+
               //         return LayoutBuilder(builder: (context, constraints) {
               //           return InkWell(
               //             highlightColor: AppColors.transparent,
@@ -337,7 +349,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               //                     child: BuildMessageWidget(
               //                       messageModel: message,
               //                     )),
-    
+
               //                 if (chatController.messages[index].isSelcted)
               //                   Positioned.fill(
               //                     child: Container(
@@ -367,7 +379,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                           () {
                             chatController.sendMessage(MessageType.text);
                             chatController.searchController.clear();
-    
+
                             setState(() {});
                           },
                           showReply: chatController.isReplay.value,
@@ -662,6 +674,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   onChanged: (val) {
                     chatController.checkTextFieldEmpty(val);
                   },
+                  style: const 
+                  TextStyle(
+                    decoration: TextDecoration.none,
+                    decorationThickness: 0,
+                  ),
                   decoration: InputDecoration(
                     contentPadding:
                         const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
@@ -816,7 +833,7 @@ class ChatMessage {
       dateTime: dateTime ?? this.dateTime,
       messageType: messageType ?? this.messageType,
       status: status ?? this.status,
-      userProfile:userProfile??this.userProfile ,
+      userProfile: userProfile ?? this.userProfile,
       filePath: filePath ?? this.filePath,
       isSelcted: isSelcted ?? this.isSelcted,
       contactList: contactList ?? this.contactList,
