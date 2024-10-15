@@ -72,7 +72,7 @@ dependencies:
   video_player: ^2.9.2
   colorize_text_avatar: ^1.0.2
   audioplayers: ^6.1.0
-  flutter_sound: 
+   
   just_audio: ^0.9.41
  
 
