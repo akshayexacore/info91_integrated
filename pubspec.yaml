@@ -74,6 +74,7 @@ dependencies:
   audioplayers: ^6.1.0
    
   just_audio: ^0.9.41
+  dropdown_button2: ^2.3.9
  
 
 

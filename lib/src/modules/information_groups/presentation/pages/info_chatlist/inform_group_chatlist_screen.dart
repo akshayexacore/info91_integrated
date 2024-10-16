@@ -98,7 +98,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
       activeFgColor: Colors.white,
       inactiveBgColor: Colors.white,
       inactiveFgColor: Colors.black,
-      initialLabelIndex: 1,
+      initialLabelIndex: 0,
       curve: Curves.bounceOut,
       cornerRadius: 10,
       activeBgColors: [

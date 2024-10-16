@@ -26,6 +26,7 @@ class InformGroupCreationScreen extends StatelessWidget {
             ),
             Expanded(
                 child: SingleChildScrollView(
+                  
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: marginWidth),
                 child: Column(
@@ -39,10 +40,11 @@ class InformGroupCreationScreen extends StatelessWidget {
                     SizedBox(
                       height: 15.h,
                     ),
-                    NewInputCard(
-                      controller: TextEditingController(),
-                      title: "Type",
-                    ),
+                    CustomDropDownWidget<String>(title:"Type" ,getItemTAble:( ak)=>ak ,onChanged: (va){},itemList: ["Normal"],selectedItem: "sss",),
+                    // NewInputCard(
+                    //   controller: TextEditingController(),
+                    //   title: "Type",
+                    // ),
                     SizedBox(
                       height: 10.h,
                     ),

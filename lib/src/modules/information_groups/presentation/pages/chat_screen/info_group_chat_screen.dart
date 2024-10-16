@@ -18,8 +18,10 @@ import 'package:info91/src/modules/information_groups/presentation/pages/profile
 import 'package:info91/src/modules/information_groups/presentation/widgets/chat_list_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
 import 'package:info91/src/widgets/custom/app_app_bar.dart';
+import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/custom/build_appbar_widgets.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
+import 'package:info91/src/widgets/custom/image_view.dart';
 import 'package:info91/src/widgets/custom/reply_chat_message_tile.dart';
 import 'package:info91/src/widgets/tiny/app_back_button.dart';
 
@@ -711,14 +713,19 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                             }
                           },
                         )),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        Icons.attach_file,
-                        color: AppColors.primary,
-                        size: 24.sp,
-                      ),
-                      onPressed: chatController.toggleGallery,
+                    suffixIcon:  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: AppInkWell(
+                          onTap: chatController.toggleGallery,
+                          borderRadius: 50,
+                          child: const AppSvgAsset(
+                            'assets/images/ic_attach.svg',
+                            width: 24,
+                            height: 24,
+                          ),
+                        ),
                     ),
+                   
                   ),
                 ),
               ),
