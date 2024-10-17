@@ -20,10 +20,10 @@ class ProfileScreen extends StatelessWidget {
     popupMenuModel(name: "Group Setting", value: 1)
   ];
   List<String> MediaList = [
-    "https://s3-alpha-sig.figma.com/img/c293/679f/a9d76f9e4f26a17ead029749476e8f6c?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=VUpvHydKMhFGG8bh8kwwZiSxvweL7FvVNYssFvgmICqabLL9PCgD5RpCixwqAtdMUAziakWiIo3~jNtyEuV6o3pSTHAcaXvyhSd3YVUWkSzTIEO3jaii~9GLCR-zfjYPryWrvol3aKoYq4xu8z~CVdKc3PIgrim7kSZKVHH5Qumrv07drsYxqZ8U-sor3Oh7-STtxDrWBpTu3A-Bn3N-ABPEG9WJwoGWzl~l2wJDQLsTIzmyMUy8sFNzt1g7bqresi1C60fCU96l4IChCtmN~pUlvuyyJv49rNxR9NfctXBRK1pycCRMZVN-UQ2z0P6XzLGG3MwplrrfwJHULz--~g__",
-    "https://s3-alpha-sig.figma.com/img/c293/679f/a9d76f9e4f26a17ead029749476e8f6c?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=VUpvHydKMhFGG8bh8kwwZiSxvweL7FvVNYssFvgmICqabLL9PCgD5RpCixwqAtdMUAziakWiIo3~jNtyEuV6o3pSTHAcaXvyhSd3YVUWkSzTIEO3jaii~9GLCR-zfjYPryWrvol3aKoYq4xu8z~CVdKc3PIgrim7kSZKVHH5Qumrv07drsYxqZ8U-sor3Oh7-STtxDrWBpTu3A-Bn3N-ABPEG9WJwoGWzl~l2wJDQLsTIzmyMUy8sFNzt1g7bqresi1C60fCU96l4IChCtmN~pUlvuyyJv49rNxR9NfctXBRK1pycCRMZVN-UQ2z0P6XzLGG3MwplrrfwJHULz--~g__",
-    "https://s3-alpha-sig.figma.com/img/c293/679f/a9d76f9e4f26a17ead029749476e8f6c?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=VUpvHydKMhFGG8bh8kwwZiSxvweL7FvVNYssFvgmICqabLL9PCgD5RpCixwqAtdMUAziakWiIo3~jNtyEuV6o3pSTHAcaXvyhSd3YVUWkSzTIEO3jaii~9GLCR-zfjYPryWrvol3aKoYq4xu8z~CVdKc3PIgrim7kSZKVHH5Qumrv07drsYxqZ8U-sor3Oh7-STtxDrWBpTu3A-Bn3N-ABPEG9WJwoGWzl~l2wJDQLsTIzmyMUy8sFNzt1g7bqresi1C60fCU96l4IChCtmN~pUlvuyyJv49rNxR9NfctXBRK1pycCRMZVN-UQ2z0P6XzLGG3MwplrrfwJHULz--~g__",
-    "https://s3-alpha-sig.figma.com/img/c293/679f/a9d76f9e4f26a17ead029749476e8f6c?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=VUpvHydKMhFGG8bh8kwwZiSxvweL7FvVNYssFvgmICqabLL9PCgD5RpCixwqAtdMUAziakWiIo3~jNtyEuV6o3pSTHAcaXvyhSd3YVUWkSzTIEO3jaii~9GLCR-zfjYPryWrvol3aKoYq4xu8z~CVdKc3PIgrim7kSZKVHH5Qumrv07drsYxqZ8U-sor3Oh7-STtxDrWBpTu3A-Bn3N-ABPEG9WJwoGWzl~l2wJDQLsTIzmyMUy8sFNzt1g7bqresi1C60fCU96l4IChCtmN~pUlvuyyJv49rNxR9NfctXBRK1pycCRMZVN-UQ2z0P6XzLGG3MwplrrfwJHULz--~g__",
+   "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
+   "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
+   "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
+   "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
   ];
 
   @override

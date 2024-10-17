@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/gallery_view_screen/gallery_view_controller.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/gallery_view_screen/video_display_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_image_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_scaffold.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
@@ -76,7 +77,7 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
     );
   }
 
-  Widget imageViewSection({bool isVideo=false}) {
+  Widget imageViewSection({bool isVideo = false}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: marginWidth, vertical: 15.h),
       child: GridView.builder(
@@ -88,8 +89,11 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
           mainAxisSpacing: 10.w,
         ),
         itemBuilder: (context, index) => customImageCard(
-          imageUrl: widget.imageList[index],isVideo: isVideo,
-          onImageTap: () {},
+          imageUrl: widget.imageList[index],
+          isVideo: isVideo,
+          onImageTap: () {
+            Get.to(() => VideoPlayerScreen());
+          },
         ),
       ),
     );
@@ -120,9 +124,11 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
                       width: 55.w,
                       height: 40.h,
                       color: AppColors.dividerlight,
-                      child:const Center(
-                        child: Icon(Icons.link,color: AppColors.text,)
-                      ),
+                      child: const Center(
+                          child: Icon(
+                        Icons.link,
+                        color: AppColors.text,
+                      )),
                     ),
                     title: SizedBox(
                         width: 300.w,
@@ -157,7 +163,7 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
                     ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading:Image.asset("assets/images/docs.png"),
+                    leading: Image.asset("assets/images/docs.png"),
                     title: SizedBox(
                         width: 300.w,
                         child: Text(

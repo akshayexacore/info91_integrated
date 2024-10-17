@@ -8,6 +8,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
+    
   ]);
   runApp(  ScreenUtilInit(
       designSize: const Size(375, 812),
