@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/informtion_group_creation.dart/group_creation_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/validity_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_arrow_button.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/new_input_card.dart';
@@ -11,8 +12,8 @@ import 'package:info91/src/widgets/custom/custom_divider.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
 
 class InformGroupCreationScreen extends StatelessWidget {
-  const InformGroupCreationScreen({super.key});
-
+   InformGroupCreationScreen({super.key});
+final GroupCreationController _controller=GroupCreationController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,14 +51,14 @@ class InformGroupCreationScreen extends StatelessWidget {
                     ),
                     NewInputCard(
                       label: "Enter group name",
-                      controller: TextEditingController(),
+                      controller: _controller.groupNameController,
                       title: "Group Name",
                     ),
                     SizedBox(
                       height: 15.h,
                     ),
                     NewInputCard(
-                      controller: TextEditingController(),
+                      controller: _controller.purposeController,
                       title: "Purpose",
                       height: 90,
                       maxLines: 3,
@@ -74,7 +75,7 @@ class InformGroupCreationScreen extends StatelessWidget {
                       height: 15.h,
                     ),
                     NewInputCard(
-                      controller: TextEditingController(),
+                      controller: _controller.category1Controller,
                       title: "Category1",
                       label: "Select category",
                     ),
@@ -82,7 +83,7 @@ class InformGroupCreationScreen extends StatelessWidget {
                       height: 15.h,
                     ),
                     NewInputCard(
-                      controller: TextEditingController(),
+                      controller: _controller.category2Controller,
                       title: "Category2",
                       label: "Select category",
                     ),
@@ -90,7 +91,7 @@ class InformGroupCreationScreen extends StatelessWidget {
                       height: 15.h,
                     ),
                     NewInputCard(
-                      controller: TextEditingController(),
+                      controller:  _controller.category3Controller,
                       title: "Category3",
                       label: "Select category",
                     ),

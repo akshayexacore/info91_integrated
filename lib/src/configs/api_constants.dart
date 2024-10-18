@@ -5,4 +5,7 @@ class ApiConstants {
   static String user = '/user_profile';
   static String updateUser = '/update_profile';
   static String refreshToken = '/auth/refresh_token';
+
+  //information Apis
+  static String creationInformationAPi="/groupCreation";
 }

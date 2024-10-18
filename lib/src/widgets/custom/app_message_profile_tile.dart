@@ -1,6 +1,10 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/models/chat.dart';
 import 'package:info91/src/models/profile.dart';
+
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/custom/app_message_status.dart';
 import 'package:info91/src/widgets/tiny/app_check_box.dart';
@@ -93,6 +97,108 @@ class AppMessageProfileTile extends StatelessWidget {
               width: 14,
             ),
             if (selected != null) AppCheckBox(value: selected!)
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+class AppAlarmProfileTile extends StatelessWidget {
+  const AppAlarmProfileTile(
+    {
+    super.key,
+    this.onPressed,
+    this.onLongPress,
+    this.selected, required this.imageUrl, required this.title, required this.subTitle, this.leading, this.messageStatus,
+  });
+
+  final VoidCallback? onPressed;
+  final String imageUrl;
+  final String title;
+  final String subTitle;
+  final String? leading;
+  final MessageStatus? messageStatus;
+
+  final VoidCallback? onLongPress;
+
+  
+
+  final bool? selected;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppInkWell(
+      onTap: onPressed,
+      onLongPress: onLongPress,
+      child: Container(
+        color: selected != null && selected!
+            ? AppColors.primary.withOpacity(0.1)
+            : null,
+        // padding: const EdgeInsets.symmetric(
+        //   horizontal: AppPaddings.large,
+        // ),
+        child: Row(
+          children: [
+            AppCircleImage(
+              image: imageUrl,
+              radius: 24,
+            ),
+            const SizedBox(
+              width: 14,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 22,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                         title,
+                          maxLines: 1,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                    if(leading!=null)  AppMessageStatus(
+                        messageStatus:messageStatus??MessageStatus.none ,
+                        time: leading!,
+                        
+                      )
+                    ],
+                  ),
+                  Text(
+                    subTitle,
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  // const Divider(
+                  //   height: 1,
+                  //   color: AppColors.white,
+                  // ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 14,
+            ),
+           AppCheckBox(value: selected??false)
           ],
         ),
       ),
