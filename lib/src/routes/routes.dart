@@ -45,13 +45,13 @@ import '../modules/home/controllers/chats_controller.dart';
 
 class Routes {
   static var getPages = [
-    GetPage(
-        name: SplashPage.routeName,
-        page: () => SplashPage(),
-        binding: BindingsBuilder(() {
-          Get.lazyPut(() => SplashController());
-          Get.lazyPut(() => AuthController());
-        })),
+    // GetPage(
+    //     name: SplashPage.routeName,
+    //     page: () => SplashPage(),
+    //     binding: BindingsBuilder(() {
+    //       Get.lazyPut(() => SplashController());
+    //       Get.lazyPut(() => AuthController());
+    //     })),
     GetPage(
         name: WelcomePage.routeName,
         page: () => WelcomePage(),
