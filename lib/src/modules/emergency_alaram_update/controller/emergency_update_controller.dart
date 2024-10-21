@@ -1,16 +1,29 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 
 class EmergencyUpdateController extends GetxController {
   var isRecording = false.obs;
-
   var isPlaying = false.obs;
-
   var filePath = ''.obs;
-  //
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
+  var recordingDuration = Duration.zero.obs;
+
+  Timer? _recordingTimer;
+
+  void startRecordingTimer() {
+    recordingDuration.value = Duration.zero;
+    _recordingTimer?.cancel();
+    _recordingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      recordingDuration.value += Duration(seconds: 1);
+    });
+  }
+
+  void stopRecordingTimer() {
+    _recordingTimer?.cancel();
+  }
+
+  void resetRecording() {
+    recordingDuration.value = Duration.zero;
   }
 
   String formatDuration(Duration duration) {

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/emergency_alaram_update/pages/emergency_updated_main_screen.dart';
-import 'package:info91/src/modules/emergency_alaram_update/pages/emergeny_main_page.dart';
+
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 import 'package:info91/src/resources/user_profile_repository.dart';
 import 'package:info91/src/widgets/custom/app_dialog.dart';
@@ -31,12 +31,12 @@ class VerifyNumberAlarmScreen extends StatelessWidget {
                   height: 20.h,
                 ),
                 greyBoldText(
-                  "For security, enter the last 4 digits of your registered mobile number to access the emergency alarm screen.",
-                  size: 15.sp,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.text.withOpacity(.7),
-                  height: 1.7.h,wordSpacing: 4.w
-                ),
+                    "For security, enter the last 4 digits of your registered mobile number to access the emergency alarm screen.",
+                    size: 15.sp,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.text.withOpacity(.7),
+                    height: 1.7.h,
+                    wordSpacing: 4.w),
                 SizedBox(
                   height: 30.h,
                 ),
@@ -69,34 +69,25 @@ class VerifyNumberAlarmScreen extends StatelessWidget {
                 Spacer(),
                 AppButton(
                   text: "Continue",
-                  onPressed: () async{
-                
-                    if(textControllerOtp.text.trim().isEmpty || textControllerOtp.text.trim().length<4){
-                    AppDialog.showSnackBar('Invalid ', 'Please enter 4 digits of your registerd number');
-  
-                    }else {
-                       var response=await   _userProfileRepository.getUser();
-                       if(response.user?.phoneNumber!=null){
-                        var  checkingVal=response.user!.phoneNumber.substring(response.user!.phoneNumber.length-4);
+                  onPressed: () async {
+                    if (textControllerOtp.text.trim().isEmpty ||
+                        textControllerOtp.text.trim().length < 4) {
+                      AppDialog.showSnackBar('Invalid ',
+                          'Please enter 4 digits of your registerd number');
+                    } else {
+                      var response = await _userProfileRepository.getUser();
+                      if (response.user?.phoneNumber != null) {
+                        var checkingVal = response.user!.phoneNumber
+                            .substring(response.user!.phoneNumber.length - 4);
                         debugPrint(checkingVal);
-                        if(checkingVal==textControllerOtp.text.trim()){
+                        if (checkingVal == textControllerOtp.text.trim()) {
                           Get.toNamed(EmergencyUpdatedMainScreen.routeName);
-
+                        } else {
+                          AppDialog.showSnackBar(
+                              'Invalid 4 digits ', 'Invalid 4 digits');
                         }
-                        else{
-                           AppDialog.showSnackBar('Invalid 4 digits ', 'Invalid 4 digits');
-
-                        }
-
-
-
-                       }
-
+                      }
                     }
-
-
-
-
                   },
                 ),
                 SizedBox(

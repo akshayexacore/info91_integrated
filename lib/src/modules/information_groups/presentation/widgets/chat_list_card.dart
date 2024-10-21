@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_avatarwithimageicon.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
@@ -89,9 +89,7 @@ class ContactListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     print("cccccccccccccc$avatar");
     return ListTile(
-        leading: buildContactAvatar(avatar,contactName
-          
-        ),
+        leading: buildContactAvatar(avatar, contactName),
         title: Text(
           contactName,
           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -103,7 +101,6 @@ class ContactListCard extends StatelessWidget {
               radius: 12.5,
               iconColor: value ? AppColors.white : Colors.transparent,
             ),
-        onTap: onCange
-        );
+        onTap: onCange);
   }
 }

@@ -8,10 +8,9 @@ import 'package:info91/src/modules/information_groups/presentation/pages/informt
 import 'package:info91/src/modules/information_groups/presentation/pages/start_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/chat_list_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
-import 'package:info91/src/modules/profile/profile_page.dart';
+
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 import 'package:info91/src/widgets/custom/custom_divider.dart';
-
 
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -22,20 +21,14 @@ class InfoGroupChatListScreen extends StatefulWidget {
   State<InfoGroupChatListScreen> createState() => _InfoGroupChatListScreen();
 }
 
-class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
-    {
-      final InfoChatListController controller=Get.put(InfoChatListController());
-  
-
-
-
-
+class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
+  final InfoChatListController controller = Get.put(InfoChatListController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColors.splashBackground,
-         resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: true,
         body: Column(
           children: [
             CustomAppBar(
@@ -61,26 +54,24 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen>
               height: 40,
             ),
             toggleSwitch(onToggle: (val) {
-              controller.toggleValue.value=val;
-
+              controller.toggleValue.value = val;
             }),
             SizedBox(
               height: 10.h,
             ),
             Expanded(
               child: ListView.separated(
-                itemCount:controller.chats.length,
-                
+                itemCount: controller.chats.length,
                 itemBuilder: (context, index) => ChatListItem(
-                  chat:controller .chats[index],
+                  chat: controller.chats[index],
                   onTap: () {
-
-
-                   
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>controller.toggleValue.value==0?const  StartScreen(): ChatScreen(),
+                          builder: (context) =>
+                              controller.toggleValue.value == 0
+                                  ? const StartScreen()
+                                  : ChatScreen(),
                         ));
                   },
                 ),
