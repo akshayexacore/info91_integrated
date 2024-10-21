@@ -16,7 +16,7 @@ class LoginResponse {
     message = json['message'] is String ? json['message'] : getStringFromMap(json);
     statusCode = json['statusCode'] ?? 0;
     user = json['data'] != null && json['data'] is Map ? User.fromJson(json['data']) : null;
-    token = json['token'] != null ? json['token']['original']['access_token'] : '';
+    token =  json['token'] ?? '';
     tokenType = 'Bearer';
     success = json['success'] == "success";
     refreshToken = json['random_string'] ?? '';

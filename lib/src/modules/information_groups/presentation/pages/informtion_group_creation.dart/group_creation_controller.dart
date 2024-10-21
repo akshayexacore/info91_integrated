@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/models/information_group.dart';
 import 'package:info91/src/resources/infromation_repository.dart';
+import 'package:info91/src/widgets/custom/app_dialog.dart';
 
 class GroupCreationController extends GetxController {
-  TextEditingController typeController = TextEditingController();
+  var typeController = "".obs;
   TextEditingController groupNameController = TextEditingController();
   TextEditingController purposeController = TextEditingController();
   TextEditingController category1Controller = TextEditingController();
@@ -14,26 +15,37 @@ class GroupCreationController extends GetxController {
   var isBusy = false.obs;
 
   final _infromationRepository = InfromationRepository();
-
+final formkey=GlobalKey<FormState>();
   void createGroupFun() async {
     isBusy(true);
     InformationGroupCreationModel model = InformationGroupCreationModel(
       category1: category1Controller.text,
-      alternativeNumber: "",
       category2: category2Controller.text,
       category3: category3Controller.text,
-      contactTime: "",
       groupName: groupNameController.text,
-      planId: planId,
+      planId: planId??1,
       purpose: purposeController.text,
-      type: typeController.text,
+      type: typeController.value,
     );
     try{
       final response = await _infromationRepository.createGroupFun(model);
-    }catch(e){
+      if(response.data1){
+        AppDialog.showSnackBar('Success', '${response.data2}');
 
+      }else{
+      AppDialog.showSnackBar('Failure', '${response.data2}');
+      }
+    }catch(e){
+      print("esss$e");
+  AppDialog.showSnackBar('Failure', '$e');
       debugPrint(e.toString());
     }
     
   }
-}
+  saveButtonPress(){
+     bool isFormValid = formkey.currentState!.validate();
+    if(isFormValid)
+      createGroupFun();
+    }
+  }
+

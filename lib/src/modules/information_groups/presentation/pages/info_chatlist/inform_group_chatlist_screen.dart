@@ -60,23 +60,26 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
               height: 10.h,
             ),
             Expanded(
-              child: ListView.separated(
-                itemCount: controller.chats.length,
-                itemBuilder: (context, index) => ChatListItem(
-                  chat: controller.chats[index],
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              controller.toggleValue.value == 0
-                                  ? const StartScreen()
-                                  : ChatScreen(),
-                        ));
-                  },
-                ),
-                separatorBuilder: (context, index) => customDivider(),
-              ),
+              child: Obx((){
+                debugPrint(controller.chatGroupList.toString());
+                return ListView.separated(
+                  itemCount:controller.toggleValue==0? controller.chatGroupList.length:controller.ownchatGroupList.length,
+                  itemBuilder: (context, index) => ChatListItem(
+                    chat:controller.toggleValue==0? controller.chatGroupList[index]:controller.ownchatGroupList[index],
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                controller.toggleValue.value == 0
+                                    ? const StartScreen()
+                                    : ChatScreen(),
+                          ));
+                    },
+                  ),
+                  separatorBuilder: (context, index) => customDivider(),
+                );
+   } ),
             )
           ],
         ));

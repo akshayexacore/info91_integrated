@@ -19,7 +19,9 @@ import 'package:info91/src/widgets/custom/custom_divider.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
 
 class EmergencyUpdatedMainScreen extends StatelessWidget {
-  static const routeName = '/';
+  // static const routeName = '/';
+  static const routeName = '/emergency_updated_main_screen';
+
 
   EmergencyUpdatedMainScreen({super.key});
   final MainController _controller = Get.put(MainController());

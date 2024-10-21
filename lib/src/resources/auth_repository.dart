@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:info91/src/configs/api_constants.dart';
 import 'package:info91/src/models/base_response.dart';
 import 'package:info91/src/models/login.dart';
@@ -36,7 +37,7 @@ class AuthRepository {
     var body = {'phone_number': phone, "country_code": code};
     final response =
         await _api.post(ApiConstants.sendOtp, body: body, headers: {});
-    AppDialog.showToast((response['otp'] ?? '').toString());
+    // AppDialog.showToast((response['otp'] ?? '').toString());
     return BaseResponse.fromJson(response);
   }
 
@@ -56,6 +57,7 @@ class AuthRepository {
     };
     final response =
         await _api.post(ApiConstants.verifyOtp, body: body, headers: {});
+        
     return LoginResponse.fromJson(response);
   }
 }

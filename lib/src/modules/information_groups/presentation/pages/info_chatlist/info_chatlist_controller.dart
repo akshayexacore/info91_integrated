@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:info91/src/models/information_group.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/chat_list_card.dart';
+import 'package:info91/src/resources/infromation_repository.dart';
 
-class InfoChatListController extends GetxController with GetSingleTickerProviderStateMixin{
-   ScrollController _scrollController = ScrollController();
-   var toggleValue=0.obs;
-    var chats = [
+class InfoChatListController extends GetxController
+    with GetSingleTickerProviderStateMixin {
+  ScrollController _scrollController = ScrollController();
+   final _infromationRepository = InfromationRepository();
+  var toggleValue = 0.obs;
+ var ownchatGroupList=<InfoGroupChatListModel>[].obs;
+  var chatGroupList=<InfoGroupChatListModel>[].obs;
+  var chats = [
     Chat(
       name: "John Doe",
       itemcount: 5,
@@ -21,4 +27,38 @@ class InfoChatListController extends GetxController with GetSingleTickerProvider
     ),
     // Add more chats here
   ].obs;
+  @override
+  void onInit() {
+    grtInfoGroupList();
+    // TODO: implement onInit
+    super.onInit();
+  }
+
+  grtInfoGroupList()async {
+    
+    try {
+      final responseData=await _infromationRepository.grtInfoGroupList();
+      debugPrint("responseData$responseData");;
+
+      if(responseData!=null){
+        chatGroupList.clear();
+        ownchatGroupList.clear();
+       for (var item in responseData) {
+        switch (item.owngroupFlag??false) {
+          case true:
+            ownchatGroupList.add(item);
+            break;
+          case false:
+            chatGroupList.add(item);
+            break;
+         
+        }
+      }
+
+      }
+      
+    } catch (e) {
+      throw (e);
+    }
+  }
 }

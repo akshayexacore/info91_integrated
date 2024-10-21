@@ -17,7 +17,9 @@ class NewInputCard extends StatefulWidget {
   final String? label;
   final String? keyboardType;
   final bool isBorder;
-
+  final bool showValidator;
+  final String? Function(String?)? validator; 
+  final String? validatorMessage; 
   final String title;
   final String? hint;
 
@@ -34,11 +36,13 @@ class NewInputCard extends StatefulWidget {
     this.readOnly = false,
     this.password = false,
     this.direction = false,
+    this.showValidator=false,
     required this.title,
+    this.validatorMessage,
     this.colors = const Color(0xffC3C7C9),
     this.maxLines = 1,
     this.height = 50,
-    this.fontsize = 13,
+    this.fontsize = 13, this.validator,
   });
 
   @override
@@ -147,13 +151,20 @@ class _NewInputCardState extends State<NewInputCard> {
                     )
                   : Container(
                       alignment: Alignment.topLeft,
-                      height: widget.height,
+                      // height: widget.height,
                       child: TextFormField(
                         textAlignVertical: TextAlignVertical.center,
                         readOnly: widget.readOnly,
                         maxLines: widget.maxLines,
                         controller: widget.controller,
                         obscureText: show,
+                         validator: widget.showValidator?
+                          widget.validator ??    (value) {
+                                if (value == null || value.isEmpty) {
+                                  return widget.validatorMessage??'This is a mandatory field';
+                                }
+                                return null; // Valid input
+                              }:null,
                         keyboardType:
                             widget.formatter ? TextInputType.number : null,
                         inputFormatters: widget.formatter
@@ -197,6 +208,7 @@ class _NewInputCardState extends State<NewInputCard> {
                           hintText: widget.label,
                           disabledBorder: borderStyle(),
                           enabledBorder: borderStyle(),
+                       border:borderStyle(),
                           focusedBorder: borderStyle(),
                         ),
                       ),

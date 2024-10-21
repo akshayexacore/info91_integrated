@@ -3,11 +3,12 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/models/information_group.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_avatarwithimageicon.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
 
 class ChatListItem extends StatelessWidget {
-  final Chat chat;
+  final InfoGroupChatListModel chat;
   final Function onTap;
   const ChatListItem({super.key, required this.chat, required this.onTap});
 
@@ -15,25 +16,25 @@ class ChatListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(chat.avatarUrl),
+        backgroundImage: NetworkImage(chat.profileImage??""),
         radius: 25.0,
       ),
       title: Text(
-        chat.name,
-        style: const TextStyle(fontWeight: FontWeight.bold),
+        chat.groupName??"",
+        style: const TextStyle(fontWeight: FontWeight.bold),maxLines: 1,
       ),
       subtitle: Text(
-        chat.message,
+        "chat.message",
         style: const TextStyle(
-            color: Colors.black, overflow: TextOverflow.ellipsis),
+            color: Colors.black, overflow: TextOverflow.ellipsis,),maxLines: 1,
       ),
       trailing: Column(
         children: [
           Text(
-            chat.time,
+            chat.lastSendTime??'',
             style: const TextStyle(color: Colors.black, fontSize: 12.0),
           ),
-          if (chat.itemcount != 0 && chat.itemcount != null) ...[
+          // if (chat.itemcount != 0 && chat.itemcount != null) ...[
             const SizedBox(
               height: 5,
             ),
@@ -45,7 +46,7 @@ class ChatListItem extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
               ),
             )
-          ]
+          // ]
         ],
       ),
       onTap: () {

@@ -8,4 +8,5 @@ class ApiConstants {
 
   //information Apis
   static String creationInformationAPi="/groupCreation";
+  static String infoGroupListAPi="/groupList";
 }

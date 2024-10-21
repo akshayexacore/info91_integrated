@@ -74,7 +74,8 @@ class User {
     name = json['name'] ?? '';
     phoneNumber = json['phone_number'] ?? '';
     countryCode = json['country_code'] ?? '';
-    otp = json['otp'] ?? 0;
+    otp = otp = int.tryParse(json['otp'].toString()) ?? 0;
+
     about = json['about'] ?? '';
     image = json['image'] ?? '';
     email = json['email'] ?? '';

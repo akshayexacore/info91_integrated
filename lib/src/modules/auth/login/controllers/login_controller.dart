@@ -146,6 +146,11 @@ class LoginController extends GetxController {
           textControllerOtp.text.length == 4) {
         final response = await _authRepository.verifyOtp(
             phone.value, textControllerOtp.text);
+
+
+
+          
+           
         if (response.success) {
           await _authRepository
               .saveAccessToken('${response.tokenType} ${response.token}');
@@ -161,7 +166,8 @@ class LoginController extends GetxController {
         AppDialog.showSnackBar('Invalid OTP', 'Please enter a valid OTP');
         busy(false);
       }
-    } catch (_) {
+    } catch (e) {
+      print("the error is here$e");
       busy(false);
       AppDialog.showSnackBar('Otp Verification Failed', 'Something went wrong');
     } finally {}
