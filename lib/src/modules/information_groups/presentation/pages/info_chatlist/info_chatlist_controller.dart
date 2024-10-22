@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:info91/src/models/information_group.dart';
+import 'package:info91/src/models/informationgroup/information_group.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/chat_list_card.dart';
 import 'package:info91/src/resources/infromation_repository.dart';
 
@@ -8,9 +10,12 @@ class InfoChatListController extends GetxController
     with GetSingleTickerProviderStateMixin {
   ScrollController _scrollController = ScrollController();
    final _infromationRepository = InfromationRepository();
+   var serchController=TextEditingController().obs;
   var toggleValue = 0.obs;
  var ownchatGroupList=<InfoGroupChatListModel>[].obs;
   var chatGroupList=<InfoGroupChatListModel>[].obs;
+   var searchGroupList=<InfoGroupChatListModel>[].obs;
+  Timer? _debounce;
   var chats = [
     Chat(
       name: "John Doe",
@@ -61,4 +66,14 @@ class InfoChatListController extends GetxController
       throw (e);
     }
   }
+
+
+searchInfoGroup(String value){
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      final response=await _infromationRepository.searchInfoGroup(value);
+      searchGroupList.value=response??[];
+     
+    });
+}
 }

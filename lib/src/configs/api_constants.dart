@@ -9,4 +9,6 @@ class ApiConstants {
   //information Apis
   static String creationInformationAPi="/groupCreation";
   static String infoGroupListAPi="/groupList";
+  static String infoGroupPublicSearchAPi="/groupSearch";
+   static String firstCategoryListApi="/firstCategories";
 }

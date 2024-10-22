@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:info91/src/configs/app_styles.dart';
-import 'package:info91/src/models/information_group.dart';
+import 'package:info91/src/models/informationgroup/information_group.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_avatarwithimageicon.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
 

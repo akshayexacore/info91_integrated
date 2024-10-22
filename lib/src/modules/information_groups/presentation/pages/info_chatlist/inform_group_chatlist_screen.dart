@@ -34,6 +34,12 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
             CustomAppBar(
               appBarName: "Information Groups",
               isTextield: true,
+              textEditingController: controller.serchController.value,
+              onChangeFunction: (va) {
+                controller.serchController.value.text = va;
+                controller.searchInfoGroup(va);
+                setState(() {});
+              },
               actionWidget: [
                 CustomPopupmenu(
                   onSelected: (val) {
@@ -53,34 +59,64 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
             const SizedBox(
               height: 40,
             ),
-            toggleSwitch(onToggle: (val) {
-              controller.toggleValue.value = val;
+            Obx(() {
+              return controller.serchController.value.text.isEmpty
+                  ? toggleSwitch(onToggle: (val) {
+                      controller.toggleValue.value = val;
+                    })
+                  : Container();
             }),
             SizedBox(
               height: 10.h,
             ),
             Expanded(
-              child: Obx((){
-                debugPrint(controller.chatGroupList.toString());
-                return ListView.separated(
-                  itemCount:controller.toggleValue==0? controller.chatGroupList.length:controller.ownchatGroupList.length,
-                  itemBuilder: (context, index) => ChatListItem(
-                    chat:controller.toggleValue==0? controller.chatGroupList[index]:controller.ownchatGroupList[index],
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                controller.toggleValue.value == 0
-                                    ? const StartScreen()
-                                    : ChatScreen(),
-                          ));
-                    },
-                  ),
-                  separatorBuilder: (context, index) => customDivider(),
-                );
-   } ),
-            )
+              child: Obx(() {
+                // Checking if the search controller has any text
+                if (controller.serchController.value.text.isNotEmpty) {
+                  return controller.searchGroupList.isEmpty
+                      ? Center(child: Text("No Data"))
+                      : ListView.separated(
+                          itemCount: controller.searchGroupList.length,
+                          itemBuilder: (context, index) => ChatListItem(
+                            chat: controller.searchGroupList[index],
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        controller.toggleValue.value == 0
+                                            ? const StartScreen()
+                                            : ChatScreen(),
+                                  ));
+                            },
+                          ),
+                          separatorBuilder: (context, index) => customDivider(),
+                        );
+                } else {
+                  return ListView.separated(
+                    itemCount: controller.toggleValue.value == 0
+                        ? controller.chatGroupList.length
+                        : controller.ownchatGroupList.length,
+                    itemBuilder: (context, index) => ChatListItem(
+                      chat: controller.toggleValue.value == 0
+                          ? controller.chatGroupList[index]
+                          : controller.ownchatGroupList[index],
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  controller.toggleValue.value == 0
+                                      ? const StartScreen()
+                                      : ChatScreen(),
+                            ));
+                      },
+                    ),
+                    separatorBuilder: (context, index) => customDivider(),
+                  );
+                }
+              }),
+            ),
           ],
         ));
   }

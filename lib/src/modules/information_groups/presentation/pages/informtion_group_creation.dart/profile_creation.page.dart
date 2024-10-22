@@ -14,7 +14,7 @@ import 'package:info91/src/widgets/tiny/app_button.dart';
 
 class InformGroupCreationScreen extends StatelessWidget {
   InformGroupCreationScreen({super.key});
-  final GroupCreationController _controller = GroupCreationController();
+  final GroupCreationController _controller =Get.put(GroupCreationController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
