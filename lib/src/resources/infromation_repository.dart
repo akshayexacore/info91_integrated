@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:info91/src/configs/api_constants.dart';
 import 'package:info91/src/models/informationgroup/category_model.dart';
 import 'package:info91/src/models/informationgroup/information_group.dart';
+import 'package:info91/src/models/informationgroup/plan_model.dart';
 import 'package:info91/src/resources/shared_preferences_data_provider.dart';
 import 'package:info91/src/resources/user_profile_repository.dart';
 import 'package:info91/src/utils/api_base_helper.dart';
@@ -81,7 +82,39 @@ class InfromationRepository {
     } catch (e) {
       throw e;
     }
+
+
+
   }
 
+  Future<List<SecondCategory>> getSecondCategory(String id) async {
+    List<SecondCategory> dataLIst = [];
 
-}
+    final response = await _api.get(ApiConstants.secondCategoryListApi+id,
+        headers: {});
+    try {
+      (response["data"] as List).forEach((element) {
+        dataLIst.add(SecondCategory.fromJson(element));
+      });
+      return dataLIst;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+Future<List<PlanModel>> planList() async {
+    List<PlanModel> dataLIst = [];
+  
+
+    final response = await _api.get(ApiConstants.getPlanListApi,
+        headers: {});
+    try {
+      (response["data"] as List).forEach((element) {
+        dataLIst.add(PlanModel.fromJson(element));
+      });
+      return dataLIst;
+    } catch (e) {
+      throw e;
+    }
+
+}}

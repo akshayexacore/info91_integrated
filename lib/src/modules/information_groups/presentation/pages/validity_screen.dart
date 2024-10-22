@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/informtion_group_creation.dart/group_creation_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custome_space_between_text.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/validity_card.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 
+class ValidityScreen extends StatefulWidget {
+  ValidityScreen({super.key});
 
-class ValidityScreen extends StatelessWidget {
-  const ValidityScreen({super.key});
+  @override
+  State<ValidityScreen> createState() => _ValidityScreenState();
+}
 
+class _ValidityScreenState extends State<ValidityScreen> {
+  final GroupCreationController _controller =
+      Get.put(GroupCreationController());
+
+  
+  // @override
+  // void initState() {
+  //  _controller.planId.value=0;
+  //   super.initState();
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +54,7 @@ class ValidityScreen extends StatelessWidget {
           ),
           Expanded(
             child: SingleChildScrollView(
+              
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: marginWidth),
                 child: Column(
@@ -51,74 +67,66 @@ class ValidityScreen extends StatelessWidget {
                     SizedBox(
                       height: 15.h,
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ValidityCard(
-                            amount: "1099",
-                            onChange: (va) {},
-                            planName: "Plan A",
-                          ),
+                    Obx((){
+                 return GridView.builder(
+                        shrinkWrap: true,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, 
+                          crossAxisSpacing: 20, 
+                          mainAxisSpacing: 20, childAspectRatio: 3.4/2
+                          // Space between rows
                         ),
-                        SizedBox(
-                          width: 20.w,
-                        ),
-                        Expanded(
-                          child: ValidityCard(
-                            amount: "1099",
-                            onChange: (va) {},
-                            planName: "Plan A",
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
+                        itemCount: _controller.planList.length, // Total number of items
+                        itemBuilder: (context, index) {
+                          return Obx((){
+                         return ValidityCard(
+                              isSelected: _controller.planList[index].id==_controller.planId.value,
+                                                  
+                              onChange:(){
+                               
+                                _controller.planId.value=_controller.planList[index].id??0;
+                                _controller.setPlanModel(_controller.planList[index]);
+                              },
+                              amount: _controller.planList[index].amount.toString(),
+                              planName:
+                                  _controller.planList[index].planName.toString(), // Generates Plan A, Plan B, etc.
+                             
+                            );}
+                          );
+                        },
+                      );},
+                    ),Obx((){return _controller.planId!=0? Column(children: [ SizedBox(
                       height: 20.h,
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ValidityCard(
-                            amount: "1099",
-                            onChange: (va) {},
-                            planName: "Plan A",
-                          ),
-                        ),
-                        SizedBox(
-                          width: 20.w,
-                        ),
-                        Expanded(
-                          child: ValidityCard(
-                            amount: "1099",
-                            onChange: (va) {},
-                            planName: "Plan A",
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    const CustomSpcaeBetweenText(
+                     CustomSpcaeBetweenText(
                       leftText: "Paln name",
-                      rightText: "Lorem inspum",
+                      rightText: _controller.selectedPlanModel.planName??"",
                     ),
-                    const CustomSpcaeBetweenText(
+                     CustomSpcaeBetweenText(
                       leftText: "Total Members",
-                      rightText: "1000",
+                      rightText: _controller.selectedPlanModel.totalMembers.toString()??""
                     ),
-                    const CustomSpcaeBetweenText(
+                     CustomSpcaeBetweenText(
                       leftText: "Validity",
-                      rightText: "6 months",
+                      rightText: _controller.selectedPlanModel.duration.toString()??"",
                     ),
-                    const CustomSpcaeBetweenText(
+                     CustomSpcaeBetweenText(
                       leftText: "Amount",
-                      rightText: "999.0",
+                      rightText: _controller.selectedPlanModel.amount.toString()??"",
                     ),
-                    const CustomSpcaeBetweenText(
+                     CustomSpcaeBetweenText(
                       leftText: "Tax",
-                      rightText: "999.0",
+                      rightText: _controller.selectedPlanModel.tax.toString()??"",
                     ),
+                    CustomSpcaeBetweenText(
+                      leftText: "Total Amount",
+                      rightText:((_controller.selectedPlanModel.tax ?? 0) + (_controller.selectedPlanModel.amount ?? 0)).toStringAsFixed(2)
+,
+                    ),
+                    
+                    
+                    ],):SizedBox();})
+                   
                   ],
                 ),
               ),

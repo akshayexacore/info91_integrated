@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/models/informationgroup/category_model.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/informtion_group_creation.dart/group_creation_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/validity_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_arrow_button.dart';
+import 'package:info91/src/modules/information_groups/presentation/widgets/custome_space_between_text.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/new_input_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
@@ -14,7 +16,8 @@ import 'package:info91/src/widgets/tiny/app_button.dart';
 
 class InformGroupCreationScreen extends StatelessWidget {
   InformGroupCreationScreen({super.key});
-  final GroupCreationController _controller =Get.put(GroupCreationController());
+  final GroupCreationController _controller =
+      Get.put(GroupCreationController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +38,7 @@ class InformGroupCreationScreen extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: marginWidth),
             child: Form(
-              key:_controller.formkey ,
+              key: _controller.formkey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -50,11 +53,15 @@ class InformGroupCreationScreen extends StatelessWidget {
                   CustomDropDownWidget<String>(
                     title: "Type",
                     getItemTAble: (ak) => ak,
-                    onChanged: (va) {_controller.typeController.value=va??"";},
-                    itemList: ["business","Non-business"],
+                    onChanged: (va) {
+                      _controller.typeController.value = va ?? "";
+                      // if(_controller.typeController.value=="business" && _controller.planList.isNotEmpty)
+                      _controller.getPlanList();
+                    },
+                    itemList: ["business", "Non-business"],
                     selectedItem: "",
                   ),
-             
+
                   SizedBox(
                     height: 10.h,
                   ),
@@ -71,7 +78,7 @@ class InformGroupCreationScreen extends StatelessWidget {
                   NewInputCard(
                     controller: _controller.purposeController,
                     title: "Purpose",
-                     showValidator: true,
+                    showValidator: true,
                     validatorMessage: "Please enter purpose",
                     height: 90,
                     maxLines: 3,
@@ -87,21 +94,53 @@ class InformGroupCreationScreen extends StatelessWidget {
                   SizedBox(
                     height: 15.h,
                   ),
-                  NewInputCard(
-                    controller: _controller.category1Controller,
-                    title: "Category1",
-                    label: "Select category",
-                     showValidator: true,
-                    validatorMessage: "Please choose category1",
+                  Obx(
+                    () {
+                      debugPrint(_controller.firstCategoryList.toString());
+                      return CustomDropDownWidget<Category>(
+                          title: "Category1",
+                          getItemTAble: (ak) => ak.firstCategoryName,
+                          onChanged: (va) {
+                            _controller.category1Controller.text =
+                                va?.id.toString() ?? "";
+                            _controller.getSecondCategory(
+                                _controller.category1Controller.text);
+                          },
+                          itemList: _controller.firstCategoryList ?? [],
+                          selectedItem:
+                              Category(firstCategoryName: "ok", id: 1));
+                    },
                   ),
+
+                  // NewInputCard(
+                  //   controller: _controller.category1Controller,
+                  //   title: "Category1",
+                  //   label: "Select category",
+                  //    showValidator: true,
+                  //   validatorMessage: "Please choose category1",
+                  // ),
                   SizedBox(
                     height: 15.h,
                   ),
+                  //  Obx((){
+                  //     debugPrint(_controller.secondCatList.toString());
+                  //    return CustomDropDownWidget<SecondCategory>(
+                  //     title: "Category2",
+                  //     getItemTAble: (ak) => ak.secondCategoryName??"",
+                  //     onChanged: (va) {
+                  //       _controller.category2Controller.text=va?.id.toString()??"";
+
+                  //     },
+                  //     itemList: _controller.secondCatList??[],
+                  //     selectedItem: SecondCategory(secondCategoryName: "ok",
+                  //     id: 1)
+                  //                      );},
+                  //  ),
                   NewInputCard(
                     controller: _controller.category2Controller,
                     title: "Category2",
                     label: "Select category",
-                        showValidator: true,
+                    showValidator: true,
                     validatorMessage: "Please choose category2",
                   ),
                   SizedBox(
@@ -117,22 +156,45 @@ class InformGroupCreationScreen extends StatelessWidget {
                   SizedBox(
                     height: 15.h,
                   ),
-                  Obx((){
-                 return _controller.typeController.value=="business"? CustomArrowTextbutton(
-                      toptitle: "Choose packages",
-                      buttonName: "Validity palns",
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ValidityScreen(),
-                            ));
-                      },
-                    ):SizedBox();}
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
+                  Obx(() {
+                    return _controller.typeController.value == "business"
+                        ? Column(
+                            children: [
+                              CustomArrowTextbutton(
+                                toptitle: "Choose packages",
+                                buttonName: "Validity palns",
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ValidityScreen(),
+                                      ));
+                                },
+                              ),
+                              SizedBox(
+                                height: 15.h,
+                              ),
+                              Obx(() {
+                                return _controller.planId != 0
+                                    ? CustomSpcaeBetweenText(
+                                        leftText: _controller
+                                                .selectedPlanModel.planName ??
+                                            "",
+                                        rightText: ((_controller
+                                                        .selectedPlanModel
+                                                        .tax ??
+                                                    0) +
+                                                (_controller.selectedPlanModel
+                                                        .amount ??
+                                                    0))
+                                            .toStringAsFixed(2),
+                                      )
+                                    : SizedBox();
+                              }),
+                            ],
+                          )
+                        : SizedBox();
+                  }),
                 ],
               ),
             ),

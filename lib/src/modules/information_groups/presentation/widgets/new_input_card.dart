@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/configs/app_styles.dart';import 'package:dropdown_search/dropdown_search.dart';
 
 
 class NewInputCard extends StatefulWidget {
@@ -346,7 +346,7 @@ class CustomDropDownWidget<T> extends StatelessWidget {
                                     color: AppColors.white),
                               ),
                               // Initial Value
-                              value:itemList.contains(selectedItem) ? selectedItem : null,
+                              // value:itemList.contains(selectedItem) ? selectedItem : null,
                               isExpanded: false,
                               // Down Arrow Icon
                               iconStyleData: IconStyleData(
@@ -376,6 +376,74 @@ class CustomDropDownWidget<T> extends StatelessWidget {
     );
   }
 }
+
+
+// class CustomDropSearcDownWidget<T> extends StatelessWidget {
+//   final String title;
+//   final double fontsize;
+//   final List<String> itemList;
+//   final T? selectedItem;
+//   final String? hintText;
+//   final ValueChanged<T?> onChanged;
+//   final String Function(T) getItemLabel;
+
+//   const CustomDropSearcDownWidget({
+//     super.key,
+//     required this.title,
+//     this.fontsize = 13,
+//     required this.getItemLabel,
+//     required this.itemList,
+//     required this.onChanged,
+//     required this.selectedItem,
+//     this.hintText,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Text(
+//           title,
+//           style: GoogleFonts.poppins(
+//             fontSize: fontsize,
+//             fontWeight: FontWeight.w400,
+//             color: AppColors.text,
+//           ),
+//         ),
+//         const SizedBox(height: 3),
+//         DropdownSearch<String>(
+//           items: itemList,
+//           selectedItem: selectedItem,
+//           itemAsString: getItemLabel,
+//           dropdownDecoratorProps: DropDownDecoratorProps(
+//             dropdownSearchDecoration: dropdownDecoration.copyWith(
+//               contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 14.h),
+//               focusColor: Colors.transparent,
+//             ),
+//           ),
+//           hint: hintText ?? "",
+//           popupProps: PopupProps.dialog(
+//             showSearchBox: true, // Enable the search feature
+//             searchFieldProps: TextFieldProps(
+//               decoration: InputDecoration(
+//                 border: OutlineInputBorder(),
+//                 hintText: "Search",
+//               ),
+//             ),
+//           ),
+//           onChanged: onChanged,
+//           validator: (value) {
+//             if (value == null) {
+//               return 'This is a mandatory field';
+//             }
+//             return null;
+//           },
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 
 InputDecoration dropdownDecoration = InputDecoration(

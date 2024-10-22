@@ -11,4 +11,6 @@ class ApiConstants {
   static String infoGroupListAPi="/groupList";
   static String infoGroupPublicSearchAPi="/groupSearch";
    static String firstCategoryListApi="/firstCategories";
+   static String secondCategoryListApi="/secondCategories/";
+   static String getPlanListApi="/businessGroupPlanList";
 }

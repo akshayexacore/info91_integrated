@@ -76,6 +76,7 @@ dependencies:
   just_audio: ^0.9.41
   dropdown_button2: ^2.3.9
   chewie: ^1.8.5
+  dropdown_search: ^6.0.1
  
 
 
