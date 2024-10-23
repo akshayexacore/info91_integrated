@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/models/informationgroup/category_model.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/informtion_group_creation.dart/group_creation_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/validity_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_arrow_button.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custome_space_between_text.dart';
+import 'package:info91/src/modules/information_groups/presentation/widgets/dropdown.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/new_input_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
@@ -50,6 +51,7 @@ class InformGroupCreationScreen extends StatelessWidget {
                   SizedBox(
                     height: 15.h,
                   ),
+
                   CustomDropDownWidget<String>(
                     title: "Type",
                     getItemTAble: (ak) => ak,
@@ -122,27 +124,27 @@ class InformGroupCreationScreen extends StatelessWidget {
                   SizedBox(
                     height: 15.h,
                   ),
-                  //  Obx((){
-                  //     debugPrint(_controller.secondCatList.toString());
-                  //    return CustomDropDownWidget<SecondCategory>(
-                  //     title: "Category2",
-                  //     getItemTAble: (ak) => ak.secondCategoryName??"",
-                  //     onChanged: (va) {
-                  //       _controller.category2Controller.text=va?.id.toString()??"";
-
-                  //     },
-                  //     itemList: _controller.secondCatList??[],
-                  //     selectedItem: SecondCategory(secondCategoryName: "ok",
-                  //     id: 1)
-                  //                      );},
-                  //  ),
-                  NewInputCard(
-                    controller: _controller.category2Controller,
-                    title: "Category2",
-                    label: "Select category",
-                    showValidator: true,
-                    validatorMessage: "Please choose category2",
+                  Obx(
+                    () {
+                      debugPrint(_controller.secondCatList.toString());
+                      return CustomDropSearcDownWidget<SecondCategory>(
+                          title: "Category2",
+                          getItemLabel: (ak) => ak.secondCategoryName ?? "",
+                          onChanged: (va) {
+                            _controller.category2Controller.text =
+                                va?.id.toString() ?? "";
+                          },
+                          itemList: _controller.secondCatList ?? [],
+                          selectedItem: null);
+                    },
                   ),
+                  // NewInputCard(
+                  //   controller: _controller.category2Controller,
+                  //   title: "Category2",
+                  //   label: "Select category",
+                  //   showValidator: true,
+                  //   validatorMessage: "Please choose category2",
+                  // ),
                   SizedBox(
                     height: 15.h,
                   ),
