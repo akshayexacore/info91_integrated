@@ -52,16 +52,18 @@ class InformGroupCreationScreen extends StatelessWidget {
                     height: 15.h,
                   ),
 
-                  CustomDropDownWidget<String>(
-                    title: "Type",
-                    getItemTAble: (ak) => ak,
-                    onChanged: (va) {
-                      _controller.typeController.value = va ?? "";
-                      // if(_controller.typeController.value=="business" && _controller.planList.isNotEmpty)
-                      _controller.getPlanList();
-                    },
-                    itemList: ["business", "Non-business"],
-                    selectedItem: "",
+                  Obx((){
+                    return CustomDropDownWidget<String>(
+                      title: "Type",suffixIconData: _controller.typeController.value.isEmpty?Icons.arrow_drop_down:Icons.clear,
+                      getItemTAble: (ak) => ak,
+                      onChanged: (va) {
+                        _controller.typeController.value = va ?? "";
+                        // if(_controller.typeController.value=="business" && _controller.planList.isNotEmpty)
+                        _controller.getPlanList();
+                      },
+                      itemList: ["business", "Non-business"],
+                      selectedItem: "",
+                    );}
                   ),
 
                   SizedBox(
@@ -103,10 +105,10 @@ class InformGroupCreationScreen extends StatelessWidget {
                           title: "Category1",
                           getItemTAble: (ak) => ak.firstCategoryName,
                           onChanged: (va) {
-                            _controller.category1Controller.text =
-                                va?.id.toString() ?? "";
-                            _controller.getSecondCategory(
-                                _controller.category1Controller.text);
+                            _controller.categoryOneSelection(va);
+
+                            print(
+                                "clearing${_controller.selectedCategory2.value}");
                           },
                           itemList: _controller.firstCategoryList ?? [],
                           selectedItem:
@@ -129,13 +131,14 @@ class InformGroupCreationScreen extends StatelessWidget {
                       debugPrint(_controller.secondCatList.toString());
                       return CustomDropSearcDownWidget<SecondCategory>(
                           title: "Category2",
+                          isValidator:
+                              _controller.selectedCategory2.value == null,
                           getItemLabel: (ak) => ak.secondCategoryName ?? "",
                           onChanged: (va) {
-                            _controller.category2Controller.text =
-                                va?.id.toString() ?? "";
+                            _controller.category2Selection(va);
                           },
                           itemList: _controller.secondCatList ?? [],
-                          selectedItem: null);
+                          selectedItem:_controller.selectedCategory2.value);
                     },
                   ),
                   // NewInputCard(
@@ -148,13 +151,26 @@ class InformGroupCreationScreen extends StatelessWidget {
                   SizedBox(
                     height: 15.h,
                   ),
-                  NewInputCard(
-                    controller: _controller.category3Controller,
-                    title: "Category3",
-                    label: "Select category",
-                    showValidator: true,
-                    validatorMessage: "Please choose category3",
+
+                  Obx(
+                    () {
+                      debugPrint(_controller.secondCatList.toString());
+                      return CustomDropSearcDownWidget<ThirdCategoryModel>(
+                          title: "Category3",
+                          getItemLabel: (ak) => ak.thirdCategoryName ?? "",
+                          onChanged: (va) {
+                            _controller.category3Selection(va);},
+                          itemList: _controller.thirdCatList ?? [],
+                          selectedItem: _controller.selectedCategory3.value);
+                    },
                   ),
+                  // NewInputCard(
+                  //   controller: _controller.category3Controller,
+                  //   title: "Category3",
+                  //   label: "Select category",
+                  //   showValidator: true,
+                  //   validatorMessage: "Please choose category3",
+                  // ),
                   SizedBox(
                     height: 15.h,
                   ),

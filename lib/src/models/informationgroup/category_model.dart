@@ -26,15 +26,17 @@ class Category {
 
 class SecondCategory {
   final int? id;
-  final String?secondCategoryName;
+  final String? secondCategoryName;
   final int? firstCategoryId;
   final Category? firstCategory;
+  final bool isVal;
 
   SecondCategory({
-     this.id,
-     this.secondCategoryName,
-     this.firstCategoryId,
-     this.firstCategory,
+    this.id,
+    this.secondCategoryName,
+    this.firstCategoryId,
+    this.firstCategory,
+    this.isVal = true,
   });
 
   // Factory method to create SecondCategory from JSON
@@ -43,7 +45,9 @@ class SecondCategory {
       id: json['id'],
       secondCategoryName: json['second_category_name'],
       firstCategoryId: json['first_category_id'],
-      firstCategory: Category.fromJson(json['first_category']),
+      firstCategory: json['first_category'] != null 
+          ? Category.fromJson(json['first_category']) 
+          : null, // Check for null before calling fromJson
     );
   }
 
@@ -54,6 +58,42 @@ class SecondCategory {
       'second_category_name': secondCategoryName,
       'first_category_id': firstCategoryId,
       'first_category': firstCategory?.toJson(),
+    };
+  }
+}
+
+
+
+class ThirdCategoryModel {
+  final int? id;
+  final String? thirdCategoryName;
+  final int? secondCategoryId;
+  final SecondCategory? secondCategory;
+
+  ThirdCategoryModel({
+    this.id,
+    this.thirdCategoryName,
+    this.secondCategoryId,
+    this.secondCategory,
+  });
+
+  factory ThirdCategoryModel.fromJson(Map<String, dynamic> json) {
+    return ThirdCategoryModel(
+      id: json['id'],
+      thirdCategoryName: json['third_category_name'],
+      secondCategoryId: json['second_category_id'],
+      secondCategory: json['second_category'] != null 
+          ? SecondCategory.fromJson(json['second_category']) 
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'third_category_name': thirdCategoryName,
+      'second_category_id': secondCategoryId,
+      'second_category': secondCategory?.toJson(),
     };
   }
 }

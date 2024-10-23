@@ -102,6 +102,24 @@ class InfromationRepository {
     }
   }
 
+
+    Future<List<ThirdCategoryModel>> getThirdCategory(String id) async {
+    List<ThirdCategoryModel> dataLIst = [];
+
+    final response = await _api.get(ApiConstants.thirdCategoryListApi+id,
+        headers: {});
+        print("objectE${response["data"]}");
+    try {
+      (response["data"] as List).forEach((element) {
+        dataLIst.add(ThirdCategoryModel.fromJson(element));
+      });
+      print("objectE${dataLIst}");
+      return dataLIst;
+    } catch (e) {
+      throw e;
+    }
+  }
+
 Future<List<PlanModel>> planList() async {
     List<PlanModel> dataLIst = [];
   

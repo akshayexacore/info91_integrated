@@ -39,6 +39,8 @@ class ApiBaseHelper {
       }
       var uri =
           Uri.parse(_baseUrl + url).replace(queryParameters: queryParameters);
+
+          print(uri);
       final response = await http.get(uri, headers: headers);
       print(response);
       responseJson = _returnResponse(response);

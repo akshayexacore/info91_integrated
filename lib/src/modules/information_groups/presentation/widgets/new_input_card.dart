@@ -284,17 +284,21 @@ class CustomDropDownWidget<T> extends StatelessWidget {
   final String title;
   final double fontsize;
   final List<T> itemList;
+  final IconData suffixIconData;
   final T? selectedItem;
   final String? hintText;
   final ValueChanged<T?> onChanged;
   final String Function(T) getItemTAble;
+  final bool isValidator;
 
   const CustomDropDownWidget(
       {super.key,
       required this.title,
       this.fontsize = 13,
+      this.suffixIconData=Icons.arrow_drop_down,
       required this.getItemTAble,
       required this.itemList,
+      this.isValidator = false,
       required this.onChanged,
       required this.selectedItem,
       this.hintText});
@@ -333,7 +337,7 @@ class CustomDropDownWidget<T> extends StatelessWidget {
             ),
             alignment: Alignment.centerLeft,
             validator: (value) {
-              if (value == null) {
+              if (value == null || isValidator) {
                 return 'This is a mandatory field';
               }
               return null; // Valid input
@@ -356,12 +360,17 @@ class CustomDropDownWidget<T> extends StatelessWidget {
             isExpanded: false,
             // Down Arrow Icon
             iconStyleData: IconStyleData(
-                icon: Padding(
-                  padding: const EdgeInsets.only(right: 0),
-                  child: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 13,
-                    color: Colors.black.withOpacity(0.6),
+                icon: InkWell(
+                  onTap:(){
+                    debugPrint("clicking the event");
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 0),
+                    child: Icon(
+                    suffixIconData,
+                      size: 20,
+                      color: Colors.black.withOpacity(0.6),
+                    ),
                   ),
                 ),
                 iconSize: 13),
@@ -389,14 +398,14 @@ class CustomDropSearcDownWidget<T> extends StatelessWidget {
   final String? hintText;
   final ValueChanged<T?> onChanged;
   final String Function(T) getItemLabel;
-
+  final bool isValidator;
   const CustomDropSearcDownWidget({
     super.key,
     required this.title,
     this.fontsize = 13,
     required this.getItemLabel,
     required this.itemList,
-    required this.onChanged,
+    required this.onChanged,this.isValidator=false,
     required this.selectedItem,
     this.hintText,
   });
@@ -418,7 +427,7 @@ class CustomDropSearcDownWidget<T> extends StatelessWidget {
         DropdownSearch<T>(
           items: itemList,
           selectedItem: selectedItem,
-          itemAsString: getItemLabel,
+          itemAsString: (T? item) => item == null ? '' : getItemLabel(item),
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: dropdownDecoration.copyWith(
               contentPadding:
@@ -428,7 +437,7 @@ class CustomDropSearcDownWidget<T> extends StatelessWidget {
           ),
           popupProps: PopupProps.menu(
             fit: FlexFit.loose,
-            showSearchBox: true, // Enable the search feature
+            // showSearchBox: true, // Enable the search feature
             searchFieldProps: TextFieldProps(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -438,7 +447,8 @@ class CustomDropSearcDownWidget<T> extends StatelessWidget {
           ),
           onChanged: onChanged,
           validator: (value) {
-            if (value == null) {
+            print("the value editor value$value");
+            if (value == null || isValidator) {
               return 'This is a mandatory field';
             }
             return null;
