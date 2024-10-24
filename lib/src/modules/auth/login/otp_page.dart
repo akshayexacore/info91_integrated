@@ -3,16 +3,48 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
-import 'package:pinput/pinput.dart';
+// import 'package:pinput/pinput.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 import 'controllers/login_controller.dart';
 
-class OtpPage extends StatelessWidget {
+class OtpPage extends StatefulWidget {
   OtpPage({Key? key}) : super(key: key);
 
   static const routeName = '/otp';
 
+  @override
+  State<OtpPage> createState() => _OtpPageState();
+}
+
+class _OtpPageState extends State<OtpPage> {
   final _loginController = Get.find<LoginController>();
+  late SmsAutoFill _smsAutoFill;
+
+  @override
+  void initState() {
+    super.initState();
+    _smsAutoFill = SmsAutoFill();
+    listenForOtp();
+  }
+
+  @override
+  void codeUpdated(code) {
+    print("code listen workjjjjjjjjjjjjjjjj$code");
+    setState(() {
+      _loginController.textControllerOtp.text = code;
+    });
+  }
+
+  void listenForOtp() async {
+    await SmsAutoFill().listenForCode(); // Correct the await call
+  }
+
+  @override
+  void dispose() {
+    _smsAutoFill.unregisterListener();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,26 +86,50 @@ class OtpPage extends StatelessWidget {
                   const SizedBox(
                     height: AppSpacings.medium,
                   ),
-                  Pinput(
-                    defaultPinTheme: PinTheme(
-                      width: 55,
-                      height: 55,
-                      textStyle: AppTextStyles.inputText,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.border, width: 1),
-                          borderRadius: BorderRadius.circular(AppRadii.small),
-                          color: AppColors.white),
-                    ),
-                    pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                    showCursor: true,
-                    length: 4,
-                    androidSmsAutofillMethod:
-                        AndroidSmsAutofillMethod.smsRetrieverApi,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // Pinput(
+                  //   defaultPinTheme: PinTheme(
+                  //     width: 55,
+                  //     height: 55,
+                  //     textStyle: AppTextStyles.inputText,
+                  //     decoration: BoxDecoration(
+                  //         border: Border.all(color: AppColors.border, width: 1),
+                  //         borderRadius: BorderRadius.circular(AppRadii.small),
+                  //         color: AppColors.white),
+                  //   ),
+                  //   pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                  //   showCursor: true,
+                  //   length: 4,
+                  //   androidSmsAutofillMethod:
+                  //       AndroidSmsAutofillMethod.smsRetrieverApi,
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   controller: _loginController.textControllerOtp,
+                  //   onChanged: (pin) {
+                  //     _loginController.isOtpValid(pin.length == 6);
+                  //   },
+                  // ),
+                  PinFieldAutoFill(
                     controller: _loginController.textControllerOtp,
-                    onChanged: (pin) {
-                      _loginController.isOtpValid(pin.length == 6);
+                    codeLength: 4,
+                    
+                    onCodeChanged: (pin) {
+                      _loginController.isOtpValid(
+                          pin?.length == 4); // Check if OTP length is valid
                     },
+                    decoration: BoxLooseDecoration(
+                      textStyle: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                      ),
+                      strokeColorBuilder: PinListenColorBuilder(
+                        Colors.grey, // Color when not focused
+                        Colors.blue, // Color when focused
+                      ),
+                      gapSpace: 10.0,
+                      // pinTextStyle: TextStyle(
+                      //   fontSize: 20.0,
+                      //   color: Colors.black,
+                      // ),
+                    ),
                   ),
                   const SizedBox(
                     height: 15,
@@ -103,13 +159,14 @@ class OtpPage extends StatelessWidget {
 
                     return !_loginController.busy.value
                         ? TextButton(
-                            onPressed: _loginController.resendRemaining.value == 0
-                                ? () {
-                                    _loginController.verifyPhone();
-                                    _loginController.startTimer(
-                                        _loginController.timerDuration2);
-                                  }
-                                : null,
+                            onPressed:
+                                _loginController.resendRemaining.value == 0
+                                    ? () {
+                                        _loginController.verifyPhone();
+                                        _loginController.startTimer(
+                                            _loginController.timerDuration2);
+                                      }
+                                    : null,
                             child: Text.rich(TextSpan(
                                 text: "Didn’t receive the OTP?",
                                 style: AppTextStyles.app14N

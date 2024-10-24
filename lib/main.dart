@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 import 'src/app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+   
+  SmsAutoFill().listenForCode;
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     

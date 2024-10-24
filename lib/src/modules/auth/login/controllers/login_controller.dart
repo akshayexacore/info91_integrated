@@ -11,6 +11,7 @@ import 'package:info91/src/modules/auth/login/widgets/login_success_dialog.dart'
 import 'package:info91/src/resources/auth_repository.dart';
 import 'package:info91/src/resources/user_profile_repository.dart';
 import 'package:info91/src/widgets/custom/app_dialog.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
 class LoginController extends GetxController {
@@ -44,11 +45,17 @@ class LoginController extends GetxController {
     });
     super.onInit();
   }
+    Future<void> requestSmsPermission() async {
+    var status = await Permission.sms.status;
+    if (!status.isGranted) {
+      await Permission.sms.request();
+    }
+  }
 
   void verifyPhone() async {
     busy(true);
     try {
-
+ await requestSmsPermission();
       if (phone.value.isValid()) {
         final response = await _authRepository.sendOtp(
             phone.value.nsn, phone.value.countryCode);
