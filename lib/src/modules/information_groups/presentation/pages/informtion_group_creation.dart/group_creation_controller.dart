@@ -30,14 +30,31 @@ class GroupCreationController extends GetxController {
 
   @override
   void onInit() {
-    debugPrint("Starting onInit");
+ 
     getFirstCategory();
-    debugPrint("After getFirstCategory call");
+    clear();
+    debugPrint("After getFirstCategory call${selectedItem.value?.secondCategoryName}");
     super.onInit();
   }
-
+void onClose() {
+  // Dispose of all TextEditingControllers to free up resources
+  groupNameController.dispose();
+  purposeController.dispose();
+  category1Controller.dispose();
+  category2Controller.dispose();
+  category3Controller.dispose();
+  
+  super.onClose(); // Always call super.onClose() last
+}
   setPlanModel(PlanModel model) {
     selectedPlanModel = model;
+  }
+  clear(){
+     groupNameController.clear();
+  purposeController.clear();
+  category1Controller.clear();
+  category2Controller.clear();
+  category3Controller.clear();
   }
 
   void createGroupFun() async {

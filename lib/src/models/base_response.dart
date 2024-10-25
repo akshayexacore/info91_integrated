@@ -2,12 +2,16 @@ class BaseResponse {
   late int status;
   late String message;
   late bool isSuccess;
+  late String tokenType;
   dynamic result;
+   bool? exist;
+      String? token;
 
   BaseResponse(
       {this.status = 0,
-      this.message = '',
-      this.isSuccess = false,
+      this.message = '',this.exist=false,
+      this.isSuccess = false,this.token,
+      this.tokenType = '',
       this.result});
   BaseResponse.init();
   BaseResponse.fromJson(Map<String, dynamic> json) {
@@ -15,6 +19,9 @@ class BaseResponse {
     message = json['message'] is String ? json['message'] : getStringFromMap(json);
     result = json['data'];
     isSuccess = json['success'] == "success";
+    exist=json['exist'] ;
+    token=json["token"];
+    tokenType = 'Bearer';
   }
 
   Map<String, dynamic> toJson() {

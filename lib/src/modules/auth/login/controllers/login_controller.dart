@@ -4,6 +4,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/models/user.dart';
 import 'package:info91/src/modules/auth/login/controllers/auth_controller.dart';
 import 'package:info91/src/modules/auth/login/login_page.dart';
 import 'package:info91/src/modules/auth/login/otp_page.dart';
@@ -62,7 +63,16 @@ class LoginController extends GetxController {
 
         if (response.isSuccess) {
           busy(false);
-          gotoOtpPage();
+          if(response.exist==true){
+               await _authRepository
+              .saveAccessToken('${response.tokenType} ${response.token}');
+          await _authRepository.saveRefreshToken(response.token??"");
+         await _userProfileRepository.saveUser(response.result as User);
+          showSuccessDialog();
+          }else{
+               gotoOtpPage();
+          }
+       
         } else {
           busy(false);
           AppDialog.showSnackBar('Failed to send OTP',
@@ -73,8 +83,9 @@ class LoginController extends GetxController {
         AppDialog.showSnackBar(
             'Invalid phone number', 'Please check the phone number.');
       }
-    } catch (_) {
+    } catch (e) {
       busy(false);
+      debugPrint(e.toString());
       AppDialog.showSnackBar('Login Failed', 'Something went wrong.');
     } finally {}
   }

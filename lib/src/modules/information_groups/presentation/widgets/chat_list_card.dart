@@ -16,9 +16,19 @@ class ChatListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(chat.profileImage??""),
-        radius: 25.0,
-      ),
+  radius: 25.0,
+  backgroundImage: chat.profileImage != null && chat.profileImage!.isNotEmpty
+      ? NetworkImage(chat.profileImage!)
+      : null,
+  child: chat.profileImage == null || chat.profileImage!.isEmpty
+      ? Icon(Icons.person, size: 30.0)
+      : FadeInImage.assetNetwork(
+          placeholder: 'assets/placeholder.png', // Path to your placeholder image
+          image: chat.profileImage!,
+          imageErrorBuilder: (context, error, stackTrace) => Icon(Icons.person, size: 30.0), // Icon on error
+          fit: BoxFit.cover,
+        ),
+),
       title: Text(
         chat.groupName??"",
         style: const TextStyle(fontWeight: FontWeight.bold),maxLines: 1,
