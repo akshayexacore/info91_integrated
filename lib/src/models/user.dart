@@ -52,6 +52,7 @@ class User {
   late String createdAt;
   late String updatedAt;
   late String deletedAt;
+   late String pincode;
 
   User(
       {this.id = 0,
@@ -66,14 +67,16 @@ class User {
         this.password = '',
         this.rememberToken = '',
         this.createdAt = '',
+        this.pincode="",
         this.updatedAt = '',
         this.deletedAt = ''});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'] ?? 0;
+    id = json['user_id'] ?? 0;
     name = json['name'] ?? '';
     phoneNumber = json['phone_number'] ?? '';
     countryCode = json['country_code'] ?? '';
+    pincode=json["pincode"]??"";
     otp = otp = int.tryParse(json['otp'].toString()) ?? 0;
 
     about = json['about'] ?? '';
@@ -89,11 +92,12 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
+    data['user_id'] = id;
     data['name'] = name;
     data['phone_number'] = phoneNumber;
     data['country_code'] = countryCode;
     data['otp'] = otp;
+    data["pincode"]=pincode;
     data['about'] = about;
     data['image'] = image;
     data['email'] = email;

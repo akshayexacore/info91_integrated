@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:info91/src/configs/api_constants.dart';
 import 'package:info91/src/models/base_response.dart';
+import 'package:info91/src/models/informationgroup/pincode_validation_model.dart';
 import 'package:info91/src/models/user.dart';
 import 'package:info91/src/resources/auth_repository.dart';
 import 'package:info91/src/utils/api_base_helper.dart';
@@ -27,15 +28,32 @@ class UserProfileRepository {
     return UserResponse.fromJson(response);
   }
 
-  Future<BaseResponse> updateUser(String name,String about,String image,ValueChanged<int> onProgress) async {
+  Future<BaseResponse> updateUser(String name,String about,String Pincode,String image,ValueChanged<int> onProgress) async {
     String token = await AuthRepository().getAccessToken();
     var header = {'Authorization': token};
     debugPrint(token);
     var body = {
       "full_name":name,
       "about":about,
+      "pincode":Pincode
     };
     final response = await _api.postMultipart(ApiConstants.updateUser, body: body,headers: header,file: image);
     return BaseResponse.fromJson(response);
+  }
+   Future<PincodeResponse> validatePincode(String pincode,) async {
+try{
+    String token = await AuthRepository().getAccessToken();
+    var header = {'Authorization': token};
+    debugPrint(token);
+    var body = {
+      "pincode":pincode,
+    
+    };
+    final response = await _api.post(ApiConstants.validatingPincodeApi, body: body,headers: header,);
+    return PincodeResponse.fromJson(response);
+}catch(e){
+  print("Eroor is here$e");
+throw e;
+}
   }
 }

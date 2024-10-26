@@ -207,7 +207,7 @@ class InfoGroupChatListModel {
   // Factory constructor to create a Group instance from JSON
   factory InfoGroupChatListModel.fromJson(Map<String, dynamic> json) {
     return InfoGroupChatListModel(
-      id: json['id'],
+      id: json['group_id'],
       groupName: json['group_name'],
       groupTableName: json['group_table_name'],
       groupusersTableName: json['groupusers_table_name'],
@@ -243,7 +243,7 @@ class InfoGroupChatListModel {
   // Method to convert a Group instance to JSON
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'group_id': id,
       'group_name': groupName,
       'group_table_name': groupTableName,
       'groupusers_table_name': groupusersTableName,

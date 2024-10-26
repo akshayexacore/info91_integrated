@@ -42,7 +42,7 @@ class SecondCategory {
   // Factory method to create SecondCategory from JSON
   factory SecondCategory.fromJson(Map<String, dynamic> json) {
     return SecondCategory(
-      id: json['id'],
+      id: json['second_category_id'],
       secondCategoryName: json['second_category_name'],
       firstCategoryId: json['first_category_id'],
       firstCategory: json['first_category'] != null 
@@ -54,7 +54,7 @@ class SecondCategory {
   // Method to convert SecondCategory to JSON
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'second_category_id': id,
       'second_category_name': secondCategoryName,
       'first_category_id': firstCategoryId,
       'first_category': firstCategory?.toJson(),
@@ -79,7 +79,7 @@ class ThirdCategoryModel {
 
   factory ThirdCategoryModel.fromJson(Map<String, dynamic> json) {
     return ThirdCategoryModel(
-      id: json['id'],
+      id: json['third_category_id'],
       thirdCategoryName: json['third_category_name'],
       secondCategoryId: json['second_category_id'],
       secondCategory: json['second_category'] != null 
@@ -90,7 +90,7 @@ class ThirdCategoryModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'third_category_id': id,
       'third_category_name': thirdCategoryName,
       'second_category_id': secondCategoryId,
       'second_category': secondCategory?.toJson(),

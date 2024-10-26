@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/profile/profile_page.dart';
 import 'package:info91/src/modules/settings/controllers/settings_controller.dart';
 import 'package:info91/src/widgets/custom/app_app_bar.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
@@ -118,7 +119,9 @@ class SettingsPage extends StatelessWidget {
   List<Widget> _buildProfile() {
     return [
       AppInkWell(
-        onTap: () {},
+        onTap: () {
+          Get.toNamed(ProfilePage.routeName);
+        },
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: AppPaddings.large,

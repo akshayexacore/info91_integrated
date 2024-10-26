@@ -20,6 +20,7 @@ import 'package:info91/src/modules/forward/controllers/forward_controller.dart';
 import 'package:info91/src/modules/forward/forward_page.dart';
 import 'package:info91/src/modules/groups/controllers/groups_controller.dart';
 import 'package:info91/src/modules/home/controllers/home_controller.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_controller.dart';
 import 'package:info91/src/modules/landing/controllers/landing_controller.dart';
 import 'package:info91/src/modules/landing/landing_page.dart';
 import 'package:info91/src/modules/network_usage/controllers/network_usage_controller.dart';
@@ -42,6 +43,7 @@ import 'package:info91/src/modules/storage_and_data/controllers/storage_and_data
 import 'package:info91/src/modules/storage_and_data/storage_and_data.dart';
 
 import '../modules/home/controllers/chats_controller.dart';
+import '../modules/information_groups/presentation/pages/startscreen/start_screen.dart';
 
 class Routes {
   static var getPages = [
@@ -95,8 +97,8 @@ class Routes {
         name: ChatPage.routeName,
         page: () => ChatPage(),
         binding: BindingsBuilder(() {
-          Get.lazyPut(() => ChatController());
-        })),
+          Get.lazyPut(() => StarScreenController());
+        })),GetPage(name: StartScreen.routName, page:() =>const  StartScreen()),
     GetPage(
         name: UserProfilePage.routeName,
         page: () => UserProfilePage(),

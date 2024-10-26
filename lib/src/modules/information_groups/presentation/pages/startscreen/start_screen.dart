@@ -12,7 +12,9 @@ import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
 
 class StartScreen extends StatelessWidget {
-  const StartScreen({super.key});
+
+    static const routName="/startScreen";
+ const StartScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

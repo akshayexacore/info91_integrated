@@ -10,13 +10,10 @@ import 'package:info91/src/resources/user_profile_repository.dart';
 import 'package:info91/src/utils/api_base_helper.dart';
 import 'package:info91/src/utils/response-utils.dart';
 
-
 class InfromationRepository {
   final ApiBaseHelper _api = ApiBaseHelper();
   late final _preferences = SharedPreferencesDataProvider();
   late final _userProfileRepository = UserProfileRepository();
-
-
 
   Future<DoubleResponse> createGroupFun(
       InformationGroupCreationModel model) async {
@@ -55,7 +52,11 @@ class InfromationRepository {
     debugPrint("${user.user?.id}");
 
     final response = await _api.post(ApiConstants.infoGroupPublicSearchAPi,
-        body: {"user_id": user.user?.id.toString() ?? null,"search_key":searchKey}, headers: {});
+        body: {
+          "user_id": user.user?.id.toString() ?? null,
+          "search_key": searchKey
+        },
+        headers: {});
     try {
       (response["data"] as List).forEach((element) {
         dataLIst.add(InfoGroupChatListModel.fromJson(element));
@@ -66,14 +67,13 @@ class InfromationRepository {
     }
   }
 
-
   Future<List<Category>> getFirstCategory() async {
     List<Category> dataLIst = [];
     final user = await _userProfileRepository.getUser();
     debugPrint("${user.user?.id}");
 
-    final response = await _api.get(ApiConstants.firstCategoryListApi,
-        headers: {});
+    final response =
+        await _api.get(ApiConstants.firstCategoryListApi, headers: {});
     try {
       (response["data"] as List).forEach((element) {
         dataLIst.add(Category.fromJson(element));
@@ -82,16 +82,13 @@ class InfromationRepository {
     } catch (e) {
       throw e;
     }
-
-
-
   }
 
   Future<List<SecondCategory>> getSecondCategory(String id) async {
     List<SecondCategory> dataLIst = [];
 
-    final response = await _api.get(ApiConstants.secondCategoryListApi+id,
-        headers: {});
+    final response =
+        await _api.get(ApiConstants.secondCategoryListApi + id, headers: {});
     try {
       (response["data"] as List).forEach((element) {
         dataLIst.add(SecondCategory.fromJson(element));
@@ -102,13 +99,12 @@ class InfromationRepository {
     }
   }
 
-
-    Future<List<ThirdCategoryModel>> getThirdCategory(String id) async {
+  Future<List<ThirdCategoryModel>> getThirdCategory(String id) async {
     List<ThirdCategoryModel> dataLIst = [];
 
-    final response = await _api.get(ApiConstants.thirdCategoryListApi+id,
-        headers: {});
-        print("objectE${response["data"]}");
+    final response =
+        await _api.get(ApiConstants.thirdCategoryListApi + id, headers: {});
+    print("objectE${response["data"]}");
     try {
       (response["data"] as List).forEach((element) {
         dataLIst.add(ThirdCategoryModel.fromJson(element));
@@ -120,12 +116,10 @@ class InfromationRepository {
     }
   }
 
-Future<List<PlanModel>> planList() async {
+  Future<List<PlanModel>> planList() async {
     List<PlanModel> dataLIst = [];
-  
 
-    final response = await _api.get(ApiConstants.getPlanListApi,
-        headers: {});
+    final response = await _api.get(ApiConstants.getPlanListApi, headers: {});
     try {
       (response["data"] as List).forEach((element) {
         dataLIst.add(PlanModel.fromJson(element));
@@ -134,5 +128,19 @@ Future<List<PlanModel>> planList() async {
     } catch (e) {
       throw e;
     }
+  }
 
-}}
+  Future<DoubleResponse> joinMessageTapFunc(String id) async {
+    List<PlanModel> dataLIst = [];
+    final response = await _api.post(ApiConstants.joinGroupApi, headers: {});
+    try {
+      if (response['statusCode'] == 200 && response['success'] == 'success') {
+        return DoubleResponse(true, response['message']);
+      } else {
+        return DoubleResponse(false, "Group creation failed");
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+}

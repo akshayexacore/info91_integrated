@@ -14,4 +14,6 @@ class ApiConstants {
    static String secondCategoryListApi="/secondCategories/";
     static String thirdCategoryListApi="/thirdCategories/";
    static String getPlanListApi="/businessGroupPlanList";
+   static String validatingPincodeApi="/validatePincode";
+   static String joinGroupApi="/validatePincode";
 }
