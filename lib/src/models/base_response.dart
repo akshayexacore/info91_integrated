@@ -1,3 +1,5 @@
+import 'package:info91/src/models/user.dart';
+
 class BaseResponse {
   late int status;
   late String message;
@@ -6,9 +8,11 @@ class BaseResponse {
   dynamic result;
    bool? exist;
       String? token;
+         User? user;
 
-  BaseResponse(
+  BaseResponse( 
       {this.status = 0,
+      this.user,
       this.message = '',this.exist=false,
       this.isSuccess = false,this.token,
       this.tokenType = '',

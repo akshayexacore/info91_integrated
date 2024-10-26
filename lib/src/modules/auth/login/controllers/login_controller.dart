@@ -67,7 +67,11 @@ class LoginController extends GetxController {
                await _authRepository
               .saveAccessToken('${response.tokenType} ${response.token}');
           await _authRepository.saveRefreshToken(response.token??"");
-         await _userProfileRepository.saveUser(response.result as User);
+          debugPrint("response.result${response.result["id"]}");
+
+
+
+         await _userProfileRepository.saveUser(User.fromJson(response.result));
           showSuccessDialog();
           }else{
                gotoOtpPage();
