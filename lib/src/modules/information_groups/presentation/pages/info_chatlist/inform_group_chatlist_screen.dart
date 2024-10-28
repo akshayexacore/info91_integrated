@@ -11,6 +11,7 @@ import 'package:info91/src/modules/information_groups/presentation/widgets/custo
 
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 import 'package:info91/src/widgets/custom/custom_divider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -80,14 +81,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
                           itemBuilder: (context, index) => ChatListItem(
                             chat: controller.searchGroupList[index],
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        controller.toggleValue.value == 0
-                                            ? const StartScreen()
-                                            : ChatScreen(),
-                                  ));
+                              controller.nonPublicTileOnTap(index);
                             },
                           ),
                           separatorBuilder: (context, index) => customDivider(),
@@ -102,14 +96,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
                           ? controller.chatGroupList[index]
                           : controller.ownchatGroupList[index],
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  controller.toggleValue.value == 0
-                                      ? const StartScreen()
-                                      : ChatScreen(),
-                            ));
+                        controller.nonPublicTileOnTap(index);
                       },
                     ),
                     separatorBuilder: (context, index) => customDivider(),

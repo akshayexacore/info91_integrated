@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/gallery_view_screen/gfallery_view_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_screen.dart';
 
-import 'package:info91/src/modules/information_groups/presentation/pages/group_info_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/profile_setting_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_arrow_button.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
@@ -20,16 +20,15 @@ class ProfileScreen extends StatelessWidget {
     popupMenuModel(name: "Group Setting", value: 1)
   ];
   List<String> MediaList = [
-   "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
-   "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
-   "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
-   "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
+    "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
+    "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
+    "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
+    "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -82,7 +81,7 @@ class ProfileScreen extends StatelessWidget {
                             "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
                             color: AppColors.text,
                             size: 15.sp),
-      
+
                         SizedBox(
                           height: 15.h,
                         ),
@@ -166,8 +165,7 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                                 title: const Text(
                                   "Arya",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 subtitle: SizedBox(
                                     width: 400.w,

@@ -676,8 +676,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   onChanged: (val) {
                     chatController.checkTextFieldEmpty(val);
                   },
-                  style: const 
-                  TextStyle(
+                  style: const TextStyle(
                     decoration: TextDecoration.none,
                     decorationThickness: 0,
                   ),
@@ -713,19 +712,18 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                             }
                           },
                         )),
-                    suffixIcon:  Padding(
+                    suffixIcon: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: AppInkWell(
-                          onTap: chatController.toggleGallery,
-                          borderRadius: 50,
-                          child: const AppSvgAsset(
-                            'assets/images/ic_attach.svg',
-                            width: 24,
-                            height: 24,
-                          ),
+                        onTap: chatController.toggleGallery,
+                        borderRadius: 50,
+                        child: const AppSvgAsset(
+                          'assets/images/ic_attach.svg',
+                          width: 24,
+                          height: 24,
                         ),
+                      ),
                     ),
-                   
                   ),
                 ),
               ),

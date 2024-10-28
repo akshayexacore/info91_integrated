@@ -7,13 +7,14 @@ class ApiConstants {
   static String refreshToken = '/auth/refresh_token';
 
   //information Apis
-  static String creationInformationAPi="/groupCreation";
-  static String infoGroupListAPi="/groupList";
-  static String infoGroupPublicSearchAPi="/groupSearch";
-   static String firstCategoryListApi="/firstCategories";
-   static String secondCategoryListApi="/secondCategories/";
-    static String thirdCategoryListApi="/thirdCategories/";
-   static String getPlanListApi="/businessGroupPlanList";
-   static String validatingPincodeApi="/validatePincode";
-   static String joinGroupApi="/validatePincode";
+  static String creationInformationAPi = "/groupCreation";
+  static String infoGroupListAPi = "/groupList";
+  static String infoGroupPublicSearchAPi = "/groupSearch";
+  static String firstCategoryListApi = "/firstCategories";
+  static String secondCategoryListApi = "/secondCategories/";
+  static String thirdCategoryListApi = "/thirdCategories/";
+  static String getPlanListApi = "/businessGroupPlanList";
+  static String validatingPincodeApi = "/validatePincode";
+  static String joinGroupApi = "/joinPublicGroup";
+  static String getInfoDatapApi = "/groupInfo";
 }

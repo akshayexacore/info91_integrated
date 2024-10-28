@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_controller.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
-
 
 class GroupInfo extends StatelessWidget {
   GroupInfo({super.key});
   Widget commonGap = SizedBox(
     height: 15.h,
   );
+  final controller = Get.put(GroupInfpController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(

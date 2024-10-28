@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:info91/src/configs/api_constants.dart';
 import 'package:info91/src/models/informationgroup/category_model.dart';
+import 'package:info91/src/models/informationgroup/info-model.dart';
 import 'package:info91/src/models/informationgroup/information_group.dart';
 import 'package:info91/src/models/informationgroup/plan_model.dart';
 import 'package:info91/src/resources/shared_preferences_data_provider.dart';
@@ -131,16 +132,27 @@ class InfromationRepository {
   }
 
   Future<DoubleResponse> joinMessageTapFunc(String id) async {
-    List<PlanModel> dataLIst = [];
-    final response = await _api.post(ApiConstants.joinGroupApi, headers: {});
+    final response = await _api
+        .post(ApiConstants.joinGroupApi, headers: {}, body: {'group_id': id});
     try {
       if (response['statusCode'] == 200 && response['success'] == 'success') {
         return DoubleResponse(true, response['message']);
       } else {
-        return DoubleResponse(false, "Group creation failed");
+        return DoubleResponse(false, response['message']);
       }
     } catch (e) {
       throw e;
+    }
+  }
+
+  Future<InfoGroupDataModel> getInfoData(String id) async {
+    final response = await _api.post(ApiConstants.getInfoDatapApi,
+        headers: {}, body: {'group_id': id});
+    try {
+      InfoGroupDataModel data = InfoGroupDataModel.fromJson(response["data"]);
+      return data;
+    } catch (e) {
+      rethrow;
     }
   }
 }

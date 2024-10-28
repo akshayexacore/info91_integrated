@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/profile_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_scaffold.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/expandable_widget.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/icon.dart';
@@ -12,10 +14,9 @@ import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
 
 class StartScreen extends StatelessWidget {
-
-    static const routName="/startScreen";
- const StartScreen({Key? key}) : super(key: key);
-
+  static const routName = "/startScreen";
+  StartScreen({Key? key}) : super(key: key);
+  final StarScreenController controller = Get.put(StarScreenController());
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -110,14 +111,17 @@ class StartScreen extends StatelessWidget {
               ),
               Expanded(
                 child: AppButton(
-                  text: "Join Group",
+                  text: controller.selectedChatModel?.joinedGroupFlag == false
+                      ? "Join Group"
+                      : 'Message',
                   busy: false,
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatScreen(),
-                        ));
+                    controller.joinMessageTapFunc();
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => ChatScreen(),
+                    //     ));
                   },
                   style: AppButtonStyles.appButton.copyWith(
                       backgroundColor: WidgetStatePropertyAll(

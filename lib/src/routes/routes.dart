@@ -98,7 +98,19 @@ class Routes {
         page: () => ChatPage(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => StarScreenController());
-        })),GetPage(name: StartScreen.routName, page:() =>const  StartScreen()),
+        })),
+    GetPage(
+        name: StartScreen.routName,
+        page: () => StartScreen(),
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => StarScreenController());
+        })),
+    GetPage(
+        name: ChatPage.routeName,
+        page: () => ChatPage(),
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => ChatController());
+        })),
     GetPage(
         name: UserProfilePage.routeName,
         page: () => UserProfilePage(),
@@ -153,7 +165,6 @@ class Routes {
         binding: BindingsBuilder(() {
           Get.lazyPut(() => EmergencyAlarmController());
         })),
-
     GetPage(
         name: RecipientsAddPage.routeName,
         page: () => RecipientsAddPage(),
