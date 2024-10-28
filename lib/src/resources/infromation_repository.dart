@@ -143,4 +143,18 @@ class InfromationRepository {
       throw e;
     }
   }
+
+  //   Future<GroupInfo > joinMessageTapFunc(String id) async {
+  //   List<PlanModel> dataLIst = [];
+  //   final response = await _api.post(ApiConstants.joinGroupApi, headers: {});
+  //   try {
+  //     if (response['statusCode'] == 200 && response['success'] == 'success') {
+  //       return DoubleResponse(true, response['message']);
+  //     } else {
+  //       return DoubleResponse(false, "Group creation failed");
+  //     }
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 }
