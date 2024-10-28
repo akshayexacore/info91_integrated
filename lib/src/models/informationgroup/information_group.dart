@@ -137,7 +137,6 @@ class InformationGroupCreationModel {
   }
 }
 
-
 //chatgroup list
 class InfoGroupChatListModel {
   final String? id;
@@ -170,6 +169,7 @@ class InfoGroupChatListModel {
   final DateTime? updatedAt;
   final String? status;
   final bool? owngroupFlag;
+  final bool? joinedGroupFlag;
 
   InfoGroupChatListModel({
     this.id,
@@ -188,6 +188,7 @@ class InfoGroupChatListModel {
     this.memberCount,
     this.planId,
     this.expireDate,
+    this.joinedGroupFlag,
     this.createdBy,
     this.mobileNumber,
     this.alternativeNumber,
@@ -208,6 +209,7 @@ class InfoGroupChatListModel {
   factory InfoGroupChatListModel.fromJson(Map<String, dynamic> json) {
     return InfoGroupChatListModel(
       id: json['group_id'],
+      joinedGroupFlag: json['joined_flag'] ?? true,
       groupName: json['group_name'],
       groupTableName: json['group_table_name'],
       groupusersTableName: json['groupusers_table_name'],
@@ -233,8 +235,12 @@ class InfoGroupChatListModel {
       websiteLink: json['website_link'],
       youtubeLink: json['youtube_link'],
       googlemapLink: json['googlemap_link'],
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'])
+          : null,
       status: json['status'],
       owngroupFlag: json['owngroup_flag'],
     );
@@ -255,6 +261,7 @@ class InfoGroupChatListModel {
       'profile_image': profileImage,
       'last_message_time': lastMessageTime,
       'last_sender': lastSender,
+      'joined_flag': joinedGroupFlag,
       'last_send_time': lastSendTime,
       'member_count': memberCount,
       'plan_id': planId,
@@ -277,38 +284,38 @@ class InfoGroupChatListModel {
   }
 
   // CopyWith method
-  InfoGroupChatListModel copyWith({
-    String? id,
-    String? groupName,
-    String? groupTableName,
-    String? groupusersTableName,
-    String? type,
-    String? purpose,
-    String? category1,
-    String? category2,
-    String? category3,
-    String? profileImage,
-    String? lastMessageTime,
-    String? lastSender,
-    String? lastSendTime,
-    int? memberCount,
-    int? planId,
-    String? expireDate,
-    String? createdBy,
-    String? mobileNumber,
-    String? alternativeNumber,
-    String? whatsappNumber,
-    String? timings,
-    String? contactTime,
-    String? holidays,
-    String? websiteLink,
-    String? youtubeLink,
-    String? googlemapLink,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    String? status,
-    bool? owngroupFlag,
-  }) {
+  InfoGroupChatListModel copyWith(
+      {String? id,
+      String? groupName,
+      String? groupTableName,
+      String? groupusersTableName,
+      String? type,
+      String? purpose,
+      String? category1,
+      String? category2,
+      String? category3,
+      String? profileImage,
+      String? lastMessageTime,
+      String? lastSender,
+      String? lastSendTime,
+      int? memberCount,
+      int? planId,
+      String? expireDate,
+      String? createdBy,
+      String? mobileNumber,
+      String? alternativeNumber,
+      String? whatsappNumber,
+      String? timings,
+      String? contactTime,
+      String? holidays,
+      String? websiteLink,
+      String? youtubeLink,
+      String? googlemapLink,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? status,
+      bool? owngroupFlag,
+      bool? joinedflad}) {
     return InfoGroupChatListModel(
       id: id ?? this.id,
       groupName: groupName ?? this.groupName,
@@ -325,6 +332,7 @@ class InfoGroupChatListModel {
       lastSendTime: lastSendTime ?? this.lastSendTime,
       memberCount: memberCount ?? this.memberCount,
       planId: planId ?? this.planId,
+      joinedGroupFlag: joinedflad ?? this.joinedGroupFlag,
       expireDate: expireDate ?? this.expireDate,
       createdBy: createdBy ?? this.createdBy,
       mobileNumber: mobileNumber ?? this.mobileNumber,

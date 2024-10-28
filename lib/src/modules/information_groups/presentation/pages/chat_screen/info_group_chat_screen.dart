@@ -28,7 +28,8 @@ import 'package:info91/src/widgets/tiny/app_back_button.dart';
 import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
-  ChatScreen({super.key});
+  final String? selectedGroupId;
+  ChatScreen({super.key, this.selectedGroupId});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -159,7 +160,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ProfileScreen(),
+                                builder: (context) => ProfileScreen(selectedGroupId:widget .selectedGroupId??"",),
                               ));
                         },
                         appBarName: "Information Groups",
@@ -676,8 +677,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   onChanged: (val) {
                     chatController.checkTextFieldEmpty(val);
                   },
-                  style: const 
-                  TextStyle(
+                  style: const TextStyle(
                     decoration: TextDecoration.none,
                     decorationThickness: 0,
                   ),
@@ -713,19 +713,18 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                             }
                           },
                         )),
-                    suffixIcon:  Padding(
+                    suffixIcon: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: AppInkWell(
-                          onTap: chatController.toggleGallery,
-                          borderRadius: 50,
-                          child: const AppSvgAsset(
-                            'assets/images/ic_attach.svg',
-                            width: 24,
-                            height: 24,
-                          ),
+                        onTap: chatController.toggleGallery,
+                        borderRadius: 50,
+                        child: const AppSvgAsset(
+                          'assets/images/ic_attach.svg',
+                          width: 24,
+                          height: 24,
                         ),
+                      ),
                     ),
-                   
                   ),
                 ),
               ),
