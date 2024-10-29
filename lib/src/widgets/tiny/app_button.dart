@@ -70,9 +70,9 @@ class AppButton extends StatelessWidget {
     );
   }
 }
-TextButton customTextButton(String buttonName, {required VoidCallback onTap}) =>
+TextButton customTextButton(String buttonName, {required Function onTap}) =>
     TextButton(
-        onPressed: onTap,
+        onPressed:(){onTap();} ,
         child: Text(
           buttonName,
           style: GoogleFonts.poppins(

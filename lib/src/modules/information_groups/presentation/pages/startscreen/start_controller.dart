@@ -25,6 +25,7 @@ class StarScreenController extends GetxController {
       final response = await _infromationRepository
           .joinMessageTapFunc(selectedChatModel?.id ?? "");
       if (response.data1) {
+          AppDialog.showSnackBar('Suceess', '${response.data2}');
         Get.to(ChatScreen());
       } else {
         AppDialog.showSnackBar('Failure', '${response.data2}');

@@ -30,10 +30,10 @@ class GroupCreationController extends GetxController {
 
   @override
   void onInit() {
- 
+   debugPrint("After getFirstCategory calssssl${selectedItem.value?.secondCategoryName}");
     getFirstCategory();
     clear();
-    debugPrint("After getFirstCategory call${selectedItem.value?.secondCategoryName}");
+  
     super.onInit();
   }
 void onClose() {
@@ -50,7 +50,7 @@ void onClose() {
     selectedPlanModel = model;
   }
   clear(){
-     groupNameController.clear();
+    groupNameController.clear();
   purposeController.clear();
   category1Controller.clear();
   category2Controller.clear();

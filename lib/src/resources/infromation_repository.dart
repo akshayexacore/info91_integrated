@@ -135,7 +135,7 @@ class InfromationRepository {
     final response = await _api
         .post(ApiConstants.joinGroupApi, headers: {}, body: {'group_id': id});
     try {
-      if (response['statusCode'] == 200 && response['success'] == 'success') {
+      if (response['status'] == 'success') {
         return DoubleResponse(true, response['message']);
       } else {
         return DoubleResponse(false, response['message']);
@@ -144,7 +144,6 @@ class InfromationRepository {
       throw e;
     }
   }
-
 
   Future<InfoGroupDataModel> getInfoData(String id) async {
     final response = await _api.post(ApiConstants.getInfoDatapApi,
@@ -157,4 +156,22 @@ class InfromationRepository {
     }
   }
 
+  Future<DoubleResponse> updateInfoData(
+      {required InfoGroupDataModel model}) async {
+    try {
+      final response = await _api.post(ApiConstants.updateInfoDatapApi,
+          body: model.toJson(), headers: {});
+
+      print("Response: $response");
+
+      if ( response['status'] == 'success') {
+        return DoubleResponse(true, response['message']);
+      } else {
+        return DoubleResponse(false,  response['message']);
+      }
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
 }

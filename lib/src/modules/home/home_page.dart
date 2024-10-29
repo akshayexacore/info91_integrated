@@ -159,8 +159,8 @@ class HomePage extends StatelessWidget {
                     onPressed: () {},
                   ),
                   CategoryIcon(
-                    assetIcon: 'ic_alumni.svg',
-                    title: 'Alumni',
+                    assetIcon: 'ic_services_dark.svg',
+                    title: 'Services',clr: AppColors.secondary,
                     onPressed: () {},
                   ),
                   CategoryIcon(

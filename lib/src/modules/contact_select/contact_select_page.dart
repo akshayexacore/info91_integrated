@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/contact_select/controllers/contact_select_controller.dart';
@@ -166,20 +167,47 @@ class ContactSelectPage extends StatelessWidget {
       color: AppColors.white,
       child: Column(
         children: [
-          _buildGroupsMenuItem(
-            icon: 'ic_persons.svg',
-            title: 'New Group',
-            onPressed: () {},
+          Row(
+            children: [
+              Expanded(
+                child: _buildGroupsMenuItem(
+                  icon: 'ic_persons.svg',
+                  title: 'Contact',
+                  onPressed: () {},
+                ),
+              ),
+              SizedBox(
+                width: 5.w,
+              ),
+              Expanded(
+                child: _buildGroupsMenuItem(
+                  icon: 'ic_person.svg',
+                  title: 'Family',
+                  onPressed: () {},
+                ),
+              ),
+            ],
           ),
-          _buildGroupsMenuItem(
-            icon: 'ic_person.svg',
-            title: 'New Contact',
-            onPressed: () {},
-          ),
-          _buildGroupsMenuItem(
-            icon: 'ic_broadcast.svg',
-            title: 'New Broadcast',
-            onPressed: () {},
+          Row(
+            children: [
+              Expanded(
+                child: _buildGroupsMenuItem(
+                  icon: 'ic_broadcast.svg',
+                  title: 'Community',
+                  onPressed: () {},
+                ),
+              ),
+              SizedBox(
+                width: 5.w,
+              ),
+              Expanded(
+                child: _buildGroupsMenuItem(
+                  icon: 'ic_alumni.svg',
+                  title: 'Alumni',
+                  onPressed: () {},
+                ),
+              ),
+            ],
           ),
         ],
       ),

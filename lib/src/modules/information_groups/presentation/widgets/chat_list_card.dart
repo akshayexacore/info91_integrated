@@ -21,12 +21,12 @@ class ChatListItem extends StatelessWidget {
       ? NetworkImage(chat.profileImage!)
       : null,
   child: chat.profileImage == null || chat.profileImage!.isEmpty
-      ? Icon(Icons.person, size: 30.0)
-      : FadeInImage.assetNetwork(
-          placeholder: 'assets/placeholder.png', // Path to your placeholder image
+      ? Icon(Icons.group, size: 30.0)
+      : FadeInImage.assetNetwork(height: 20,color: AppColors.white,
+          placeholder: 'assets/images/group.png', // Path to your placeholder image
           image: chat.profileImage!,
-          imageErrorBuilder: (context, error, stackTrace) => Icon(Icons.person, size: 30.0), // Icon on error
-          fit: BoxFit.cover,
+          imageErrorBuilder: (context, error, stackTrace) => Icon(Icons.group, size: 30.0), // Icon on error
+          fit: BoxFit.fitHeight,
         ),
 ),
       title: Text(

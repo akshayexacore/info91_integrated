@@ -6,8 +6,11 @@ import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
+import 'package:info91/src/modules/information_groups/presentation/widgets/new_input_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
+import 'package:info91/src/widgets/tiny/app_button.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class GroupInfo extends StatelessWidget {
   static const routeName = '/group_info';
@@ -22,47 +25,112 @@ class GroupInfo extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomAppBar(
-            appBarName: "Group Info",
-            actionWidget: [
-              CustomPopupmenu(
-                onSelected: (val) {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) =>
-                  //           const InformGroupCreationScreen(),
-                  //     ));
-                },
-                itemList: [popupMenuModel(name: "Edit", value: 1)],
-              ),
-            ],
+          
+            CustomAppBar(
+              appBarName: "Group Info",
+              actionWidget: [
+              customTextButton("Save",
+                  onTap: (){
+                    print("ontap");
+                    controller.updateInfoData();
+                  }
+                  
+                ),
+              ],
+          
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: marginWidth),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    commonGap,
-                    blusHeading("Contact Details"),
-                    commonGap,
-                    groupInfoDoubleText("Contact No. 1", "9988665533"),
-                    groupInfoDoubleText("Contact No. 1", "9988665533"),
-                    groupInfoDoubleText("Contact No. 1", "9988665533"),
-                    blusHeading("Timings and Holidays"),
-                    commonGap,
-                    groupInfoDoubleText("Contact Time", "9:00 AM to 5:00 PM"),
-                    blusHeading("Website link"),
-                    commonGap,
-                    groupInfoDoubleText("Website link", "www.loremipsim.c"),
-                    groupInfoDoubleText("Website link", "www.loremipsim.c"),
-                    groupInfoDoubleText("Website link", "www.loremipsim.c"),
-                  ],
+            child: Obx(() {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: marginWidth),
+                  child: Skeletonizer(
+                    enabled: controller.isLoading.value,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (controller.dataModel.value.isAdmin == true) ...[
+                          commonGap,
+                          blusHeading("Contact Details"),
+                          commonGap,
+                          NewInputCard(
+                            controller: controller.mobileNumberController,
+                            title: "Mobile Number",
+                            keyType: TextInputType.phone,
+                          ),
+                          commonGap,
+                          NewInputCard(
+                            controller:
+                                controller.alterNativeMobileNumberController,
+                            keyType: TextInputType.phone,
+                            title: "Alternative Number",
+                          ),commonGap,
+                          NewInputCard(
+                            controller: controller.whatsappNumberController,
+                            title: "Whatsapp Number",
+                            keyType: TextInputType.phone,
+                          ),
+                          commonGap,
+                          blusHeading("Timings and Holidays"),
+                          commonGap,
+                          NewInputCard(
+                            controller: controller.contactTimeController,
+                            title: "Contact Time",
+                          ),
+                          commonGap,
+                          NewInputCard(
+                            controller: controller.holidaysController,
+                            title: "Holidays",
+                          ),
+                          commonGap,
+                          blusHeading("Others"),
+                          commonGap,
+                          NewInputCard(
+                            controller: controller.websiteLinkController,
+                            title: "Website link",
+                          ),
+                          commonGap,
+                          NewInputCard(
+                            controller: controller.youtubeLinkController,
+                            title: "Youtube link",
+                          ),
+                          commonGap,
+                          NewInputCard(
+                            controller: controller.googleMapControllerController,
+                            title: "Google map link",
+                          ),
+                        ] else ...[
+                          commonGap,
+                          blusHeading("Contact Details"),
+                          commonGap,
+                          groupInfoDoubleText("Mobile Number",
+                              controller.mobileNumberController.text),
+                          groupInfoDoubleText("Alternative Number",
+                              controller.alterNativeMobileNumberController.text),
+                          groupInfoDoubleText("Whatsapp Number",
+                              controller.whatsappNumberController.text),
+                          blusHeading("Timings and Holidays"),
+                          commonGap,
+                          groupInfoDoubleText("Contact Time",
+                              controller.contactTimeController.text),
+                          groupInfoDoubleText(
+                              "Holidays", controller.holidaysController.text),
+                          blusHeading("Others"),
+                          commonGap,
+                          groupInfoDoubleText("Website link",
+                              controller.websiteLinkController.text),
+                          groupInfoDoubleText("Youtube link",
+                              controller.youtubeLinkController.text),
+                          groupInfoDoubleText("Google map link",
+                              controller.googleMapControllerController.text),
+                        ],
+                        commonGap,
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
           )
         ],
       ),
