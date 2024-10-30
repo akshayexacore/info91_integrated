@@ -190,7 +190,7 @@ class AlarmTextMessagePopup extends StatelessWidget {
       ),
       child: Container(
         width: 350.w,
-        height: 350.h,
+        height: 370.h,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(10),
@@ -217,7 +217,7 @@ class AlarmTextMessagePopup extends StatelessWidget {
               controller: TextEditingController(),
               title: "Message",
               label: "Enter your message here",
-              height: 90,
+              height: 80,
               maxLines: 3,
             ),
             SizedBox(
