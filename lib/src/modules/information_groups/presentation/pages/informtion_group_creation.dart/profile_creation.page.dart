@@ -22,7 +22,7 @@ class InformGroupCreationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-      
+      _controller.clear();
        Get.back();
         return true; // Allow the back navigation
       },
@@ -36,6 +36,7 @@ class InformGroupCreationScreen extends StatelessWidget {
             onBackButtonPress: (){
               // Get.delete<GroupCreationController>();
               Get.back();
+              _controller.clear();
             },
             actionWidget: [
               customTextButton("Submit", onTap: () {
@@ -50,7 +51,7 @@ class InformGroupCreationScreen extends StatelessWidget {
               child: Form(
                 key: _controller.formkey,
                 child: Obx((){
-                  print( _controller.typeController.value);
+                  debugPrint("controller value${ _controller.groupNameController.value.text}");
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -84,7 +85,7 @@ class InformGroupCreationScreen extends StatelessWidget {
                         label: "Enter group name",
                         showValidator: true,
                         validatorMessage: "Please enter group name",
-                        controller: _controller.groupNameController,
+                        controller: _controller.groupNameController.value,
                         title: "Group Name",
                       ),
                       SizedBox(
