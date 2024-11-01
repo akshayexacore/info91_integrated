@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
+import 'package:voice_message_package/voice_message_package.dart';
 
 class AlarmAudioMessagePopup extends StatefulWidget {
   final String heading;
@@ -30,7 +32,7 @@ class _AlarmAudioMessagePopupState extends State<AlarmAudioMessagePopup> {
 
   final AudioRecorder _recorder = AudioRecorder();
   final AudioPlayer _audioPlayer = AudioPlayer();
-
+  final RecorderController _recorderController = RecorderController();
   Duration _audioDuration = Duration.zero;
   Duration _currentPosition = Duration.zero;
 
@@ -152,49 +154,43 @@ class _AlarmAudioMessagePopupState extends State<AlarmAudioMessagePopup> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Obx(() {
-                              return IconButton(
-                                padding: EdgeInsets.zero,
-                                icon: Icon(
-                                  _emergencyUpdateController.isPlaying.value
-                                      ? Icons.pause
-                                      : Icons.play_arrow,
-                                  size: 35.sp,
-                                ),
-                                onPressed: () async {
-                                  if (_audioPlayer.playing) {
-                                    await _audioPlayer.stop();
-                                    _emergencyUpdateController.isPlaying.value =
-                                        false;
-                                  } else {
-                                    _emergencyUpdateController.isPlaying.value =
-                                        true;
-                                    await _audioPlayer.setFilePath(
-                                        _emergencyUpdateController
-                                            .filePath.value);
-                                    await _audioPlayer.play();
-                                  }
-                                },
-                                color: AppColors.primary,
-                              );
-                            }),
-                            Expanded(
-                              child: SliderTheme(
-                                data: SliderThemeData(
-                                  trackHeight: 2.0,
-                                  thumbShape: RoundSliderThumbShape(
-                                      enabledThumbRadius: 6.0),
-                                ),
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Obx(() {
+                                return IconButton(
+                                  padding: EdgeInsets.zero,
+                                  icon: Icon(
+                                    _emergencyUpdateController.isPlaying.value
+                                        ? Icons.pause
+                                        : Icons.play_arrow,
+                                    size: 35.sp,
+                                  ),
+                                  onPressed: () async {
+                                    if (_audioPlayer.playing) {
+                                      await _audioPlayer.stop();
+                                      _emergencyUpdateController
+                                          .isPlaying.value = false;
+                                    } else {
+                                      _emergencyUpdateController
+                                          .isPlaying.value = true;
+                                      await _audioPlayer.setFilePath(
+                                          _emergencyUpdateController
+                                              .filePath.value);
+                                      await _audioPlayer.play();
+                                    }
+                                  },
+                                  color: AppColors.primary,
+                                );
+                              }),
+                              Expanded(
                                 child: Slider(
-                                  value: _currentPosition.inMilliseconds
-                                      .toDouble(),
-                                  max: _audioDuration.inMilliseconds.toDouble(),min: 0,
+                                  value:
+                                      _currentPosition.inMilliseconds.toDouble(),
+                                  max: _audioDuration.inMilliseconds.toDouble(),
                                   activeColor: AppColors.primary,
                                   onChanged: (value) async {
-                                  final position =
-                                     Duration(milliseconds: value.toInt());
+                                    final position =
+                                        Duration(milliseconds: value.toInt());
                                     await _audioPlayer.seek(position);
                                     setState(() {
                                       _currentPosition = position;
@@ -202,9 +198,31 @@ class _AlarmAudioMessagePopupState extends State<AlarmAudioMessagePopup> {
                                   },
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                        
+
+                              // Container(
+                              //   width: 200,
+                              //   child: VoiceMessageView(
+                              //     controller: VoiceController(
+                              //       audioSrc: _emergencyUpdateController
+                              //           .filePath.value,
+                              //       maxDuration: const Duration(seconds: 10),
+                              //       isFile: false,
+                              //       onComplete: () {
+                              //         /// do something on complete
+                              //       },
+                              //       onPause: () {
+                              //         /// do something on pause
+                              //       },
+                              //       onPlaying: () {
+                              //         /// do something on playing
+                              //       },
+                              //     ),
+                              //     innerPadding: 12,
+                              //     cornerRadius: 20,
+                              //   ),
+                              // ),
+                            ]),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

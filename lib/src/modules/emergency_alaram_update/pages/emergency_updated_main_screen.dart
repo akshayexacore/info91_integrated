@@ -132,8 +132,10 @@ class EmergencyUpdatedMainScreen extends StatelessWidget {
                     children: [
                       CustomCircleIconWidget(
                         onCange: () {
-                          Get.dialog(const AlarmAudioMessagePopup(
-                            heading: "Record your Audio to send your alert.",
+                          Get.dialog( AlarmAudioMessagePopup(
+                            heading: "Record your Audio to send your alert.",onSend: (){
+                              _controller.sendFunction();
+                            },
                           ));
                         },
                         radius: 25,
@@ -147,7 +149,7 @@ class EmergencyUpdatedMainScreen extends StatelessWidget {
                       ),
                       CustomCircleIconWidget(
                         onCange: () {
-                          Get.dialog(AlarmTextMessagePopup());
+                          Get.dialog( AlarmTextMessagePopup(sendFunction: (){_controller.sendFunction();},));
                         },
                         radius: 25.r,
                         iconData: Icons.message,
@@ -180,8 +182,9 @@ class EmergencyUpdatedMainScreen extends StatelessWidget {
 }
 
 class AlarmTextMessagePopup extends StatelessWidget {
+  final Function sendFunction;
   const AlarmTextMessagePopup({
-    super.key,
+    super.key, required this.sendFunction,
   });
 
   @override
@@ -229,7 +232,9 @@ class AlarmTextMessagePopup extends StatelessWidget {
               Expanded(
                   child: AppButton(
                 text: "Cancel",
-                onPressed: () {},
+                onPressed: () {
+                      Get.back();
+                },
                 style: AppButtonStyles.appButton.copyWith(
                   backgroundColor:
                       WidgetStatePropertyAll(AppColors.primary.withOpacity(.1)),
@@ -244,7 +249,9 @@ class AlarmTextMessagePopup extends StatelessWidget {
               Expanded(
                   child: AppButton(
                 text: "Send",
-                onPressed: () {},
+                onPressed: () {
+                               if (sendFunction != null) sendFunction();
+                },
                 height: 40.h,
               )),
             ])

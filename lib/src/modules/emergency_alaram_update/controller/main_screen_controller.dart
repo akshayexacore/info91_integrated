@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:info91/src/modules/emergency_alaram_update/pages/verify_number_screen.dart';
 // import 'package:geolocator/geolocator.dart';
 
 class MainController extends GetxController {
@@ -60,6 +61,9 @@ class MainController extends GetxController {
     }
     return returnValue;
   }
+  sendFunction(){
+    Get.toNamed(VerifyNumberAlarmScreen.routeName);
+}
 
 
 //  Future<void> _getCurrentLocation() async {
