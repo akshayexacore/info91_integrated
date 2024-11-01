@@ -34,7 +34,7 @@ class ChatListItem extends StatelessWidget {
         style: const TextStyle(fontWeight: FontWeight.bold),maxLines: 1,
       ),
       subtitle: Text(
-        "chat.message",
+        chat.lastmessage??"",
         style: const TextStyle(
             color: Colors.black, overflow: TextOverflow.ellipsis,),maxLines: 1,
       ),
@@ -48,12 +48,12 @@ class ChatListItem extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
-            const CircleAvatar(
+         if(chat.unReadCount!=null)    CircleAvatar(
               radius: 13,
               backgroundColor: AppColors.primaryAccent,
               child: Text(
-                "1",
-                style: TextStyle(color: Colors.white),
+                chat.unReadCount??"",
+                style:const TextStyle(color: Colors.white),
               ),
             )
           // ]
