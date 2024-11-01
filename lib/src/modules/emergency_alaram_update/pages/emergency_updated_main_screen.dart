@@ -68,10 +68,12 @@ class EmergencyUpdatedMainScreen extends StatelessWidget {
                       SizedBox(
                         width: 10.w,
                       ),
-                      greyBoldText("koratty, Thrissur, Kerala",
-                          size: 13.sp,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.text),
+                      Obx((){
+                        return greyBoldText(_controller.locationMessage.value??"",
+                            size: 13.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.text);}
+                      ),
                     ],
                   ),
                   SizedBox(height: 20.h),

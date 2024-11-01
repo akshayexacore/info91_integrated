@@ -181,19 +181,26 @@ class _AlarmAudioMessagePopupState extends State<AlarmAudioMessagePopup> {
                               );
                             }),
                             Expanded(
-                              child: Slider(
-                                value:
-                                    _currentPosition.inMilliseconds.toDouble(),
-                                max: _audioDuration.inMilliseconds.toDouble(),
-                                activeColor: AppColors.primary,
-                                onChanged: (value) async {
+                              child: SliderTheme(
+                                data: SliderThemeData(
+                                  trackHeight: 2.0,
+                                  thumbShape: RoundSliderThumbShape(
+                                      enabledThumbRadius: 6.0),
+                                ),
+                                child: Slider(
+                                  value: _currentPosition.inMilliseconds
+                                      .toDouble(),
+                                  max: _audioDuration.inMilliseconds.toDouble(),min: 0,
+                                  activeColor: AppColors.primary,
+                                  onChanged: (value) async {
                                   final position =
-                                      Duration(milliseconds: value.toInt());
-                                  await _audioPlayer.seek(position);
-                                  setState(() {
-                                    _currentPosition = position;
-                                  });
-                                },
+                                     Duration(milliseconds: value.toInt());
+                                    await _audioPlayer.seek(position);
+                                    setState(() {
+                                      _currentPosition = position;
+                                    });
+                                  },
+                                ),
                               ),
                             ),
                           ],
@@ -210,8 +217,8 @@ class _AlarmAudioMessagePopupState extends State<AlarmAudioMessagePopup> {
                         ),
                         SizedBox(height: 50.h),
                         CustomCircleIconWidget(
-                          radius: 21.r,
-                          iconSize: 20,
+                          radius: 22.r,
+                          iconSize: 21,
                           iconColor: AppColors.red,
                           iconData: Icons.delete,
                           backgroundClr: AppColors.primary.withOpacity(.2),
