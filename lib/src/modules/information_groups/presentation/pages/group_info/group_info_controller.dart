@@ -32,16 +32,19 @@ class GroupInfpController extends GetxController {
     try {
       print(groupId ?? "");
       final response = await _infromationRepository.getInfoData(groupId);
+      print("response${response.isAdmin}");
       if (response != null) {
         dataModel.value = response;
-        mobileNumberController.text =response.mobileNumber??"";
-        alterNativeMobileNumberController.text= response.alternativeNumber??"";
-        whatsappNumberController.text =response.whatsappNumber??"";
-        contactTimeController.text = response.contactTime??"";
-        holidaysController.text =response.holidays??"";
-        websiteLinkController .text= response.websiteLink??"";
-        youtubeLinkController.text= response.youtubeLink??"";
-        googleMapControllerController.text = response.googlemapLink??"";
+        print("responsedd${dataModel.value.isAdmin}");
+        mobileNumberController.text = response.mobileNumber ?? "";
+        alterNativeMobileNumberController.text =
+            response.alternativeNumber ?? "";
+        whatsappNumberController.text = response.whatsappNumber ?? "";
+        contactTimeController.text = response.contactTime ?? "";
+        holidaysController.text = response.holidays ?? "";
+        websiteLinkController.text = response.websiteLink ?? "";
+        youtubeLinkController.text = response.youtubeLink ?? "";
+        googleMapControllerController.text = response.googlemapLink ?? "";
       }
     } catch (e) {
       print("Error fetching data: $e");

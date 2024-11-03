@@ -145,16 +145,15 @@ class InfromationRepository {
     }
   }
 
-
   Future<InfoGroupDataModel> getInfoData(String id) async {
     final response = await _api.post(ApiConstants.getInfoDatapApi,
         headers: {}, body: {'group_id': id});
     try {
+      debugPrint("dadatat${response["data"].toString()}");
       InfoGroupDataModel data = InfoGroupDataModel.fromJson(response["data"]);
       return data;
     } catch (e) {
       rethrow;
     }
   }
-
 }

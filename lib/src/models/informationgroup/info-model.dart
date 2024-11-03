@@ -68,6 +68,7 @@ class InfoGroupDataModel {
 
   // Factory constructor to create a Group instance from JSON, with null safety
   factory InfoGroupDataModel.fromJson(Map<String, dynamic> json) {
+    print("json data${json["is_admin"]}");
     return InfoGroupDataModel(
       id: json['group_id'] as String?,
       groupName: json['group_name'] as String?,
@@ -75,7 +76,7 @@ class InfoGroupDataModel {
       groupusersTableName: json['groupusers_table_name'] as String?,
       type: json['type'] as String?,
       purpose: json['purpose'] as String?,
-      isAdmin: json["is_admin"] as bool?,
+      isAdmin: json["is_admin"],
       category1: json['category1'] as String?,
       category2: json['category2'] as String?,
       category3: json['category3'] as String?,
@@ -113,7 +114,7 @@ class InfoGroupDataModel {
     return {
       'group_id': id,
       'group_name': groupName,
-      "is_admin":isAdmin,
+      "is_admin": isAdmin,
       'group_table_name': groupTableName,
       'groupusers_table_name': groupusersTableName,
       'type': type,
