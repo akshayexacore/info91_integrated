@@ -40,9 +40,9 @@ class LandingPage extends StatelessWidget {
                   ChatsPage(),
                   GroupsPage(),
                   StatusPage(),
-                  Container(
-                    color: Colors.white,
-                  )
+                  // Container(
+                  //   color: Colors.white,
+                  // )
                 ],
               ),
             ),
@@ -131,15 +131,15 @@ class LandingPage extends StatelessWidget {
                   ),
                   label: 'Status',
                 ),
-                BottomNavigationBarItem(
-                  icon: AppSvgAsset(
-                    'assets/images/ic_services_dark.svg',
-                    color: _controller.currentIndex.value == 4
-                        ? AppColors.secondary
-                        : AppColors.text,
-                  ),
-                  label: 'Services',
-                ),
+                // BottomNavigationBarItem(
+                //   icon: AppSvgAsset(
+                //     'assets/images/ic_services_dark.svg',
+                //     color: _controller.currentIndex.value == 4
+                //         ? AppColors.secondary
+                //         : AppColors.text,
+                //   ),
+                //   label: 'Services',
+                // ),
               ],
             ),
           );

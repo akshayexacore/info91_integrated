@@ -68,10 +68,12 @@ class EmergencyUpdatedMainScreen extends StatelessWidget {
                       SizedBox(
                         width: 10.w,
                       ),
-                      greyBoldText("koratty, Thrissur, Kerala",
-                          size: 13.sp,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.text),
+                      Obx((){
+                        return greyBoldText(_controller.locationMessage.value??"",
+                            size: 13.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.text);}
+                      ),
                     ],
                   ),
                   SizedBox(height: 20.h),
@@ -130,8 +132,10 @@ class EmergencyUpdatedMainScreen extends StatelessWidget {
                     children: [
                       CustomCircleIconWidget(
                         onCange: () {
-                          Get.dialog(const AlarmAudioMessagePopup(
-                            heading: "Record your Audio to send your alert.",
+                          Get.dialog( AlarmAudioMessagePopup(
+                            heading: "Record your Audio to send your alert.",onSend: (){
+                              _controller.sendFunction();
+                            },
                           ));
                         },
                         radius: 25,
@@ -145,7 +149,7 @@ class EmergencyUpdatedMainScreen extends StatelessWidget {
                       ),
                       CustomCircleIconWidget(
                         onCange: () {
-                          Get.dialog(AlarmTextMessagePopup());
+                          Get.dialog( AlarmTextMessagePopup(sendFunction: (){_controller.sendFunction();},));
                         },
                         radius: 25.r,
                         iconData: Icons.message,
@@ -178,8 +182,9 @@ class EmergencyUpdatedMainScreen extends StatelessWidget {
 }
 
 class AlarmTextMessagePopup extends StatelessWidget {
+  final Function sendFunction;
   const AlarmTextMessagePopup({
-    super.key,
+    super.key, required this.sendFunction,
   });
 
   @override
@@ -190,7 +195,7 @@ class AlarmTextMessagePopup extends StatelessWidget {
       ),
       child: Container(
         width: 350.w,
-        height: 350.h,
+        height: 370.h,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(10),
@@ -217,7 +222,7 @@ class AlarmTextMessagePopup extends StatelessWidget {
               controller: TextEditingController(),
               title: "Message",
               label: "Enter your message here",
-              height: 90,
+              height: 80,
               maxLines: 3,
             ),
             SizedBox(
@@ -227,7 +232,9 @@ class AlarmTextMessagePopup extends StatelessWidget {
               Expanded(
                   child: AppButton(
                 text: "Cancel",
-                onPressed: () {},
+                onPressed: () {
+                      Get.back();
+                },
                 style: AppButtonStyles.appButton.copyWith(
                   backgroundColor:
                       WidgetStatePropertyAll(AppColors.primary.withOpacity(.1)),
@@ -242,7 +249,9 @@ class AlarmTextMessagePopup extends StatelessWidget {
               Expanded(
                   child: AppButton(
                 text: "Send",
-                onPressed: () {},
+                onPressed: () {
+                               if (sendFunction != null) sendFunction();
+                },
                 height: 40.h,
               )),
             ])

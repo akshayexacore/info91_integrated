@@ -22,6 +22,7 @@ class NewInputCard extends StatefulWidget {
   final String? validatorMessage;
   final String title;
   final String? hint;
+  final TextInputType? keyType;
 
   final bool password;
   final bool direction;
@@ -43,7 +44,7 @@ class NewInputCard extends StatefulWidget {
     this.maxLines = 1,
     this.height = 50,
     this.fontsize = 13,
-    this.validator,
+    this.validator, this.keyType,
   });
 
   @override
@@ -170,7 +171,7 @@ class _NewInputCardState extends State<NewInputCard> {
                                 }
                             : null,
                         keyboardType:
-                            widget.formatter ? TextInputType.number : null,
+                            widget.formatter ? TextInputType.number : widget.keyType,
                         inputFormatters: widget.formatter
                             ? <TextInputFormatter>[
                                 FilteringTextInputFormatter.digitsOnly

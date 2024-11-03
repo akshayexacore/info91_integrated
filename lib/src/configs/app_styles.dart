@@ -215,6 +215,7 @@ class AppColors {
   static const black = Colors.black;
   static const hint = text;
   static const shadow = Color.fromRGBO(41, 41, 41, 0.8);
+  static const lightGrey = Color(0xffDADAE0);
   static const transparent = Colors.transparent;
 
   static const color = {

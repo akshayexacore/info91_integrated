@@ -8,11 +8,11 @@ class CategoryIcon extends StatelessWidget {
     super.key,
     required this.assetIcon,
     required this.title,
-    this.onPressed,
+    this.onPressed, this.clr,
   });
 
   final String assetIcon;
-  final String title;
+  final String title;final Color? clr;
   final VoidCallback? onPressed;
 
   @override
@@ -41,7 +41,7 @@ class CategoryIcon extends StatelessWidget {
                 child: AppSvgAsset(
                   'assets/images/$assetIcon',
                   width: 40,
-                  height: 40,
+                  height: 40,color: clr??null,
                   fit: BoxFit.contain,
                 ),
               ),

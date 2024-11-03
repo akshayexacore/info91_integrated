@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +7,7 @@ import 'package:info91/src/models/profile.dart';
 
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/custom/app_message_status.dart';
-import 'package:info91/src/widgets/tiny/app_button.dart';
+
 import 'package:info91/src/widgets/tiny/app_check_box.dart';
 import 'package:info91/src/widgets/tiny/image_view.dart';
 
@@ -120,6 +118,7 @@ class AppAlarmProfileTile extends StatelessWidget {
     required this.subTitle,
     this.leading,
     this.messageStatus,
+    this.color,
   });
 
   final VoidCallback? onPressed;
@@ -131,7 +130,7 @@ class AppAlarmProfileTile extends StatelessWidget {
   final MessageStatus? messageStatus;
   final VoidCallback? onButtonPressed;
   final VoidCallback? onLongPress;
-
+  final Color? color;
   final bool? selected;
 
   @override
@@ -140,14 +139,17 @@ class AppAlarmProfileTile extends StatelessWidget {
       onTap: onPressed,
       onLongPress: onLongPress,
       child: Container(
-        color: selected != null && selected!
+        decoration: BoxDecoration(
+          color: selected != null && selected!
             ? AppColors.primary.withOpacity(0.1)
-            : null,
+            : color ?? null,borderRadius: BorderRadius.circular(15.r)
+        ),
         padding: const EdgeInsets.symmetric(
-          vertical: AppPaddings.small,
+          vertical: AppPaddings.small,horizontal: AppPaddings.small
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             AppCircleImage(
               image: imageUrl,

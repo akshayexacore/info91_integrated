@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:info91/src/configs/api_constants.dart';
 import 'package:info91/src/models/informationgroup/category_model.dart';
+import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/models/informationgroup/info-model.dart';
 import 'package:info91/src/models/informationgroup/information_group.dart';
 import 'package:info91/src/models/informationgroup/plan_model.dart';
@@ -135,7 +136,7 @@ class InfromationRepository {
     final response = await _api
         .post(ApiConstants.joinGroupApi, headers: {}, body: {'group_id': id});
     try {
-      if (response['statusCode'] == 200 && response['success'] == 'success') {
+      if (response['status'] == 'success') {
         return DoubleResponse(true, response['message']);
       } else {
         return DoubleResponse(false, response['message']);
@@ -151,6 +152,37 @@ class InfromationRepository {
     try {
       debugPrint("dadatat${response["data"].toString()}");
       InfoGroupDataModel data = InfoGroupDataModel.fromJson(response["data"]);
+      return data;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<DoubleResponse> updateInfoData(
+      {required InfoGroupDataModel model}) async {
+    try {
+      final response = await _api.post(ApiConstants.updateInfoDatapApi,
+          body: model.toJson(), headers: {});
+
+      print("Response: $response");
+
+      if (response['status'] == 'success') {
+        return DoubleResponse(true, response['message']);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
+
+  Future<GroupProfileModel> getProfileData(String id) async {
+    final response = await _api.post(ApiConstants.groupProfileApi,
+        headers: {}, body: {'group_id': id});
+    try {
+      debugPrint("dadatat${response["data"].toString()}");
+      GroupProfileModel data = GroupProfileModel.fromJson(response["data"]);
       return data;
     } catch (e) {
       rethrow;

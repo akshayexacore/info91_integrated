@@ -10,7 +10,6 @@ import 'package:info91/src/modules/information_groups/presentation/widgets/texts
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
 
-
 import '../widgets/profile_top_image_sec.dart';
 
 class ProfileSettingScreen extends StatelessWidget {
@@ -33,9 +32,11 @@ class ProfileSettingScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const ProfileTopImageSec(
-                backGroundImage:"https://s3-alpha-sig.figma.com/img/674c/ebe1/163a0f5534eb6b60ce27af5086f6ae3a?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=EeDFDDWWb88~c8gy8o2fUQu0vMU0Jx8ip5IfpaTzSx8Z6GDpwLEBAAhuLvNF4Nvq6pyDN5aGBTc035ZQ3kH-8oo01v4Ow6JlUD3X18KrHGEIXeTBPcredtQYLS8fAU6KtLQH2miIDbZJxvebFu9u61kDTY06egJrgIsR9qxIQ7heSzING~026zIgl3bQiK9XXR44a3oyc5rF8-ypl17kKT9fSMJXl3BJoUlrhyEZaXjP3TokRJuC03kci8238MpFMnHKkQ7kILvGaXz-vHdVOt~ElSz7vOMvzKlv6AX3tE3vp4Q3GcFXNfQr5rFo2nzQeZLaOpN5ioSRUkVBZWQ37w__",
+                backGroundImage:
+                    "https://s3-alpha-sig.figma.com/img/674c/ebe1/163a0f5534eb6b60ce27af5086f6ae3a?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=EeDFDDWWb88~c8gy8o2fUQu0vMU0Jx8ip5IfpaTzSx8Z6GDpwLEBAAhuLvNF4Nvq6pyDN5aGBTc035ZQ3kH-8oo01v4Ow6JlUD3X18KrHGEIXeTBPcredtQYLS8fAU6KtLQH2miIDbZJxvebFu9u61kDTY06egJrgIsR9qxIQ7heSzING~026zIgl3bQiK9XXR44a3oyc5rF8-ypl17kKT9fSMJXl3BJoUlrhyEZaXjP3TokRJuC03kci8238MpFMnHKkQ7kILvGaXz-vHdVOt~ElSz7vOMvzKlv6AX3tE3vp4Q3GcFXNfQr5rFo2nzQeZLaOpN5ioSRUkVBZWQ37w__",
                 profileImage:
-"https://s3-alpha-sig.figma.com/img/674c/ebe1/163a0f5534eb6b60ce27af5086f6ae3a?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=EeDFDDWWb88~c8gy8o2fUQu0vMU0Jx8ip5IfpaTzSx8Z6GDpwLEBAAhuLvNF4Nvq6pyDN5aGBTc035ZQ3kH-8oo01v4Ow6JlUD3X18KrHGEIXeTBPcredtQYLS8fAU6KtLQH2miIDbZJxvebFu9u61kDTY06egJrgIsR9qxIQ7heSzING~026zIgl3bQiK9XXR44a3oyc5rF8-ypl17kKT9fSMJXl3BJoUlrhyEZaXjP3TokRJuC03kci8238MpFMnHKkQ7kILvGaXz-vHdVOt~ElSz7vOMvzKlv6AX3tE3vp4Q3GcFXNfQr5rFo2nzQeZLaOpN5ioSRUkVBZWQ37w__" ,               isAdmin: true,
+                    "https://s3-alpha-sig.figma.com/img/674c/ebe1/163a0f5534eb6b60ce27af5086f6ae3a?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=EeDFDDWWb88~c8gy8o2fUQu0vMU0Jx8ip5IfpaTzSx8Z6GDpwLEBAAhuLvNF4Nvq6pyDN5aGBTc035ZQ3kH-8oo01v4Ow6JlUD3X18KrHGEIXeTBPcredtQYLS8fAU6KtLQH2miIDbZJxvebFu9u61kDTY06egJrgIsR9qxIQ7heSzING~026zIgl3bQiK9XXR44a3oyc5rF8-ypl17kKT9fSMJXl3BJoUlrhyEZaXjP3TokRJuC03kci8238MpFMnHKkQ7kILvGaXz-vHdVOt~ElSz7vOMvzKlv6AX3tE3vp4Q3GcFXNfQr5rFo2nzQeZLaOpN5ioSRUkVBZWQ37w__",
+                isAdmin: true,
               ),
               SizedBox(
                 height: 60.h,
@@ -137,7 +138,9 @@ class ProfileSettingScreen extends StatelessWidget {
                         color: AppColors.text,
                         size: 16.sp),
                     constGap,
-                     BannersImageView( imageList: ["https://s3-alpha-sig.figma.com/img/674c/ebe1/163a0f5534eb6b60ce27af5086f6ae3a?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=EeDFDDWWb88~c8gy8o2fUQu0vMU0Jx8ip5IfpaTzSx8Z6GDpwLEBAAhuLvNF4Nvq6pyDN5aGBTc035ZQ3kH-8oo01v4Ow6JlUD3X18KrHGEIXeTBPcredtQYLS8fAU6KtLQH2miIDbZJxvebFu9u61kDTY06egJrgIsR9qxIQ7heSzING~026zIgl3bQiK9XXR44a3oyc5rF8-ypl17kKT9fSMJXl3BJoUlrhyEZaXjP3TokRJuC03kci8238MpFMnHKkQ7kILvGaXz-vHdVOt~ElSz7vOMvzKlv6AX3tE3vp4Q3GcFXNfQr5rFo2nzQeZLaOpN5ioSRUkVBZWQ37w__"],),
+                    BannersImageView(
+                      imageList: [],
+                    ),
                     CustomArrowTextbutton(
                         buttonName: "Add Banners",
                         onTap: () {

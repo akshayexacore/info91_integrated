@@ -9,7 +9,7 @@ import '../../../../../models/informationgroup/category_model.dart';
 
 class GroupCreationController extends GetxController {
   var typeController = "".obs;
-  TextEditingController groupNameController = TextEditingController();
+  var groupNameController = TextEditingController().obs;
   TextEditingController purposeController = TextEditingController();
   TextEditingController category1Controller = TextEditingController();
   TextEditingController category2Controller = TextEditingController();
@@ -30,15 +30,15 @@ class GroupCreationController extends GetxController {
 
   @override
   void onInit() {
- 
+   debugPrint("After getFirstCategory calssssl${selectedItem.value?.secondCategoryName}");
     getFirstCategory();
     clear();
-    debugPrint("After getFirstCategory call${selectedItem.value?.secondCategoryName}");
+  
     super.onInit();
   }
 void onClose() {
   // Dispose of all TextEditingControllers to free up resources
-  groupNameController.dispose();
+  groupNameController.value.dispose();
   purposeController.dispose();
   category1Controller.dispose();
   category2Controller.dispose();
@@ -50,7 +50,7 @@ void onClose() {
     selectedPlanModel = model;
   }
   clear(){
-     groupNameController.clear();
+    groupNameController.value.clear();
   purposeController.clear();
   category1Controller.clear();
   category2Controller.clear();
@@ -63,7 +63,7 @@ void onClose() {
       category1: category1Controller.text,
       category2: category2Controller.text,
       category3: category3Controller.text,
-      groupName: groupNameController.text,
+      groupName: groupNameController.value.text,
       planId: planId.value,
       purpose: purposeController.text,
       type: typeController.value,

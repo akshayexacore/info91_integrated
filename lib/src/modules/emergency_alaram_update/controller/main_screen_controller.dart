@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:info91/src/modules/emergency_alaram_update/pages/verify_number_screen.dart';
+// import 'package:geolocator/geolocator.dart';
 
 class MainController extends GetxController {
+    var locationMessage = "koratty, Thrissur, Kerala".obs;
   var groupsList = [
     Groupmodel(
         imageUrl:
@@ -24,6 +27,18 @@ class MainController extends GetxController {
   ].obs;
 
   var selctedGroups = <int>[].obs;
+
+
+
+
+@override
+  void onInit() {
+    debugPrint("init state xcalling");
+  //  _getCurrentLocation();
+    super.onInit();
+  }
+
+
   void onArchiveProfilePressed(int index) {
     debugPrint("index$index");
     if (!selctedGroups.contains(groupsList[index].id)) {
@@ -46,6 +61,40 @@ class MainController extends GetxController {
     }
     return returnValue;
   }
+  sendFunction(){
+    Get.toNamed(VerifyNumberAlarmScreen.routeName);
+}
+
+
+//  Future<void> _getCurrentLocation() async {
+//     // Check permissions
+//     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+//     if (!serviceEnabled) {
+//       return Future.error('Location services are disabled.');
+//     }
+
+//     LocationPermission permission = await Geolocator.checkPermission();
+//     if (permission == LocationPermission.denied) {
+//       permission = await Geolocator.requestPermission();
+//       if (permission == LocationPermission.denied) {
+//         return Future.error('Location permissions are denied');
+//       }
+//     }
+
+//     if (permission == LocationPermission.deniedForever) {
+//       return Future.error(
+//           'Location permissions are permanently denied, we cannot request permissions.');
+//     }
+
+//     // Get the current location
+//     Position position = await Geolocator.getCurrentPosition(
+//         desiredAccuracy: LocationAccuracy.high);
+    
+   
+//       locationMessage.value = "Lat: ${position.latitude}, Lng: ${position.longitude}";
+   
+//   }
+
 }
 
 class Groupmodel {

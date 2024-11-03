@@ -18,6 +18,7 @@ class AppMessageStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      
       children: [
         if (messageStatus != MessageStatus.none)
           SizedBox(

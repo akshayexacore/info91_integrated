@@ -1,6 +1,6 @@
 class Category {
-  final int id;
-  final String firstCategoryName;
+  final int? id;
+  final String? firstCategoryName;
 
   Category({
     required this.id,
@@ -9,7 +9,7 @@ class Category {
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
-      id: json['id'],
+      id: json['first_category_id']??0,
       firstCategoryName: json['first_category_name'],
     );
   }
@@ -17,7 +17,7 @@ class Category {
   // Method to convert the object to JSON
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'first_category_id': id,
       'first_category_name': firstCategoryName,
     };
   }

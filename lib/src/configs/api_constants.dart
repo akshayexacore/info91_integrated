@@ -17,4 +17,5 @@ class ApiConstants {
   static String validatingPincodeApi = "/validatePincode";
   static String joinGroupApi = "/joinPublicGroup";
   static String getInfoDatapApi = "/groupInfo";
-}
+  static String updateInfoDatapApi = "/groupInfoUpdate";
+static String groupProfileApi = "/groupProfile";}

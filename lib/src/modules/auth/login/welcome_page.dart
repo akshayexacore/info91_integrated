@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
@@ -23,24 +24,34 @@ class WelcomePage extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.asset("assets/images/bg.jpg", fit: BoxFit.cover),
+           
             Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Spacer(flex: 1),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    child: Image.asset('assets/images/app_icon.png')),
+                const Spacer(flex: 10),
+                // SizedBox(
+                //     width: MediaQuery.of(context).size.width * 0.45,
+                //     child: Image.asset('assets/images/app_icon.png')),
+                 Center(
+                child:
+                    Image.asset("assets/images/start.png", fit: BoxFit.cover)),
                 const Spacer(flex: 7),
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("In the business of making\ndreams come true.!",
-                          style: AppTextStyles.app16B,
+                      Text("Connect & Collaborate",
+                          style: AppTextStyles.app16B.copyWith(fontSize: 23.sp),
                           textAlign: TextAlign.center),
+                      Text("Dive Into Conversations and Groups!",
+                          style: AppTextStyles.app16B.copyWith(
+                              fontSize: 22.sp,
+                              color: AppColors.text,
+                              fontWeight: FontWeight.w400),
+                          textAlign: TextAlign.left),
                       const SizedBox(
                         height: AppSpacings.xxLarge,
                       ),

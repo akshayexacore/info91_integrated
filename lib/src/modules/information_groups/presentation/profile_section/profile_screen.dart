@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/gallery_view_screen/gfallery_view_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_screen.dart';
 
@@ -17,10 +18,10 @@ import '../widgets/profile_top_image_sec.dart';
 
 class ProfileScreen extends StatelessWidget {
   final String selectedGroupId;
- 
-
-   ProfileScreen({super.key,required this.selectedGroupId});
-    List<popupMenuModel> listModel = [
+  final GroupProfileModel model;
+  ProfileScreen(
+      {super.key, required this.selectedGroupId, required this.model});
+  List<popupMenuModel> listModel = [
     popupMenuModel(name: "Group Setting", value: 1)
   ];
   List<String> MediaList = [
@@ -38,7 +39,7 @@ class ProfileScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomAppBar(
-            imageUrl: "",
+            imageUrl: model.profileImage,
             actionWidget: [
               CustomPopupmenu(
                 onSelected: (val) {
@@ -51,17 +52,15 @@ class ProfileScreen extends StatelessWidget {
                 itemList: listModel,
               ),
             ],
-            appBarName: "Group Profile",
+            appBarName: model.groupName ?? "",
           ),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   ProfileTopImageSec(
-                    profileImage:
-                        "https://s3-alpha-sig.figma.com/img/35e8/9d9d/e5b9d1d23149590ef05ef35d5019c1af?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=do0mwMRfU6Z7wAuKFlRGTJViBJt8GoiZfHzEk0MPlGPdSOkQ827srEiWLy8FW7ffyI8Cna4kFN~arDN5bi5xiYyBK8dmaxhJAlUkvPk0tp31R0J~m75hgiyQgTiv2JdNTH2SDQy3cOROUD0TUU1eJNCXjNYvP93UMmMbb-0FWqBz36Rb1l9b9KdDKyqjiR126T5NDyPPVpAl0fBhHRXCbl4MdBg7kwsFIukg-KkqwXn7rJ147C2tXME2DszcHrsUOY6yheMFySd0oZyP-Fw7HzXbWaMGYgtwakC9nXd3ey3sjdaFF9apAKkBSV~KbzRBUMR9tX2Xuj5ls7itygeqYw__",
-                    backGroundImage:
-                        "https://s3-alpha-sig.figma.com/img/7eb1/5aa2/b39983facffc91323415afccde962741?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Ih2DM9CiJ6XpHCKoVfhYgmHeOEGdd3QlWBkiV0qIB70LqywdvITAlMwLHez0KqrXSVxhtW5Dvs4FxDiPu9KXqyVPLqlfW9rvlADuVkTJ9UqxW3G326kZTucPazfnfT1oM4e6fS~owGpmfwBk-PZ84un1RXjKXjjHvQ2MqmDPx7fW7nNEo6ujSNJLbwg8rahGoTGkxe0936nNb0-uJfmX5iivpbeIEdyaxi12gIFg8YrCIdTmVLGLH18n98IUXdb5JentY-3ZFZJwD2gTT3jvKElVbOQYNUZQkHZ9WTC~Lfoz~rCdwqIcGJKdy63CQ2KHqJNP8mzwyIc8MZ4w-K6uEw__",
+                    profileImage: model.profileImage ?? "",
+                    backGroundImage: model.coverImage ?? "",
                   ),
                   SizedBox(
                     height: 50.h,
@@ -71,7 +70,7 @@ class ProfileScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        greyBoldText("Group Name",
+                        greyBoldText(model.groupName ?? "",
                             fontWeight: FontWeight.bold,
                             color: AppColors.text,
                             size: 16.sp),
@@ -82,16 +81,14 @@ class ProfileScreen extends StatelessWidget {
                         SizedBox(
                           height: 10.h,
                         ),
-                        greyBoldText(
-                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
-                            color: AppColors.text,
-                            size: 15.sp),
+                        greyBoldText(model.purpose ?? "",
+                            color: AppColors.text, size: 15.sp),
 
                         SizedBox(
                           height: 15.h,
                         ),
-                        const Text(
-                          "Created by arya/ 24 march 24",
+                        Text(
+                          model.createdAt ?? "",
                           style: TextStyle(color: Colors.grey),
                         ),
                         SizedBox(
@@ -132,7 +129,10 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         CustomArrowTextbutton(
                           buttonName: "Group info",
-                          onTap: () {Get.toNamed('/group_info', arguments: {"group_id": selectedGroupId});;
+                          onTap: () {
+                            Get.toNamed('/group_info',
+                                arguments: {"group_id": selectedGroupId});
+                            ;
                             // Navigator.push(
                             //     context,
                             //     MaterialPageRoute(
@@ -147,9 +147,7 @@ class ProfileScreen extends StatelessWidget {
                         SizedBox(
                           height: 5.h,
                         ),
-                        BannersImageView(imageList: [
-                          "https://s3-alpha-sig.figma.com/img/c293/679f/a9d76f9e4f26a17ead029749476e8f6c?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=VUpvHydKMhFGG8bh8kwwZiSxvweL7FvVNYssFvgmICqabLL9PCgD5RpCixwqAtdMUAziakWiIo3~jNtyEuV6o3pSTHAcaXvyhSd3YVUWkSzTIEO3jaii~9GLCR-zfjYPryWrvol3aKoYq4xu8z~CVdKc3PIgrim7kSZKVHH5Qumrv07drsYxqZ8U-sor3Oh7-STtxDrWBpTu3A-Bn3N-ABPEG9WJwoGWzl~l2wJDQLsTIzmyMUy8sFNzt1g7bqresi1C60fCU96l4IChCtmN~pUlvuyyJv49rNxR9NfctXBRK1pycCRMZVN-UQ2z0P6XzLGG3MwplrrfwJHULz--~g__"
-                        ]),
+                        BannersImageView(imageList: model.banners ?? []),
                         SizedBox(
                           height: 5.h,
                         ),
@@ -159,31 +157,42 @@ class ProfileScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              greynonBoldText("1k members"),
+                              greynonBoldText("${model.memberCount} members"),
                               SizedBox(
                                 height: 10.h,
                               ),
-                              ListTile(
-                                leading: circle_image(
-                                  "https://randomuser.me/api/portraits/women/1.jpg",
-                                  onTap: () {},
-                                ),
-                                title: const Text(
-                                  "Arya",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                subtitle: SizedBox(
-                                    width: 400.w,
-                                    child: const Text(
-                                      "Creating My own sunshine in a world",
-                                      overflow: TextOverflow.ellipsis,
-                                    )),
-                                trailing: Text(
-                                  "Admin",
-                                  style: TextStyle(
-                                      color: Colors.orange, fontSize: 13.sp),
-                                ),
-                              )
+                              ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: ScrollPhysics(),
+                                  itemBuilder: (context, index) => ListTile(
+                                        leading: circle_image(
+                                          "https://randomuser.me/api/portraits/women/1.jpg",
+                                          onTap: () {},
+                                        ),
+                                        title: Text(
+                                          model.members?[index].name ?? "",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        subtitle: SizedBox(
+                                            width: 400.w,
+                                            child: Text(
+                                              model.members?[index].status ??
+                                                  "",
+                                              overflow: TextOverflow.ellipsis,
+                                            )),
+                                        trailing: Text(
+                                          "Admin",
+                                          style: TextStyle(
+                                              color: Colors.orange,
+                                              fontSize: 13.sp),
+                                        ),
+                                      ),
+                                  separatorBuilder: (context, index) =>
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                  itemCount: model.members?.length ?? 0)
                             ],
                           ),
                         )
@@ -217,7 +226,7 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class BannersImageView extends StatelessWidget {
-  final List<String> imageList;
+  final List<BannerModel> imageList;
 
   BannersImageView({
     super.key,
@@ -243,16 +252,16 @@ class BannersImageView extends StatelessWidget {
                 customImageCard(
                   width: double.infinity,
                   height: 150.h,
-                  imageUrl: imageList[index],
+                  imageUrl: imageList[index].image ?? "",
                 ),
                 SizedBox(
                   height: 5.h,
                 ),
-                greynonBoldText("Title"),
+                greynonBoldText(imageList[index].title ?? ""),
                 SizedBox(
                   height: 5.h,
                 ),
-                greynonBoldText("Description"),
+                greynonBoldText(imageList[index].description ?? ""),
               ],
             ),
           ),

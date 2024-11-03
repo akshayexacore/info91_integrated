@@ -10,13 +10,15 @@ import 'package:flutter/foundation.dart' as foundation;
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/configs/filepicker.dart';
 import 'package:info91/src/configs/variables.dart';
+import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/modules/chat/grouped_list.dart';
 import 'package:info91/src/modules/information_groups/presentation/blocs/chat_screen_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/build_message_widget.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/contact_list.dart';
-import 'package:info91/src/modules/information_groups/presentation/pages/profile_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/profile_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/chat_list_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
+import 'package:info91/src/resources/infromation_repository.dart';
 import 'package:info91/src/widgets/custom/app_app_bar.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/custom/build_appbar_widgets.dart';
@@ -29,7 +31,8 @@ import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
   final String? selectedGroupId;
-  ChatScreen({super.key, this.selectedGroupId});
+  final GroupProfileModel? model;
+  ChatScreen({super.key, this.selectedGroupId, this.model});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -39,16 +42,18 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final ChatScreenController chatController = Get.put(ChatScreenController());
   FocusNode searchFocusnOde = FocusNode();
   FilePickerHelper filePickerHelper = FilePickerHelper();
-
+  InfromationRepository _repository = InfromationRepository();
   Animation<Offset>? _animation;
   AnimationController? _animationController1;
   Tween<Offset>? _animationTween;
   String msgdate = '';
-
+  GroupProfileModel model = GroupProfileModel();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getProfileData();
+
     // this for to get contact litinitial,to avoid lag
     searchFocusnOde.addListener(() {
       if (searchFocusnOde.hasFocus) {
@@ -68,6 +73,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         curve: Curves.ease,
       ),
     );
+  }
+
+  getProfileData() async {
+    if (widget.model == null) {
+      model = await _repository.getProfileData(widget.selectedGroupId ?? "");
+      setState(() {});
+    }
   }
 
   String formatMessageTimestamp(DateTime timestamp, int index) {
@@ -155,15 +167,22 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         isPic: chatController.messageSelectedcount() != 0
                             ? false
                             : true,
-                        imageUrl: "",
+                        imageUrl: widget.model != null
+                            ? widget.model?.profileImage ?? ""
+                            : model.profileImage ?? "",
                         imageOntap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ProfileScreen(selectedGroupId:widget .selectedGroupId??"",),
+                                builder: (context) => ProfileScreen(
+                                  selectedGroupId: widget.selectedGroupId ?? "",
+                                  model: widget.model ?? model,
+                                ),
                               ));
                         },
-                        appBarName: "Information Groups",
+                        appBarName: widget.model != null
+                            ? widget.model?.groupName ?? ""
+                            : model.groupName ?? "",
                         actionWidget: [
                           if (chatController.messageSelectedcount() != 0) ...[
                             if (chatController.checkOnlySelectedMessageIsText())

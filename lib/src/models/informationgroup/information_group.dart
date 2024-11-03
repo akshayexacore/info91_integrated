@@ -170,13 +170,15 @@ class InfoGroupChatListModel {
   final String? status;
   final bool? owngroupFlag;
   final bool? joinedGroupFlag;
+  final String? lastmessage;
+  final String? unReadCount;
 
   InfoGroupChatListModel({
     this.id,
     this.groupName,
     this.groupTableName,
     this.groupusersTableName,
-    this.type,
+    this.type,this.lastmessage,
     this.purpose,
     this.category1,
     this.category2,
@@ -190,7 +192,7 @@ class InfoGroupChatListModel {
     this.expireDate,
     this.joinedGroupFlag,
     this.createdBy,
-    this.mobileNumber,
+    this.mobileNumber,this.unReadCount,
     this.alternativeNumber,
     this.whatsappNumber,
     this.timings,
@@ -209,6 +211,8 @@ class InfoGroupChatListModel {
   factory InfoGroupChatListModel.fromJson(Map<String, dynamic> json) {
     return InfoGroupChatListModel(
       id: json['group_id'],
+      unReadCount: json['unread_count'],
+      lastmessage: json["last_message"],
       joinedGroupFlag: json['joined_flag'] ?? true,
       groupName: json['group_name'],
       groupTableName: json['group_table_name'],
@@ -250,6 +254,8 @@ class InfoGroupChatListModel {
   Map<String, dynamic> toJson() {
     return {
       'group_id': id,
+      "unread_count":unReadCount,
+      "last_message":lastmessage,
       'group_name': groupName,
       'group_table_name': groupTableName,
       'groupusers_table_name': groupusersTableName,
@@ -315,10 +321,11 @@ class InfoGroupChatListModel {
       DateTime? updatedAt,
       String? status,
       bool? owngroupFlag,
-      bool? joinedflad}) {
+      bool? joinedflad,String? unReadCount,String? latMessage }) {
     return InfoGroupChatListModel(
       id: id ?? this.id,
-      groupName: groupName ?? this.groupName,
+      groupName: groupName ?? this.groupName,unReadCount: unReadCount??this.unReadCount,
+      lastmessage: latMessage??this.lastmessage,
       groupTableName: groupTableName ?? this.groupTableName,
       groupusersTableName: groupusersTableName ?? this.groupusersTableName,
       type: type ?? this.type,

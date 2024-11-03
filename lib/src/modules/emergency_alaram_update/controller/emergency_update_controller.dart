@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:info91/src/modules/emergency_alaram_update/pages/verify_number_screen.dart';
 
 class EmergencyUpdateController extends GetxController {
   var isRecording = false.obs;
@@ -32,4 +33,8 @@ class EmergencyUpdateController extends GetxController {
     final seconds = twoDigits(duration.inSeconds.remainder(60));
     return "$minutes:$seconds";
   }
+
+
+
+
 }

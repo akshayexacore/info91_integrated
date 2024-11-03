@@ -80,6 +80,10 @@ dependencies:
   sms_autofill: ^2.0.1
   freezed: ^2.5.7
   skeletonizer: ^1.4.2
+  audio_waveforms: ^1.1.1
+  voice_message_package: ^2.1.0
+  
+
 
  
 

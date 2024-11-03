@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
+import 'package:permission_handler/permission_handler.dart';
 // import 'package:pinput/pinput.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
@@ -24,20 +25,37 @@ class _OtpPageState extends State<OtpPage> {
   @override
   void initState() {
     super.initState();
+   
     _smsAutoFill = SmsAutoFill();
+     requestSmsPermission();
     listenForOtp();
   }
 
-  @override
-  void codeUpdated(code) {
-    print("code listen workjjjjjjjjjjjjjjjj$code");
-    setState(() {
-      _loginController.textControllerOtp.text = code;
-    });
+ Future<void> requestSmsPermission() async {
+    var status = await Permission.sms.request();
+    if (status.isGranted) {
+      print("SMS permission granted.");
+      listenForOtp();
+    } else {
+      print("SMS permission denied.");
+      // Handle the case where permission is denied
+    }
   }
 
-  void listenForOtp() async {
-    await SmsAutoFill().listenForCode(); // Correct the await call
+   void codeUpdated(String code) {
+    print("Code received: $code");
+    setState(() {
+      _loginController.textControllerOtp.text = code; 
+      // Update the OTP TextField
+    });
+  }
+   void listenForOtp() async {
+    try {
+      await _smsAutoFill.listenForCode();
+      print("Started listening for OTP code.");
+    } catch (e) {
+      print("Error starting SMS listening: $e");
+    }
   }
 
   @override
@@ -48,9 +66,10 @@ class _OtpPageState extends State<OtpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvoked: (val) async {
+    return WillPopScope(
+      onWillPop: () async {
         _loginController.cancelTimer();
+        return true;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -110,7 +129,6 @@ class _OtpPageState extends State<OtpPage> {
                   PinFieldAutoFill(
                     controller: _loginController.textControllerOtp,
                     codeLength: 4,
-                    
                     onCodeChanged: (pin) {
                       _loginController.isOtpValid(
                           pin?.length == 4); // Check if OTP length is valid

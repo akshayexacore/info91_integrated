@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/models/informationgroup/information_group.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 import 'package:info91/src/resources/infromation_repository.dart';
@@ -7,6 +8,7 @@ import 'package:info91/src/widgets/custom/app_dialog.dart';
 
 class StarScreenController extends GetxController {
   late InfoGroupChatListModel? selectedChatModel;
+  var responseModel = GroupProfileModel().obs;
   final _infromationRepository = InfromationRepository();
   @override
   void onInit() {
@@ -17,6 +19,7 @@ class StarScreenController extends GetxController {
     } else {
       debugPrint('No group data found in Get.arguments');
     }
+    getGroupInfoDetails();
     super.onInit();
   }
 
@@ -25,10 +28,24 @@ class StarScreenController extends GetxController {
       final response = await _infromationRepository
           .joinMessageTapFunc(selectedChatModel?.id ?? "");
       if (response.data1) {
-        Get.to(ChatScreen());
+        AppDialog.showSnackBar('Suceess', '${response.data2}');
+        Get.to(ChatScreen(
+          selectedGroupId: selectedChatModel?.id,
+          model: responseModel.value,
+        ));
       } else {
         AppDialog.showSnackBar('Failure', '${response.data2}');
       }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<void> getGroupInfoDetails() async {
+    try {
+      final response = await _infromationRepository
+          .getProfileData(selectedChatModel?.id ?? "");
+      responseModel.value = response;
     } catch (e) {
       throw e;
     }
