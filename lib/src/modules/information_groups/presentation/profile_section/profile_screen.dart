@@ -6,7 +6,7 @@ import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/gallery_view_screen/gfallery_view_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_screen.dart';
 
-import 'package:info91/src/modules/information_groups/presentation/pages/profile_setting_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/profile_setting_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_arrow_button.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
