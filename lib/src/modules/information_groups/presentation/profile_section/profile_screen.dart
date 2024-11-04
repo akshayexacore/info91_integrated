@@ -50,7 +50,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
  if(widget.model.id==null){
  controller. getGroupInfoDetails(widget.selectedGroupId);
  }else{controller.profilledataModel.value=widget.model;}
+ controller.groupId=widget.selectedGroupId;
     super.initState();
+
   }
   
   @override
@@ -90,6 +92,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       ProfileTopImageSec(isAdmin: controller.profilledataModel.value.isAdmin??false,
                         profileImage:controller.profilledataModel.value.profileImage ?? "",
+                        onCoverChange: (){
+                          controller.showUploadOptions(isCrop: false);
+                          },
+                        onProfileChange: (){
+                          controller.showUploadOptions(isCrop: true);
+                        },
                         backGroundImage: controller.profilledataModel.value.coverImage ?? "",
                       ),
                       SizedBox(

@@ -11,13 +11,15 @@ class ProfileTopImageSec extends StatelessWidget {
   final String backGroundImage;
   final String profileImage;
   final bool isAdmin;
+  final Function? onProfileChange;
+    final Function? onCoverChange;
   final bool isProfile;
   const ProfileTopImageSec(
       {super.key,
       required this.backGroundImage,
       required this.profileImage,
       this.isAdmin = false,
-      this.isProfile = true});
+      this.isProfile = true, this.onProfileChange, this.onCoverChange});
   void pickFromCamera() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
@@ -76,7 +78,10 @@ Future<ImageProvider> _loadImageProvider() async {
                     padding: EdgeInsets.symmetric(horizontal: 17.w, vertical: 8.h),
                     child: InkWell(
                       onTap: () {
-                        pickFromCamera();
+                        if(onCoverChange!=null){
+                          onCoverChange!();
+                        }
+                        // pickFromCamera();
                       },
                       child: isAdmin ? 
                       roundCamera() : SizedBox(),
@@ -98,11 +103,12 @@ Future<ImageProvider> _loadImageProvider() async {
                       child: circle_image(profileImage, radius: 31),
                     ),
                     if (isAdmin)
-                      Positioned(
-                        bottom: 2.h,
-                        right: -2,
-                        child: roundCamera(),
-                      )
+                      InkWell(onTap: (){
+                        if(onProfileChange!=null){
+                        onProfileChange!();
+                      }
+                      },
+                        child: roundCamera())
                   ],
                 ),
               ),

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:info91/src/configs/api_constants.dart';
+import 'package:info91/src/models/base_response.dart';
 import 'package:info91/src/models/informationgroup/category_model.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/models/informationgroup/info-model.dart';
@@ -188,4 +189,26 @@ class InfromationRepository {
       rethrow;
     }
   }
+
+
+
+    Future<DoubleResponse> uploadFile(String file,String group_id) async {
+    final response = await _api.postMultipart(ApiConstants.groupProfilePicUpdateApi,body: {"group_id":group_id}, headers: {},file: file,);
+    debugPrint("response is here$response");
+ 
+  if (response['statusCode'] == 200) {
+        return DoubleResponse(true,GroupProfileModel.fromJson(response["data"]));
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+  }
+    Future<DoubleResponse> uploadCoverPic(String file,String group_id) async {
+    final response = await _api.postMultipart(ApiConstants.groupCovPicUpdateApi,body: {"group_id":group_id}, headers: {},file: file,);
+    if (response['statusCode'] == 200) {
+        return DoubleResponse(true,GroupProfileModel.fromJson(response["data"]));
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+  }
+  
 }

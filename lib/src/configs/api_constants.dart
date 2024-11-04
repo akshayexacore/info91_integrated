@@ -18,4 +18,8 @@ class ApiConstants {
   static String joinGroupApi = "/joinPublicGroup";
   static String getInfoDatapApi = "/groupInfo";
   static String updateInfoDatapApi = "/groupInfoUpdate";
-static String groupProfileApi = "/groupProfile";}
+  static String groupProfileApi = "/groupProfile";
+  static String groupProfilePicUpdateApi = "/groupProfilePicUpdate";
+  static String groupCovPicUpdateApi = "/groupCoverPicUpdate";
+
+}

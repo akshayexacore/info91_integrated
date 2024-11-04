@@ -53,15 +53,15 @@ class StartScreen extends StatelessWidget {
                           color: AppColors.text,
                           size: 16.sp),
                       Spacer(),
-                      clickebleIcon("assets/images/youtube.png", () {}),
+                      clickebleIcon("assets/images/youtube.svg", () {controller.launchURL( controller.responseModel.value.youtubeLink??"");}),
                       SizedBox(
                         width: 20.w,
                       ),
-                      clickebleIcon("assets/images/world.png", () {}),
+                      clickebleIcon("assets/images/world.png", () {controller.launchURL( controller.responseModel.value.websiteLink??"");}),
                       SizedBox(
                         width: 20.w,
                       ),
-                      clickebleIcon("assets/images/map.png", () {}),
+                      clickebleIcon("assets/images/map.png", () {controller.launchURL( controller.responseModel.value.googleMapLink??"");}),
                     ],
                   ),
                   SizedBox(
