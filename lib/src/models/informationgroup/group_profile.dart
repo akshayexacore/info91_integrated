@@ -33,6 +33,7 @@ class GroupProfileModel {
   final int? membersCount;
   final List<Member>? members;
   final List<BannerModel>? banners;
+  final bool? isAdmin;
 
   GroupProfileModel({
     this.id,
@@ -68,12 +69,13 @@ class GroupProfileModel {
     this.memberFlag,
     this.membersCount,
     this.members,
-    this.banners,
+    this.banners,this.isAdmin,
   });
 
   factory GroupProfileModel.fromJson(Map<String, dynamic> json) {
     return GroupProfileModel(
       id: json['id'] as String?,
+      isAdmin: json['is_admin'] as bool?,
       groupName: json['group_name'] as String?,
       groupTableName: json['group_table_name'] as String?,
       groupUsersTableName: json['groupusers_table_name'] as String?,
@@ -130,6 +132,7 @@ class GroupProfileModel {
     String? lastSender,
     String? lastSendTime,
     int? memberCount,
+    bool? isAdmin,
     int? planId,
     String? expireDate,
     String? createdBy,
@@ -162,6 +165,7 @@ class GroupProfileModel {
       category3: category3 ?? this.category3,
       profileImage: profileImage ?? this.profileImage,
       coverImage: coverImage ?? this.coverImage,
+      isAdmin: isAdmin??this.isAdmin,
       lastMessageTime: lastMessageTime ?? this.lastMessageTime,
       lastSender: lastSender ?? this.lastSender,
       lastSendTime: lastSendTime ?? this.lastSendTime,

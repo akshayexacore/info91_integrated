@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/models/informationgroup/information_group.dart';
 
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
@@ -68,8 +69,8 @@ class InfoChatListController extends GetxController
       Get.toNamed(StartScreen.routName,
           arguments: {'group': chatGroupList[index]});
     } else {
-       debugPrint('chatGroupList[index]${ownchatGroupList[index].id}');
-      Get.to(ChatScreen(selectedGroupId:  ownchatGroupList[index].id,));
+    
+      Get.to(ChatScreen(selectedGroupId:  ownchatGroupList[index].id,model: GroupProfileModel(groupName: ownchatGroupList[index].groupName,alternativeNumber:  ownchatGroupList[index].alternativeNumber, ),));
     }
   }
 }

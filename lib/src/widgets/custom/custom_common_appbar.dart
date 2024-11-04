@@ -75,7 +75,7 @@ class CustomAppBar extends StatelessWidget {
                   width: 5.w,
                 ),
                 if (isPic) ...[
-                  circle_image("https://randomuser.me/api/portraits/women/1.jpg",
+                  circle_image(imageUrl??"",
                       onTap: imageOntap),
                    SizedBox(
                     width: 10.w,

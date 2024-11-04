@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/banners_screen.dart';
-import 'package:info91/src/modules/information_groups/presentation/pages/profile_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/profile_screen.dart';
+
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_arrow_button.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_scaffold.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/new_input_card.dart';
