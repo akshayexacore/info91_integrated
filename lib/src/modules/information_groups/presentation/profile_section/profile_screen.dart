@@ -67,6 +67,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   enabled: controller.isLoading.value,
               child: CustomAppBar(
                 imageUrl:controller.profilledataModel.value.profileImage,isPic: true,
+                onBackButtonPress: (){
+               Navigator.pop(context, controller.profilledataModel.value);
+                },
                 actionWidget: [
                   CustomPopupmenu(
                     onSelected: (val) {

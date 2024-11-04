@@ -6,66 +6,75 @@ import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/models/informationgroup/information_group.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_avatarwithimageicon.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ChatListItem extends StatelessWidget {
   final InfoGroupChatListModel chat;
   final Function onTap;
+
   const ChatListItem({super.key, required this.chat, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-  radius: 25.0,
-  backgroundImage: chat.profileImage != null && chat.profileImage!.isNotEmpty
-      ? NetworkImage(chat.profileImage!)
-      : null,
-  child: chat.profileImage == null || chat.profileImage!.isEmpty
-      ? Icon(Icons.group, size: 30.0,color: AppColors.black)
-      : FadeInImage.assetNetwork(height: 20,color: AppColors.white,
-          placeholder: 'assets/images/group.png', // Path to your placeholder image
-          image: chat.profileImage!,
-          imageErrorBuilder: (context, error, stackTrace) => Icon(Icons.group, size: 30.0,color: AppColors.black,), // Icon on error
-          fit: BoxFit.fitHeight,
+        radius: 25.0,
+        backgroundColor: Colors.grey.shade200, // Optional background color for contrast
+        child: ClipOval(
+          child: chat.profileImage != null && chat.profileImage!.isNotEmpty
+              ? CachedNetworkImage(
+                  imageUrl: chat.profileImage!,
+                  placeholder: (context, url) =>SizedBox(height :10,width:10,child: const  CircularProgressIndicator()),
+                  errorWidget: (context, url, error) =>const Icon(
+                    Icons.group,
+                    size: 30.0,
+                    color: AppColors.black,
+                  ),
+                  fit: BoxFit.cover,
+                  width: 50, // Match CircleAvatar's diameter
+                  height: 50,
+                )
+              :const Icon(Icons.group, size: 30.0, color: AppColors.black),
         ),
-),
+      ),
       title: Text(
-        chat.groupName??"",
-        style: const TextStyle(fontWeight: FontWeight.bold),maxLines: 1,
+        chat.groupName ?? "",
+        style: const TextStyle(fontWeight: FontWeight.bold),
+        maxLines: 1,
       ),
       subtitle: Text(
-        chat.lastmessage??"",
+        chat.lastmessage ?? "",
         style: const TextStyle(
-            color: Colors.black, overflow: TextOverflow.ellipsis,),maxLines: 1,
+          color: Colors.black,
+          overflow: TextOverflow.ellipsis,
+        ),
+        maxLines: 1,
       ),
       trailing: Column(
         children: [
           Text(
-            chat.lastSendTime??'',
+            chat.lastSendTime ?? '',
             style: const TextStyle(color: Colors.black, fontSize: 12.0),
           ),
-          // if (chat.itemcount != 0 && chat.itemcount != null) ...[
-            const SizedBox(
-              height: 5,
-            ),
-         if(chat.unReadCount!=null)    CircleAvatar(
+          const SizedBox(height: 5),
+          if (chat.unReadCount != null)
+            CircleAvatar(
               radius: 13,
               backgroundColor: AppColors.primaryAccent,
               child: Text(
-                chat.unReadCount??"",
-                style:const TextStyle(color: Colors.white),
+                chat.unReadCount ?? "",
+                style: const TextStyle(color: Colors.white),
               ),
-            )
-          // ]
+            ),
         ],
       ),
       onTap: () {
         onTap();
-        // Handle tap event (e.g., navigate to chat details)
       },
     );
   }
 }
+
 
 class Chat {
   final String name;

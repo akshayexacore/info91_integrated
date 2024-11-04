@@ -77,8 +77,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   getProfileData() async {
     if (widget.model == null) {
-      model = await _repository.getProfileData(widget.selectedGroupId ?? "");
+    chatController.groupProfileModel.value = await _repository.getProfileData(widget.selectedGroupId ?? "");
       setState(() {});
+    }else{
+     chatController.groupProfileModel.value=widget.model!;
     }
   }
 
@@ -157,71 +159,73 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           body: Column(
             children: [
               //AppBAr
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: chatController.selectedMessage.isEmpty
-                    ? CustomAppBar(
-                        onBackButtonPress: () {
-                          chatController.onBackButtonPress();
-                        },
-                        isPic: chatController.messageSelectedcount() != 0
-                            ? false
-                            : true,
-                        imageUrl: widget.model != null
-                            ? widget.model?.profileImage ?? ""
-                            : model.profileImage ?? "",
-                        imageOntap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProfileScreen(
-                                  selectedGroupId: widget.selectedGroupId ?? "",
-                                  model: widget.model ?? model,
+              Obx((){debugPrint(chatController.groupProfileModel.value.toString());
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: chatController.selectedMessage.isEmpty
+                      ? CustomAppBar(
+                          onBackButtonPress: () {
+                            chatController.onBackButtonPress();
+                          },
+                          isPic: chatController.messageSelectedcount() != 0
+                              ? false
+                              : true,
+                          imageUrl:chatController.groupProfileModel.value.profileImage ?? "",
+                          imageOntap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfileScreen(
+                                    selectedGroupId: widget.selectedGroupId ?? "",
+                                    model: chatController.groupProfileModel.value,
+                                  ),
+                                )).then((value){
+                                  chatController.groupProfileModel.value=value;
+                                });
+                          },
+                          appBarName: widget.model != null
+                              ? widget.model?.groupName ?? ""
+                              : model.groupName ?? "",
+                          actionWidget: [
+                            if (chatController.messageSelectedcount() != 0) ...[
+                              if (chatController.checkOnlySelectedMessageIsText())
+                                IconButton(
+                                  onPressed: () {
+                                    chatController.copySelectedMessages(context);
+                                  },
+                                  icon: Icon(Icons.copy),
+                                  color: AppColors.white,
                                 ),
-                              ));
-                        },
-                        appBarName: widget.model != null
-                            ? widget.model?.groupName ?? ""
-                            : model.groupName ?? "",
-                        actionWidget: [
-                          if (chatController.messageSelectedcount() != 0) ...[
-                            if (chatController.checkOnlySelectedMessageIsText())
-                              IconButton(
-                                onPressed: () {
-                                  chatController.copySelectedMessages(context);
-                                },
-                                icon: Icon(Icons.copy),
-                                color: AppColors.white,
-                              ),
-                            CustomPopupmenu(
-                                onSelected: (value) {
-                                  if (value == 1) {}
-                                  if (value == 2) {
-                                    chatController.messages.removeWhere(
-                                        (item) => item?.isSelcted == true);
-                                  }
-                                },
-                                itemList: [
-                                  popupMenuModel(
-                                      name: chatController
-                                                  .messageSelectedcount() ==
-                                              1
-                                          ? "Copy"
-                                          : "Delete",
-                                      value: chatController
-                                                  .messageSelectedcount() ==
-                                              1
-                                          ? 1
-                                          : 2)
-                                ])
-                          ]
-                        ],
-                      )
-                    : _buildSelectedAppBar(
-                        canPop: canPop,
-                        key: const Key('_buildInfoSelectedAppBar'),
-                        selectedCount:
-                            chatController.selectedMessage.length.toString()),
+                              CustomPopupmenu(
+                                  onSelected: (value) {
+                                    if (value == 1) {}
+                                    if (value == 2) {
+                                      chatController.messages.removeWhere(
+                                          (item) => item?.isSelcted == true);
+                                    }
+                                  },
+                                  itemList: [
+                                    popupMenuModel(
+                                        name: chatController
+                                                    .messageSelectedcount() ==
+                                                1
+                                            ? "Copy"
+                                            : "Delete",
+                                        value: chatController
+                                                    .messageSelectedcount() ==
+                                                1
+                                            ? 1
+                                            : 2)
+                                  ])
+                            ]
+                          ],
+                        )
+                      : _buildSelectedAppBar(
+                          canPop: canPop,
+                          key: const Key('_buildInfoSelectedAppBar'),
+                          selectedCount:
+                              chatController.selectedMessage.length.toString()),
+                );}
               ),
 
               Expanded(

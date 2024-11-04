@@ -68,22 +68,23 @@ class InfoChatListController extends GetxController
       debugPrint('chatGroupList[index]${chatGroupList[index].id}');
       Get.toNamed(StartScreen.routName,
           arguments: {'group': chatGroupList[index]})?.then((_) {
-          // This will be called when you return to the previous page
-         
+        // This will be called when you return to the previous page
+
         grtInfoGroupList(); // Call fetchData to refresh the data
-        });
+      });
     } else {
+      debugPrint("ownchatGroupList[index].profileImage${ownchatGroupList[index].profileImage}");
       Get.to(ChatScreen(
         selectedGroupId: ownchatGroupList[index].id,
         model: GroupProfileModel(
-          groupName: ownchatGroupList[index].groupName,
-          alternativeNumber: ownchatGroupList[index].alternativeNumber,
-        ),
+            groupName: ownchatGroupList[index].groupName,
+            alternativeNumber: ownchatGroupList[index].alternativeNumber,
+            profileImage: ownchatGroupList[index].profileImage),
       ))?.then((_) {
-          // This will be called when you return to the previous page
-         
+        // This will be called when you return to the previous page
+
         grtInfoGroupList(); // Call fetchData to refresh the data
-        });
+      });
     }
   }
 }

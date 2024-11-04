@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/modules/chat_info/chat_info_page.dart';
 import 'package:info91/src/modules/forward/forward_page.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
@@ -27,6 +28,7 @@ class ChatScreenController extends GetxController {
   late ChatMessage replyChat;
   var isReplay = false.obs;
   var selectedMessage = <ChatMessage>[].obs;
+   var groupProfileModel=GroupProfileModel().obs;
  Map<String, GlobalKey> messageKeys = {};
   OverlayEntry? _overlayEntry;
   final emojis = const [

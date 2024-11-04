@@ -10,7 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
-import 'package:info91/src/modules/information_groups/presentation/pages/contactSelected_view_screen.dart';
+
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 import 'package:info91/src/widgets/custom/custom_divider.dart';
 import 'package:info91/src/widgets/custom/custom_image_popup.dart';
@@ -85,7 +85,7 @@ class BuildMessageWidget extends StatelessWidget {
                           isReplyMe
                               ? "you"
                               : "${message.replyModel?.userName.toString().toTitleCase()}",
-                          style: TextStyle(
+                          style:const TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary)),
