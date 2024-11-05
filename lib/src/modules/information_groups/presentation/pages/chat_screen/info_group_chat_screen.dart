@@ -159,7 +159,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           body: Column(
             children: [
               //AppBAr
-              Obx((){debugPrint(chatController.groupProfileModel.value.toString());
+              Obx((){
                 return AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
                   child: chatController.selectedMessage.isEmpty
