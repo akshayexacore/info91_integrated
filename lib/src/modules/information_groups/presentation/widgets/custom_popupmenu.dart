@@ -23,11 +23,11 @@ class CustomPopupmenu extends StatelessWidget {
           return itemList
               .map(
                 (element) => PopupMenuItem(
-                  height: 30,
+                  height: 35,
                   value: element.value,
                   child: Text(
                     element.name,
-                    style: TextStyle(fontSize: 10),
+                    style: const TextStyle(fontSize: 11),
                   ),
                 ),
               )

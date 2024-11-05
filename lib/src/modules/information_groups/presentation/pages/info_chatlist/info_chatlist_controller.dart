@@ -16,6 +16,7 @@ class InfoChatListController extends GetxController
   final _infromationRepository = InfromationRepository();
   var serchController = TextEditingController().obs;
   var toggleValue = 0.obs;
+  var searchText = "".obs;
   var ownchatGroupList = <InfoGroupChatListModel>[].obs;
   var chatGroupList = <InfoGroupChatListModel>[].obs;
   var searchGroupList = <InfoGroupChatListModel>[].obs;
@@ -73,7 +74,8 @@ class InfoChatListController extends GetxController
         grtInfoGroupList(); // Call fetchData to refresh the data
       });
     } else {
-      debugPrint("ownchatGroupList[index].profileImage${ownchatGroupList[index].profileImage}");
+      debugPrint(
+          "ownchatGroupList[index].profileImage${ownchatGroupList[index].profileImage}");
       Get.to(ChatScreen(
         selectedGroupId: ownchatGroupList[index].id,
         model: GroupProfileModel(

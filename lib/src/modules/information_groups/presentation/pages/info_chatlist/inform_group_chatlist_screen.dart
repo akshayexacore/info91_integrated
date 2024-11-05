@@ -36,9 +36,9 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
               isTextield: true,
               textEditingController: controller.serchController.value,
               onChangeFunction: (va) {
-                controller.serchController.value.text = va;
+                controller.searchText.value = va;
                 controller.searchInfoGroup(va);
-                setState(() {});
+                // setState(() {});
               },
               actionWidget: [
                 CustomPopupmenu(
@@ -60,10 +60,14 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
               height: 40,
             ),
             Obx(() {
-              return controller.serchController.value.text.isEmpty
-                  ? toggleSwitch(onToggle: (val) {
-                      controller.toggleValue.value = val;
-                    })
+              debugPrint(
+                  "controller.serchController.value.text.isEmpty${controller.serchController.value.text.trim().isEmpty}");
+              return controller.searchText.value.isEmpty
+                  ? toggleSwitch(
+                      onToggle: (val) {
+                        controller.toggleValue.value = val;
+                      },
+                      toggleValue: controller.toggleValue.value)
                   : Container();
             }),
             SizedBox(
@@ -72,7 +76,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
             Expanded(
               child: Obx(() {
                 // Checking if the search controller has any text
-                if (controller.serchController.value.text.isNotEmpty) {
+                if (controller.searchText.value.isNotEmpty) {
                   return controller.searchGroupList.isEmpty
                       ? Center(child: Text("No Data"))
                       : ListView.separated(
@@ -86,6 +90,8 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
                           separatorBuilder: (context, index) => customDivider(),
                         );
                 } else {
+                  debugPrint(
+                      "controller.toggle.value.text.isEmpty${controller.toggleValue.value}");
                   return ListView.separated(
                     itemCount: controller.toggleValue.value == 0
                         ? controller.chatGroupList.length
@@ -107,14 +113,14 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
         ));
   }
 
-  ToggleSwitch toggleSwitch({Function? onToggle}) {
+  ToggleSwitch toggleSwitch({Function? onToggle, required int toggleValue}) {
     return ToggleSwitch(
       minWidth: 110.0.w,
       minHeight: 34.h,
       activeFgColor: Colors.white,
       inactiveBgColor: Colors.white,
       inactiveFgColor: Colors.black,
-      initialLabelIndex: 0,
+      initialLabelIndex: toggleValue,
       curve: Curves.bounceOut,
       cornerRadius: 10,
       activeBgColors: [
