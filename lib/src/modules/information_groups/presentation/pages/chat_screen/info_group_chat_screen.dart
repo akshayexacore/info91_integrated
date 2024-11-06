@@ -10,13 +10,13 @@ import 'package:flutter/foundation.dart' as foundation;
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/configs/filepicker.dart';
 import 'package:info91/src/configs/variables.dart';
+import 'package:info91/src/models/informationgroup/chat_model.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/modules/chat/grouped_list.dart';
 import 'package:info91/src/modules/information_groups/presentation/blocs/chat_screen_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/build_message_widget.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/contact_list.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/profile_screen.dart';
-import 'package:info91/src/modules/information_groups/presentation/widgets/chat_list_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
 import 'package:info91/src/resources/infromation_repository.dart';
 import 'package:info91/src/widgets/custom/app_app_bar.dart';
@@ -47,6 +47,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   AnimationController? _animationController1;
   Tween<Offset>? _animationTween;
   String msgdate = '';
+  
   GroupProfileModel model = GroupProfileModel();
   @override
   void initState() {
@@ -79,10 +80,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     if (widget.model == null) {
       chatController.groupProfileModel.value =
           await _repository.getProfileData(widget.selectedGroupId ?? "");
+           chatController.selectedGroupId=widget.selectedGroupId??"";
       setState(() {});
     } else {
       chatController.groupProfileModel.value = widget.model!;
+      chatController.selectedGroupId=widget.selectedGroupId??"";
     }
+    // chatController.startFetchingChats();
   }
 
   String formatMessageTimestamp(DateTime timestamp, int index) {
@@ -202,8 +206,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                 onSelected: (value) {
                                   if (value == 1) {}
                                   if (value == 2) {
-                                    chatController.messages.removeWhere(
-                                        (item) => item?.isSelcted == true);
+                                    // chatController.messages.removeWhere(
+                                    //     (item) => item!.isSelcted == true);
                                   }
                                 },
                                 itemList: [
@@ -235,7 +239,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   return GroupedList<ChatMessage, DateTime>(
                       controller: chatController.scrollController,
                       elements: chatController.messages,
-                      groupBy: (element) => element.dateTime,
+                      groupBy: (element) =>DateTime.parse(element.date??""),
+                      // element.date,
+
                       groupComparator: (value1, value2) =>
                           value1.compareTo(value2),
                       groupHeaderBuilder: (index) => Column(
@@ -251,9 +257,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                   horizontal: AppPaddings.xSmall,
                                   vertical: AppPaddings.xxxSmall4,
                                 ),
-                                child: Text(
-                                  DateFormat("MMM dd, yyyy").format(
-                                      chatController.messages[index].dateTime),
+                                child: Text(chatController.messages[index].time??"",
+                                  // DateFormat("MMM dd, yyyy").format(
+                                  //     chatController.messages[index].dateTime),
                                   style: const TextStyle(
                                     fontSize: 10,
                                     color: AppColors.primary,
@@ -269,13 +275,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         debugPrint(
                             "chatController.messages[index]${chatController.messages[index].message}$index");
                         final message = chatController.messages[index];
-                        bool isMe = message.senderId == "1";
-                        msgdate =
-                            formatMessageTimestamp(message.dateTime, index);
+                        bool isMe = message.isMe??false;
+                        msgdate =message.date??"";
+                            // formatMessageTimestamp(message.dateTime, index);
                         bool isSameUser =
                             index + 1 <= chatController.messages.length - 1
-                                ? message.id !=
-                                        chatController.messages[index + 1].id
+                                ? message.userId !=
+                                        chatController.messages[index + 1].userId
                                     ? false
                                     : true
                                 : false;
@@ -289,9 +295,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                   "message.isReplay${!chatController.checkSelcetionExist()}");
 
                               if (!chatController.checkSelcetionExist()) {
-                                if (message.isReplay == true) {
+                                if (message.reactionFlag == true) {
                                   chatController.scrollToMessage(
-                                      message.replyModel?.id ?? "0");
+                                      message.replyDetails?.messageId ?? "0");
                                 }
                               } else {
                                 chatController.messageOntapfunction(index,
@@ -318,7 +324,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                       messageModel: message,
                                       isSameUser: isSameUser,
                                     )),
-                                if (chatController.messages[index].isSelcted)
+                                if (chatController.messages[index].isSelcted==true)
                                   Positioned.fill(
                                     child: Container(
                                         color:
@@ -404,7 +410,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                           chatController.searchController,
                           searchFocusnOde,
                           () {
-                            chatController.sendMessage(MessageType.text);
+                            chatController.sendMessage1("text");
                             chatController.searchController.clear();
 
                             setState(() {});
@@ -521,10 +527,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       MaterialPageRoute(
                         builder: (context) => ContactList(
                           contacts: Variables.userContact,
-                          onSubmitFunction: (contactList) {
-                            print("contactlist$contactList");
-                            chatController.sendMessage(MessageType.contact,
-                                contactList: contactList);
+                          onSubmitFunction: (List<Contact> contact) {
+                     List<Map<String, dynamic>> contactList=      contact.map((contact) => contact.toJson()).toList();
+
+                     debugPrint("contactListData${contactList.runtimeType}");
+                            chatController.sendMessage1("contact",
+                                messsageType: contactList);
                           },
                         ),
                       ));
@@ -684,7 +692,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             },
             chatMessage: chatController.replyChat,
             isChatMessage: true,
-            message: chatController.replyChat.message,
+            message: chatController.replyChat.message??"",
           ),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -797,92 +805,92 @@ enum MessageStatus {
   read,
 }
 
-class ChatMessage {
-  final String id;
-  final String message;
-  final String senderId;
-  final bool isRead;
-  final String time;
-  final String userName;
-  final DateTime dateTime;
-  final String? userProfile;
+// class ChatMessage {
+//   final String id;
+//   final String message;
+//   final String senderId;
+//   final bool isRead;
+//   final String time;
+//   final String userName;
+//   final DateTime dateTime;
+//   final String? userProfile;
 
-  final MessageType messageType;
-  MessageStatus status;
-  final String? filePath;
-  final bool isSelcted;
-  final bool? isReplay;
-  String reaction;
-  final ChatMessage? replyModel;
-  final List<Contact>? contactList;
+//   final MessageType messageType;
+//   MessageStatus status;
+//   final String? filePath;
+//   final bool isSelcted;
+//   final bool? isReplay;
+//   String reaction;
+//   final ChatMessage? replyModel;
+//   final List<Contact>? contactList;
 
-  ChatMessage({
-    this.isReplay,
-    required this.id,
-    required this.dateTime,
-    required this.userName,
-    required this.messageType,
-    this.filePath,
-    this.userProfile,
-    this.replyModel,
-    this.contactList,
-    required this.time,
-    this.reaction = '',
-    this.isSelcted = false,
-    required this.message,
-    required this.senderId,
-    required this.status,
-    this.isRead = false,
-  });
+//   ChatMessage({
+//     this.isReplay,
+//     required this.id,
+//     required this.dateTime,
+//     required this.userName,
+//     required this.messageType,
+//     this.filePath,
+//     this.userProfile,
+//     this.replyModel,
+//     this.contactList,
+//     required this.time,
+//     this.reaction = '',
+//     this.isSelcted = false,
+//     required this.message,
+//     required this.senderId,
+//     required this.status,
+//     this.isRead = false,
+//   });
 
-  ChatMessage copyWith({
-    String? message,
-    String? senderId,
-    bool? isRead,
-    String? time,
-    DateTime? dateTime,
-    MessageType? messageType,
-    MessageStatus? status,
-    String? filePath,
-    bool? isSelcted,
-    String? reaction,
-    bool? isReplay,
-    List<Contact>? contactList,
-    String? userNAme,
-    String? userProfile,
-  }) {
-    return ChatMessage(
-      message: message ?? this.message,
-      senderId: senderId ?? this.senderId,
-      isRead: isRead ?? this.isRead,
-      id: id ?? this.id,
-      userName: userNAme ?? this.userName,
-      reaction: reaction ?? this.reaction,
-      isReplay: isReplay ?? this.isReplay,
-      time: time ?? this.time,
-      dateTime: dateTime ?? this.dateTime,
-      messageType: messageType ?? this.messageType,
-      status: status ?? this.status,
-      userProfile: userProfile ?? this.userProfile,
-      filePath: filePath ?? this.filePath,
-      isSelcted: isSelcted ?? this.isSelcted,
-      contactList: contactList ?? this.contactList,
-    );
-  }
+//   ChatMessage copyWith({
+//     String? message,
+//     String? senderId,
+//     bool? isRead,
+//     String? time,
+//     DateTime? dateTime,
+//     MessageType? messageType,
+//     MessageStatus? status,
+//     String? filePath,
+//     bool? isSelcted,
+//     String? reaction,
+//     bool? isReplay,
+//     List<Contact>? contactList,
+//     String? userNAme,
+//     String? userProfile,
+//   }) {
+//     return ChatMessage(
+//       message: message ?? this.message,
+//       senderId: senderId ?? this.senderId,
+//       isRead: isRead ?? this.isRead,
+//       id: id ?? this.id,
+//       userName: userNAme ?? this.userName,
+//       reaction: reaction ?? this.reaction,
+//       isReplay: isReplay ?? this.isReplay,
+//       time: time ?? this.time,
+//       dateTime: dateTime ?? this.dateTime,
+//       messageType: messageType ?? this.messageType,
+//       status: status ?? this.status,
+//       userProfile: userProfile ?? this.userProfile,
+//       filePath: filePath ?? this.filePath,
+//       isSelcted: isSelcted ?? this.isSelcted,
+//       contactList: contactList ?? this.contactList,
+//     );
+//   }
 
-  // Method to mark the message as read
-  ChatMessage markAsRead() {
-    return ChatMessage(
-        message: message,
-        senderId: senderId,
-        isRead: true,
-        userName: userName,
-        dateTime: dateTime,
-        userProfile: userProfile,
-        id: id,
-        messageType: messageType,
-        isSelcted: this.isSelcted,
-        status: status,
-        time: time);
-  }
-}
+//   // Method to mark the message as read
+//   ChatMessage markAsRead() {
+//     return ChatMessage(
+//         message: message,
+//         senderId: senderId,
+//         isRead: true,
+//         userName: userName,
+//         dateTime: dateTime,
+//         userProfile: userProfile,
+//         id: id,
+//         messageType: messageType,
+//         isSelcted: this.isSelcted,
+//         status: status,
+//         time: time);
+//   }
+// }

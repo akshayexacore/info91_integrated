@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
@@ -8,10 +9,12 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/models/informationgroup/chat_model.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/modules/chat_info/chat_info_page.dart';
 import 'package:info91/src/modules/forward/forward_page.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
+import 'package:info91/src/resources/infromation_repository.dart';
 import 'package:info91/src/widgets/custom/app_dialog.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 
@@ -24,12 +27,19 @@ class ChatScreenController extends GetxController {
   RxBool isGalleryVisible = false.obs;
   final ScrollController scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
+  String selectedGroupId = '';
+  final _infromationRepository = InfromationRepository();
   get selectedMoreThanOne => selectedMessage.length != 1;
+  RxList<ChatMessage> messages = <ChatMessage>[].obs;
+
   late ChatMessage replyChat;
+  Timer? _chatFetchTimer;
+  final int fetchIntervalSeconds = 3;
   var isReplay = false.obs;
   var selectedMessage = <ChatMessage>[].obs;
-   var groupProfileModel=GroupProfileModel().obs;
- Map<String, GlobalKey> messageKeys = {};
+  var groupProfileModel = GroupProfileModel().obs;
+  Map<String, GlobalKey> messageKeys = {};
+
   OverlayEntry? _overlayEntry;
   final emojis = const [
     Emoji('👍', 'Thumbs Up', hasSkinTone: true),
@@ -39,77 +49,22 @@ class ChatScreenController extends GetxController {
     Emoji('👎', 'Thumbs Down', hasSkinTone: true),
   ];
 
-  RxList<ChatMessage> messages = <ChatMessage>[
-    ChatMessage(
-      message: "Good Morning, Have a Good Day!",
-      id: "1",
-      senderId: "2",
-      userProfile: "https://th.bing.com/th/id/R.e2bb45fff1e398723c711c519502d5a3?rik=SEPvooeqfgw0kA&riu=http%3a%2f%2fimages.unsplash.com%2fphoto-1535713875002-d1d0cf377fde%3fcrop%3dentropy%26cs%3dtinysrgb%26fit%3dmax%26fm%3djpg%26ixid%3dMnwxMjA3fDB8MXxzZWFyY2h8NHx8bWFsZSUyMHByb2ZpbGV8fDB8fHx8MTYyNTY2NzI4OQ%26ixlib%3drb-1.2.1%26q%3d80%26w%3d1080&ehk=Gww3MHYoEwaudln4mR6ssDjrAMbAvyoXYMsyKg5p0Ac%3d&risl=&pid=ImgRaw&r=0",
-      userName: "Akshay",
-      time: "1:00 PM",
-      status: MessageStatus.read,
-      messageType: MessageType.image,
-      isRead: true,
-      dateTime: DateTime.parse('2024-06-20'),
-    ),
-     ChatMessage(
-      message: "Good Morning, Have a Good Day!",
-      id: "1",
-      senderId: "2",
-      userName: "Akshay",
-      userProfile: "https://th.bing.com/th/id/R.e2bb45fff1e398723c711c519502d5a3?rik=SEPvooeqfgw0kA&riu=http%3a%2f%2fimages.unsplash.com%2fphoto-1535713875002-d1d0cf377fde%3fcrop%3dentropy%26cs%3dtinysrgb%26fit%3dmax%26fm%3djpg%26ixid%3dMnwxMjA3fDB8MXxzZWFyY2h8NHx8bWFsZSUyMHByb2ZpbGV8fDB8fHx8MTYyNTY2NzI4OQ%26ixlib%3drb-1.2.1%26q%3d80%26w%3d1080&ehk=Gww3MHYoEwaudln4mR6ssDjrAMbAvyoXYMsyKg5p0Ac%3d&risl=&pid=ImgRaw&r=0",
-      time: "1:00 PM",
-      status: MessageStatus.read,
-      messageType: MessageType.image,
-      isRead: true,
-      dateTime: DateTime.parse('2024-06-20'),
-    ),
-    ChatMessage(
-      message: "Good Morning !",
-      senderId: "1",
-      id: " 2",
-      time: "1:00 PM",
-      userName: "Akshay",
-      isRead: false,
-      status: MessageStatus.read,
-      messageType: MessageType.text,
-      dateTime: DateTime.parse('2024-04-20'),
-    ),
-    ChatMessage(
-        message: "https://pub.dev/packages/linkify!",
-        senderId: "2",
-        isRead: true,
-        id: "3",
-        userName: "Anvar",
-        status: MessageStatus.delivered,
-        time: "1:00 PM",
-        messageType: MessageType.text,
-        dateTime: DateTime.parse('2024-03-20')),
-    ChatMessage(
-        message: "https://chatgpt.com/c/a49ae773-f7cd-477c-a7ab-5cca063d47d7",
-        senderId: "1",
-        messageType: MessageType.text,
-        userName: "Akshay",
-        time: "1:00 PM",
-        id: "4",
-        isRead: false,
-        status: MessageStatus.delivered,
-        dateTime: DateTime.parse('2024-02-20'))
-  ].obs;
-
   final picker = ImagePicker();
   var isTextFieldEmpty = true.obs;
-@override
+  @override
   void onInit() {
-messages.forEach((msg) {
-      messageKeys[msg.id] = GlobalKey();
+    messages.forEach((msg) {
+      messageKeys[msg?.userId ?? ""] = GlobalKey();
     });
+    // viewMessage();
     super.onInit();
   }
+
   @override
   void dispose() {
     super.dispose();
     _disposeOverlayEntry();
+    _chatFetchTimer?.cancel();
   }
 
   void _disposeOverlayEntry() {
@@ -117,6 +72,13 @@ messages.forEach((msg) {
       ?..remove()
       ..dispose();
     _overlayEntry = null;
+  }
+
+  void startFetchingChats() {
+    _chatFetchTimer = Timer.periodic(
+      Duration(seconds: fetchIntervalSeconds),
+      (_) => viewMessage(),
+    );
   }
 
   void toggleEmojiPicker() {
@@ -150,12 +112,10 @@ messages.forEach((msg) {
     isGalleryVisible.value = false;
   } //imageanddocumenandvideoselctionfunction var imageFile = Rx<File?>(null);
 
-
-
-     void scrollToMessage(String messageId) {
-      print("messag id$messageId");
+  void scrollToMessage(String messageId) {
+    print("messag id$messageId");
     final key = messageKeys[messageId];
-     print("messag key$key");
+    print("messag key$key");
     if (key != null) {
       final context = key.currentContext;
       if (context != null) {
@@ -172,20 +132,20 @@ messages.forEach((msg) {
     _disposeOverlayEntry();
     var xid = Xid();
     print(xid);
-    messages.insert(
-        0,
-        ChatMessage(
-            messageType: type,
-            message: searchController.text,
-            isReplay: isReplay.value,
-            replyModel: isReplay.value ? replyChat : null,
-            senderId: "1",
-            userName: "",
-            id: "$xid",
-            contactList: contactList,
-            time: getCurrentTime(),
-            status: MessageStatus.sent,
-            dateTime: DateTime.parse(getCurrentDate())));
+    // messages.insert(
+    //     0,
+    //     ChatMessage(
+    //         messageType: type,
+    //         message: searchController.text,
+    //         isReplay: isReplay.value,
+    //         replyModel: isReplay.value ? replyChat : null,
+    //         senderId: "1",
+    //         userName: "",
+    //         id: "$xid",
+    //         contactList: contactList,
+    //         time: getCurrentTime(),
+    //         status: MessageStatus.sent,
+    // dateTime: DateTime.parse(getCurrentDate())));
 
     isReplay.value = false;
     scrollController.animateTo(
@@ -193,6 +153,47 @@ messages.forEach((msg) {
       duration: Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );
+  }
+
+  Future<void> sendMessage1(String type, {dynamic? messsageType}) async {
+    _disposeOverlayEntry();
+    var xid = Xid();
+
+    final response = await _infromationRepository.sendMessage(
+        groupId: selectedGroupId,
+        type: type,
+        message: messsageType ?? searchController.text.trim(),
+        replyFlag: isReplay.value,
+        reply_message_id: isReplay.value ? replyChat.userId : null);
+    print("calliing sendmessage1${response.data1}");
+    if (response.data1) {
+      messages.value = response.data2;
+      print("calliing sendmessage1${messages.value.length}");
+
+      isReplay.value = false;
+      scrollController.animateTo(
+        0.0,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    } else {}
+  }
+
+  Future<void> viewMessage() async {
+    final response = await _infromationRepository.viewMessage(
+      groupId: selectedGroupId,
+    );
+
+    if (response.data1) {
+      messages.value = response.data2;
+
+      isReplay.value = false;
+      scrollController.animateTo(
+        0.0,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    } else {}
   }
 
   String getCurrentTime() {
@@ -208,7 +209,7 @@ messages.forEach((msg) {
       _disposeOverlayEntry();
       if (messages[index].isSelcted == true) {
         selectedMessage.removeWhere((message) {
-          return messages[index].id == message.id;
+          return messages[index].userId == message.userId;
         });
       } else if (checkSelcetionExist()) {
         selectedMessage.add(messages[index]);
@@ -220,15 +221,16 @@ messages.forEach((msg) {
         _disposeOverlayEntry();
       }
 
-      if (selectedMessage.any((message) => message.id == messages[index].id)) {
+      if (selectedMessage
+          .any((message) => message.userId == messages[index].userId)) {
         selectedMessage
-            .removeWhere((message) => message.id == messages[index].id);
+            .removeWhere((message) => message.userId == messages[index].userId);
       } else {
         selectedMessage.add(messages[index]);
       }
     }
     messages[index] = messages[index].copyWith(
-        isSelcted: isOntap
+        isSelected: isOntap
             ? checkSelcetionExist()
                 ? !messages[index].isSelcted
                 : false
@@ -247,7 +249,7 @@ messages.forEach((msg) {
   //selected message only contain text checkig function
   bool checkOnlySelectedMessageIsText() {
     for (var message in selectedMessage) {
-      if (message.messageType != MessageType.text) {
+      if (message.type != MessageType.text) {
         return false;
       }
     }
@@ -258,7 +260,7 @@ messages.forEach((msg) {
     _disposeOverlayEntry();
     try {
       final chat = messages.firstWhere(
-        (element) => element.id == selectedMessage.first.id,
+        (element) => element.userId == selectedMessage.first.userId,
       );
       isReplay.value = true;
       selectedMessage.clear();
@@ -304,7 +306,7 @@ messages.forEach((msg) {
 
       selectedMessage.clear();
       for (var i = 0; i < messages.length; i++) {
-        messages[i] = messages[i].copyWith(isSelcted: false);
+        messages[i] = messages[i].copyWith(isSelected: false);
       }
     }
   }
@@ -312,9 +314,8 @@ messages.forEach((msg) {
   deleteSelectedMessage() {
     AppDialog.showDialog(
       title: 'Delete selected messages?',
-      primaryText: 'Delete for me',
-      secondaryText: "Delete for me",
-      tertiaryText: 'Cancel',
+      primaryText: 'Delete ',
+      tertiaryText: "cancel",
       arrangeButtonVertically: true,
       onPrimaryPressed: () {
         _deleteSelected();
@@ -330,16 +331,26 @@ messages.forEach((msg) {
     );
   }
 
-  _deleteSelected() {
+  Future<void> _deleteSelected() async {
     _disposeOverlayEntry();
-    messages.removeWhere((item) => item?.isSelcted == true);
+    final response = await _infromationRepository.deleTeMessages(
+        groupId: selectedGroupId,
+        messageIds: selectedMessage.value.map((e) => e.messageId).toList());
+    if (response.data1) {
+      selectedMessage.value=[];
+      messages.value = response.data2;
+      AppDialog.showSnackBar('Scuccess ', "message deleted Successfully");
+    } else {
+      AppDialog.showSnackBar('Failed ', response.data2);
+    }
+    // messages.removeWhere((item) => item?.isSelcted == true);
     selectedMessage.clear();
   }
 
   void onInfoPressed() {
     _disposeOverlayEntry();
     final chat = messages.firstWhere(
-      (element) => element.id == selectedMessage.first.id,
+      (element) => element.userId == selectedMessage.first.userId,
     );
     Get.toNamed(
       ChatInfoPage.routeName,
@@ -376,9 +387,11 @@ messages.forEach((msg) {
                               borderRadius: 10,
                               onTap: () {
                                 if (messages[index].reaction == e.emoji) {
-                                  messages[index].reaction = '';
+                                  messages[index] =
+                                      messages[index].copyWith(reaction: "");
                                 } else {
-                                  messages[index].reaction = e.emoji;
+                                  messages[index] = messages[index]
+                                      .copyWith(reaction: e.emoji);
                                 }
                                 //chats.refresh();
                                 selectedMessage.clear();
@@ -426,7 +439,7 @@ messages.forEach((msg) {
   void reSetSelctionMessageList() {
     for (int i = 0; i < messages.length; i++) {
       if (messages[i].isSelcted) {
-        messages[i] = messages[i].copyWith(isSelcted: false);
+        messages[i] = messages[i].copyWith(isSelected: false);
       }
     }
   }

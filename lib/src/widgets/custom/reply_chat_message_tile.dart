@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/models/informationgroup/chat_model.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
+
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/tiny/image_view.dart';
 
@@ -68,11 +70,11 @@ class ReplyChatMessageTile extends StatelessWidget {
                         ),
                       ),
                       if (isChatMessage) ...[
-                        if (chatMessage!.messageType == MessageType.image)
+                        if (chatMessage!.type == MessageType.image)
                           _imageDesign(),
-                        if (chatMessage!.messageType == MessageType.text)
+                        if (chatMessage!.type == MessageType.text)
                           textMsaageType(),
-                        if (chatMessage!.messageType == MessageType.document)
+                        if (chatMessage!.type == MessageType.document)
                           textMsaageType(),
                       ] else ...[
                         textMsaageType(),

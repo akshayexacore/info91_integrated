@@ -21,5 +21,8 @@ class ApiConstants {
   static String groupProfileApi = "/groupProfile";
   static String groupProfilePicUpdateApi = "/groupProfilePicUpdate";
   static String groupCovPicUpdateApi = "/groupCoverPicUpdate";
+  static String addMessageApi = "/addGroupMessage";
+   static String viewMessageApi = "/viewGroupChat";
+   static String deleteMessageApi = "/deleteGroupMessage";
 
 }

@@ -9,6 +9,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/models/informationgroup/chat_model.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
@@ -31,15 +32,15 @@ class BuildMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (messageModel.messageType) {
-      case MessageType.text:
+    switch (messageModel.type) {
+      case "text":
         return _buildTextMessage(messageModel, context,isSameUser: isSameUser);
-      case MessageType.image:
+      case "image":
         return BuildChatImage(
           message: messageModel,
           isSameUser: isSameUser,
         );
-      case MessageType.document:
+      case "document":
         return _buildDocumentMessage(messageModel);
       case MessageType.audio:
         return _buildAudioMessage(messageModel);
@@ -47,7 +48,7 @@ class BuildMessageWidget extends StatelessWidget {
         return _buildVideoMessage(messageModel);
       case MessageType.reply:
         return _buildReplyMessage(messageModel);
-      case MessageType.contact:
+      case "contact":
         return _buildConatctMessage(messageModel, context,isSameUser: isSameUser);
       default:
         return SizedBox.shrink();
@@ -57,8 +58,8 @@ class BuildMessageWidget extends StatelessWidget {
   Widget _buildTextMessage(ChatMessage message, BuildContext context,{required bool isSameUser}) {
     double w1 = MediaQuery.of(context).size.width;
     double w = w1 > 700 ? 400 : w1;
-    bool isMe = message.senderId == "1";
-       bool isReplyMe = message.replyModel?.senderId == "1";
+    bool isMe = message.isMe??false;
+       bool isReplyMe = true;
     return commonBuildMessageOuter(
       message: message,
       context: context,
@@ -67,7 +68,7 @@ class BuildMessageWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          message.isReplay == true
+          message.replyFlag == true
               ? Container(
                   width: w,
                   padding:
@@ -82,9 +83,9 @@ class BuildMessageWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          isReplyMe
+                          isReplyMe==true
                               ? "you"
-                              : "${message.replyModel?.userName.toString().toTitleCase()}",
+                              : "${message.replyDetails?.name.toString().toTitleCase()}",
                           style:const TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
@@ -95,30 +96,30 @@ class BuildMessageWidget extends StatelessWidget {
                           Positioned(
                               left: -1,
                               top: 2,
-                              child: message.replyModel?.messageType ==
+                              child: message.replyDetails?.type ==
                                       MessageType.image
                                   ? Icon(
                                       Icons.image,
                                       size: 16,
                                     )
-                                  : message.replyModel?.messageType ==
+                                  : message.replyDetails?.type ==
                                           MessageType.video
                                       ? Icon(
                                           Icons.video_library,
                                           size: 16,
                                         )
-                                      : message.replyModel?.messageType ==
+                                      : message.replyDetails?.type ==
                                               MessageType.audio
                                           ? Icon(Icons.mic, size: 16)
-                                          : message.replyModel?.messageType ==
+                                          : message.replyDetails?.type ==
                                                   MessageType.document
                                               ? Icon(Icons.file_copy, size: 16)
                                               : SizedBox()),
-                          message.replyModel?.messageType == MessageType.text ||
-                                  message.replyModel?.messageType ==
+                          message.replyDetails?.type == MessageType.text ||
+                                 message.replyDetails?.type ==
                                       MessageType.mention
                               ? Text(
-                                  message.replyModel?.message ?? "",
+                                  message.replyDetails?.type ?? "",
                                   softWrap: true,
                                   textScaler: TextScaler.linear(1),
                                   maxLines: 1,
@@ -127,7 +128,7 @@ class BuildMessageWidget extends StatelessWidget {
                               : Padding(
                                   padding: const EdgeInsets.only(left: 15),
                                   child: Text(
-                                    message.replyModel?.message ?? "",
+                                   message.replyDetails?.type ?? "",
                                     softWrap: true,
                                     textScaler: TextScaler.linear(1),
                                     maxLines: 1,
@@ -157,7 +158,7 @@ class BuildMessageWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  message.time,
+                  message.time??"",
                   style: GoogleFonts.poppins(
                       color: Color(0xff666666),
                       fontWeight: FontWeight.w400,
@@ -166,7 +167,7 @@ class BuildMessageWidget extends StatelessWidget {
                 SizedBox(
                   width: 1.w,
                 ),
-                if (isMe) _buildMessageStatus(message.status),
+                if (isMe) _buildMessageStatus(message.messageStatus??""),
               ],
             ),
           ),
@@ -177,35 +178,35 @@ class BuildMessageWidget extends StatelessWidget {
 
   Widget _buildDocumentMessage(ChatMessage message) {
     return ListTile(
-      title: Text(message.message),
-      subtitle: Text(message.senderId),
+      title: Text(message.message??""),
+      subtitle: Text(message.userId??""),
     );
   }
 
   Widget _buildAudioMessage(ChatMessage message) {
     return ListTile(
-      title: Text(message.message),
-      subtitle: Text(message.senderId),
+      title: Text(message.message??""),
+      subtitle: Text(message.userId??""),
     );
   }
 
   Widget _buildVideoMessage(ChatMessage message) {
     return ListTile(
-      title: Text(message.message),
-      subtitle: Text(message.senderId),
+      title: Text(message.message??""),
+      subtitle: Text(message.userId??""),
     );
   }
 
   Widget _buildReplyMessage(ChatMessage message) {
     return ListTile(
-      title: Text(message.message),
-      subtitle: Text(message.senderId),
+      title: Text(message.message??""),
+      subtitle: Text(message.userId??""),
     );
   }
 
   Widget _buildConatctMessage(ChatMessage message, BuildContext context,{required bool isSameUser}) {
     int contactListCount = message.contactList?.length ?? 0;
-    bool isMe = message.senderId == "1";
+    bool isMe = message.isMe??false;
     return commonBuildMessageOuter(
       context: context,
       isMe: isMe,
@@ -229,7 +230,7 @@ class BuildMessageWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  message.time,
+                  message.time??"",
                   style: GoogleFonts.poppins(
                       color: Color(0xff666666),
                       fontWeight: FontWeight.w400,
@@ -238,7 +239,7 @@ class BuildMessageWidget extends StatelessWidget {
                 SizedBox(
                   width: 1.w,
                 ),
-                if (isMe) _buildMessageStatus(message.status),
+                if (isMe) _buildMessageStatus(message.messageStatus??""),
               ],
             ),
           ),
@@ -422,7 +423,7 @@ class _BuildChatImageState extends State<BuildChatImage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isMe = widget.message.senderId == "1";
+    bool isMe = widget.message.isMe??false;
 
     return commonBuildMessageOuter(
         context: context,
@@ -522,7 +523,7 @@ class _BuildChatImageState extends State<BuildChatImage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      widget.message.time,
+                      widget.message.time??"",
                       style: GoogleFonts.poppins(
                           color: Color(0xff666666),
                           fontWeight: FontWeight.w400,
@@ -531,7 +532,7 @@ class _BuildChatImageState extends State<BuildChatImage> {
                     SizedBox(
                       width: 1.w,
                     ),
-                    if (isMe) _buildMessageStatus(widget.message.status),
+                    if (isMe) _buildMessageStatus(widget.message.messageStatus??"sent"),
                   ],
                 ),
               ),
@@ -541,7 +542,7 @@ class _BuildChatImageState extends State<BuildChatImage> {
   }
 }
 
-Widget _buildMessageStatus(MessageStatus status) {
+Widget _buildMessageStatus(String status) {
   if (status == MessageStatus.sent) {
     return Icon(
       Icons.check,
@@ -571,14 +572,14 @@ Widget commonBuildMessageOuter(
     required ChatMessage message,
     required bool isMe,required bool isSameUser}) {
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: message.isSelcted ? 5 : 0),
+    padding: EdgeInsets.symmetric(horizontal: message.isSelcted==true ? 5 : 0),
     child: Row(
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (!isMe && message.isSelcted)
+        if (!isMe && message.isSelcted==true)
           AppCheckBox(
-            value: message.isSelcted,
+            value: message.isSelcted??false,
           ),
         const SizedBox(
           width: 5,
@@ -588,14 +589,14 @@ Widget commonBuildMessageOuter(
                         await showDialog(
                             context: context,
                             builder: (_) => imageDialog(
-                                message.userName,
-                                 message.userProfile,
+                                message.name,
+                                 message.image,
                                 context));
                       },
                       child: Align(
                           alignment: Alignment.topLeft,
-                          child: message.userProfile== null ||
-                                 message.userProfile?.isEmpty==true
+                          child: message.image== null ||
+                                 message.image?.isEmpty==true
                               ? CircleAvatar(
                                   backgroundColor: Colors.white,
                                   radius: 13.r,
@@ -607,13 +608,13 @@ Widget commonBuildMessageOuter(
                                     textColor: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     text:
-                                        "${message.userName.toString().toTitleCase()}",
+                                        "${message.name.toString().toTitleCase()}",
                                   ))
                               : CircleAvatar(
                                   backgroundColor: Colors.white,
                                   radius: 18,
                                   backgroundImage: NetworkImage(
-                                      message.userProfile ??
+                                      message.image ??
                                           ""),
                                 )),
                     ),
@@ -630,7 +631,7 @@ Widget commonBuildMessageOuter(
                 padding: const EdgeInsets.all(5),
                 margin: EdgeInsets.symmetric(
                     vertical:
-                        message.reaction != null && message.reaction.isNotEmpty
+                        message.reaction != null && message.reaction?.isNotEmpty==true
                             ? 15
                             : isSameUser?3:6,
                     horizontal: 10),
@@ -644,7 +645,7 @@ Widget commonBuildMessageOuter(
               right: isMe ? null : AppSpacings.xxSmall2,
               left: isMe ? AppSpacings.xxSmall2 : null,
               child: Text(
-                message.reaction,
+                message.reaction??"",
                 style: const TextStyle(fontSize: 20),
               ),
             )
@@ -653,9 +654,9 @@ Widget commonBuildMessageOuter(
         SizedBox(
           width: 5,
         ),
-        if (isMe && message.isSelcted)
+        if (isMe && message.isSelcted==true)
           AppCheckBox(
-            value: message.isSelcted,
+            value: message.isSelcted??false,
           ),
         const SizedBox(
           width: 5,

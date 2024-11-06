@@ -1,9 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:flutter_contacts/contact.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/models/informationgroup/chat_model.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/chat_list_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_scaffold.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
@@ -14,9 +16,9 @@ import 'package:info91/src/widgets/tiny/app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SelectedContactListView extends StatelessWidget {
-  final List<Contact> contactList;
+  final List<ContactModel> contactList;
   const SelectedContactListView({super.key, required this.contactList});
-  void saveContact(Contact contact) async {
+  void saveContact(ContactModel contact) async {
     final String url = 'tel:${contact.displayName}';
 
     if (await canLaunch(url)) {

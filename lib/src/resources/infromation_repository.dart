@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:info91/src/configs/api_constants.dart';
 import 'package:info91/src/models/base_response.dart';
 import 'package:info91/src/models/informationgroup/category_model.dart';
+import 'package:info91/src/models/informationgroup/chat_model.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/models/informationgroup/info-model.dart';
 import 'package:info91/src/models/informationgroup/information_group.dart';
@@ -190,25 +191,110 @@ class InfromationRepository {
     }
   }
 
-
-
-    Future<DoubleResponse> uploadFile(String file,String group_id) async {
-    final response = await _api.postMultipart(ApiConstants.groupProfilePicUpdateApi,body: {"group_id":group_id}, headers: {},file: file,);
+  Future<DoubleResponse> uploadFile(String file, String group_id) async {
+    final response = await _api.postMultipart(
+      ApiConstants.groupProfilePicUpdateApi,
+      body: {"group_id": group_id},
+      headers: {},
+      file: file,
+    );
     debugPrint("response is here$response");
- 
-  if (response['statusCode'] == 200) {
-        return DoubleResponse(true,GroupProfileModel.fromJson(response["data"]));
-      } else {
-        return DoubleResponse(false, response['message']);
-      }
-  }
-    Future<DoubleResponse> uploadCoverPic(String file,String group_id) async {
-    final response = await _api.postMultipart(ApiConstants.groupCovPicUpdateApi,body: {"group_id":group_id}, headers: {},file: file,);
+
     if (response['statusCode'] == 200) {
-        return DoubleResponse(true,GroupProfileModel.fromJson(response["data"]));
+      return DoubleResponse(true, GroupProfileModel.fromJson(response["data"]));
+    } else {
+      return DoubleResponse(false, response['message']);
+    }
+  }
+
+  Future<DoubleResponse> uploadCoverPic(String file, String group_id) async {
+    final response = await _api.postMultipart(
+      ApiConstants.groupCovPicUpdateApi,
+      body: {"group_id": group_id},
+      headers: {},
+      file: file,
+    );
+    if (response['statusCode'] == 200) {
+      return DoubleResponse(true, GroupProfileModel.fromJson(response["data"]));
+    } else {
+      return DoubleResponse(false, response['message']);
+    }
+  }
+
+  Future<DoubleResponse> sendMessage(
+      {required String groupId,
+      required String type,
+      required dynamic message,
+      bool replyFlag = false,
+      String? reply_message_id}) async {
+    List<ChatMessage> dataLIst = [];
+    try {
+      final response =
+          await _api.post(ApiConstants.addMessageApi, headers: {}, body: {
+        'group_id': groupId,
+        "type": type,
+        "message": message,
+        "reply_flag": replyFlag,
+        "reply_message_id": reply_message_id
+      });
+      debugPrint("response['status'] ");
+      if (response['status'] == 'success') {
+        (response["data"] as List).forEach((element) {
+          dataLIst.add(ChatMessage.fromJson(element));
+        });
+        return DoubleResponse(true, dataLIst);
       } else {
         return DoubleResponse(false, response['message']);
       }
+    } catch (e) {
+      debugPrint("e");
+      throw e;
+    }
   }
-  
+
+  Future<DoubleResponse> viewMessage({
+    required String groupId,
+  }) async {
+    List<ChatMessage> dataLIst = [];
+    try {
+      final response =
+          await _api.post(ApiConstants.viewMessageApi, headers: {}, body: {
+        'group_id': groupId,
+      });
+      debugPrint("response['status'] ");
+      if (response['status'] == 'success') {
+        (response["data"] as List).forEach((element) {
+          dataLIst.add(ChatMessage.fromJson(element));
+        });
+        return DoubleResponse(true, dataLIst);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      debugPrint("e");
+      throw e;
+    }
+  }
+
+  Future<DoubleResponse> deleTeMessages(
+      {required String groupId, required List<String?> messageIds}) async {
+        debugPrint("message Id$messageIds");
+    try {
+       List<ChatMessage> dataLIst = [];
+      final response = await _api.post(ApiConstants.deleteMessageApi,
+          headers: {}, body: {'group_id': groupId, "message_id": messageIds});
+      debugPrint("response['status'] ");
+      if (response['status'] == 'success') {
+           (response["data"] as List).forEach((element) {
+          dataLIst.add(ChatMessage.fromJson(element));
+        });
+        return DoubleResponse(true, dataLIst);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      debugPrint("e");
+      throw e;
+    }
+  }
 }
