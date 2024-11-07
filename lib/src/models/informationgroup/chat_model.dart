@@ -20,14 +20,18 @@ class ChatMessage {
   final bool? isMe;
   final bool isSelcted;
   final String? reaction;
+  final String? fileName;
   final List<ContactModel>? contactList;
-  
   final ReplyDetails? replyDetails;
+  final String? fileSize;
+  final String? fileType;
+  
 
   ChatMessage({
     this.messageId,
     this.userId,
     this.type,
+    this.fileName,
     this.message,this.contactList,
     this.isSelcted=false,
     this.isMe,this.reaction,
@@ -39,9 +43,11 @@ class ChatMessage {
     this.phoneNumber,
     this.name,
     this.replyType,
+    this.fileSize,
     this.date,
     this.time,
     this.replyDetails,
+    this.fileType,
   });
 
   // CopyWith method
@@ -63,8 +69,11 @@ class ChatMessage {
     String? time,
     bool? isMe,
     String? reaction,
+    String? fileName,
      List<ContactModel>?contactList, 
     ReplyDetails? replyDetails,
+    String? fileSize,
+    String? fileType,
   }) {
     return ChatMessage(
       messageId: messageId ?? this.messageId,
@@ -74,6 +83,8 @@ class ChatMessage {
       contactList: contactList??this.contactList,
       isMe: isMe??this.isMe,reaction: reaction??this.reaction,
       isSelcted: isSelected??this.isSelcted,
+      fileName: fileName??this.fileName,
+      fileType: fileType??this.fileType,
       messageStatus: messageStatus ?? this.messageStatus,
       createdAt: createdAt ?? this.createdAt,
       replyFlag: replyFlag ?? this.replyFlag,
@@ -85,6 +96,7 @@ class ChatMessage {
       date: date ?? this.date,
       time: time ?? this.time,
       replyDetails: replyDetails ?? this.replyDetails,
+      fileSize: fileSize??this.fileSize,
     );
   }
 
@@ -97,7 +109,10 @@ class ChatMessage {
       type: json['type'] as String?,
       message: json['message'] as String?,
       messageStatus: json['message_status'] as String?,
+      fileSize: json["filesize"] as String?,
+      fileType: json["filetype"] as String?,
       createdAt: json['created_at'] as String?,
+      fileName: json["filename"] as String?,
       replyFlag: json['reply_flag'] as bool?,
       reactionFlag: json['reaction_flag'] as bool?,
       image: json['image'] as String?,
@@ -133,11 +148,14 @@ class ChatMessage {
       'reply_flag': replyFlag,
       'reaction_flag': reactionFlag,
       'image': image,
+      "filetype":fileType,
       'phone_number': phoneNumber,
       'name': name,
       'reply_type': replyType,
       'date': date,
       'time': time,
+      "filesize":fileSize,
+      "filename":fileName,
       'reply_details': replyDetails?.toJson(),
     };
   }
@@ -149,12 +167,14 @@ class ReplyDetails {
   final String? type;
   final String? name;
   final String? phoneNumber;
+  final bool? replyIsme;
 
   ReplyDetails({
     this.messageId,
     this.message,
     this.type,
     this.name,
+    this.replyIsme,
     this.phoneNumber,
   });
 
@@ -165,12 +185,14 @@ class ReplyDetails {
     String? type,
     String? name,
     String? phoneNumber,
+    bool? isMe,
   }) {
     return ReplyDetails(
       messageId: messageId ?? this.messageId,
       message: message ?? this.message,
       type: type ?? this.type,
       name: name ?? this.name,
+      replyIsme: isMe??this.replyIsme,
       phoneNumber: phoneNumber ?? this.phoneNumber,
     );
   }
@@ -182,6 +204,7 @@ class ReplyDetails {
       message: json['message'] as String?,
       type: json['type'] as String?,
       name: json['name'] as String?,
+      replyIsme: json["reply_is_me"] as bool?,
       phoneNumber: json['phone_number'] as String?,
     );
   }

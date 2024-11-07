@@ -62,8 +62,8 @@ class ReplyChatMessageTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Arya',
+                       Text(
+                      chatMessage?.name??"",
                         style: TextStyle(
                           fontSize: AppFontSizes.small15,
                           fontWeight: FontWeight.w600,

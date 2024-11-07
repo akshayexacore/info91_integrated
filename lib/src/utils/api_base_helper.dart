@@ -90,6 +90,7 @@ class ApiBaseHelper {
   Future<dynamic> postMultipart(String url,
       {Map<String, String>? body,
       Map<String, String>? headers,
+      String? key,
       List<String> files = const [],
       String file = ''}) async {
     dynamic responseJson;
@@ -115,8 +116,9 @@ class ApiBaseHelper {
       }
 
       if (file.isNotEmpty) {
+        String keys=key??"image";
         request.files
-            .add(await MultipartFile.fromPath("image", file));
+            .add(await MultipartFile.fromPath(keys, file));
       }
 
       final streamedResponse = await http.send(request);

@@ -24,5 +24,6 @@ class ApiConstants {
   static String addMessageApi = "/addGroupMessage";
    static String viewMessageApi = "/viewGroupChat";
    static String deleteMessageApi = "/deleteGroupMessage";
+   static String fileUploadApi = "/fileUpload";
 
 }

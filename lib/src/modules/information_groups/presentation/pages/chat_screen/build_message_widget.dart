@@ -7,9 +7,12 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/models/informationgroup/chat_model.dart';
+import 'package:info91/src/modules/information_groups/presentation/blocs/chat_screen_controller.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/contactSelected_view_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
@@ -28,20 +31,22 @@ import 'package:http/http.dart' as http;
 class BuildMessageWidget extends StatelessWidget {
   final ChatMessage messageModel;
   final bool isSameUser;
-  BuildMessageWidget({super.key, required this.messageModel,required this.isSameUser});
+  BuildMessageWidget(
+      {super.key, required this.messageModel, required this.isSameUser});
 
   @override
   Widget build(BuildContext context) {
     switch (messageModel.type) {
       case "text":
-        return _buildTextMessage(messageModel, context,isSameUser: isSameUser);
+        return _buildTextMessage(messageModel, context, isSameUser: isSameUser);
       case "image":
         return BuildChatImage(
           message: messageModel,
           isSameUser: isSameUser,
         );
       case "document":
-        return _buildDocumentMessage(messageModel);
+        return _buildDocumentMessage(messageModel, context,
+            isSameUser: isSameUser);
       case MessageType.audio:
         return _buildAudioMessage(messageModel);
       case MessageType.video:
@@ -49,17 +54,19 @@ class BuildMessageWidget extends StatelessWidget {
       case MessageType.reply:
         return _buildReplyMessage(messageModel);
       case "contact":
-        return _buildConatctMessage(messageModel, context,isSameUser: isSameUser);
+        return _buildConatctMessage(messageModel, context,
+            isSameUser: isSameUser);
       default:
         return SizedBox.shrink();
     }
   }
 
-  Widget _buildTextMessage(ChatMessage message, BuildContext context,{required bool isSameUser}) {
+  Widget _buildTextMessage(ChatMessage message, BuildContext context,
+      {required bool isSameUser}) {
     double w1 = MediaQuery.of(context).size.width;
     double w = w1 > 700 ? 400 : w1;
-    bool isMe = message.isMe??false;
-       bool isReplyMe = true;
+    bool isMe = message.isMe ?? false;
+    bool isReplyMe = true;
     return commonBuildMessageOuter(
       message: message,
       context: context,
@@ -70,7 +77,7 @@ class BuildMessageWidget extends StatelessWidget {
         children: [
           message.replyFlag == true
               ? Container(
-                  width: w,
+                  width: w / 1.5,
                   padding:
                       EdgeInsets.only(top: 5, right: 5, bottom: 5, left: 7),
                   decoration: BoxDecoration(
@@ -78,15 +85,15 @@ class BuildMessageWidget extends StatelessWidget {
                       borderRadius: BorderRadius.only(
                           topRight: Radius.circular(7),
                           topLeft: Radius.circular(7)),
-                      color: isMe?AppColors.replyWhite:Color(0xff666666)),
+                      color: isMe ? AppColors.replyWhite : Color(0xff666666)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          isReplyMe==true
+                          isReplyMe == true
                               ? "you"
                               : "${message.replyDetails?.name.toString().toTitleCase()}",
-                          style:const TextStyle(
+                          style: const TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary)),
@@ -96,30 +103,27 @@ class BuildMessageWidget extends StatelessWidget {
                           Positioned(
                               left: -1,
                               top: 2,
-                              child: message.replyDetails?.type ==
-                                      MessageType.image
+                              child: message.replyDetails?.type == "image"
                                   ? Icon(
                                       Icons.image,
                                       size: 16,
                                     )
-                                  : message.replyDetails?.type ==
-                                          MessageType.video
+                                  : message.replyDetails?.type == "video"
                                       ? Icon(
                                           Icons.video_library,
                                           size: 16,
                                         )
-                                      : message.replyDetails?.type ==
-                                              MessageType.audio
+                                      : message.replyDetails?.type == "audio"
                                           ? Icon(Icons.mic, size: 16)
                                           : message.replyDetails?.type ==
-                                                  MessageType.document
+                                                  "document"
                                               ? Icon(Icons.file_copy, size: 16)
                                               : SizedBox()),
-                          message.replyDetails?.type == MessageType.text ||
-                                 message.replyDetails?.type ==
+                          message.replyDetails?.type == "text" ||
+                                  message.replyDetails?.type ==
                                       MessageType.mention
                               ? Text(
-                                  message.replyDetails?.type ?? "",
+                                  message.replyDetails?.message ?? "",
                                   softWrap: true,
                                   textScaler: TextScaler.linear(1),
                                   maxLines: 1,
@@ -128,7 +132,7 @@ class BuildMessageWidget extends StatelessWidget {
                               : Padding(
                                   padding: const EdgeInsets.only(left: 15),
                                   child: Text(
-                                   message.replyDetails?.type ?? "",
+                                    message.replyDetails?.message ?? "",
                                     softWrap: true,
                                     textScaler: TextScaler.linear(1),
                                     maxLines: 1,
@@ -158,7 +162,7 @@ class BuildMessageWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  message.time??"",
+                  message.time ?? "",
                   style: GoogleFonts.poppins(
                       color: Color(0xff666666),
                       fontWeight: FontWeight.w400,
@@ -167,7 +171,7 @@ class BuildMessageWidget extends StatelessWidget {
                 SizedBox(
                   width: 1.w,
                 ),
-                if (isMe) _buildMessageStatus(message.messageStatus??""),
+                if (isMe) _buildMessageStatus(message.messageStatus ?? ""),
               ],
             ),
           ),
@@ -176,45 +180,205 @@ class BuildMessageWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDocumentMessage(ChatMessage message) {
-    return ListTile(
-      title: Text(message.message??""),
-      subtitle: Text(message.userId??""),
+  Widget _buildDocumentMessage(ChatMessage message, BuildContext context,
+      {required bool isSameUser}) {
+    double w1 = MediaQuery.of(context).size.width;
+    double w = w1 > 700 ? 400 : w1;
+    bool isMe = message.isMe ?? false;
+    bool isReplyMe = message.replyDetails?.replyIsme ?? false;
+    return commonBuildMessageOuter(
+      message: message,
+      context: context,
+      isSameUser: isSameUser,
+      isMe: isMe,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          message.replyFlag == true
+              ? Container(
+                  width: w,
+                  padding:
+                      EdgeInsets.only(top: 5, right: 5, bottom: 5, left: 5),
+                  decoration: BoxDecoration(
+                      // border: Border.all(color: ColorPalette.primary),
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(7),
+                          topLeft: Radius.circular(7)),
+                      color: isMe ? AppColors.replyWhite : Color(0xff666666)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          isReplyMe == true
+                              ? "you"
+                              : "${message.replyDetails?.name.toString().toTitleCase()}",
+                          style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary)),
+                      Container(
+                          child: Stack(
+                        children: [
+                          Positioned(
+                              left: -1,
+                              top: 2,
+                              child: message.replyDetails?.type ==
+                                      MessageType.image
+                                  ? Icon(
+                                      Icons.image,
+                                      size: 16,
+                                    )
+                                  : message.replyDetails?.type ==
+                                          MessageType.video
+                                      ? Icon(
+                                          Icons.video_library,
+                                          size: 16,
+                                        )
+                                      : message.replyDetails?.type ==
+                                              MessageType.audio
+                                          ? Icon(Icons.mic, size: 16)
+                                          : message.replyDetails?.type ==
+                                                  MessageType.document
+                                              ? Icon(Icons.file_copy, size: 16)
+                                              : SizedBox()),
+                          message.replyDetails?.type == MessageType.text ||
+                                  message.replyDetails?.type ==
+                                      MessageType.mention
+                              ? Text(
+                                  message.replyDetails?.type ?? "",
+                                  softWrap: true,
+                                  textScaler: TextScaler.linear(1),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: Text(
+                                    message.replyDetails?.type ?? "",
+                                    softWrap: true,
+                                    textScaler: TextScaler.linear(1),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                        ],
+                      ))
+                    ],
+                  ),
+                )
+              : SizedBox(),
+          Row(
+            children: [
+              Icon(
+                message?.fileType == "pdf"
+                    ? Icons.picture_as_pdf_outlined
+                    : message?.fileType == "jpg"
+                        ? Icons.image
+                        : Icons.insert_drive_file,
+                color: AppColors.primary,
+                size: 30,
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      " ${message.message ?? ""} MB ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 16,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          message.fileSize ?? "",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        Text(
+                          " .  ${message.fileType ?? ""}",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Align(
+            alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  message.time ?? "",
+                  style: GoogleFonts.poppins(
+                      color: Color(0xff666666),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 11.sp),
+                ),
+                SizedBox(
+                  width: 1.w,
+                ),
+                if (isMe) _buildMessageStatus(message.messageStatus ?? ""),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
+  // Widget _buildDocumentMessage(ChatMessage message) {
+  //   return ListTile(
+  //     title: Text(message.message??""),
+  //     subtitle: Text(message.userId??""),
+  //   );
+  // }
+
   Widget _buildAudioMessage(ChatMessage message) {
     return ListTile(
-      title: Text(message.message??""),
-      subtitle: Text(message.userId??""),
+      title: Text(message.message ?? ""),
+      subtitle: Text(message.userId ?? ""),
     );
   }
 
   Widget _buildVideoMessage(ChatMessage message) {
     return ListTile(
-      title: Text(message.message??""),
-      subtitle: Text(message.userId??""),
+      title: Text(message.message ?? ""),
+      subtitle: Text(message.userId ?? ""),
     );
   }
 
   Widget _buildReplyMessage(ChatMessage message) {
     return ListTile(
-      title: Text(message.message??""),
-      subtitle: Text(message.userId??""),
+      title: Text(message.message ?? ""),
+      subtitle: Text(message.userId ?? ""),
     );
   }
 
-  Widget _buildConatctMessage(ChatMessage message, BuildContext context,{required bool isSameUser}) {
+  Widget _buildConatctMessage(ChatMessage message, BuildContext context,
+      {required bool isSameUser}) {
     int contactListCount = message.contactList?.length ?? 0;
-    bool isMe = message.isMe??false;
+    bool isMe = message.isMe ?? false;
     return commonBuildMessageOuter(
       context: context,
       isMe: isMe,
       message: message,
-    isSameUser: isSameUser,
+      isSameUser: isSameUser,
       child: Column(
         children: [
           ListTile(
+            
             leading: AppCustomCirleProfileIamge(
               isStringImag: false,
               memoryImage: null,
@@ -230,7 +394,7 @@ class BuildMessageWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  message.time??"",
+                  message.time ?? "",
                   style: GoogleFonts.poppins(
                       color: Color(0xff666666),
                       fontWeight: FontWeight.w400,
@@ -239,7 +403,7 @@ class BuildMessageWidget extends StatelessWidget {
                 SizedBox(
                   width: 1.w,
                 ),
-                if (isMe) _buildMessageStatus(message.messageStatus??""),
+                if (isMe) _buildMessageStatus(message.messageStatus ?? ""),
               ],
             ),
           ),
@@ -248,12 +412,12 @@ class BuildMessageWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               customTextButton("View All", onTap: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => SelectedContactListView(
-                //           contactList: []),
-                //     ));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SelectedContactListView(
+                          contactList:message.contactList??[]),
+                    ));
               })
             ],
           ),
@@ -266,7 +430,7 @@ class BuildMessageWidget extends StatelessWidget {
 class BuildChatImage extends StatefulWidget {
   final ChatMessage message;
   final bool isSameUser;
-  BuildChatImage({super.key, required this.message,required this.isSameUser});
+  BuildChatImage({super.key, required this.message, required this.isSameUser});
 
   @override
   State<BuildChatImage> createState() => _BuildChatImageState();
@@ -423,7 +587,7 @@ class _BuildChatImageState extends State<BuildChatImage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isMe = widget.message.isMe??false;
+    bool isMe = widget.message.isMe ?? false;
 
     return commonBuildMessageOuter(
         context: context,
@@ -451,16 +615,14 @@ class _BuildChatImageState extends State<BuildChatImage> {
                       fit: BoxFit.fill,
                       image: ResizeImage(
                           NetworkImage(
-                            "https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg",
+                            widget.message.message ?? "",
                           ),
                           width: 250,
                           height: 200,
                           allowUpscaling: true,
                           policy: ResizeImagePolicy.fit)),
                   Positioned(
-                      child: _downloadStatus[
-                                  "https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg"] !=
-                              true
+                      child: _downloadStatus[widget.message.message] != true
                           ? BlurryContainer(
                               color: Colors.transparent,
                               child: Container(
@@ -471,10 +633,10 @@ class _BuildChatImageState extends State<BuildChatImage> {
                                       GestureDetector(
                                         onTap: () {
                                           _downloadImage(
-                                              "https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg");
+                                              widget.message.message ?? "");
                                         },
                                         child: _downloadloading[
-                                                    "https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg"] !=
+                                                    widget.message.message] !=
                                                 true
                                             ? Card(
                                                 color: Color.fromARGB(
@@ -506,24 +668,26 @@ class _BuildChatImageState extends State<BuildChatImage> {
                           : SizedBox())
                 ]),
               ),
-              Linkify(
-                linkStyle: GoogleFonts.poppins(decorationColor: Colors.blue),
-                onOpen: (link) async {
-                  if (!await launchUrl(Uri.parse(link.url))) {
-                    throw Exception('Could not launch ${link.url}');
-                  }
-                },
-                text: widget.message.message ?? "",
-                textAlign: TextAlign.left,
-                style: chatTextstyle,
-              ),
+
+              //if content hase in image*******************************************************************
+              // Linkify(
+              //   linkStyle: GoogleFonts.poppins(decorationColor: Colors.blue),
+              //   onOpen: (link) async {
+              //     if (!await launchUrl(Uri.parse(link.url))) {
+              //       throw Exception('Could not launch ${link.url}');
+              //     }
+              //   },
+              //   text: widget.message.message ?? "",
+              //   textAlign: TextAlign.left,
+              //   style: chatTextstyle,
+              // ),
               Align(
                 alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      widget.message.time??"",
+                      widget.message.time ?? "",
                       style: GoogleFonts.poppins(
                           color: Color(0xff666666),
                           fontWeight: FontWeight.w400,
@@ -532,7 +696,9 @@ class _BuildChatImageState extends State<BuildChatImage> {
                     SizedBox(
                       width: 1.w,
                     ),
-                    if (isMe) _buildMessageStatus(widget.message.messageStatus??"sent"),
+                    if (isMe)
+                      _buildMessageStatus(
+                          widget.message.messageStatus ?? "sent"),
                   ],
                 ),
               ),
@@ -570,56 +736,56 @@ Widget commonBuildMessageOuter(
     {required Widget child,
     required BuildContext context,
     required ChatMessage message,
-    required bool isMe,required bool isSameUser}) {
+    required bool isMe,
+    required bool isSameUser}) {
+  ChatScreenController controller = Get.put(ChatScreenController());
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: message.isSelcted==true ? 5 : 0),
+    padding:
+        EdgeInsets.symmetric(horizontal: message.isSelcted == true ? 5 : 0),
     child: Row(
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (!isMe && message.isSelcted==true)
+        if (!isMe &&
+            controller.selectedMessage
+                .any((e) => e.messageId == message.messageId))
           AppCheckBox(
-            value: message.isSelcted??false,
+            value: controller.selectedMessage
+                .any((e) => e.messageId == message.messageId),
           ),
         const SizedBox(
           width: 5,
-        ),if (!isSameUser &&!isMe)
-                    GestureDetector(
-                      onTap: () async {
-                        await showDialog(
-                            context: context,
-                            builder: (_) => imageDialog(
-                                message.name,
-                                 message.image,
-                                context));
-                      },
-                      child: Align(
-                          alignment: Alignment.topLeft,
-                          child: message.image== null ||
-                                 message.image?.isEmpty==true
-                              ? CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 13.r,
-                                  child: TextAvatar(
-                                    shape: Shape.Circular,
-                                    size: 14,
-                                    numberLetters: 2,
-                                    fontSize: 13.sp,
-                                    textColor: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    text:
-                                        "${message.name.toString().toTitleCase()}",
-                                  ))
-                              : CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 18,
-                                  backgroundImage: NetworkImage(
-                                      message.image ??
-                                          ""),
-                                )),
-                    ),
-                  SizedBox(
-                      width: !isSameUser? 5 : 35),
+        ),
+        if (!isSameUser && !isMe)
+          GestureDetector(
+            onTap: () async {
+              await showDialog(
+                  context: context,
+                  builder: (_) =>
+                      imageDialog(message.name, message.image, context));
+            },
+            child: Align(
+                alignment: Alignment.topLeft,
+                child: message.image == null || message.image?.isEmpty == true
+                    ? CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 13.r,
+                        child: TextAvatar(
+                          shape: Shape.Circular,
+                          size: 14,
+                          numberLetters: 2,
+                          fontSize: 13.sp,
+                          textColor: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          text: "${message.name.toString().toTitleCase()}",
+                        ))
+                    : CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 18,
+                        backgroundImage: NetworkImage(message.image ?? ""),
+                      )),
+          ),
+        SizedBox(width: !isSameUser ? 5 : 35),
         Stack(
           clipBehavior: Clip.none,
           children: [
@@ -630,14 +796,16 @@ Widget commonBuildMessageOuter(
                 ),
                 padding: const EdgeInsets.all(5),
                 margin: EdgeInsets.symmetric(
-                    vertical:
-                        message.reaction != null && message.reaction?.isNotEmpty==true
-                            ? 15
-                            : isSameUser?3:6,
+                    vertical: message.reaction != null &&
+                            message.reaction?.isNotEmpty == true
+                        ? 15
+                        : isSameUser
+                            ? 3
+                            : 6,
                     horizontal: 10),
                 decoration: BoxDecoration(
                   color: isMe ? AppColors.lightChat : AppColors.white,
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: IntrinsicWidth(child: child)),
             Positioned(
@@ -645,7 +813,7 @@ Widget commonBuildMessageOuter(
               right: isMe ? null : AppSpacings.xxSmall2,
               left: isMe ? AppSpacings.xxSmall2 : null,
               child: Text(
-                message.reaction??"",
+                message.reaction ?? "",
                 style: const TextStyle(fontSize: 20),
               ),
             )
@@ -654,9 +822,12 @@ Widget commonBuildMessageOuter(
         SizedBox(
           width: 5,
         ),
-        if (isMe && message.isSelcted==true)
+        if (isMe &&
+            controller.selectedMessage
+                .any((e) => e.messageId == message.messageId))
           AppCheckBox(
-            value: message.isSelcted??false,
+            value: controller.selectedMessage
+                .any((e) => e.messageId == message.messageId),
           ),
         const SizedBox(
           width: 5,

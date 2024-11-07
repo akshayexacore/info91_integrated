@@ -30,7 +30,218 @@ class ChatScreenController extends GetxController {
   String selectedGroupId = '';
   final _infromationRepository = InfromationRepository();
   get selectedMoreThanOne => selectedMessage.length != 1;
+  List<Map<String, dynamic>> messagesData = [
+
+        {
+            "message_id": "20241107140957348901b9",
+            "user_id": "31",
+            "type": "text",
+            "message": "vh",
+            "message_status": "send",
+            "created_at": "2024-11-07 14:09:57",
+            "reply_flag": false,
+            "reaction_flag": false,
+            "image": "https://info91.co.in/public/profile_pic/31_1730007041_image_cropper_1730007004159.jpg",
+            "phone_number": "9567441600",
+            "name": "Akshay",
+            "reply_user_id": null,
+            "reply_type": null,
+            "reply_user_name": null,
+            "reply_user_phone_number": null,
+            "contact_list": [],
+            "date": "2024-11-07",
+            "time": "02:09 PM",
+            "is_me": true,
+            "filesize": null,
+            "filename": null,
+            "filetype": null,
+            "filepages": 0,
+            "reply_details": {
+                "message_id": null,
+                "message": null,
+                "type": null,
+                "user_id": null,
+                "name": null,
+                "phone_number": null,
+                "reply_is_me": false
+            }
+        },
+        {
+            "message_id": "2024110709320493135299",
+            "user_id": "31",
+            "type": "image",
+            "message": "https://info91.co.in/public/upload_files/1730952124_31.jpg",
+            "message_status": "send",
+            "created_at": "2024-11-07 09:32:04",
+            "reply_flag": false,
+            "reaction_flag": false,
+            "image": "https://info91.co.in/public/profile_pic/31_1730007041_image_cropper_1730007004159.jpg",
+            "phone_number": "9567441600",
+            "name": "Akshay",
+            "reply_user_id": null,
+            "reply_type": null,
+            "reply_user_name": null,
+            "reply_user_phone_number": null,
+            "contact_list": [],
+            "date": "2024-11-07",
+            "time": "09:32 AM",
+            "is_me": true,
+            "filesize": "0.02 MB",
+            "filename": "1730952124_31.jpg",
+            "filetype": "jpg",
+            "filepages": 0,
+            "reply_details": {
+                "message_id": null,
+                "message": null,
+                "type": null,
+                "user_id": null,
+                "name": null,
+                "phone_number": null,
+                "reply_is_me": false
+            }
+        },
+        {
+            "message_id": "2024110709314983467050",
+            "user_id": "31",
+            "type": "text",
+            "message": "hhh",
+            "message_status": "send",
+            "created_at": "2024-11-07 09:31:49",
+            "reply_flag": false,
+            "reaction_flag": false,
+            "image": "https://info91.co.in/public/profile_pic/31_1730007041_image_cropper_1730007004159.jpg",
+            "phone_number": "9567441600",
+            "name": "Akshay",
+            "reply_user_id": null,
+            "reply_type": null,
+            "reply_user_name": null,
+            "reply_user_phone_number": null,
+            "contact_list": [],
+            "date": "2024-11-07",
+            "time": "09:31 AM",
+            "is_me": true,
+            "filesize": null,
+            "filename": null,
+            "filetype": null,
+            "filepages": 0,
+            "reply_details": {
+                "message_id": null,
+                "message": null,
+                "type": null,
+                "user_id": null,
+                "name": null,
+                "phone_number": null,
+                "reply_is_me": false
+            }
+        },
+        {
+            "message_id": "20241107093145178070bd",
+            "user_id": "31",
+            "type": "text",
+            "message": "hello",
+            "message_status": "send",
+            "created_at": "2024-11-07 09:31:45",
+            "reply_flag": false,
+            "reaction_flag": false,
+            "image": "https://info91.co.in/public/profile_pic/31_1730007041_image_cropper_1730007004159.jpg",
+            "phone_number": "9567441600",
+            "name": "Akshay",
+            "reply_user_id": null,
+            "reply_type": null,
+            "reply_user_name": null,
+            "reply_user_phone_number": null,
+            "contact_list": [],
+            "date": "2024-11-07",
+            "time": "09:31 AM",
+            "is_me": true,
+            "filesize": null,
+            "filename": null,
+            "filetype": null,
+            "filepages": 0,
+            "reply_details": {
+                "message_id": null,
+                "message": null,
+                "type": null,
+                "user_id": null,
+                "name": null,
+                "phone_number": null,
+                "reply_is_me": false
+            }
+        },
+        {
+            "message_id": "2024110214155447420bb",
+            "user_id": "47",
+            "type": "text",
+            "message": "tata bye bye",
+            "message_status": "send",
+            "created_at": "2024-11-02 02:45:55",
+            "reply_flag": false,
+            "reaction_flag": false,
+            "image": "https://info91.co.in/public/profile_pic/47_1729923603_2.png",
+            "phone_number": "9633719888",
+            "name": "Sandeep",
+            "reply_user_id": null,
+            "reply_type": null,
+            "reply_user_name": null,
+            "reply_user_phone_number": null,
+            "contact_list": [],
+            "date": "2024-11-02",
+            "time": "02:45 AM",
+            "is_me": false,
+            "filesize": null,
+            "filename": null,
+            "filetype": null,
+            "filepages": 0,
+            "reply_details": {
+                "message_id": null,
+                "message": null,
+                "type": null,
+                "user_id": null,
+                "name": null,
+                "phone_number": null,
+                "reply_is_me": false
+            }
+        },
+        {
+            "message_id": "20241102131450486602f3",
+            "user_id": "31",
+            "type": "text",
+            "message": "Muthumani",
+            "message_status": "send",
+            "created_at": "2024-11-02 02:44:50",
+            "reply_flag": false,
+            "reaction_flag": false,
+            "image": "https://info91.co.in/public/profile_pic/31_1730007041_image_cropper_1730007004159.jpg",
+            "phone_number": "9567441600",
+            "name": "Akshay",
+            "reply_user_id": null,
+            "reply_type": null,
+            "reply_user_name": null,
+            "reply_user_phone_number": null,
+            "contact_list": [],
+            "date": "2024-11-02",
+            "time": "02:44 AM",
+            "is_me": true,
+            "filesize": null,
+            "filename": null,
+            "filetype": null,
+            "filepages": 0,
+            "reply_details": {
+                "message_id": null,
+                "message": null,
+                "type": null,
+                "user_id": null,
+                "name": null,
+                "phone_number": null,
+                "reply_is_me": false
+            }
+        },
+        
+
+];
+
   RxList<ChatMessage> messages = <ChatMessage>[].obs;
+   var isLoading=false.obs;
 
   late ChatMessage replyChat;
   Timer? _chatFetchTimer;
@@ -80,7 +291,10 @@ class ChatScreenController extends GetxController {
       (_) => viewMessage(),
     );
   }
-
+void addMessages() {
+    // Parse each JSON message and add to the chatMessages RxList
+    messages.addAll(messagesData.map((json) => ChatMessage.fromJson(json)).toList());
+  }
   void toggleEmojiPicker() {
     isEmojiVisible.value = !isEmojiVisible.value;
 
@@ -164,7 +378,7 @@ class ChatScreenController extends GetxController {
         type: type,
         message: messsageType ?? searchController.text.trim(),
         replyFlag: isReplay.value,
-        reply_message_id: isReplay.value ? replyChat.userId : null);
+        reply_message_id: isReplay.value ? replyChat.messageId : null);
     print("calliing sendmessage1${response.data1}");
     if (response.data1) {
       messages.value = response.data2;
@@ -187,12 +401,26 @@ class ChatScreenController extends GetxController {
     if (response.data1) {
       messages.value = response.data2;
 
-      isReplay.value = false;
-      scrollController.animateTo(
-        0.0,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
+      // isReplay.value = false;
+      // scrollController.animateTo(
+      //   0.0,
+      //   duration: Duration(milliseconds: 300),
+      //   curve: Curves.easeOut,
+      // );
+    } else {
+      messages.clear();
+    }
+    
+    isLoading.value=false;
+  }
+
+  Future<void> fileUpload(String file, String type) async {
+    final response = await _infromationRepository.fileUpload(
+      file: file,
+    );
+
+    if (response.data1) {
+      sendMessage1(type, messsageType: response.data2["fileName"]);
     } else {}
   }
 
@@ -207,10 +435,14 @@ class ChatScreenController extends GetxController {
   messageOntapfunction(int index, {bool isOntap = false, Offset? position}) {
     if (isOntap) {
       _disposeOverlayEntry();
+      print("this case 1");
       if (messages[index].isSelcted == true) {
+          print("this case true");
+           print("this case ${selectedMessage.length}");
         selectedMessage.removeWhere((message) {
-          return messages[index].userId == message.userId;
+          return messages[index].messageId == message.messageId;
         });
+         print("this case 1${selectedMessage.length}");
       } else if (checkSelcetionExist()) {
         selectedMessage.add(messages[index]);
       }
@@ -224,7 +456,7 @@ class ChatScreenController extends GetxController {
       if (selectedMessage
           .any((message) => message.userId == messages[index].userId)) {
         selectedMessage
-            .removeWhere((message) => message.userId == messages[index].userId);
+            .removeWhere((message) => message.messageId == messages[index].messageId);
       } else {
         selectedMessage.add(messages[index]);
       }
@@ -260,7 +492,7 @@ class ChatScreenController extends GetxController {
     _disposeOverlayEntry();
     try {
       final chat = messages.firstWhere(
-        (element) => element.userId == selectedMessage.first.userId,
+        (element) => element.messageId == selectedMessage.first.messageId,
       );
       isReplay.value = true;
       selectedMessage.clear();
@@ -276,12 +508,14 @@ class ChatScreenController extends GetxController {
   }
 
   bool checkSelcetionExist() {
-    for (var message in messages) {
-      if (message.isSelcted) {
-        return true;
-      }
-    }
-    return false;
+    
+    // for (var message in messages) {
+    //   if (message.isSelcted) {
+    //     return true;
+    //   }
+    // }
+    // return false;
+    return selectedMessage.isNotEmpty;
   }
 
   void onForwardPressed() {
@@ -337,7 +571,7 @@ class ChatScreenController extends GetxController {
         groupId: selectedGroupId,
         messageIds: selectedMessage.value.map((e) => e.messageId).toList());
     if (response.data1) {
-      selectedMessage.value=[];
+      selectedMessage.value = [];
       messages.value = response.data2;
       AppDialog.showSnackBar('Scuccess ', "message deleted Successfully");
     } else {

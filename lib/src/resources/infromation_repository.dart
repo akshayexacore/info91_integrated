@@ -297,4 +297,30 @@ class InfromationRepository {
       throw e;
     }
   }
+
+
+   Future<DoubleResponse> fileUpload(
+      {required String file, }) async {
+       
+    try {
+       
+          final response = await _api.postMultipart(
+      ApiConstants.fileUploadApi,
+      body: {},
+      key: "file",
+      headers: {},
+      file: file,
+    );
+    debugPrint("the fileUpload response+$response");
+      if (response['success'] == 'success') {
+       
+        return DoubleResponse(true, response['data']);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      debugPrint("e");
+      throw e;
+    }
+  }
 }

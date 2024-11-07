@@ -12,6 +12,7 @@ import 'package:info91/src/configs/filepicker.dart';
 import 'package:info91/src/configs/variables.dart';
 import 'package:info91/src/models/informationgroup/chat_model.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
+import 'package:info91/src/modules/chat/controllers/chat_controller.dart';
 import 'package:info91/src/modules/chat/grouped_list.dart';
 import 'package:info91/src/modules/information_groups/presentation/blocs/chat_screen_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/build_message_widget.dart';
@@ -28,6 +29,7 @@ import 'package:info91/src/widgets/custom/reply_chat_message_tile.dart';
 import 'package:info91/src/widgets/tiny/app_back_button.dart';
 
 import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ChatScreen extends StatefulWidget {
   final String? selectedGroupId;
@@ -47,6 +49,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   AnimationController? _animationController1;
   Tween<Offset>? _animationTween;
   String msgdate = '';
+ 
   
   GroupProfileModel model = GroupProfileModel();
   @override
@@ -77,6 +80,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   getProfileData() async {
+    chatController.addMessages();
     if (widget.model == null) {
       chatController.groupProfileModel.value =
           await _repository.getProfileData(widget.selectedGroupId ?? "");
@@ -86,7 +90,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       chatController.groupProfileModel.value = widget.model!;
       chatController.selectedGroupId=widget.selectedGroupId??"";
     }
-    // chatController.startFetchingChats();
+    chatController.  isLoading.value=true;
+    chatController.startFetchingChats();
   }
 
   String formatMessageTimestamp(DateTime timestamp, int index) {
@@ -320,11 +325,18 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                     alignment: isMe
                                         ? Alignment.centerRight
                                         : Alignment.centerLeft,
-                                    child: BuildMessageWidget(
-                                      messageModel: message,
-                                      isSameUser: isSameUser,
+                                    child: Obx(
+                                     () {
+                                        return Skeletonizer(
+                                          enabled: chatController.isLoading.value,
+                                          child: BuildMessageWidget(
+                                            messageModel: message,
+                                            isSameUser: isSameUser,
+                                          ),
+                                        );
+                                      }
                                     )),
-                                if (chatController.messages[index].isSelcted==true)
+                                if (chatController.selectedMessage.any((contact) => contact.messageId == chatController.messages[index].messageId))
                                   Positioned.fill(
                                     child: Container(
                                         color:
@@ -507,13 +519,16 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     icon: Icons.photo,
                     text: "Photos",
                     color: AppColors.secondary),
-                onTap: () {
-                  filePickerHelper.pickFiles("image", context, "gallery");
+                onTap: ()async {
+           final response=     await   filePickerHelper.pickFiles("image", context, "gallery");
+           chatController.fileUpload(response,"image");
+          
                 },
               ),
               InkWell(
-                onTap: () {
-                  filePickerHelper.pickFiles("MultipleFile", context, "");
+                onTap: () async{
+            final response=     await        filePickerHelper.pickFiles("MultipleFile", context, "");
+                  chatController.fileUpload(response,"document");
                 },
                 child: iconCreation(
                     icon: Icons.insert_drive_file,

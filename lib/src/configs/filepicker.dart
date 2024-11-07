@@ -14,18 +14,21 @@ class FilePickerHelper {
   late File _imageFile;
   FilePickerResult? result;
 
-  Future<void> pickFiles(String filetype, BuildContext context, String? source,
+  Future<String > pickFiles(String filetype, BuildContext context, String? source,
       {Function(dynamic)? onDone}) async {
     switch (filetype) {
       case 'image':
-        await _handleImageSelection(context, source, onDone);
+    String data=    await _handleImageSelection(context, source, onDone);
+    return data;
         break;
       case 'MultipleFile':
-        await _handleMultipleFileSelection(context);
+   String file=     await _handleMultipleFileSelection(context);
+   return file;
         break;
       default:
         print('Unsupported file type');
     }
+    return "";
   }
 
   bool _isVideo(File file) {
@@ -35,7 +38,7 @@ class FilePickerHelper {
         filePath.endsWith('.mov');
   }
 
-  Future<void> _handleImageSelection(
+  Future<String> _handleImageSelection(
       BuildContext context, String? source, Function(dynamic)? onDone) async {
     final FilePickerResult = await FilePicker.platform.pickFiles(
       type: FileType.media, // This allows picking both images and videos
@@ -46,7 +49,7 @@ class FilePickerHelper {
   //  if (Navigator.canPop(context)) {
   //     Navigator.pop(context); // Only pop if the dialog is open
   //   }
-      return;
+      return "";
     }
     List<File> files =
         FilePickerResult.paths.map((path) => File(path!)).toList();
@@ -62,31 +65,39 @@ class FilePickerHelper {
       if (await _isFileSizeWithinLimit(
         compressedImage,
       )) {
-        _showImagePreviewDialog(context, source, _imageFile, onDone);
+
+return compressedImage.path;
+        // _showImagePreviewDialog(context, source, _imageFile, onDone);
       } else {
         _showSizeExceedDialog(context);
+        return "";
       }
+     
     }
+     return "";
   }
 
-  Future<void> _handleMultipleFileSelection(BuildContext context) async {
+  Future<String> _handleMultipleFileSelection(BuildContext context) async {
     result = await FilePicker.platform
         .pickFiles(allowMultiple: false, allowCompression: true);
 
     if (result == null) {
       // User canceled the file picking
-      return;
+      return "";
     }
 
     for (PlatformFile file in result!.files) {
       if (_isFileSizeWithinLimitFromSize(file.size, maxSizeInMB: 5)) {
+        return file.path??"";
         // Handle file upload
         print('File path: ${file.path}');
         print('File size: ${file.size}');
       } else {
         _showSizeExceedDialog(context);
       }
+    
     }
+      return "";
   }
 
   Future<XFile> compressFile(File file) async {
