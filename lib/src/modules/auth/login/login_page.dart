@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/auth/login/privacy_policy.dart';
+import 'package:info91/src/modules/auth/login/terms_and%20_privacy_policy.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
 import 'package:info91/src/widgets/tiny/app_input_text.dart';
 import 'package:info91/src/widgets/tiny/image_view.dart';
@@ -96,6 +98,7 @@ class LoginPage extends StatelessWidget {
                         text: "Terms of use",
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
+                            Get.to(const TermsAndPrivacy());
         
                           },
                         style: AppTextStyles.app12SB.copyWith(decoration: TextDecoration.underline,fontWeight: FontWeight.w800),
@@ -107,6 +110,10 @@ class LoginPage extends StatelessWidget {
                         text: "Privacy policy",
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
+                              Get.to(const PrivacyPolicy());
+                            
+        
+        
         
                           },
                         style: AppTextStyles.app12SB.copyWith(decoration: TextDecoration.underline,fontWeight: FontWeight.w800),

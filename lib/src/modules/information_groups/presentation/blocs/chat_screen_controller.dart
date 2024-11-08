@@ -244,7 +244,7 @@ class ChatScreenController extends GetxController {
    var isLoading=false.obs;
 
   late ChatMessage replyChat;
-  Timer? _chatFetchTimer;
+  Timer? chatFetchTimer;
   final int fetchIntervalSeconds = 3;
   var isReplay = false.obs;
   var selectedMessage = <ChatMessage>[].obs;
@@ -275,7 +275,7 @@ class ChatScreenController extends GetxController {
   void dispose() {
     super.dispose();
     _disposeOverlayEntry();
-    _chatFetchTimer?.cancel();
+    chatFetchTimer?.cancel();
   }
 
   void _disposeOverlayEntry() {
@@ -286,7 +286,7 @@ class ChatScreenController extends GetxController {
   }
 
   void startFetchingChats() {
-    _chatFetchTimer = Timer.periodic(
+    chatFetchTimer = Timer.periodic(
       Duration(seconds: fetchIntervalSeconds),
       (_) => viewMessage(),
     );

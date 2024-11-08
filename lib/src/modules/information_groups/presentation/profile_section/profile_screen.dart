@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/banners_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/gallery_view_screen/gfallery_view_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/profile_controller.dart';
@@ -29,9 +30,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
-
-    final InfoProfileController controller = Get.put(InfoProfileController());
+  final InfoProfileController controller = Get.put(InfoProfileController());
   List<popupMenuModel> listModel = [
     popupMenuModel(name: "Group Setting", value: 1)
   ];
@@ -43,32 +42,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
     "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
   ];
 
-@override
+  @override
   void initState() {
-  
-
- if(widget.model.id==null){
- controller. getGroupInfoDetails(widget.selectedGroupId);
- }else{controller.profilledataModel.value=widget.model;}
- controller.groupId=widget.selectedGroupId;
+    if (widget.model.id == null) {
+      controller.getGroupInfoDetails(widget.selectedGroupId);
+    } else {
+      controller.profilledataModel.value = widget.model;
+    }
+    controller.groupId = widget.selectedGroupId;
     super.initState();
-
   }
-  
+
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Obx((){
+          Obx(() {
             return Skeletonizer(
-                  enabled: controller.isLoading.value,
+              enabled: controller.isLoading.value,
               child: CustomAppBar(
-                imageUrl:controller.profilledataModel.value.profileImage,isPic: true,
-                onBackButtonPress: (){
-               Navigator.pop(context, controller.profilledataModel.value);
+                imageUrl: controller.profilledataModel.value.profileImage,
+                isPic: true,
+                onBackButtonPress: () {
+                  Navigator.pop(context, controller.profilledataModel.value);
                 },
                 actionWidget: [
                   CustomPopupmenu(
@@ -82,26 +80,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     itemList: listModel,
                   ),
                 ],
-                appBarName:controller.profilledataModel.value.groupName ?? "",
+                appBarName: controller.profilledataModel.value.groupName ?? "",
               ),
-            );}
-          ),
+            );
+          }),
           Expanded(
             child: SingleChildScrollView(
-              child: Obx((){
+              child: Obx(() {
                 return Skeletonizer(
                   enabled: controller.isLoading.value,
                   child: Column(
                     children: [
-                      ProfileTopImageSec(isAdmin: controller.profilledataModel.value.isAdmin??false,
-                        profileImage:controller.profilledataModel.value.profileImage ?? "",
-                        onCoverChange: (){
+                      ProfileTopImageSec(
+                        isAdmin:
+                            controller.profilledataModel.value.isAdmin ?? false,
+                        profileImage:
+                            controller.profilledataModel.value.profileImage ??
+                                "",
+                        onCoverChange: () {
                           controller.showUploadOptions(isCrop: false);
-                          },
-                        onProfileChange: (){
+                        },
+                        onProfileChange: () {
                           controller.showUploadOptions(isCrop: true);
                         },
-                        backGroundImage: controller.profilledataModel.value.coverImage ?? "",
+                        backGroundImage:
+                            controller.profilledataModel.value.coverImage ?? "",
                       ),
                       SizedBox(
                         height: 50.h,
@@ -111,7 +114,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            greyBoldText( controller.profilledataModel.value.groupName ?? "",
+                            greyBoldText(
+                                controller.profilledataModel.value.groupName ??
+                                    "",
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.text,
                                 size: 16.sp),
@@ -122,9 +127,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SizedBox(
                               height: 10.h,
                             ),
-                            greyBoldText( controller.profilledataModel.value.purpose ?? "",
-                                color: AppColors.text, size: 15.sp),
-                  
+                            greyBoldText(
+                                controller.profilledataModel.value.purpose ??
+                                    "",
+                                color: AppColors.text,
+                                size: 15.sp),
+
                             SizedBox(
                               height: 15.h,
                             ),
@@ -146,7 +154,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: 100.h,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) => customImageCard(
+                                itemBuilder: (context, index) =>
+                                    customImageCard(
                                   index: index,
                                   imageCount: MediaList.length,
                                   imageUrl: MediaList[index],
@@ -155,7 +164,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => GaleryViewScreen(
+                                          builder: (context) =>
+                                              GaleryViewScreen(
                                             imageList: MediaList,
                                           ),
                                         ));
@@ -171,8 +181,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             CustomArrowTextbutton(
                               buttonName: "Group info",
                               onTap: () {
-                                Get.toNamed('/group_info',
-                                    arguments: {"group_id": widget.selectedGroupId});
+                                Get.toNamed('/group_info', arguments: {
+                                  "group_id": widget.selectedGroupId
+                                });
                                 ;
                                 // Navigator.push(
                                 //     context,
@@ -184,47 +195,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SizedBox(
                               height: 14.h,
                             ),
-                            if(controller.profilledataModel.value.banners?.isNotEmpty==true)...[   blusHeading("Banners"),
+                            blusHeading("Banners"),
                             SizedBox(
                               height: 5.h,
                             ),
-                            BannersImageView(imageList: controller.profilledataModel.value.banners ?? []),
+                            BannersImageView(
+                                imageList: controller
+                                        .profilledataModel.value.banners ??
+                                    []),
                             SizedBox(
                               height: 5.h,
-                            ),],
-                         
+                            ),
+
+                            CustomArrowTextbutton(
+                              buttonName: "Add Banners",
+                              onTap: () {
+                                Get.to(
+                                  BannersScreen(),
+                                );
+                                ;
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //       builder: (context) => GroupInfo(),
+                                //     ));
+                              },
+                            ),
+                            SizedBox(
+                              height: 15.h,
+                            ),
+
                             blusHeading("Group Members"),
                             Container(
-                              padding: EdgeInsets.symmetric(vertical: 10.h),
+                              padding: EdgeInsets.symmetric(vertical: 5.h),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  greynonBoldText("${controller.profilledataModel.value.memberCount??0} members"),
+                                  greynonBoldText(
+                                      "${controller.profilledataModel.value.memberCount ?? 0} members"),
                                   SizedBox(
-                                    height: 10.h,
+                                    height: 5.h,
+                                  ),
+                                  TextButton.icon(
+                                    onPressed: () {},
+                                    label: blusHeading("Add Members"),
+                                    icon: Icon(Icons.add,color: AppColors.secondary,),
                                   ),
                                   ListView.separated(
                                       shrinkWrap: true,
+                                      padding: EdgeInsets.zero,
+                                      
                                       physics: ScrollPhysics(),
                                       itemBuilder: (context, index) => ListTile(
                                             leading: circle_image(
-                                             controller.profilledataModel.value.profileImage??"",
+                                              controller.profilledataModel.value
+                                                      .profileImage ??
+                                                  "",
                                               onTap: () {},
                                             ),
                                             title: Text(
-                                             controller.profilledataModel.value.members?[index].name ?? "",
+                                              controller.profilledataModel.value
+                                                      .members?[index].name ??
+                                                  "",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             subtitle: SizedBox(
                                                 width: 400.w,
                                                 child: Text(
-                                                 controller.profilledataModel.value.members?[index].status ??
+                                                  controller
+                                                          .profilledataModel
+                                                          .value
+                                                          .members?[index]
+                                                          .about ??
                                                       "",
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 )),
                                             trailing: Text(
-                                              "Admin",
+                                              controller
+                                                          .profilledataModel
+                                                          .value
+                                                          .members?[index]
+                                                          .role ==
+                                                      "1"
+                                                  ? "admin"
+                                                  : "",
                                               style: TextStyle(
                                                   color: Colors.orange,
                                                   fontSize: 13.sp),
@@ -234,7 +290,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           SizedBox(
                                             height: 5,
                                           ),
-                                      itemCount: widget.model.members?.length ?? 0)
+                                      itemCount:
+                                          widget.model.members?.length ?? 0)
                                 ],
                               ),
                             )
@@ -259,8 +316,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       )
                     ],
                   ),
-                );}
-              ),
+                );
+              }),
             ),
           )
         ],

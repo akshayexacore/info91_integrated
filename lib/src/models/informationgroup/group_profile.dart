@@ -89,7 +89,7 @@ class GroupProfileModel {
       lastMessageTime: json['last_message_time'] as String?,
       lastSender: json['last_sender'] as String?,
       lastSendTime: json['last_send_time'] as String?,
-      memberCount: json['member_count'] as int?,
+      memberCount: json['members_count'] as int?,
       planId: json['plan_id'] as int?,
       expireDate: json['expire_date'] as String?,
       createdBy: json['created_by'] as String?,
@@ -200,6 +200,7 @@ class Member {
   final String? phoneNumber;
   final String? name;
   final int? id;
+  final String? about;
 
   Member({
     this.userId,
@@ -207,6 +208,7 @@ class Member {
     this.status,
     this.phoneNumber,
     this.name,
+    this.about,
     this.id,
   });
 
@@ -218,6 +220,7 @@ class Member {
       phoneNumber: json['phone_number'] as String?,
       name: json['name'] as String?,
       id: json['id'] as int?,
+      about:json["about"] as String?,
     );
   }
 
@@ -228,6 +231,7 @@ class Member {
     String? phoneNumber,
     String? name,
     int? id,
+    String? about,
   }) {
     return Member(
       userId: userId ?? this.userId,
@@ -236,6 +240,7 @@ class Member {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       name: name ?? this.name,
       id: id ?? this.id,
+      about: about??this.about,
     );
   }
 }

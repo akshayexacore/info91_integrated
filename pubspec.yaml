@@ -82,6 +82,7 @@ dependencies:
   skeletonizer: ^1.4.2
   audio_waveforms: ^1.1.1
   voice_message_package: ^2.1.0
+
   
 
 

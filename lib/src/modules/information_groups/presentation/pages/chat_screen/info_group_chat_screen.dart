@@ -49,8 +49,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   AnimationController? _animationController1;
   Tween<Offset>? _animationTween;
   String msgdate = '';
- 
-  
+
   GroupProfileModel model = GroupProfileModel();
   @override
   void initState() {
@@ -84,13 +83,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     if (widget.model == null) {
       chatController.groupProfileModel.value =
           await _repository.getProfileData(widget.selectedGroupId ?? "");
-           chatController.selectedGroupId=widget.selectedGroupId??"";
+      chatController.selectedGroupId = widget.selectedGroupId ?? "";
       setState(() {});
     } else {
       chatController.groupProfileModel.value = widget.model!;
-      chatController.selectedGroupId=widget.selectedGroupId??"";
+      chatController.selectedGroupId = widget.selectedGroupId ?? "";
     }
-    chatController.  isLoading.value=true;
+    chatController.isLoading.value = true;
     chatController.startFetchingChats();
   }
 
@@ -148,6 +147,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    chatController.chatFetchTimer?.cancel(); //
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final bool canPop = ModalRoute.of(context)?.canPop ?? false;
     double h = MediaQuery.of(context).size.height;
@@ -183,15 +189,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                 .groupProfileModel.value.profileImage ??
                             "",
                         imageOntap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProfileScreen(
-                                  selectedGroupId: widget.selectedGroupId ?? "",
-                                  model: chatController.groupProfileModel.value,
-                                ),
-                              )).then((value) {
-                            chatController.groupProfileModel.value = value;
+                          Get.to(() => ProfileScreen(
+                                selectedGroupId: widget.selectedGroupId ?? "",
+                                model: chatController.groupProfileModel.value,
+                              ))?.then((value) {
+                            if (value != null) {
+                              chatController.groupProfileModel.value = value;
+                            }
                           });
                         },
                         appBarName: widget.model != null
@@ -244,7 +248,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   return GroupedList<ChatMessage, DateTime>(
                       controller: chatController.scrollController,
                       elements: chatController.messages,
-                      groupBy: (element) =>DateTime.parse(element.date??""),
+                      groupBy: (element) => DateTime.parse(element.date ?? ""),
                       // element.date,
 
                       groupComparator: (value1, value2) =>
@@ -262,7 +266,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                   horizontal: AppPaddings.xSmall,
                                   vertical: AppPaddings.xxxSmall4,
                                 ),
-                                child: Text(chatController.messages[index].time??"",
+                                child: Text(
+                                  chatController.messages[index].time ?? "",
                                   // DateFormat("MMM dd, yyyy").format(
                                   //     chatController.messages[index].dateTime),
                                   style: const TextStyle(
@@ -280,16 +285,16 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         debugPrint(
                             "chatController.messages[index]${chatController.messages[index].message}$index");
                         final message = chatController.messages[index];
-                        bool isMe = message.isMe??false;
-                        msgdate =message.date??"";
-                            // formatMessageTimestamp(message.dateTime, index);
-                        bool isSameUser =
-                            index + 1 <= chatController.messages.length - 1
-                                ? message.userId !=
-                                        chatController.messages[index + 1].userId
-                                    ? false
-                                    : true
-                                : false;
+                        bool isMe = message.isMe ?? false;
+                        msgdate = message.date ?? "";
+                        // formatMessageTimestamp(message.dateTime, index);
+                        bool isSameUser = index + 1 <=
+                                chatController.messages.length - 1
+                            ? message.userId !=
+                                    chatController.messages[index + 1].userId
+                                ? false
+                                : true
+                            : false;
 
                         return LayoutBuilder(builder: (context, constraints) {
                           return InkWell(
@@ -325,18 +330,20 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                     alignment: isMe
                                         ? Alignment.centerRight
                                         : Alignment.centerLeft,
-                                    child: Obx(
-                                     () {
-                                        return Skeletonizer(
-                                          enabled: chatController.isLoading.value,
-                                          child: BuildMessageWidget(
-                                            messageModel: message,
-                                            isSameUser: isSameUser,
-                                          ),
-                                        );
-                                      }
-                                    )),
-                                if (chatController.selectedMessage.any((contact) => contact.messageId == chatController.messages[index].messageId))
+                                    child: Obx(() {
+                                      return Skeletonizer(
+                                        enabled: chatController.isLoading.value,
+                                        child: BuildMessageWidget(
+                                          messageModel: message,
+                                          isSameUser: isSameUser,
+                                        ),
+                                      );
+                                    })),
+                                if (chatController.selectedMessage.any(
+                                    (contact) =>
+                                        contact.messageId ==
+                                        chatController
+                                            .messages[index].messageId))
                                   Positioned.fill(
                                     child: Container(
                                         color:
@@ -519,16 +526,17 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     icon: Icons.photo,
                     text: "Photos",
                     color: AppColors.secondary),
-                onTap: ()async {
-           final response=     await   filePickerHelper.pickFiles("image", context, "gallery");
-           chatController.fileUpload(response,"image");
-          
+                onTap: () async {
+                  final response = await filePickerHelper.pickFiles(
+                      "image", context, "gallery");
+                  chatController.fileUpload(response, "image");
                 },
               ),
               InkWell(
-                onTap: () async{
-            final response=     await        filePickerHelper.pickFiles("MultipleFile", context, "");
-                  chatController.fileUpload(response,"document");
+                onTap: () async {
+                  final response = await filePickerHelper.pickFiles(
+                      "MultipleFile", context, "");
+                  chatController.fileUpload(response, "document");
                 },
                 child: iconCreation(
                     icon: Icons.insert_drive_file,
@@ -543,9 +551,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         builder: (context) => ContactList(
                           contacts: Variables.userContact,
                           onSubmitFunction: (List<Contact> contact) {
-                     List<Map<String, dynamic>> contactList=      contact.map((contact) => contact.toJson()).toList();
+                            List<Map<String, dynamic>> contactList = contact
+                                .map((contact) => contact.toJson())
+                                .toList();
 
-                     debugPrint("contactListData${contactList.runtimeType}");
+                            debugPrint(
+                                "contactListData${contactList.runtimeType}");
                             chatController.sendMessage1("contact",
                                 messsageType: contactList);
                           },
@@ -707,7 +718,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             },
             chatMessage: chatController.replyChat,
             isChatMessage: true,
-            message: chatController.replyChat.message??"",
+            message: chatController.replyChat.message ?? "",
           ),
         Padding(
           padding: const EdgeInsets.all(8.0),

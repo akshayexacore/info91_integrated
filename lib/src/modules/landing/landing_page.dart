@@ -21,11 +21,11 @@ class LandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) {
-        if (didPop) return;
+    return WillPopScope(
+      onWillPop: () async {
         _controller.onBackPressed();
+      
+        return true; // Prevents the default back navigation
       },
       child: Scaffold(
         body: Column(

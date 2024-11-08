@@ -51,7 +51,7 @@ class InformGroupCreationScreen extends StatelessWidget {
               child: Form(
                 key: _controller.formkey,
                 child: Obx((){
-                  debugPrint("controller value${ _controller.groupNameController.value.text}");
+                  debugPrint("controller value${ _controller.category2Controller.value.text}");
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -73,7 +73,7 @@ class InformGroupCreationScreen extends StatelessWidget {
                             // if(_controller.typeController.value=="business" && _controller.planList.isNotEmpty)
                             _controller.getPlanList();
                           },
-                          itemList: ["business", "Non-business"],
+                          itemList: ["business", "non-business"],
                           selectedItem: "",
                         );}
                       ),
@@ -92,7 +92,7 @@ class InformGroupCreationScreen extends StatelessWidget {
                         height: 15.h,
                       ),
                       NewInputCard(
-                        controller: _controller.purposeController,
+                        controller: _controller.purposeController.value,
                         title: "Purpose",
                         showValidator: true,
                         validatorMessage: "Please enter purpose",

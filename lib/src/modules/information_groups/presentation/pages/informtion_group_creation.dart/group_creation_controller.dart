@@ -10,10 +10,10 @@ import '../../../../../models/informationgroup/category_model.dart';
 class GroupCreationController extends GetxController {
   var typeController = "".obs;
   var groupNameController = TextEditingController().obs;
-  TextEditingController purposeController = TextEditingController();
-  TextEditingController category1Controller = TextEditingController();
-  TextEditingController category2Controller = TextEditingController();
-  TextEditingController category3Controller = TextEditingController();
+  var purposeController = TextEditingController().obs;
+  var category1Controller = TextEditingController().obs;
+  var category2Controller = TextEditingController().obs;
+  var category3Controller = TextEditingController().obs;
   var firstCategoryList = <Category>[].obs;
   var secondCatList = <SecondCategory>[].obs;
   var thirdCatList = <ThirdCategoryModel>[].obs;
@@ -39,10 +39,10 @@ class GroupCreationController extends GetxController {
 void onClose() {
   // Dispose of all TextEditingControllers to free up resources
   groupNameController.value.dispose();
-  purposeController.dispose();
-  category1Controller.dispose();
-  category2Controller.dispose();
-  category3Controller.dispose();
+  purposeController.value.dispose();
+  category1Controller.value.dispose();
+  category2Controller.value.dispose();
+  category3Controller.value.dispose();
   
   super.onClose(); // Always call super.onClose() last
 }
@@ -51,21 +51,30 @@ void onClose() {
   }
   clear(){
     groupNameController.value.clear();
-  purposeController.clear();
-  category1Controller.clear();
-  category2Controller.clear();
-  category3Controller.clear();
+  purposeController.value.clear();
+  category1Controller.value.clear();
+  category2Controller.value.clear();
+  typeController.value="";
+  category3Controller.value.clear();
+ firstCategoryList .clear();
+   secondCatList.clear();
+   thirdCatList .clear();
+   planList.clear();
+   selectedCategory2.value=SecondCategory();
+ selectedCategory3.value = ThirdCategoryModel();
+   selectedItem .value= SecondCategory();
+ selectedPlanModel= PlanModel();
   }
 
   void createGroupFun() async {
     isBusy(true);
     InformationGroupCreationModel model = InformationGroupCreationModel(
-      category1: category1Controller.text,
-      category2: category2Controller.text,
-      category3: category3Controller.text,
+      category1: category1Controller.value.text,
+      category2: category2Controller.value.text,
+      category3: category3Controller.value.text,
       groupName: groupNameController.value.text,
       planId: planId.value,
-      purpose: purposeController.text,
+      purpose: purposeController.value.text,
       type: typeController.value,
     );
     try {
@@ -98,32 +107,32 @@ void onClose() {
   }
 
   categoryOneSelection(va) {
-    if (va.id.toString() != category1Controller.text) {
-      category1Controller.text = va?.id.toString() ?? "";
-      category2Controller.clear();
+    if (va.id.toString() != category1Controller.value.text) {
+      category1Controller.value.text = va?.id.toString() ?? "";
+      category2Controller.value.clear();
 
-      category3Controller.clear();
+      category3Controller.value.clear();
       secondCatList.clear();
       selectedCategory2.value = null;
       selectedCategory3.value = null;
       thirdCatList.clear();
-      getSecondCategory(category1Controller.text);
+      getSecondCategory(category1Controller.value.text);
     }
   }
 
   category2Selection(va) {
-    if (va.id.toString() != category2Controller.text) {
-      category2Controller.text = va?.id.toString() ?? "";
+    if (va.id.toString() != category2Controller.value.text) {
+      category2Controller.value.text = va?.id.toString() ?? "";
       selectedCategory2.value = va;
       selectedCategory3.value = null;
-      category3Controller.clear();
+      category3Controller.value.clear();
 
-      getThirdCategory(category2Controller.text);
+      getThirdCategory(category2Controller.value.text);
     }
   }
 
   category3Selection(va) {
-    category3Controller.text = va?.id.toString() ?? "";
+    category3Controller.value.text = va?.id.toString() ?? "";
     selectedCategory3.value=va;
   }
 
