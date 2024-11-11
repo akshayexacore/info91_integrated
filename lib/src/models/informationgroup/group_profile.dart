@@ -34,8 +34,9 @@ class GroupProfileModel {
   final List<Member>? members;
   final List<BannerModel>? banners;
   final bool? isAdmin;
+  final MediaList? mediaList;
 
-  GroupProfileModel({
+  GroupProfileModel( {
     this.id,
     this.groupName,
     this.groupTableName,
@@ -69,7 +70,8 @@ class GroupProfileModel {
     this.memberFlag,
     this.membersCount,
     this.members,
-    this.banners,this.isAdmin,
+    this.banners,
+    this.isAdmin,this.mediaList,
   });
 
   factory GroupProfileModel.fromJson(Map<String, dynamic> json) {
@@ -113,6 +115,9 @@ class GroupProfileModel {
       banners: (json['banners'] as List?)
           ?.map((e) => BannerModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      mediaList: json['media_list'] != null
+          ? MediaList.fromJson(json['media_list'])
+          : null,
     );
   }
 
@@ -152,6 +157,7 @@ class GroupProfileModel {
     int? membersCount,
     List<Member>? members,
     List<BannerModel>? banners,
+    
   }) {
     return GroupProfileModel(
       id: id ?? this.id,
@@ -165,7 +171,7 @@ class GroupProfileModel {
       category3: category3 ?? this.category3,
       profileImage: profileImage ?? this.profileImage,
       coverImage: coverImage ?? this.coverImage,
-      isAdmin: isAdmin??this.isAdmin,
+      isAdmin: isAdmin ?? this.isAdmin,
       lastMessageTime: lastMessageTime ?? this.lastMessageTime,
       lastSender: lastSender ?? this.lastSender,
       lastSendTime: lastSendTime ?? this.lastSendTime,
@@ -190,7 +196,47 @@ class GroupProfileModel {
       members: members ?? this.members,
       banners: banners ?? this.banners,
     );
+  }  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'group_name': groupName,
+      'group_table_name': groupTableName,
+      'groupusers_table_name': groupUsersTableName,
+      'type': type,
+      'purpose': purpose,
+      'category1': category1,
+      'category2': category2,
+      'category3': category3,
+      'profile_image': profileImage,
+      'cover_image': coverImage,
+      'last_message_time': lastMessageTime,
+      'last_sender': lastSender,
+      'last_send_time': lastSendTime,
+      'member_count': memberCount,
+      'plan_id': planId,
+      'expire_date': expireDate,
+      'created_by': createdBy,
+      'mobile_number': mobileNumber,
+      'alternative_number': alternativeNumber,
+      'whatsapp_number': whatsappNumber,
+      'timings': timings,
+      'contact_time': contactTime,
+      'holidays': holidays,
+      'website_link': websiteLink,
+      'youtube_link': youtubeLink,
+      'googlemap_link': googleMapLink,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+      'status': status,
+      'member_flag': memberFlag,
+      'members_count': membersCount,
+      'members': members?.map((e) => e.toJson()).toList(),
+      'banners': banners?.map((e) => e.toJson()).toList(),
+      'is_admin': isAdmin,
+      'media_list': mediaList?.toJson(),
+    };
   }
+
 }
 
 class Member {
@@ -220,7 +266,7 @@ class Member {
       phoneNumber: json['phone_number'] as String?,
       name: json['name'] as String?,
       id: json['id'] as int?,
-      about:json["about"] as String?,
+      about: json["about"] as String?,
     );
   }
 
@@ -240,39 +286,211 @@ class Member {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       name: name ?? this.name,
       id: id ?? this.id,
-      about: about??this.about,
+      about: about ?? this.about,
     );
+  }  Map<String, dynamic> toJson() {
+    return {
+      'user_id': userId,
+      'role': role,
+      'status': status,
+      'phone_number': phoneNumber,
+      'name': name,
+      'id': id,
+      'about': about,
+    };
   }
 }
 
 class BannerModel {
   final String? image;
+  final String? id;
   final String? title;
   final String? description;
 
-  BannerModel({
-    this.image,
-    this.title,
-    this.description,
-  });
+  BannerModel({this.image, this.title, this.description, this.id});
 
   factory BannerModel.fromJson(Map<String, dynamic> json) {
     return BannerModel(
       image: json['image'] as String?,
       title: json['title'] as String?,
+      id: json["id"] as String?,
       description: json['description'] as String?,
     );
   }
-
-  BannerModel copyWith({
-    String? image,
-    String? title,
-    String? description,
-  }) {
+  BannerModel copyWith(
+      {String? image, String? title, String? description, String? id}) {
     return BannerModel(
       image: image ?? this.image,
       title: title ?? this.title,
+      id: id ?? this.id,
       description: description ?? this.description,
+    );
+  }
+    Map<String, dynamic> toJson() {
+    return {
+      'image': image,
+      'id': id,
+      'title': title,
+      'description': description,
+    };
+  }
+}
+class MediaItem {
+  final String? messageId;
+  final String? userId;
+  final String? type;
+  final String? message;
+  final String? createdAt;
+  final String? phoneNumber;
+  final String? name;
+  final String? date;
+  final String? time;
+  final bool? isMe;
+  final String? filesize;
+  final String? filename;
+  final String? filetype;
+  final int? filepages;
+
+  MediaItem({
+    this.messageId,
+    this.userId,
+    this.type,
+    this.message,
+    this.createdAt,
+    this.phoneNumber,
+    this.name,
+    this.date,
+    this.time,
+    this.isMe,
+    this.filesize,
+    this.filename,
+    this.filetype,
+    this.filepages,
+  });
+
+  factory MediaItem.fromJson(Map<String, dynamic> json) {
+    return MediaItem(
+      messageId: json['message_id'],
+      userId: json['user_id'],
+      type: json['type'],
+      message: json['message'],
+      createdAt: json['created_at'],
+      phoneNumber: json['phone_number'],
+      name: json['name'],
+      date: json['date'],
+      time: json['time'],
+      isMe: json['is_me'],
+      filesize: json['filesize'],
+      filename: json['filename'],
+      filetype: json['filetype'],
+      filepages: json['filepages'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'message_id': messageId,
+      'user_id': userId,
+      'type': type,
+      'message': message,
+      'created_at': createdAt,
+      'phone_number': phoneNumber,
+      'name': name,
+      'date': date,
+      'time': time,
+      'is_me': isMe,
+      'filesize': filesize,
+      'filename': filename,
+      'filetype': filetype,
+      'filepages': filepages,
+    };
+  }
+
+  MediaItem copyWith({
+    String? messageId,
+    String? userId,
+    String? type,
+    String? message,
+    String? createdAt,
+    String? phoneNumber,
+    String? name,
+    String? date,
+    String? time,
+    bool? isMe,
+    String? filesize,
+    String? filename,
+    String? filetype,
+    int? filepages,
+  }) {
+    return MediaItem(
+      messageId: messageId ?? this.messageId,
+      userId: userId ?? this.userId,
+      type: type ?? this.type,
+      message: message ?? this.message,
+      createdAt: createdAt ?? this.createdAt,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      name: name ?? this.name,
+      date: date ?? this.date,
+      time: time ?? this.time,
+      isMe: isMe ?? this.isMe,
+      filesize: filesize ?? this.filesize,
+      filename: filename ?? this.filename,
+      filetype: filetype ?? this.filetype,
+      filepages: filepages ?? this.filepages,
+    );
+  }
+}
+
+class MediaList {
+  final List<MediaItem>? imageList;
+  final List<MediaItem>? videoList;
+  final List<MediaItem>? audioList;
+  final List<MediaItem>? documentList;
+
+  MediaList({
+    this.imageList,
+    this.videoList,
+    this.audioList,
+    this.documentList,
+  });
+
+  factory MediaList.fromJson(Map<String, dynamic> json) {
+    return MediaList(
+      imageList: (json['image_list'] as List<dynamic>?)
+          ?.map((e) => MediaItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      videoList: (json['video_list'] as List<dynamic>?)
+          ?.map((e) => MediaItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      audioList: (json['audio_list'] as List<dynamic>?)
+          ?.map((e) => MediaItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      documentList: (json['document_list'] as List<dynamic>?)
+          ?.map((e) => MediaItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'image_list': imageList?.map((e) => e.toJson()).toList(),
+      'video_list': videoList?.map((e) => e.toJson()).toList(),
+      'audio_list': audioList?.map((e) => e.toJson()).toList(),
+      'document_list': documentList?.map((e) => e.toJson()).toList(),
+    };
+  }
+
+  MediaList copyWith({
+    List<MediaItem>? imageList,
+    List<MediaItem>? videoList,
+    List<MediaItem>? audioList,
+    List<MediaItem>? documentList,
+  }) {
+    return MediaList(
+      imageList: imageList ?? this.imageList,
+      videoList: videoList ?? this.videoList,
+      audioList: audioList ?? this.audioList,
+      documentList: documentList ?? this.documentList,
     );
   }
 }

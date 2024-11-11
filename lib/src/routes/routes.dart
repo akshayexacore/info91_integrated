@@ -23,6 +23,8 @@ import 'package:info91/src/modules/home/controllers/home_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_controller.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/banners_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/controller/banner_controller.dart';
 import 'package:info91/src/modules/landing/controllers/landing_controller.dart';
 import 'package:info91/src/modules/landing/landing_page.dart';
 import 'package:info91/src/modules/network_usage/controllers/network_usage_controller.dart';
@@ -108,6 +110,12 @@ class Routes {
           Get.lazyPut(() => StarScreenController());
         })),
     GetPage(
+        name: BannersScreen.routeName,
+        page: () => BannersScreen(),
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => BannerController());
+        })),
+    GetPage(
         name: ChatPage.routeName,
         page: () => ChatPage(),
         binding: BindingsBuilder(() {
@@ -166,13 +174,13 @@ class Routes {
         page: () => EmergencyAlarmPage(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => EmergencyAlarmController());
-        })),GetPage(
-      name: GroupInfo.routeName,
-      page: () => GroupInfo(),
+        })),
+    GetPage(
+        name: GroupInfo.routeName,
+        page: () => GroupInfo(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => GroupInfpController());
-        })
-    ),
+        })),
     GetPage(
         name: RecipientsAddPage.routeName,
         page: () => RecipientsAddPage(),

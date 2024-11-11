@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
-import 'package:info91/src/modules/information_groups/presentation/pages/banners_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/banners_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/gallery_view_screen/gfallery_view_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_screen.dart';
-import 'package:info91/src/modules/information_groups/presentation/profile_section/profile_controller.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/controller/profile_controller.dart';
 
 import 'package:info91/src/modules/information_groups/presentation/profile_section/profile_setting_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_arrow_button.dart';
@@ -49,6 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } else {
       controller.profilledataModel.value = widget.model;
     }
+
     controller.groupId = widget.selectedGroupId;
     super.initState();
   }
@@ -157,8 +159,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 itemBuilder: (context, index) =>
                                     customImageCard(
                                   index: index,
-                                  imageCount: MediaList.length,
-                                  imageUrl: MediaList[index],
+                                  imageCount: controller.profilledataModel.value
+                                          .mediaList?.imageList?.length ??
+                                      0,
+                                  imageUrl: controller
+                                          .profilledataModel
+                                          .value
+                                          .mediaList
+                                          ?.imageList?[index]
+                                          .message ??
+                                      "",
                                   width: 110.w,
                                   onImageTap: () {
                                     Navigator.push(
@@ -166,13 +176,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               GaleryViewScreen(
-                                            imageList: MediaList,
+                                            mediaModel: controller
+                                                .profilledataModel
+                                                .value
+                                                .mediaList!,
                                           ),
                                         ));
                                   },
                                 ),
-                                itemCount:
-                                    MediaList.length < 3 ? MediaList.length : 3,
+                                itemCount: (controller.profilledataModel.value
+                                                .mediaList?.imageList?.length ??
+                                            0) <
+                                        3
+                                    ? (controller.profilledataModel.value
+                                            .mediaList?.imageList?.length ??
+                                        0)
+                                    : 3,
                               ),
                             ),
                             SizedBox(
@@ -200,6 +219,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: 5.h,
                             ),
                             BannersImageView(
+                                onTap: (index) {
+                                  Get.toNamed(BannersScreen.routeName,
+                                      arguments: {
+                                        "group_id": widget.selectedGroupId,
+                                        "isUpdate": true,
+                                        "model": controller.profilledataModel
+                                            .value.banners![index]
+                                      })?.then((value) {
+                                    controller.getGroupInfoDetails(
+                                        widget.selectedGroupId);
+                                  });
+                                },
                                 imageList: controller
                                         .profilledataModel.value.banners ??
                                     []),
@@ -210,10 +241,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             CustomArrowTextbutton(
                               buttonName: "Add Banners",
                               onTap: () {
-                                Get.to(
-                                  BannersScreen(),
-                                );
-                                ;
+                                Get.toNamed(BannersScreen.routeName,
+                                    arguments: {
+                                      "group_id": widget.selectedGroupId,
+                                      "isUpdate": false
+                                    })?.then((value) {
+                                  controller.getGroupInfoDetails(
+                                      widget.selectedGroupId);
+                                });
+
                                 // Navigator.push(
                                 //     context,
                                 //     MaterialPageRoute(
@@ -239,13 +275,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   TextButton.icon(
                                     onPressed: () {},
                                     label: blusHeading("Add Members"),
-                                    icon: Icon(Icons.add,color: AppColors.secondary,),
+                                    icon: const Icon(
+                                      Icons.add,
+                                      color: AppColors.secondary,
+                                    ),
                                   ),
                                   ListView.separated(
                                       shrinkWrap: true,
                                       padding: EdgeInsets.zero,
-                                      
-                                      physics: ScrollPhysics(),
+                                      physics: const ScrollPhysics(),
                                       itemBuilder: (context, index) => ListTile(
                                             leading: circle_image(
                                               controller.profilledataModel.value
@@ -328,10 +366,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 class BannersImageView extends StatelessWidget {
   final List<BannerModel> imageList;
+  final Function? onTap;
 
   BannersImageView({
     super.key,
     required this.imageList,
+    this.onTap,
   });
   final PageController _pageController = PageController(
       viewportFraction: 0.95,
@@ -350,10 +390,17 @@ class BannersImageView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                customImageCard(
-                  width: double.infinity,
-                  height: 150.h,
-                  imageUrl: imageList[index].image ?? "",
+                InkWell(
+                  onTap: () {
+                    if (onTap != null) {
+                      onTap!(index);
+                    }
+                  },
+                  child: customImageCard(
+                    width: double.infinity,
+                    height: 150.h,
+                    imageUrl: imageList[index].image ?? "",
+                  ),
                 ),
                 SizedBox(
                   height: 5.h,
@@ -362,7 +409,15 @@ class BannersImageView extends StatelessWidget {
                 SizedBox(
                   height: 5.h,
                 ),
-                greynonBoldText(imageList[index].description ?? ""),
+                SizedBox(
+                  width: 400.w,
+                  child: Text(
+                    imageList[index].description ?? "",
+                    maxLines: 1,
+                    style: TextStyle(
+                        fontSize: 13.sp, overflow: TextOverflow.ellipsis),
+                  ),
+                )
               ],
             ),
           ),

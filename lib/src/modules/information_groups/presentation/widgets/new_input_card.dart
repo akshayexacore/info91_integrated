@@ -44,7 +44,8 @@ class NewInputCard extends StatefulWidget {
     this.maxLines = 1,
     this.height = 50,
     this.fontsize = 13,
-    this.validator, this.keyType,
+    this.validator,
+    this.keyType,
   });
 
   @override
@@ -153,7 +154,7 @@ class _NewInputCardState extends State<NewInputCard> {
                     )
                   : Container(
                       alignment: Alignment.topLeft,
-                      // height: widget.height,
+                      height: widget.height,
                       child: TextFormField(
                         textAlignVertical: TextAlignVertical.center,
                         readOnly: widget.readOnly,
@@ -170,8 +171,9 @@ class _NewInputCardState extends State<NewInputCard> {
                                   return null; // Valid input
                                 }
                             : null,
-                        keyboardType:
-                            widget.formatter ? TextInputType.number : widget.keyType,
+                        keyboardType: widget.formatter
+                            ? TextInputType.number
+                            : widget.keyType,
                         inputFormatters: widget.formatter
                             ? <TextInputFormatter>[
                                 FilteringTextInputFormatter.digitsOnly
@@ -296,7 +298,7 @@ class CustomDropDownWidget<T> extends StatelessWidget {
       {super.key,
       required this.title,
       this.fontsize = 13,
-      this.suffixIconData=Icons.arrow_drop_down,
+      this.suffixIconData = Icons.arrow_drop_down,
       required this.getItemTAble,
       required this.itemList,
       this.isValidator = false,
@@ -362,13 +364,13 @@ class CustomDropDownWidget<T> extends StatelessWidget {
             // Down Arrow Icon
             iconStyleData: IconStyleData(
                 icon: InkWell(
-                  onTap:(){
+                  onTap: () {
                     debugPrint("clicking the event");
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 0),
                     child: Icon(
-                    suffixIconData,
+                      suffixIconData,
                       size: 20,
                       color: Colors.black.withOpacity(0.6),
                     ),
@@ -406,7 +408,8 @@ class CustomDropSearcDownWidget<T> extends StatelessWidget {
     this.fontsize = 13,
     required this.getItemLabel,
     required this.itemList,
-    required this.onChanged,this.isValidator=false,
+    required this.onChanged,
+    this.isValidator = false,
     required this.selectedItem,
     this.hintText,
   });

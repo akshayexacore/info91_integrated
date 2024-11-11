@@ -4,7 +4,7 @@ import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/home/controllers/chats_controller.dart';
 import 'package:info91/src/modules/home/controllers/home_controller.dart';
 import 'package:info91/src/modules/home/widgets/category_icon.dart';
-import 'package:info91/src/modules/information_groups/presentation/pages/banners_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/banners_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/info_chatlist/inform_group_chatlist_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/informtion_group_creation.dart/profile_creation.page.dart';
 import 'package:info91/src/widgets/custom/app_message_profile_tile.dart';
@@ -110,11 +110,7 @@ class HomePage extends StatelessWidget {
                     title: 'Information',
                     onPressed: () {
                       print("Akshayr");
-                        Get.to(() => const InfoGroupChatListScreen()) ;
-                   
-
-
-            
+                      Get.to(() => const InfoGroupChatListScreen());
                     },
                   ),
                   CategoryIcon(
@@ -160,7 +156,8 @@ class HomePage extends StatelessWidget {
                   ),
                   CategoryIcon(
                     assetIcon: 'ic_services_dark.svg',
-                    title: 'Services',clr: AppColors.secondary,
+                    title: 'Services',
+                    clr: AppColors.secondary,
                     onPressed: () {},
                   ),
                   CategoryIcon(

@@ -51,7 +51,7 @@ class BuildMessageWidget extends StatelessWidget {
         return _buildAudioMessage(messageModel);
       case MessageType.video:
         return _buildVideoMessage(messageModel);
-      case MessageType.reply:
+      case "reply":
         return _buildReplyMessage(messageModel);
       case "contact":
         return _buildConatctMessage(messageModel, context,

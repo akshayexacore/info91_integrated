@@ -84,7 +84,7 @@ class InfromationRepository {
       });
       return dataLIst;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -278,14 +278,14 @@ class InfromationRepository {
 
   Future<DoubleResponse> deleTeMessages(
       {required String groupId, required List<String?> messageIds}) async {
-        debugPrint("message Id$messageIds");
+    debugPrint("message Id$messageIds");
     try {
-       List<ChatMessage> dataLIst = [];
+      List<ChatMessage> dataLIst = [];
       final response = await _api.post(ApiConstants.deleteMessageApi,
           headers: {}, body: {'group_id': groupId, "message_id": messageIds});
       debugPrint("response['status'] ");
       if (response['status'] == 'success') {
-           (response["data"] as List).forEach((element) {
+        (response["data"] as List).forEach((element) {
           dataLIst.add(ChatMessage.fromJson(element));
         });
         return DoubleResponse(true, dataLIst);
@@ -298,22 +298,19 @@ class InfromationRepository {
     }
   }
 
-
-   Future<DoubleResponse> fileUpload(
-      {required String file, }) async {
-       
+  Future<DoubleResponse> fileUpload({
+    required String file,
+  }) async {
     try {
-       
-          final response = await _api.postMultipart(
-      ApiConstants.fileUploadApi,
-      body: {},
-      key: "file",
-      headers: {},
-      file: file,
-    );
-    debugPrint("the fileUpload response+$response");
+      final response = await _api.postMultipart(
+        ApiConstants.fileUploadApi,
+        body: {},
+        key: "file",
+        headers: {},
+        file: file,
+      );
+      debugPrint("the fileUpload response+$response");
       if (response['success'] == 'success') {
-       
         return DoubleResponse(true, response['data']);
       } else {
         return DoubleResponse(false, response['message']);
@@ -321,6 +318,92 @@ class InfromationRepository {
     } catch (e) {
       debugPrint("e");
       throw e;
+    }
+  }
+
+  Future<DoubleResponse> createBanner({
+    required String file,
+    required String groupId,
+    required String title,
+    required String description,
+  }) async {
+    try {
+      final response = await _api.postMultipart(
+        ApiConstants.createBannerApi,
+        body: {
+          "banner_title": title,
+          "banner_description": description,
+          "group_id": groupId
+        },
+        key: "banner_image",
+        headers: {},
+        file: file,
+      );
+      debugPrint("the fileUpload response+$response");
+      if (response['success'] == true) {
+        return DoubleResponse(true, response['data']["banners"]);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      debugPrint("e");
+      rethrow;
+    }
+  }
+
+  Future<DoubleResponse> upDateBanner({
+    required String file,
+    required String groupId,
+    required String title,
+    required String description,
+    required String bannerId,
+  }) async {
+    try {
+      final response = await _api.postMultipart(
+        ApiConstants.updateBannerApi,
+        body: {
+          "banner_title": title,
+          "banner_description": description,
+          "banner_id": bannerId,
+          "group_id": groupId,
+        },
+        key: "banner_image",
+        headers: {},
+        file: file,
+      );
+      debugPrint("the fileUpload response+$response");
+      if (response['success'] == true) {
+        return DoubleResponse(true, response['data']["banners"]);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      debugPrint("e");
+      rethrow;
+    }
+  }
+
+  Future<DoubleResponse> deleteBanner({
+    required String bannerId,
+    required String groupId,
+  }) async {
+    try {
+      final response = await _api.post(
+        ApiConstants.deleteBannerApi,
+        body: {
+          "group_id": groupId,
+          "banner_id": bannerId,
+        },
+      );
+
+      if (response['success'] == true) {
+        return DoubleResponse(true, response['message']);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      debugPrint("e");
+      rethrow;
     }
   }
 }

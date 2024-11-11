@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/gallery_view_screen/gallery_view_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/gallery_view_screen/video_display_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_image_card.dart';
@@ -11,8 +12,8 @@ import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 import '../../widgets/texts.dart';
 
 class GaleryViewScreen extends StatefulWidget {
-  final List<String> imageList;
-  const GaleryViewScreen({super.key, required this.imageList});
+  final MediaList mediaModel;
+  const GaleryViewScreen({super.key, required this.mediaModel});
 
   @override
   State<GaleryViewScreen> createState() => _GaleryViewScreenState();
@@ -51,11 +52,11 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
             padding: EdgeInsets.zero,
             splashFactory: NoSplash.splashFactory,
             indicatorPadding:
-                EdgeInsets.symmetric(horizontal: 7.0, vertical: 9),
-            labelStyle: TextStyle(
+                const EdgeInsets.symmetric(horizontal: 7.0, vertical: 9),
+            labelStyle: const TextStyle(
                 color: AppColors.secondary, fontWeight: FontWeight.bold),
-            unselectedLabelStyle:
-                TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+            unselectedLabelStyle: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.w500),
             indicator: BoxDecoration(
               color: Colors.orange.withOpacity(.1),
               borderRadius: BorderRadius.circular(10), // Rounded corners
@@ -70,7 +71,7 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
             imageViewSection(),
             imageViewSection(isVideo: true),
             linksViewSection(),
-            docsViewSection(),
+            docsViewSection(widget.mediaModel.documentList ?? []),
           ]),
         )
       ],
@@ -81,15 +82,15 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: marginWidth, vertical: 15.h),
       child: GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: widget.imageList.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: widget.mediaModel.imageList?.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 10.w,
           mainAxisSpacing: 10.w,
         ),
         itemBuilder: (context, index) => customImageCard(
-          imageUrl: widget.imageList[index],
+          imageUrl: widget.mediaModel.imageList?[index].message ?? "",
           isVideo: isVideo,
           onImageTap: () {
             Get.to(() => VideoPlayerScreen());
@@ -142,12 +143,12 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
     );
   }
 
-  Widget docsViewSection() {
+  Widget docsViewSection(List<MediaItem> docList) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: marginWidth, vertical: 15.h),
       child: ListView.builder(
           physics: AlwaysScrollableScrollPhysics(),
-          itemCount: 100,
+          itemCount: docList.length,
           itemBuilder: (context, index) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -163,14 +164,77 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
                     ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading: Image.asset("assets/images/docs.png"),
+                    leading:
+                        //  Image.asset("assets/images/docs.png"),
+                        SizedBox(
+                      width:
+                          40, // Control the width to reduce the gap between leading and title
+                      child: docList[index].filetype == "jpg" ||  docList[index].filetype=="png"
+                          ? const Icon(
+                              Icons.image,
+                              size: 24, 
+                            ):docList[index].filetype =="pdf"?const Icon(
+                              Icons.picture_as_pdf,
+                              size: 24, 
+                            )
+                          : docList[index].filetype =="video"
+                              ? const Icon(
+                                  Icons.video_library,
+                                  size: 24,
+                                )
+                              : docList[index].filetype == "audio"
+                                  ? const Icon(
+                                      Icons.mic,
+                                      size: 24, 
+                                    )
+                                  : docList[index].filetype == "document"
+                                      ?const Icon(
+                                          Icons.file_copy,
+                                          size:
+                                              24, 
+                                        )
+                                      :const SizedBox(),
+                    ),
                     title: SizedBox(
                         width: 300.w,
                         child: Text(
-                          "File.pdf",
-                          style: TextStyle(overflow: TextOverflow.ellipsis),
+                          docList[index].message ?? "",
+                          style:const TextStyle(overflow: TextOverflow.ellipsis),
                         )),
-                    subtitle: const Text("2.9 MB"),
+                    subtitle: Row(
+                      children: [
+                        if (docList[index].filetype == "pdf")
+                          Text(
+                            docList[index].filepages.toString(),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        Text(
+                          docList[index].filesize ?? "",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        Text(
+                          " .  ${docList[index].filetype ?? ""}",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      const  Spacer(),
+                        Text(
+                          docList[index].date ?? "",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               )),
