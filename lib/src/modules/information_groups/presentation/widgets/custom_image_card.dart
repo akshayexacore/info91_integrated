@@ -32,7 +32,7 @@ class customImageCard extends StatelessWidget {
               width: width ?? 170.w,
               child: Image.network(
                 imageUrl,
-                fit: BoxFit.cover,
+                fit: BoxFit.height,
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) {
