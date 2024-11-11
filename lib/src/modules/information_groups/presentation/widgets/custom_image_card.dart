@@ -27,16 +27,16 @@ class customImageCard extends StatelessWidget {
       children: [
         Stack(
           children: [
-            Container(
+            SizedBox(
               height: height ?? 107.h,
               width: width ?? 170.w,
               child: Image.network(
                 imageUrl,
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) {
-                    return child; // Image is fully loaded
+                    return child;
                   } else {
                     return Center(
                       child: CircularProgressIndicator(

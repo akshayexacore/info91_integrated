@@ -69,7 +69,8 @@ class GroupProfileModel {
     this.memberFlag,
     this.membersCount,
     this.members,
-    this.banners,this.isAdmin,
+    this.banners,
+    this.isAdmin,
   });
 
   factory GroupProfileModel.fromJson(Map<String, dynamic> json) {
@@ -165,7 +166,7 @@ class GroupProfileModel {
       category3: category3 ?? this.category3,
       profileImage: profileImage ?? this.profileImage,
       coverImage: coverImage ?? this.coverImage,
-      isAdmin: isAdmin??this.isAdmin,
+      isAdmin: isAdmin ?? this.isAdmin,
       lastMessageTime: lastMessageTime ?? this.lastMessageTime,
       lastSender: lastSender ?? this.lastSender,
       lastSendTime: lastSendTime ?? this.lastSendTime,
@@ -220,7 +221,7 @@ class Member {
       phoneNumber: json['phone_number'] as String?,
       name: json['name'] as String?,
       id: json['id'] as int?,
-      about:json["about"] as String?,
+      about: json["about"] as String?,
     );
   }
 
@@ -240,38 +241,33 @@ class Member {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       name: name ?? this.name,
       id: id ?? this.id,
-      about: about??this.about,
+      about: about ?? this.about,
     );
   }
 }
 
 class BannerModel {
   final String? image;
+  final String? id;
   final String? title;
   final String? description;
 
-  BannerModel({
-    this.image,
-    this.title,
-    this.description,
-  });
+  BannerModel({this.image, this.title, this.description, this.id});
 
   factory BannerModel.fromJson(Map<String, dynamic> json) {
     return BannerModel(
       image: json['image'] as String?,
       title: json['title'] as String?,
+      id: json["id"] as String?,
       description: json['description'] as String?,
     );
   }
-
-  BannerModel copyWith({
-    String? image,
-    String? title,
-    String? description,
-  }) {
+  BannerModel copyWith(
+      {String? image, String? title, String? description, String? id}) {
     return BannerModel(
       image: image ?? this.image,
       title: title ?? this.title,
+      id: id ?? this.id,
       description: description ?? this.description,
     );
   }
