@@ -35,7 +35,7 @@ class SplashController extends GetxController {
   Future<void> fetchContacts() async {
     try {
       final Iterable<Contact> contacts = await FlutterContacts.getContacts( withThumbnail: true,   // Fetch thumbnails
-      withPhoto: true, );
+      withPhoto: true, withProperties: true);
       
       Variables.userContact = contacts.toList();
     } catch (e) {
