@@ -89,4 +89,15 @@ class InfoChatListController extends GetxController
       });
     }
   }
+  publicTileOnTap(int index) {
+   
+      debugPrint('chatGroupList[index]${searchGroupList[index].id}');
+      Get.toNamed(StartScreen.routName,
+          arguments: {'group': searchGroupList[index]})?.then((_) {
+        // This will be called when you return to the previous page
+
+        grtInfoGroupList(); // Call fetchData to refresh the data
+      });
+    } 
+  
 }

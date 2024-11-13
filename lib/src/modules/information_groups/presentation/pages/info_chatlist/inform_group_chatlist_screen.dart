@@ -75,37 +75,53 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
             ),
             Expanded(
               child: Obx(() {
-                // Checking if the search controller has any text
+              
                 if (controller.searchText.value.isNotEmpty) {
                   return controller.searchGroupList.isEmpty
-                      ? Center(child: Text("No Data"))
+                      ?const Center(child: Text("No Data"))
                       : ListView.separated(
                           itemCount: controller.searchGroupList.length,
                           itemBuilder: (context, index) => ChatListItem(
                             chat: controller.searchGroupList[index],
                             onTap: () {
-                              controller.nonPublicTileOnTap(index);
+                              controller.publicTileOnTap(index);
                             },
                           ),
                           separatorBuilder: (context, index) => customDivider(),
                         );
                 } else {
-                  debugPrint(
-                      "controller.toggle.value.text.isEmpty${controller.toggleValue.value}");
-                  return ListView.separated(
-                    itemCount: controller.toggleValue.value == 0
-                        ? controller.chatGroupList.length
-                        : controller.ownchatGroupList.length,
+                  if(controller.toggleValue.value == 0){
+                        return controller.chatGroupList.isEmpty
+                      ? const Center(child: Text("No Data"))
+                      : ListView.separated(
+                    itemCount:controller.chatGroupList.length,
+                     
                     itemBuilder: (context, index) => ChatListItem(
-                      chat: controller.toggleValue.value == 0
-                          ? controller.chatGroupList[index]
-                          : controller.ownchatGroupList[index],
+                      chat: controller.chatGroupList[index]  ,                     
                       onTap: () {
                         controller.nonPublicTileOnTap(index);
                       },
                     ),
                     separatorBuilder: (context, index) => customDivider(),
                   );
+
+                  }else{
+                        return controller.ownchatGroupList.isEmpty
+                      ? const Center(child: Text("No Data"))
+                      : ListView.separated(
+                    itemCount: controller.ownchatGroupList.length,
+                    itemBuilder: (context, index) => ChatListItem(
+                      chat: controller.ownchatGroupList[index],
+                      onTap: () {
+                        controller.nonPublicTileOnTap(index);
+                      },
+                    ),
+                    separatorBuilder: (context, index) => customDivider(),
+                  );
+
+                  }
+                  
+              
                 }
               }),
             ),

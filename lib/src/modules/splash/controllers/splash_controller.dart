@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/variables.dart';
@@ -34,8 +35,14 @@ class SplashController extends GetxController {
 }
   Future<void> fetchContacts() async {
     try {
-      final Iterable<Contact> contacts = await FlutterContacts.getContacts( withThumbnail: true,   // Fetch thumbnails
-      withPhoto: true, withProperties: true);
+      final Iterable<Contact> contacts = await FlutterContacts.getContacts( withProperties: true);
+       List<String> phoneNumbers = [];
+    for (var contact in contacts) {
+      for (var phone in contact.phones) {
+        phoneNumbers.add(phone.number);
+      }
+    }
+    debugPrint("the numbers are here${phoneNumbers}");
       
       Variables.userContact = contacts.toList();
     } catch (e) {

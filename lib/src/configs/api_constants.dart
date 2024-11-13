@@ -9,7 +9,7 @@ class ApiConstants {
   //information Apis
   static String creationInformationAPi = "/groupCreation";
   static String infoGroupListAPi = "/groupList";
-  static String infoGroupPublicSearchAPi = "/groupSearch";
+  static String infoGroupPublicSearchAPi = "/publicGroupSearch";
   static String firstCategoryListApi = "/firstCategories";
   static String secondCategoryListApi = "/secondCategories/";
   static String thirdCategoryListApi = "/thirdCategories/";
@@ -27,5 +27,6 @@ class ApiConstants {
   static String fileUploadApi = "/fileUpload";
   static String createBannerApi = "/addGroupBanner";
   static String deleteBannerApi = "/deleteGroupBanner";
-  static String updateBannerApi = "/updateGroupBanner";
+  static String updateBannerApi = "/updateGroupBanner"; 
+  static String contactSyncApi = "/contactSync";
 }
