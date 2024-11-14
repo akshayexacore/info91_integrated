@@ -98,29 +98,37 @@ class ContactListCard extends StatelessWidget {
   final bool value;
   final VoidCallback onCange;
   final Widget? leadingWidget;
+  final bool isInactive;
   const ContactListCard(
       {this.value = false,
       required this.onCange,
       required this.avatar,
       required this.contactName,
-      this.leadingWidget});
+      this.leadingWidget,this.isInactive=false});
 
   @override
   Widget build(BuildContext context) {
-    print("cccccccccccccc$avatar");
-    return ListTile(
-        leading: buildContactAvatar(avatar, contactName),
-        title: Text(
-          contactName,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        trailing: leadingWidget ??
-            CustomCircleIconWidget(
-              onCange: onCange,
-              backgroundClr: value ? AppColors.secondary : Color(0xffD9D9D9),
-              radius: 12.5,
-              iconColor: value ? AppColors.white : Colors.transparent,
-            ),
-        onTap: onCange);
+ 
+    return Container(
+      color: isInactive?AppColors.lightGrey:AppColors.transparent,
+      child: ListTile(
+          leading: buildContactAvatar(avatar, contactName),
+          title: Text(
+            contactName,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),tileColor: isInactive?AppColors.white.withOpacity(.2):AppColors.transparent,
+          trailing: leadingWidget ??
+              CustomCircleIconWidget(
+                onCange: onCange,
+                backgroundClr: value ? AppColors.secondary :const Color(0xffD9D9D9),
+                radius: 12.5,
+                iconColor: value ? AppColors.white : Colors.transparent,
+              ),
+          onTap: (){
+            if(!isInactive){
+              onCange();
+            }
+          }),
+    );
   }
 }

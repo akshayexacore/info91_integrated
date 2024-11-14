@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/add_members.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/banners_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/gallery_view_screen/gfallery_view_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_screen.dart';
@@ -273,7 +274,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     height: 5.h,
                                   ),
                                   TextButton.icon(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Get.toNamed(AddMembersScreen.routeName,arguments: {"group_id":controller.groupId});
+                                    },
                                     label: blusHeading("Add Members"),
                                     icon: const Icon(
                                       Icons.add,

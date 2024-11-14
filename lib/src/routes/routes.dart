@@ -23,7 +23,9 @@ import 'package:info91/src/modules/home/controllers/home_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_controller.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/add_members.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/banners_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/controller/addmember_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/controller/banner_controller.dart';
 import 'package:info91/src/modules/landing/controllers/landing_controller.dart';
 import 'package:info91/src/modules/landing/landing_page.dart';
@@ -204,6 +206,12 @@ class Routes {
         page: () => NetworkUsagePage(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => NetworkUsageController());
+        })),
+        GetPage(
+        name: AddMembersScreen.routeName,
+        page: () => AddMembersScreen(),
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => AddmemberController());
         })),
   ];
 }

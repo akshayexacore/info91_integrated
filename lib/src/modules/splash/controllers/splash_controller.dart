@@ -1,13 +1,15 @@
 
-import 'package:flutter/material.dart';
+
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/variables.dart';
 import 'package:info91/src/modules/auth/login/controllers/auth_controller.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:info91/src/resources/infromation_repository.dart';
+
 
 class SplashController extends GetxController {
   var isBusy = false.obs;
+
 
   @override
   void onInit() {
@@ -42,7 +44,7 @@ class SplashController extends GetxController {
         phoneNumbers.add(phone.number);
       }
     }
-    debugPrint("the numbers are here${phoneNumbers}");
+
       
       Variables.userContact = contacts.toList();
     } catch (e) {

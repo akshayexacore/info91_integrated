@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:info91/src/configs/api_constants.dart';
+import 'package:info91/src/configs/variables.dart';
 import 'package:info91/src/models/base_response.dart';
 import 'package:info91/src/models/informationgroup/category_model.dart';
 import 'package:info91/src/models/informationgroup/chat_model.dart';
+import 'package:info91/src/models/informationgroup/contact_model.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/models/informationgroup/info-model.dart';
 import 'package:info91/src/models/informationgroup/information_group.dart';
@@ -393,6 +395,48 @@ class InfromationRepository {
         body: {
           "group_id": groupId,
           "banner_id": bannerId,
+        },
+      );
+
+      if (response['success'] == true) {
+        return DoubleResponse(true, response['message']);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      debugPrint("e");
+      rethrow;
+    }
+  }
+
+
+
+   Future<List<ContactAddGroupModel>> fetchInfo91Contacts(String groupId) async {
+    List<ContactAddGroupModel> dataLIst = [];
+    final response =
+        await _api.post(ApiConstants.contactSyncApi , headers: {},   body: {
+          "group_id": groupId,
+          "contacts": Variables.userContact,
+        },);
+    try {
+      (response["data"] as List).forEach((element) {
+        dataLIst.add(ContactAddGroupModel.fromJson(element));
+      });
+      return dataLIst;
+    } catch (e) {
+      throw e;
+    }
+  }
+    Future<DoubleResponse> addToGroup(
+   String groupId,
+    List< String> userId,
+  ) async {
+    try {
+      final response = await _api.post(
+        ApiConstants.addUsersToGroupApi,
+        body: {
+          "group_id": groupId,
+          "user_ids": userId,
         },
       );
 
