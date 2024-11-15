@@ -450,4 +450,22 @@ class InfromationRepository {
       rethrow;
     }
   }
+   Future<DoubleResponse> changeGroupUserStatuse({required String status,required String groupid,required userId,required String role }) async {
+  try{final response = await _api.post(
+      ApiConstants.changeGroupUserStatusApi,
+      body: {"group_id": groupid,"user_id":userId,"role":role,"status":status},
+      headers: {},
+    
+    );
+    debugPrint("response is here$response");
+
+    if (response['statusCode'] == 200) {
+      return DoubleResponse(true, GroupProfileModel.fromJson(response["data"]));
+    } else {
+      return DoubleResponse(false, response['message']);
+    }
+  }catch(e){
+rethrow;
+  }  
+}
 }

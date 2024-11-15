@@ -29,7 +29,7 @@ class ContactAddGroupModel {
       name: json['name'] as String?,
       about: json['about'] as String?,
       userId: json['user_id'] as String?,
-      existGoup: json['group_exists'] as bool,
+      existGoup: json['group_exists'] as bool?,
       profileImage: json['profile_image'] as String?,
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/models/informationgroup/information_group.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_avatarwithimageicon.dart';
+import 'package:info91/src/widgets/custom/add_divider.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -99,11 +100,13 @@ class ContactListCard extends StatelessWidget {
   final VoidCallback onCange;
   final Widget? leadingWidget;
   final bool isInactive;
+  final String? subtitle;
   const ContactListCard(
       {this.value = false,
       required this.onCange,
       required this.avatar,
       required this.contactName,
+      this.subtitle,
       this.leadingWidget,this.isInactive=false});
 
   @override
@@ -111,24 +114,33 @@ class ContactListCard extends StatelessWidget {
  
     return Container(
       color: isInactive?AppColors.lightGrey:AppColors.transparent,
-      child: ListTile(
-          leading: buildContactAvatar(avatar, contactName),
-          title: Text(
-            contactName,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),tileColor: isInactive?AppColors.white.withOpacity(.2):AppColors.transparent,
-          trailing: leadingWidget ??
-              CustomCircleIconWidget(
-                onCange: onCange,
-                backgroundClr: value ? AppColors.secondary :const Color(0xffD9D9D9),
-                radius: 12.5,
-                iconColor: value ? AppColors.white : Colors.transparent,
+      child: Column(
+        children: [
+          ListTile(
+              leading: buildContactAvatar(avatar, contactName),
+              title: Text(
+                contactName,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),tileColor: isInactive?AppColors.white.withOpacity(.2):AppColors.transparent,
+              subtitle: Text(
+                subtitle??"",
+                style: const TextStyle(fontWeight: FontWeight.w400),
               ),
-          onTap: (){
-            if(!isInactive){
-              onCange();
-            }
-          }),
+              trailing: leadingWidget ??
+                  CustomCircleIconWidget(
+                    onCange: onCange,
+                    backgroundClr: value ? AppColors.secondary :const Color(0xffD9D9D9),
+                    radius: 12.5,
+                    iconColor: value ? AppColors.white : Colors.transparent,
+                  ),
+              onTap: (){
+                if(!isInactive){
+                  onCange();
+                }
+              }),
+              //  customDivider(),?
+        ],
+      ),
     );
   }
 }

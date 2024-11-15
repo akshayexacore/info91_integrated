@@ -66,18 +66,20 @@ class _AddMembersScreenState extends State<AddMembersScreen> {
                             child: greyBoldText("Contacts on Info91"),
                           ),
                            SizedBox(height: 10.h,),
-                          ListView.separated(physics:   const ScrollPhysics() ,
+                          ListView.builder(physics:   const ScrollPhysics() ,
                           padding: EdgeInsets.zero,
                             itemCount: _controller.existingContacts.length,
 
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               final contact = _controller.existingContacts[index];
+                         
                           
                               return ContactListCard(
                                 avatar: Uint8List(0),
-                                // isInactive: contact.existGoup??false,
+                                isInactive: contact.existGoup??false,
                                 contactName: contact.displayName ?? '',
+                                subtitle: contact.existGoup==true?"All ready added to the group":contact.about,
                                 value: _controller.selectedContacts.contains(contact),
                                 onCange: () {
                                   _controller.toggleContactSelection(contact);
@@ -89,7 +91,7 @@ class _AddMembersScreenState extends State<AddMembersScreen> {
                                 },
                               );
                             },
-                            separatorBuilder: (context, index) => customDivider(),
+                           
                           ),    SizedBox(height: 10.h,),
                           Padding(
                             padding:  EdgeInsets.symmetric(horizontal: marginWidth),

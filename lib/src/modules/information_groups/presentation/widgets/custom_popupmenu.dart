@@ -4,9 +4,12 @@ import 'package:info91/src/configs/app_styles.dart';
 
 class CustomPopupmenu extends StatelessWidget {
   final Function onSelected;
+  final Color iconColr;
+  final IconData icon;
   final List<popupMenuModel> itemList;
-  const CustomPopupmenu(
-      {super.key, required this.onSelected, required this.itemList});
+  final Widget? iconWidget;
+   CustomPopupmenu(
+      {super.key, required this.onSelected, required this.itemList,this.iconColr=AppColors.white,this.icon= Icons.more_vert,this.iconWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +36,9 @@ class CustomPopupmenu extends StatelessWidget {
               )
               .toList();
         },
-        icon: const Icon(
-          Icons.more_vert,
-          color: AppColors.white,
+        icon: iconWidget?? Icon(
+          icon,
+          color: iconColr,
         ));
   }
 }

@@ -4,6 +4,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
+
 import 'package:info91/src/resources/infromation_repository.dart';
 import 'package:info91/src/widgets/custom/app_dialog.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
@@ -15,6 +16,7 @@ class InfoProfileController extends GetxController {
   final _infromationRepository = InfromationRepository();
 
   var selectedFile = ''.obs;
+  
 
   Future<void> uploadFile() async {
     final response =
@@ -41,7 +43,7 @@ class InfoProfileController extends GetxController {
   Future<void> getGroupInfoDetails(String id) async {
     debugPrint("getGroupInfoDetails calling");
     try {
-      isLoading.value = true;
+      // isLoading.value = true;
       final response = await _infromationRepository.getProfileData(id ?? "");
       debugPrint("getGroupInfoDetails calling${response.memberCount}");
       profilledataModel.value = response;
@@ -50,6 +52,19 @@ class InfoProfileController extends GetxController {
       isLoading.value = false;
       throw e;
     }
+  }
+
+ Future<void> memberpopuFunction(int value,Member model)async{
+  final response=await _infromationRepository.changeGroupUserStatuse(status:value.toString(),role:model.role??"", groupid: groupId,userId: profilledataModel.value.id);
+  print("data.data1${response.data1}");
+if(response.data1){
+
+}else{
+
+}
+
+
+
   }
 
   void pickFromCamera({bool isCrop = true}) async {

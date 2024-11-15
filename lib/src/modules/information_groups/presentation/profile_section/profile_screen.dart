@@ -239,7 +239,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: 5.h,
                             ),
 
-                            CustomArrowTextbutton(
+                            if(controller.profilledataModel.value.isAdmin==true)    CustomArrowTextbutton(
                               buttonName: "Add Banners",
                               onTap: () {
                                 Get.toNamed(BannersScreen.routeName,
@@ -273,9 +273,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   SizedBox(
                                     height: 5.h,
                                   ),
+                            if(controller.profilledataModel.value.isAdmin==true)
                                   TextButton.icon(
                                     onPressed: () {
-                                      Get.toNamed(AddMembersScreen.routeName,arguments: {"group_id":controller.groupId});
+                                      Get.toNamed(AddMembersScreen.routeName,
+                                          arguments: {
+                                            "group_id": controller.groupId
+                                          })?.then((value) {
+                                    controller.getGroupInfoDetails(controller.groupId);
+                                  });
                                     },
                                     label: blusHeading("Add Members"),
                                     icon: const Icon(
@@ -288,51 +294,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       padding: EdgeInsets.zero,
                                       physics: const ScrollPhysics(),
                                       itemBuilder: (context, index) => ListTile(
-                                            leading: circle_image(
-                                              controller.profilledataModel.value
-                                                      .profileImage ??
-                                                  "",
-                                              onTap: () {},
-                                            ),
-                                            title: Text(
-                                              controller.profilledataModel.value
-                                                      .members?[index].name ??
-                                                  "",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            subtitle: SizedBox(
-                                                width: 400.w,
-                                                child: Text(
-                                                  controller
-                                                          .profilledataModel
-                                                          .value
-                                                          .members?[index]
-                                                          .about ??
-                                                      "",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                )),
-                                            trailing: Text(
-                                              controller
+                                          leading: circle_image(
+                                            controller.profilledataModel.value
+                                                    .members?[index].image ??
+                                                "",
+                                            onTap: (details) {},
+                                          ),
+                                          title: Text(
+                                            controller.profilledataModel.value
+                                                    .members?[index].name ??
+                                                "",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          subtitle: SizedBox(
+                                              width: 400.w,
+                                              child: Text(
+                                                controller
+                                                        .profilledataModel
+                                                        .value
+                                                        .members?[index]
+                                                        .about ??
+                                                    "",
+                                                overflow: TextOverflow.ellipsis,
+                                              )),
+                                          trailing:
+                                              controller.profilledataModel
+                                                              .value.isAdmin ==
+                                                          true
+                                                      ? CustomPopupmenu(
+                                                        iconWidget:  controller
                                                           .profilledataModel
                                                           .value
                                                           .members?[index]
                                                           .role ==
                                                       "1"
-                                                  ? "admin"
-                                                  : "",
-                                              style: TextStyle(
-                                                  color: Colors.orange,
-                                                  fontSize: 13.sp),
-                                            ),
-                                          ),
+                                                  ? Text(
+                                                      "admin",
+                                                      style: TextStyle(
+                                                          color: Colors.orange,
+                                                          fontSize: 13.sp),
+                                                    )
+                                                  :null,
+                                                        iconColr: AppColors.primary,
+                                                          onSelected: (value) {
+                                                     controller.memberpopuFunction(value,   controller
+                                                          .profilledataModel
+                                                          .value
+                                                          .members![index]);
+                                                          },
+                                                          itemList: [
+                                                              popupMenuModel(
+                                                                
+                                                                  name:
+                                                                      "Remove",
+                                                                  value: 1),
+                                                              popupMenuModel(
+                                                                  name: controller
+                                                                              .profilledataModel
+                                                                              .value
+                                                                              .members?[index]
+                                                                              .role ==
+                                                                          "1"
+                                                                      ? "Dismiss as admin"
+                                                                      : "Make group admin ",
+                                                                  value: 2),
+                                                            ])
+                                                      : Icon(Icons.more_vert)),
                                       separatorBuilder: (context, index) =>
                                           SizedBox(
                                             height: 5,
                                           ),
-                                      itemCount:
-                                          widget.model.members?.length ?? 0)
+                                      itemCount: controller.profilledataModel
+                                              .value.members?.length ??
+                                          0)
                                 ],
                               ),
                             )
@@ -365,6 +400,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+}
+
+void _showOptions(BuildContext context, Offset position, String memberName) {
+  showMenu(
+    context: context,
+    position: RelativeRect.fromLTRB(
+      position.dx,
+      position.dy,
+      MediaQuery.of(context).size.width - position.dx,
+      MediaQuery.of(context).size.height - position.dy,
+    ),
+    items: [
+      PopupMenuItem(
+        value: 'Make Admin',
+        child: Row(
+          children: [
+            Icon(Icons.admin_panel_settings, color: Colors.blue),
+            SizedBox(width: 10),
+            Text('Make Admin'),
+          ],
+        ),
+      ),
+      PopupMenuItem(
+        value: 'Remove Member',
+        child: Row(
+          children: [
+            Icon(Icons.delete, color: Colors.red),
+            SizedBox(width: 10),
+            Text('Remove Member'),
+          ],
+        ),
+      ),
+    ],
+  ).then((value) {
+    if (value == 'Make Admin') {
+      // controller.makeAdmin(memberName);
+    } else if (value == 'Remove Member') {}
+  });
 }
 
 class BannersImageView extends StatelessWidget {

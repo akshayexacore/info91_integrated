@@ -16,11 +16,14 @@ class AddmemberController extends GetxController {
   @override
   void onInit() {
     if (Get.arguments != null) {
-      selectedGroupId = Get.arguments['group_id'] ?? '';
-    } else {
-      debugPrint('No group data found in Get.arguments');
+      if (Get.arguments['group_id'] != selectedGroupId) {
+        selectedGroupId = Get.arguments['group_id'] ?? '';
+        fetchInfo91Contacts();
+      } else {
+        debugPrint('No group data found in Get.arguments');
+      }
     }
-    fetchInfo91Contacts();
+
     super.onInit();
   }
 
@@ -72,9 +75,14 @@ class AddmemberController extends GetxController {
       final response = await _infromationRepository.addToGroup(selectedGroupId,
           selectedContacts.map((e) => e.userId ?? "").toList());
       if (response.data1) {
-      } else {}
+           Get.back();
+        //  Get.snackbar("Success", response.data2);
+      
+      } else {
+        Get.snackbar("error", response.data2);
+      }
     } catch (e) {
-      print('Error fetching contacts: $e');
+   
     }
   }
 }

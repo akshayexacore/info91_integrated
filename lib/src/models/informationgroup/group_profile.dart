@@ -76,7 +76,7 @@ class GroupProfileModel {
 
   factory GroupProfileModel.fromJson(Map<String, dynamic> json) {
     return GroupProfileModel(
-      id: json['id'] as String?,
+      id: json['user_id'] as String?,
       isAdmin: json['is_admin'] as bool?,
       groupName: json['group_name'] as String?,
       groupTableName: json['group_table_name'] as String?,
@@ -247,6 +247,7 @@ class Member {
   final String? name;
   final int? id;
   final String? about;
+   final String? image;
 
   Member({
     this.userId,
@@ -255,7 +256,7 @@ class Member {
     this.phoneNumber,
     this.name,
     this.about,
-    this.id,
+    this.id,this.image,
   });
 
   factory Member.fromJson(Map<String, dynamic> json) {
@@ -267,6 +268,7 @@ class Member {
       name: json['name'] as String?,
       id: json['id'] as int?,
       about: json["about"] as String?,
+      image: json["image"] as String?
     );
   }
 
@@ -277,7 +279,7 @@ class Member {
     String? phoneNumber,
     String? name,
     int? id,
-    String? about,
+    String? about,String? image
   }) {
     return Member(
       userId: userId ?? this.userId,
@@ -287,6 +289,8 @@ class Member {
       name: name ?? this.name,
       id: id ?? this.id,
       about: about ?? this.about,
+      image: about ?? this.image,
+     
     );
   }  Map<String, dynamic> toJson() {
     return {
@@ -297,6 +301,7 @@ class Member {
       'name': name,
       'id': id,
       'about': about,
+      'image': image,
     };
   }
 }
