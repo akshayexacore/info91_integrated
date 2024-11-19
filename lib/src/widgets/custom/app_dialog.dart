@@ -94,13 +94,17 @@ class AppDialog {
     );
   }
 
-  static showToast(String message) {
+  static showToast(String message, {bool? isSucess}) {
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.black,
+      backgroundColor: isSucess == true
+          ? Colors.greenAccent
+          : isSucess == true
+              ? Colors.red
+              : Colors.black,
       textColor: Colors.white,
       fontSize: 14.0,
     );

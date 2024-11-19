@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:info91/src/configs/api_constants.dart';
 import 'package:info91/src/configs/variables.dart';
-import 'package:info91/src/models/base_response.dart';
+
 import 'package:info91/src/models/informationgroup/category_model.dart';
 import 'package:info91/src/models/informationgroup/chat_model.dart';
 import 'package:info91/src/models/informationgroup/contact_model.dart';
@@ -15,6 +14,7 @@ import 'package:info91/src/resources/shared_preferences_data_provider.dart';
 import 'package:info91/src/resources/user_profile_repository.dart';
 import 'package:info91/src/utils/api_base_helper.dart';
 import 'package:info91/src/utils/response-utils.dart';
+import 'package:info91/src/widgets/custom/app_dialog.dart';
 
 class InfromationRepository {
   final ApiBaseHelper _api = ApiBaseHelper();
@@ -69,7 +69,7 @@ class InfromationRepository {
       });
       return dataLIst;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -101,7 +101,7 @@ class InfromationRepository {
       });
       return dataLIst;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -409,15 +409,16 @@ class InfromationRepository {
     }
   }
 
-
-
-   Future<List<ContactAddGroupModel>> fetchInfo91Contacts(String groupId) async {
+  Future<List<ContactAddGroupModel>> fetchInfo91Contacts(String groupId) async {
     List<ContactAddGroupModel> dataLIst = [];
-    final response =
-        await _api.post(ApiConstants.contactSyncApi , headers: {},   body: {
-          "group_id": groupId,
-          "contacts": Variables.userContact,
-        },);
+    final response = await _api.post(
+      ApiConstants.contactSyncApi,
+      headers: {},
+      body: {
+        "group_id": groupId,
+        "contacts": Variables.userContact,
+      },
+    );
     try {
       (response["data"] as List).forEach((element) {
         dataLIst.add(ContactAddGroupModel.fromJson(element));
@@ -427,9 +428,10 @@ class InfromationRepository {
       throw e;
     }
   }
-    Future<DoubleResponse> addToGroup(
-   String groupId,
-    List< String> userId,
+
+  Future<DoubleResponse> addToGroup(
+    String groupId,
+    List<String> userId,
   ) async {
     try {
       final response = await _api.post(
@@ -450,22 +452,33 @@ class InfromationRepository {
       rethrow;
     }
   }
-   Future<DoubleResponse> changeGroupUserStatuse({required String status,required String groupid,required userId,required String role }) async {
-  try{final response = await _api.post(
-      ApiConstants.changeGroupUserStatusApi,
-      body: {"group_id": groupid,"user_id":userId,"role":role,"status":status},
-      headers: {},
-    
-    );
-    debugPrint("response is here$response");
 
-    if (response['statusCode'] == 200) {
-      return DoubleResponse(true, GroupProfileModel.fromJson(response["data"]));
-    } else {
-      return DoubleResponse(false, response['message']);
+  Future<DoubleResponse> changeGroupUserStatuse(
+      {required String status,
+      required String groupid,
+      required String userId,
+      required String role}) async {
+    try {
+      debugPrint('the userid is here$userId');
+      final response = await _api.post(
+        ApiConstants.changeGroupUserStatusApi,
+        body: {
+          "group_id": groupid,
+          "user_id": userId,
+          "role": role,
+          "status": status
+        },
+        headers: {},
+      );
+      debugPrint("response is here$response");
+
+      if (response['statusCode'] == 200) {
+        return DoubleResponse(true, response['message']);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      rethrow;
     }
-  }catch(e){
-rethrow;
-  }  
-}
+  }
 }

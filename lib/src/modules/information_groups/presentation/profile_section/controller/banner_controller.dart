@@ -87,12 +87,13 @@ class BannerController extends GetxController {
           );
           if (response.data1) {
             Get.back();
-            // AppDialog.showSnackBar('Success ', "Banner created successfully");
+            AppDialog.showToast('Banner created successfully',
+                isSucess: response.data1);
 
             isBusy.value = false;
           } else {
             isBusy.value = false;
-            AppDialog.showSnackBar('Failed ', response.data2);
+            AppDialog.showToast(response.data2, isSucess: response.data1);
           }
         }
       } else {
@@ -109,12 +110,10 @@ class BannerController extends GetxController {
       );
 
       if (response.data1) {
-         Get.back();
+        Get.back();
         // AppDialog.showSnackBar('Success', "Banner removed successfully");
         // Future.delayed(Duration(milliseconds: 500), () {
-         
-           
-          
+
         // });
       } else {
         AppDialog.showSnackBar('Failed ', response.data2);
@@ -130,7 +129,8 @@ class BannerController extends GetxController {
         isBusy.value = true;
         final response = await _infromationRepository.upDateBanner(
           file: filePath.value,
-          groupId: groupId,bannerId:data.id??"",
+          groupId: groupId,
+          bannerId: data.id ?? "",
           title: titleController.text.trim(),
           description: descriptionController.text.trim(),
         );

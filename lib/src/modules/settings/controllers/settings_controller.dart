@@ -12,7 +12,7 @@ class SettingsController extends GetxController {
 
   final name = 'Basil'.obs;
 
-  final about = 'Hey there! I am using Info91'.obs;
+  final about = 'Hey there! I am using Info91s'.obs;
 
   void onLanguagePressed() {
     showModalBottomSheet(

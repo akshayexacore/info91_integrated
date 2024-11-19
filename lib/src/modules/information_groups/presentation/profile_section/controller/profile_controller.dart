@@ -16,7 +16,6 @@ class InfoProfileController extends GetxController {
   final _infromationRepository = InfromationRepository();
 
   var selectedFile = ''.obs;
-  
 
   Future<void> uploadFile() async {
     final response =
@@ -54,17 +53,39 @@ class InfoProfileController extends GetxController {
     }
   }
 
- Future<void> memberpopuFunction(int value,Member model)async{
-  final response=await _infromationRepository.changeGroupUserStatuse(status:value.toString(),role:model.role??"", groupid: groupId,userId: profilledataModel.value.id);
-  print("data.data1${response.data1}");
-if(response.data1){
+  removeMember(int value, Member model) {
+    AppDialog.showDialog(
+      title: 'Remove ${model.name} from ${profilledataModel.value.groupName}?',
+      primaryText: 'Delete ',
+      tertiaryText: "cancel",
+      arrangeButtonVertically: true,
+      onPrimaryPressed: () {
+        memberpopuFunction(value, model);
+        Get.back();
+      },
+      onSecondaryPressed: () {
+        // _deleteSelected();
+        Get.back();
+      },
+      onTertiaryPressed: () {
+        Get.back();
+      },
+    );
+  }
 
-}else{
-
-}
-
-
-
+  Future<void> memberpopuFunction(int value, Member model) async {
+    final response = await _infromationRepository.changeGroupUserStatuse(
+        status: value.toString(),
+        role: model.role ?? "",
+        groupid: groupId,
+        userId: model.userId ?? "");
+    print("data.data1${response.data1}");
+    if (response.data1) {
+      getGroupInfoDetails(groupId);
+    } else {
+      // Get.back();
+      AppDialog.showToast(response.data2, isSucess: response.data1);
+    }
   }
 
   void pickFromCamera({bool isCrop = true}) async {
@@ -90,7 +111,7 @@ if(response.data1){
       if (isCrop) {
         cropImage(photo.path);
       } else {
-        debugPrint("isCrop${photo?.path??""}");
+        debugPrint("isCrop${photo?.path ?? ""}");
         selectedFile(photo.path);
         uploadCoverPic();
       }

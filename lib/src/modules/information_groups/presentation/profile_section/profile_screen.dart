@@ -239,25 +239,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: 5.h,
                             ),
 
-                            if(controller.profilledataModel.value.isAdmin==true)    CustomArrowTextbutton(
-                              buttonName: "Add Banners",
-                              onTap: () {
-                                Get.toNamed(BannersScreen.routeName,
-                                    arguments: {
-                                      "group_id": widget.selectedGroupId,
-                                      "isUpdate": false
-                                    })?.then((value) {
-                                  controller.getGroupInfoDetails(
-                                      widget.selectedGroupId);
-                                });
+                            if (controller.profilledataModel.value.isAdmin ==
+                                true)
+                              CustomArrowTextbutton(
+                                buttonName: "Add Banners",
+                                onTap: () {
+                                  Get.toNamed(BannersScreen.routeName,
+                                      arguments: {
+                                        "group_id": widget.selectedGroupId,
+                                        "isUpdate": false
+                                      })?.then((value) {
+                                    controller.getGroupInfoDetails(
+                                        widget.selectedGroupId);
+                                  });
 
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //       builder: (context) => GroupInfo(),
-                                //     ));
-                              },
-                            ),
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //       builder: (context) => GroupInfo(),
+                                  //     ));
+                                },
+                              ),
                             SizedBox(
                               height: 15.h,
                             ),
@@ -273,22 +275,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   SizedBox(
                                     height: 5.h,
                                   ),
-                            if(controller.profilledataModel.value.isAdmin==true)
-                                  TextButton.icon(
-                                    onPressed: () {
-                                      Get.toNamed(AddMembersScreen.routeName,
-                                          arguments: {
-                                            "group_id": controller.groupId
-                                          })?.then((value) {
-                                    controller.getGroupInfoDetails(controller.groupId);
-                                  });
-                                    },
-                                    label: blusHeading("Add Members"),
-                                    icon: const Icon(
-                                      Icons.add,
-                                      color: AppColors.secondary,
+                                  if (controller
+                                          .profilledataModel.value.isAdmin ==
+                                      true)
+                                    TextButton.icon(
+                                      onPressed: () {
+                                        Get.toNamed(AddMembersScreen.routeName,
+                                            arguments: {
+                                              "group_id": controller.groupId
+                                            })?.then((value) {
+                                          controller.getGroupInfoDetails(
+                                              controller.groupId);
+                                        });
+                                      },
+                                      label: blusHeading("Add Members"),
+                                      icon: const Icon(
+                                        Icons.add,
+                                        color: AppColors.secondary,
+                                      ),
                                     ),
-                                  ),
                                   ListView.separated(
                                       shrinkWrap: true,
                                       padding: EdgeInsets.zero,
@@ -318,51 +323,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     "",
                                                 overflow: TextOverflow.ellipsis,
                                               )),
-                                          trailing:
-                                              controller.profilledataModel
-                                                              .value.isAdmin ==
-                                                          true
-                                                      ? CustomPopupmenu(
-                                                        iconWidget:  controller
-                                                          .profilledataModel
-                                                          .value
-                                                          .members?[index]
-                                                          .role ==
-                                                      "1"
-                                                  ? Text(
-                                                      "admin",
-                                                      style: TextStyle(
-                                                          color: Colors.orange,
-                                                          fontSize: 13.sp),
-                                                    )
-                                                  :null,
-                                                        iconColr: AppColors.primary,
-                                                          onSelected: (value) {
-                                                     controller.memberpopuFunction(value,   controller
-                                                          .profilledataModel
-                                                          .value
-                                                          .members![index]);
-                                                          },
-                                                          itemList: [
-                                                              popupMenuModel(
-                                                                
-                                                                  name:
-                                                                      "Remove",
-                                                                  value: 1),
-                                                              popupMenuModel(
-                                                                  name: controller
-                                                                              .profilledataModel
-                                                                              .value
-                                                                              .members?[index]
-                                                                              .role ==
-                                                                          "1"
-                                                                      ? "Dismiss as admin"
-                                                                      : "Make group admin ",
-                                                                  value: 2),
-                                                            ])
-                                                      : Icon(Icons.more_vert)),
+                                          trailing: controller.profilledataModel
+                                                      .value.isAdmin ==
+                                                  true
+                                              ? CustomPopupmenu(
+                                                  iconWidget: controller
+                                                              .profilledataModel
+                                                              .value
+                                                              .members?[index]
+                                                              .role ==
+                                                          "1"
+                                                      ? Text(
+                                                          "admin",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.orange,
+                                                              fontSize: 13.sp),
+                                                        )
+                                                      : null,
+                                                  iconColr: AppColors.primary,
+                                                  onSelected: (value) {
+                                                    value == 0
+                                                        ? controller.removeMember(
+                                                            value,
+                                                            controller
+                                                                    .profilledataModel
+                                                                    .value
+                                                                    .members![
+                                                                index])
+                                                        : controller.memberpopuFunction(
+                                                            value,
+                                                            controller
+                                                                .profilledataModel
+                                                                .value
+                                                                .members![index]);
+                                                  },
+                                                  itemList: [
+                                                      popupMenuModel(
+                                                          name: "Remove",
+                                                          value: 0),
+                                                      popupMenuModel(
+                                                          name: controller
+                                                                      .profilledataModel
+                                                                      .value
+                                                                      .members?[
+                                                                          index]
+                                                                      .role ==
+                                                                  "1"
+                                                              ? "Dismiss as admin"
+                                                              : "Make group admin ",
+                                                          value: 1),
+                                                    ])
+                                              : const Icon(Icons.more_vert)),
                                       separatorBuilder: (context, index) =>
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 5,
                                           ),
                                       itemCount: controller.profilledataModel

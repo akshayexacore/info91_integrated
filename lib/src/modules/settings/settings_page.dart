@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/profile/controllers/profile_controller.dart';
 import 'package:info91/src/modules/profile/profile_page.dart';
 import 'package:info91/src/modules/settings/controllers/settings_controller.dart';
 import 'package:info91/src/widgets/custom/app_app_bar.dart';
@@ -14,6 +15,7 @@ class SettingsPage extends StatelessWidget {
   static const routeName = '/settings';
 
   final _controller = Get.find<SettingsController>();
+  final _profilecontroller = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +133,7 @@ class SettingsPage extends StatelessWidget {
             children: [
               Obx(() {
                 return AppCircleImage(
-                  image: _controller.profileImageUrl.value,
+                  image: _profilecontroller.user.value?.image ?? "",
                   radius: 37,
                 );
               }),
@@ -147,7 +149,7 @@ class SettingsPage extends StatelessWidget {
                     ),
                     Obx(() {
                       return Text(
-                        _controller.name.value,
+                        _profilecontroller.user.value?.name ?? "",
                         maxLines: 1,
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
@@ -157,7 +159,7 @@ class SettingsPage extends StatelessWidget {
                     }),
                     Obx(() {
                       return Text(
-                        _controller.about.value,
+                        _profilecontroller.user.value?.about ?? "",
                         maxLines: 1,
                         style: const TextStyle(
                           fontSize: 14,

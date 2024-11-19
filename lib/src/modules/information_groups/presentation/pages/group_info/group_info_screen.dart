@@ -25,20 +25,18 @@ class GroupInfo extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          
-            CustomAppBar(
+          Obx(() {
+            return CustomAppBar(
               appBarName: "Group Info",
               actionWidget: [
-              customTextButton("Save",
-                  onTap: (){
+                if (controller.dataModel.value.isAdmin == true)
+                  customTextButton("Save", onTap: () {
                     print("ontap");
                     controller.updateInfoData();
-                  }
-                  
-                ),
+                  }),
               ],
-          
-          ),
+            );
+          }),
           Expanded(
             child: Obx(() {
               return SingleChildScrollView(
@@ -64,7 +62,8 @@ class GroupInfo extends StatelessWidget {
                                 controller.alterNativeMobileNumberController,
                             keyType: TextInputType.phone,
                             title: "Alternative Number",
-                          ),commonGap,
+                          ),
+                          commonGap,
                           NewInputCard(
                             controller: controller.whatsappNumberController,
                             title: "Whatsapp Number",
@@ -96,7 +95,8 @@ class GroupInfo extends StatelessWidget {
                           ),
                           commonGap,
                           NewInputCard(
-                            controller: controller.googleMapControllerController,
+                            controller:
+                                controller.googleMapControllerController,
                             title: "Google map link",
                           ),
                         ] else ...[
@@ -105,8 +105,10 @@ class GroupInfo extends StatelessWidget {
                           commonGap,
                           groupInfoDoubleText("Mobile Number",
                               controller.mobileNumberController.text),
-                          groupInfoDoubleText("Alternative Number",
-                              controller.alterNativeMobileNumberController.text),
+                          groupInfoDoubleText(
+                              "Alternative Number",
+                              controller
+                                  .alterNativeMobileNumberController.text),
                           groupInfoDoubleText("Whatsapp Number",
                               controller.whatsappNumberController.text),
                           blusHeading("Timings and Holidays"),

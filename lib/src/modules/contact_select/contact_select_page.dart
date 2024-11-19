@@ -70,11 +70,11 @@ class ContactSelectPage extends StatelessWidget {
                         icon: 'ic_archive.svg',
                         onPressed: () {},
                       ),
-                      AppPopupMenuItem(
-                        title: 'Broadcast list',
-                        icon: 'ic_broadcast_list.svg',
-                        onPressed: () {},
-                      ),
+                      // AppPopupMenuItem(
+                      //   title: 'Broadcast list',
+                      //   icon: 'ic_broadcast_list.svg',
+                      //   onPressed: () {},
+                      // ),
                       AppPopupMenuItem(
                         title: 'Settings',
                         icon: 'ic_settings_small.svg',
