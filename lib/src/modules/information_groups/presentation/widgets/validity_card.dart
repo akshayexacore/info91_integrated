@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:info91/src/configs/app_styles.dart';
 
 class ValidityCard extends StatelessWidget {
   final String amount;
@@ -21,7 +22,7 @@ class ValidityCard extends StatelessWidget {
         onChange();
       },
       child: Container(
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -30,9 +31,9 @@ class ValidityCard extends StatelessWidget {
                 blurRadius: 1, // Blur radius
                 offset: Offset(0, 0.7), // Shadow position
               ),
-            ],
-            border: Border.all(color: Colors.grey.withOpacity(.5), width: .5),
-            color: Colors.white),
+            ],borderRadius: BorderRadius.circular(12),
+            // border: Border.all(color: Colors.grey.withOpacity(.5), width: .5,radius:),
+            color:isSelected?AppColors.primary.withOpacity(.1): Colors.white),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -211,27 +211,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                 icon: Icon(Icons.copy),
                                 color: AppColors.white,
                               ),
-                            CustomPopupmenu(
-                                onSelected: (value) {
-                                  if (value == 1) {}
-                                  if (value == 2) {
-                                    // chatController.messages.removeWhere(
-                                    //     (item) => item!.isSelcted == true);
-                                  }
-                                },
-                                itemList: [
-                                  popupMenuModel(
-                                      name: chatController
-                                                  .messageSelectedcount() ==
-                                              1
-                                          ? "Copy"
-                                          : "Delete",
-                                      value: chatController
-                                                  .messageSelectedcount() ==
-                                              1
-                                          ? 1
-                                          : 2)
-                                ])
+                       
                           ]
                         ],
                       )

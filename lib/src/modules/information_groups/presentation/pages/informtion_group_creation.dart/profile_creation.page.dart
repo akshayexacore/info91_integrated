@@ -14,10 +14,24 @@ import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 import 'package:info91/src/widgets/custom/custom_divider.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
 
-class InformGroupCreationScreen extends StatelessWidget {
-  InformGroupCreationScreen({super.key});
+class InformGroupCreationScreen extends StatefulWidget {
+ const InformGroupCreationScreen({super.key});
+
+  @override
+  State<InformGroupCreationScreen> createState() => _InformGroupCreationScreenState();
+}
+
+class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
   final GroupCreationController _controller =
       Get.put(GroupCreationController(),  );
+      @override
+      void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller.  clear();
+   _controller.   getFirstCategory();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -66,7 +80,8 @@ class InformGroupCreationScreen extends StatelessWidget {
                         
                       Obx((){
                         return CustomDropDownWidget<String>(
-                          title: "Type",suffixIconData: _controller.typeController.value.isEmpty?Icons.arrow_drop_down:Icons.clear,
+                          title: "Type",
+                          suffixIconData: _controller.typeController.value.isEmpty?Icons.arrow_drop_down:Icons.arrow_drop_down,
                           getItemTAble: (ak) => ak,
                           onChanged: (va) {
                             _controller.typeController.value = va ?? "";
@@ -205,17 +220,17 @@ class InformGroupCreationScreen extends StatelessWidget {
                                     height: 15.h,
                                   ),
                                   Obx(() {
-                                    return _controller.planId != 0
+                                    return _controller.selectedPlanModel.value.id!= 0
                                         ? CustomSpcaeBetweenText(
                                             leftText: _controller
-                                                    .selectedPlanModel.planName ??
+                                                    .selectedPlanModel.value.planName ??
                                                 "",
                                             rightText: ((_controller
-                                                            .selectedPlanModel
-                                                            .tax ??
+                                                            .selectedPlanModel.
+                                                           value .tax ??
                                                         0) +
                                                     (_controller.selectedPlanModel
-                                                            .amount ??
+                                                           .value .amount ??
                                                         0))
                                                 .toStringAsFixed(2),
                                           )

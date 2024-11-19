@@ -72,6 +72,7 @@ class User {
         this.deletedAt = ''});
 
   User.fromJson(Map<String, dynamic> json) {
+    print("json['image']${json['image']}");
     id = json['user_id'] ?? 0;
     name = json['name'] ?? '';
     phoneNumber = json['phone_number'] ?? '';

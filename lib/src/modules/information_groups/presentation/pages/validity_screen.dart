@@ -6,8 +6,10 @@ import 'package:info91/src/modules/information_groups/presentation/pages/informt
 import 'package:info91/src/modules/information_groups/presentation/widgets/custome_space_between_text.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/validity_card.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
+import 'package:info91/src/widgets/tiny/app_button.dart';
 
 class ValidityScreen extends StatefulWidget {
+  
   ValidityScreen({super.key});
 
   @override
@@ -21,7 +23,7 @@ class _ValidityScreenState extends State<ValidityScreen> {
   
   // @override
   // void initState() {
-  //  _controller.planId.value=0;
+  //  _controller.validityClear;
   //   super.initState();
   // }
   @override
@@ -32,25 +34,16 @@ class _ValidityScreenState extends State<ValidityScreen> {
           CustomAppBar(
             imageUrl: "",
             actionWidget: [
-              PopupMenuButton<int>(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                offset: Offset(0, 40.h),
-                onSelected: (value) {},
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 1,
-                    child: Text('Create Group'),
-                  ),
-                ],
-                icon: const Icon(
-                  Icons.more_vert,
-                  color: Colors.white,
-                ),
-              ),
+              customTextButton("Apply", onTap: (){
+                debugPrint("_controller.getSelectedPalnIndex()${_controller.getSelectedPalnIndex()}");
+                _controller.setPlanModel(_controller.planList[_controller.getSelectedPalnIndex()]);
+                    debugPrint("_controller.getSelectedPalnIndex()${_controller.selectedPlanModel
+}");
+                Get.back();
+
+              }),
             ],
-            appBarName: "Group Profile",
+            appBarName: "Validity Plans",
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -85,7 +78,7 @@ class _ValidityScreenState extends State<ValidityScreen> {
                               onChange:(){
                                
                                 _controller.planId.value=_controller.planList[index].id??0;
-                                _controller.setPlanModel(_controller.planList[index]);
+                                // _controller.setPlanModel(_controller.planList[index]);
                               },
                               amount: _controller.planList[index].amount.toString(),
                               planName:
@@ -95,32 +88,32 @@ class _ValidityScreenState extends State<ValidityScreen> {
                           );
                         },
                       );},
-                    ),Obx((){return _controller.planId!=0? Column(children: [ SizedBox(
+                    ),Obx((){return _controller.planId!=0  ? Column(children: [ SizedBox(
                       height: 20.h,
                     ),
                      CustomSpcaeBetweenText(
                       leftText: "Paln name",
-                      rightText: _controller.selectedPlanModel.planName??"",
+                      rightText: _controller.planList[_controller.getSelectedPalnIndex()]. planName??"",
                     ),
                      CustomSpcaeBetweenText(
                       leftText: "Total Members",
-                      rightText: _controller.selectedPlanModel.totalMembers.toString()??""
+                      rightText: _controller.planList[_controller.getSelectedPalnIndex()].totalMembers.toString()??""
                     ),
                      CustomSpcaeBetweenText(
                       leftText: "Validity",
-                      rightText: _controller.selectedPlanModel.duration.toString()??"",
+                      rightText: _controller.planList[_controller.getSelectedPalnIndex()].duration.toString()??"",
                     ),
                      CustomSpcaeBetweenText(
                       leftText: "Amount",
-                      rightText: _controller.selectedPlanModel.amount.toString()??"",
+                      rightText: _controller.planList[_controller.getSelectedPalnIndex()].amount.toString()??"",
                     ),
                      CustomSpcaeBetweenText(
                       leftText: "Tax",
-                      rightText: _controller.selectedPlanModel.tax.toString()??"",
+                      rightText: _controller.planList[_controller.getSelectedPalnIndex()].tax.toString()??"",
                     ),
                     CustomSpcaeBetweenText(
                       leftText: "Total Amount",
-                      rightText:((_controller.selectedPlanModel.tax ?? 0) + (_controller.selectedPlanModel.amount ?? 0)).toStringAsFixed(2)
+                      rightText:((_controller.planList[_controller.getSelectedPalnIndex()].tax ?? 0) + (_controller.planList[_controller.getSelectedPalnIndex()].amount ?? 0)).toStringAsFixed(2)
 ,
                     ),
                     

@@ -1,19 +1,22 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/models/informationgroup/information_group.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_avatarwithimageicon.dart';
 import 'package:info91/src/widgets/custom/add_divider.dart';
+import 'package:info91/src/widgets/custom/app_dialog.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ChatListItem extends StatelessWidget {
   final InfoGroupChatListModel chat;
   final Function onTap;
+  final bool isSearch;
 
-  const ChatListItem({super.key, required this.chat, required this.onTap});
+  const ChatListItem({super.key, required this.chat, required this.onTap,this.isSearch=false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +29,16 @@ class ChatListItem extends StatelessWidget {
               ? CachedNetworkImage(
                   imageUrl: chat.profileImage!,
                   placeholder: (context, url) =>SizedBox(height :10,width:10,child: const  CircularProgressIndicator()),
-                  errorWidget: (context, url, error) =>const Icon(
-                    Icons.group,
-                    size: 30.0,
-                    color: AppColors.black,
+                  errorWidget: (context, url, error) => Image.asset(
+                   "assets/images/defaultimg.png"
                   ),
                   fit: BoxFit.cover,
                   width: 50, // Match CircleAvatar's diameter
                   height: 50,
                 )
-              :const Icon(Icons.group, size: 30.0, color: AppColors.black),
+              :  Image.asset(
+                   "assets/images/defaultimg.png"
+                  ),
         ),
       ),
       title: Text(
@@ -58,7 +61,7 @@ class ChatListItem extends StatelessWidget {
             style: const TextStyle(color: Colors.black, fontSize: 12.0),
           ),
           const SizedBox(height: 5),
-          if (chat.unReadCount != null)
+          if(chat.groupAprovedFlag=="approved"||isSearch==true)...[ if (chat.unReadCount != null)
             CircleAvatar(
               radius: 13,
               backgroundColor: AppColors.primaryAccent,
@@ -66,11 +69,18 @@ class ChatListItem extends StatelessWidget {
                 chat.unReadCount ?? "",
                 style: const TextStyle(color: Colors.white),
               ),
-            ),
+            ),]else...[Text(chat.groupAprovedFlag=="rejected"?"Rejected":"Pending",style: GoogleFonts.poppins(color: chat.groupAprovedFlag=="rejected"?Colors.red:AppColors.secondary),)]
+         
         ],
       ),
       onTap: () {
-        onTap();
+        if(chat.groupAprovedFlag=="approved" ||isSearch==true){
+         onTap();
+        }else{
+         AppDialog.showToast(chat.groupAprovedFlag=="rejected"?"Approval rejected":"Approval pending", isSucess: false);
+        }
+
+        
       },
     );
   }

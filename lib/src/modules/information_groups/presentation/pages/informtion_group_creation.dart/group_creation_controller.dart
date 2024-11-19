@@ -21,7 +21,7 @@ class GroupCreationController extends GetxController {
   var selectedCategory2 = Rxn<SecondCategory>();
   var selectedCategory3 = Rxn<ThirdCategoryModel>();
   var selectedItem = Rxn<SecondCategory>();
-  PlanModel selectedPlanModel = PlanModel();
+ var selectedPlanModel = Rx<PlanModel>(PlanModel());
   var planId = 0.obs;
   var isBusy = false.obs;
 
@@ -31,8 +31,9 @@ class GroupCreationController extends GetxController {
   @override
   void onInit() {
    debugPrint("After getFirstCategory calssssl${selectedItem.value?.secondCategoryName}");
+     clear();
     getFirstCategory();
-    clear();
+  
   
     super.onInit();
   }
@@ -47,7 +48,7 @@ void onClose() {
   super.onClose(); // Always call super.onClose() last
 }
   setPlanModel(PlanModel model) {
-    selectedPlanModel = model;
+    selectedPlanModel.value = model;
   }
   clear(){
     groupNameController.value.clear();
@@ -59,12 +60,14 @@ void onClose() {
  firstCategoryList .clear();
    secondCatList.clear();
    thirdCatList .clear();
-   planList.clear();
+
    selectedCategory2.value=SecondCategory();
  selectedCategory3.value = ThirdCategoryModel();
    selectedItem .value= SecondCategory();
- selectedPlanModel= PlanModel();
+//  selectedPlanModel= PlanModel();
+
   }
+
 
   void createGroupFun() async {
     isBusy(true);
@@ -80,6 +83,7 @@ void onClose() {
     try {
       final response = await _infromationRepository.createGroupFun(model);
       if (response.data1) {
+        Get.back();
         AppDialog.showSnackBar('Success', '${response.data2}');
       } else {
         AppDialog.showSnackBar('Failure', '${response.data2}');
@@ -104,6 +108,9 @@ void onClose() {
         createGroupFun();
       }
     }
+  }int getSelectedPalnIndex(){
+    int? index = planList.indexWhere((plan) => plan.id == planId.value);
+return index;
   }
 
   categoryOneSelection(va) {
@@ -137,9 +144,13 @@ void onClose() {
   }
 
   getFirstCategory() async {
-    final response = await _infromationRepository.getFirstCategory();
-    firstCategoryList.value = response;
-    print("categoryList$firstCategoryList");
+      debugPrint("calling initially");
+
+try {   final response = await _infromationRepository.getFirstCategory();
+    firstCategoryList.value = response;}catch(e){
+      debugPrint("the error is $e");
+    }
+  
   }
 
   getSecondCategory(String id) async {

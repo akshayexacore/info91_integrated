@@ -172,13 +172,15 @@ class InfoGroupChatListModel {
   final bool? joinedGroupFlag;
   final String? lastmessage;
   final String? unReadCount;
+  final String? groupAprovedFlag;
 
   InfoGroupChatListModel({
     this.id,
     this.groupName,
     this.groupTableName,
     this.groupusersTableName,
-    this.type,this.lastmessage,
+    this.type,
+    this.lastmessage,
     this.purpose,
     this.category1,
     this.category2,
@@ -188,11 +190,13 @@ class InfoGroupChatListModel {
     this.lastSender,
     this.lastSendTime,
     this.memberCount,
+    this.groupAprovedFlag,
     this.planId,
     this.expireDate,
     this.joinedGroupFlag,
     this.createdBy,
-    this.mobileNumber,this.unReadCount,
+    this.mobileNumber,
+    this.unReadCount,
     this.alternativeNumber,
     this.whatsappNumber,
     this.timings,
@@ -239,6 +243,7 @@ class InfoGroupChatListModel {
       websiteLink: json['website_link'],
       youtubeLink: json['youtube_link'],
       googlemapLink: json['googlemap_link'],
+      groupAprovedFlag: json['group_approved_flag'],
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
           : null,
@@ -254,8 +259,8 @@ class InfoGroupChatListModel {
   Map<String, dynamic> toJson() {
     return {
       'group_id': id,
-      "unread_count":unReadCount,
-      "last_message":lastmessage,
+      "unread_count": unReadCount,
+      "last_message": lastmessage,
       'group_name': groupName,
       'group_table_name': groupTableName,
       'groupusers_table_name': groupusersTableName,
@@ -286,6 +291,7 @@ class InfoGroupChatListModel {
       'updated_at': updatedAt?.toIso8601String(),
       'status': status,
       'owngroup_flag': owngroupFlag,
+      "group_approved_flag": groupAprovedFlag,
     };
   }
 
@@ -321,11 +327,14 @@ class InfoGroupChatListModel {
       DateTime? updatedAt,
       String? status,
       bool? owngroupFlag,
-      bool? joinedflad,String? unReadCount,String? latMessage }) {
+      bool? joinedflad,
+      String? unReadCount,
+      String? latMessage,String? groupAprovedFlag}) {
     return InfoGroupChatListModel(
       id: id ?? this.id,
-      groupName: groupName ?? this.groupName,unReadCount: unReadCount??this.unReadCount,
-      lastmessage: latMessage??this.lastmessage,
+      groupName: groupName ?? this.groupName,
+      unReadCount: unReadCount ?? this.unReadCount,
+      lastmessage: latMessage ?? this.lastmessage,
       groupTableName: groupTableName ?? this.groupTableName,
       groupusersTableName: groupusersTableName ?? this.groupusersTableName,
       type: type ?? this.type,
@@ -354,6 +363,7 @@ class InfoGroupChatListModel {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       status: status ?? this.status,
+      groupAprovedFlag: groupAprovedFlag??this.groupAprovedFlag,
       owngroupFlag: owngroupFlag ?? this.owngroupFlag,
     );
   }

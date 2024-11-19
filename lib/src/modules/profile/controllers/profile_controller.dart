@@ -34,6 +34,7 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     pr = ProgressDialog(Get.context!, isDismissible: false);
+   
     getUser();
     super.onInit();
   }
@@ -46,7 +47,7 @@ class ProfileController extends GetxController {
         user(response.user);
         textControllerName.text = user.value?.name ?? '';
         textControllerAbout.text = user.value?.about ?? '';
-        textControllerPincode.text=user.value?.pincode??"";
+        textControllerPincode.text=user.value?.pincode??"";debugPrint("response.user?.image${response.user?.image}ddd$response");
         selectedFile(response.user?.image);
       }
     } catch (_) {

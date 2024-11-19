@@ -76,7 +76,7 @@ class InfoProfileController extends GetxController {
   Future<void> memberpopuFunction(int value, Member model) async {
     final response = await _infromationRepository.changeGroupUserStatuse(
         status: value.toString(),
-        role: model.role ?? "",
+        role: model.role=="0"?"1":"0" ,
         groupid: groupId,
         userId: model.userId ?? "");
     print("data.data1${response.data1}");

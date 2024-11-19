@@ -152,6 +152,7 @@ class Routes {
         page: () => SettingsPage(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => SettingsController());
+           Get.lazyPut(() => ProfileController());
         })),
     GetPage(
         name: ContactSelectPage.routeName,

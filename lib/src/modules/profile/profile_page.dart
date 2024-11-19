@@ -60,6 +60,7 @@ class ProfilePage extends StatelessWidget {
                           height: AppSpacings.xxLarge,
                         ),
                         Obx(() {
+                          print( " _controller.selectedFile.value${ _controller.selectedFile.value}");
                           return Stack(
                             children: [
                               CircleAvatar(

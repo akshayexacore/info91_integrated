@@ -49,7 +49,10 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => InformGroupCreationScreen(),
-                          ));
+                          )).then((value) {
+                                    controller.grtInfoGroupList(
+                                        );
+                                  });
                     }
                   },
                   itemList: [popupMenuModel(name: "Create group", value: 1)],
@@ -83,6 +86,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
                           itemCount: controller.searchGroupList.length,
                           itemBuilder: (context, index) => ChatListItem(
                             chat: controller.searchGroupList[index],
+                            isSearch: true,
                             onTap: () {
                               controller.publicTileOnTap(index);
                             },
