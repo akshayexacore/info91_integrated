@@ -46,7 +46,8 @@ class LoginController extends GetxController {
     });
     super.onInit();
   }
-    Future<void> requestSmsPermission() async {
+
+  Future<void> requestSmsPermission() async {
     var status = await Permission.sms.status;
     if (!status.isGranted) {
       await Permission.sms.request();
@@ -56,27 +57,27 @@ class LoginController extends GetxController {
   void verifyPhone() async {
     busy(true);
     try {
- await requestSmsPermission();
+      await requestSmsPermission();
       if (phone.value.isValid()) {
         final response = await _authRepository.sendOtp(
             phone.value.nsn, phone.value.countryCode);
 
         if (response.isSuccess) {
           busy(false);
-          if(response.exist==true){
-               await _authRepository
-              .saveAccessToken('${response.tokenType} ${response.token}');
-          await _authRepository.saveRefreshToken(response.token??"");
-          debugPrint("response.result${response.result["id"]}");
+          if (response.exist == true) {
+            await _authRepository
+                .saveAccessToken('${response.tokenType} ${response.token}');
+            await _authRepository.saveRefreshToken(response.token ?? "");
+            debugPrint("response.result${response.result["id"]}");
 
+            await _userProfileRepository
+                .saveUser(User.fromJson(response.result));
 
-
-         await _userProfileRepository.saveUser(User.fromJson(response.result));
-          showSuccessDialog();
-          }else{
-               gotoOtpPage();
+            Get.find<AuthController>()
+                .gotoLandingPage(); // showSuccessDialog();
+          } else {
+            gotoOtpPage();
           }
-       
         } else {
           busy(false);
           AppDialog.showSnackBar('Failed to send OTP',
@@ -169,10 +170,6 @@ class LoginController extends GetxController {
         final response = await _authRepository.verifyOtp(
             phone.value, textControllerOtp.text);
 
-
-
-          
-           
         if (response.success) {
           await _authRepository
               .saveAccessToken('${response.tokenType} ${response.token}');

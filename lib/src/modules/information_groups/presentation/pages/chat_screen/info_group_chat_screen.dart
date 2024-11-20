@@ -211,7 +211,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                 icon: Icon(Icons.copy),
                                 color: AppColors.white,
                               ),
-                       
                           ]
                         ],
                       )

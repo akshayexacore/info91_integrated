@@ -24,7 +24,7 @@ class LandingPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         _controller.onBackPressed();
-      
+
         return true; // Prevents the default back navigation
       },
       child: Scaffold(
@@ -153,19 +153,19 @@ class LandingPage extends StatelessWidget {
       return AppAppBar(
         disableActionPadding: true,
         leadingLeftPadding: false,
-        leading: _controller.enableChatSelection.isFalse
-            ? const SizedBox(
-                height: 31,
-                width: 31,
-                child: AppCircleImage(
-                  image:
-                      'https://shotkit.com/wp-content/uploads/2021/06/cool-profile-pic-matheus-ferrero.jpeg',
-                ),
-              )
-            : AppBackButton(
-                color: AppColors.white,
-                onPressed: _controller.onBackPressed,
-              ),
+        // leading: _controller.enableChatSelection.isFalse
+        //     ? const SizedBox(
+        //         height: 31,
+        //         width: 31,
+        //         child: AppCircleImage(
+        //           image:
+        //               'https://shotkit.com/wp-content/uploads/2021/06/cool-profile-pic-matheus-ferrero.jpeg',
+        //         ),
+        //       )
+        //     : AppBackButton(
+        //         color: AppColors.white,
+        //         onPressed: _controller.onBackPressed,
+        //       ),
         titleWidget: _controller.enableChatSelection.isFalse
             ? const AppAssetImage(
                 'assets/images/appbar_logo.png',
@@ -270,7 +270,9 @@ class LandingPage extends StatelessWidget {
             ],
           );
         }),
-        const SizedBox(width: 10,)
+        const SizedBox(
+          width: 10,
+        )
       ],
     );
   }
@@ -286,7 +288,9 @@ class LandingPage extends StatelessWidget {
           'ic_delete_fill.svg',
           onPressed: _controller.onDeletePressed,
         ),
-        const SizedBox(width: 10,)
+        const SizedBox(
+          width: 10,
+        )
       ],
     );
   }

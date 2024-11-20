@@ -26,39 +26,42 @@ class StarScreenController extends GetxController {
 
   Future<void> joinMessageTapFunc() async {
     try {
-      if(selectedChatModel?.joinedGroupFlag==true ){ Get.to(ChatScreen(
-          selectedGroupId: selectedChatModel?.id,
-          model: responseModel.value,
-        ));}else{
-            final response = await _infromationRepository
-          .joinMessageTapFunc(selectedChatModel?.id ?? "");
-      if (response.data1) {
-        AppDialog.showSnackBar('Suceess', '${response.data2}');
+      if (selectedChatModel?.joinedGroupFlag == true) {
         Get.to(ChatScreen(
           selectedGroupId: selectedChatModel?.id,
           model: responseModel.value,
         ));
       } else {
-        AppDialog.showSnackBar('Failure', '${response.data2}');
-      }
+        final response = await _infromationRepository
+            .joinMessageTapFunc(selectedChatModel?.id ?? "");
+        if (response.data1) {
+          AppDialog.showSnackBar('Suceess', '${response.data2}');
+          Get.to(ChatScreen(
+            selectedGroupId: selectedChatModel?.id,
+            model: responseModel.value,
+          ))?.then((value) {
+            if (value) getGroupInfoDetails();
+          });
+          ;
+        } else {
+          AppDialog.showSnackBar('Failure', '${response.data2}');
         }
-    
+      }
     } catch (e) {
       throw e;
     }
   }
-Future<void> launchURL(String urls) async {
+
+  Future<void> launchURL(String urls) async {
     final Uri url = Uri.parse(urls);
 
     if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication); 
+      await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
       throw 'Could not launch $url';
     }
   }
 
-
-  
   Future<void> getGroupInfoDetails() async {
     try {
       final response = await _infromationRepository

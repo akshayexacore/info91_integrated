@@ -16,15 +16,15 @@ import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 class ProfileController extends GetxController {
   late var busy = false.obs;
-    late var isError = false.obs;
+  late var isError = false.obs;
   late var isNameValid = false.obs;
 
   late final textControllerName = TextEditingController();
   late final textControllerAbout = TextEditingController();
-   late final textControllerPincode = TextEditingController();
+  late final textControllerPincode = TextEditingController();
   late final _userProfileRepository = UserProfileRepository();
   late final _authRepository = AuthRepository();
-   var errorMessage = ''.obs;
+  var errorMessage = ''.obs;
   var user = Rxn<User>();
 
   late ProgressDialog pr;
@@ -34,7 +34,7 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     pr = ProgressDialog(Get.context!, isDismissible: false);
-   
+
     getUser();
     super.onInit();
   }
@@ -43,11 +43,14 @@ class ProfileController extends GetxController {
     try {
       busy(true);
       final response = await _userProfileRepository.getUser();
+      debugPrint(
+          'Updating user observable with image: ${response.user?.image}');
       if (response.success) {
         user(response.user);
         textControllerName.text = user.value?.name ?? '';
         textControllerAbout.text = user.value?.about ?? '';
-        textControllerPincode.text=user.value?.pincode??"";debugPrint("response.user?.image${response.user?.image}ddd$response");
+        textControllerPincode.text = user.value?.pincode ?? "";
+
         selectedFile(response.user?.image);
       }
     } catch (_) {
@@ -72,30 +75,30 @@ class ProfileController extends GetxController {
     _authRepository.logoutUser();
     Get.offAllNamed(LoginPage.routeName);
   }
-pinTextfieldOnchage(String value)
-{
-if(value.length==6){
-  validatePincode();
- 
-}
- else{
-  if(errorMessage.isNotEmpty){
-      isError.value=false;
-    errorMessage.value="";
+
+  pinTextfieldOnchage(String value) {
+    if (value.length == 6) {
+      validatePincode();
+    } else {
+      if (errorMessage.isNotEmpty) {
+        isError.value = false;
+        errorMessage.value = "";
+      }
+    }
   }
-  
-  }
-}  void updateProfile() async {
+
+  void updateProfile() async {
     try {
       busy(true);
       if (!validate()) {
         return;
-      }if(isError.value){
-         AppDialog.showSnackBar('Failed ', "Invalid pincode");
+      }
+      if (isError.value) {
+        AppDialog.showSnackBar('Failed ', "Invalid pincode");
         return;
       }
-      if(textControllerPincode.text.length!=6){
-         AppDialog.showSnackBar('Failed ', "Invalid pincode");
+      if (textControllerPincode.text.length != 6) {
+        AppDialog.showSnackBar('Failed ', "Invalid pincode");
         return;
       }
       await pr.show();
@@ -129,33 +132,29 @@ if(value.length==6){
       pr.hide();
     }
   }
-    void validatePincode() async {
-    try {
-      busy(true)
-;      pr.update(message: "Updating profile...");
-      final response = await _userProfileRepository.validatePincode(
-          textControllerPincode.text.trim(),
-        
-          );
-       
 
-      if (response?.statusCode==200) {
-      
-        if(response.data!=null){
-      
-           errorMessage.value=response.data![0].postname??"";
-          isError.value=false;
+  void validatePincode() async {
+    try {
+      busy(true);
+      pr.update(message: "Updating profile...");
+      final response = await _userProfileRepository.validatePincode(
+        textControllerPincode.text.trim(),
+      );
+
+      if (response?.statusCode == 200) {
+        if (response.data != null) {
+          errorMessage.value = response.data![0].postname ?? "";
+          isError.value = false;
         }
-     
       } else {
-        errorMessage.value=response.message??"";
-        isError.value=true;
+        errorMessage.value = response.message ?? "";
+        isError.value = true;
       }
     } catch (_) {
       pr.hide();
       if (_ is DioError) {
-         errorMessage.value="Something wrong";
-        isError.value=true;
+        errorMessage.value = "Something wrong";
+        isError.value = true;
       }
     } finally {
       busy(false);

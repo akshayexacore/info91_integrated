@@ -1,4 +1,5 @@
 import 'base_response.dart';
+
 class UserResponse {
   late String message;
   late int statusCode;
@@ -8,20 +9,23 @@ class UserResponse {
 
   UserResponse(
       {this.message = '',
-        this.statusCode = 0,
-        this.user,
-        this.profilePic = '',
-        this.success = false});
+      this.statusCode = 0,
+      this.user,
+      this.profilePic = '',
+      this.success = false});
 
   UserResponse.fromJson(Map<String, dynamic> json) {
-    message = json['message'] is String ? json['message'] : getStringFromMap(json);
+    message =
+        json['message'] is String ? json['message'] : getStringFromMap(json);
     statusCode = json['statusCode'] ?? 0;
-    user = json['data'] != null && json['data'] is Map ? User.fromJson(json['data']) : null;
+    user = json['data'] != null && json['data'] is Map
+        ? User.fromJson(json['data'])
+        : null;
     profilePic = json['profile_pic'] ?? '';
     success = json['success'] == "success";
-    if(user!=null) {
-      user?.image = profilePic;
-    }
+    // if (user != null) {
+    //   user?.image = profilePic;
+    // }
   }
 
   Map<String, dynamic> toJson() {
@@ -52,24 +56,24 @@ class User {
   late String createdAt;
   late String updatedAt;
   late String deletedAt;
-   late String pincode;
+  late String pincode;
 
   User(
       {this.id = 0,
-        this.name ='',
-        this.phoneNumber = '',
-        this.countryCode = '',
-        this.otp = 0,
-        this.about = '',
-        this.image = '',
-        this.email = '',
-        this.emailVerifiedAt = '',
-        this.password = '',
-        this.rememberToken = '',
-        this.createdAt = '',
-        this.pincode="",
-        this.updatedAt = '',
-        this.deletedAt = ''});
+      this.name = '',
+      this.phoneNumber = '',
+      this.countryCode = '',
+      this.otp = 0,
+      this.about = '',
+      this.image = '',
+      this.email = '',
+      this.emailVerifiedAt = '',
+      this.password = '',
+      this.rememberToken = '',
+      this.createdAt = '',
+      this.pincode = "",
+      this.updatedAt = '',
+      this.deletedAt = ''});
 
   User.fromJson(Map<String, dynamic> json) {
     print("json['image']${json['image']}");
@@ -77,7 +81,7 @@ class User {
     name = json['name'] ?? '';
     phoneNumber = json['phone_number'] ?? '';
     countryCode = json['country_code'] ?? '';
-    pincode=json["pincode"]??"";
+    pincode = json["pincode"] ?? "";
     otp = otp = int.tryParse(json['otp'].toString()) ?? 0;
 
     about = json['about'] ?? '';
@@ -98,7 +102,7 @@ class User {
     data['phone_number'] = phoneNumber;
     data['country_code'] = countryCode;
     data['otp'] = otp;
-    data["pincode"]=pincode;
+    data["pincode"] = pincode;
     data['about'] = about;
     data['image'] = image;
     data['email'] = email;

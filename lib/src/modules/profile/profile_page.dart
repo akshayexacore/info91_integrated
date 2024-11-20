@@ -60,17 +60,22 @@ class ProfilePage extends StatelessWidget {
                           height: AppSpacings.xxLarge,
                         ),
                         Obx(() {
-                          print( " _controller.selectedFile.value${ _controller.selectedFile.value}");
+                          print(
+                              " _controller.selectedFile.value${_controller.selectedFile.value}");
                           return Stack(
                             children: [
                               CircleAvatar(
                                   radius: 60,
                                   child: _controller.selectedFile.value.isURL ||
                                           _controller.selectedFile.isEmpty
-                                      ? AppNetworkImage(
-                                          _controller.selectedFile.value,
-                                          placeholder: Image.asset(
-                                              "assets/images/ic_user.png"))
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(60),
+                                          child: AppNetworkImage(
+                                              _controller.selectedFile.value,
+                                              placeholder: Image.asset(
+                                                  "assets/images/ic_user.png")),
+                                        )
                                       : ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(60),

@@ -12,7 +12,6 @@ class UserProfileRepository {
   late final _api = ApiBaseHelper();
   late final _preferences = SharedPreferencesDataProvider();
 
-
   Future<void> saveUser(User user) async {
     await _preferences.saveUserId(user.id);
     await _preferences.saveUserName(user.name);
@@ -24,36 +23,45 @@ class UserProfileRepository {
   Future<UserResponse> getUser() async {
     String token = await AuthRepository().getAccessToken();
     var headers = {'Authorization': token};
-    final response = await _api.get(ApiConstants.user, headers: headers);
-    return UserResponse.fromJson(response);
+    try {
+      final response = await _api.get(ApiConstants.user, headers: headers);
+      return UserResponse.fromJson(response);
+    } catch (e) {
+      debugPrint("rethrow$e");
+      rethrow;
+    }
   }
 
-  Future<BaseResponse> updateUser(String name,String about,String Pincode,String image,ValueChanged<int> onProgress) async {
+  Future<BaseResponse> updateUser(String name, String about, String Pincode,
+      String image, ValueChanged<int> onProgress) async {
     String token = await AuthRepository().getAccessToken();
     var header = {'Authorization': token};
     debugPrint(token);
-    var body = {
-      "full_name":name,
-      "about":about,
-      "pincode":Pincode
-    };
-    final response = await _api.postMultipart(ApiConstants.updateUser, body: body,headers: header,file: image);
+    var body = {"full_name": name, "about": about, "pincode": Pincode};
+    final response = await _api.postMultipart(ApiConstants.updateUser,
+        body: body, headers: header, file: image);
     return BaseResponse.fromJson(response);
   }
-   Future<PincodeResponse> validatePincode(String pincode,) async {
-try{
-    String token = await AuthRepository().getAccessToken();
-    var header = {'Authorization': token};
-    debugPrint(token);
-    var body = {
-      "pincode":pincode,
-    
-    };
-    final response = await _api.post(ApiConstants.validatingPincodeApi, body: body,headers: header,);
-    return PincodeResponse.fromJson(response);
-}catch(e){
-  print("Eroor is here$e");
-throw e;
-}
+
+  Future<PincodeResponse> validatePincode(
+    String pincode,
+  ) async {
+    try {
+      String token = await AuthRepository().getAccessToken();
+      var header = {'Authorization': token};
+      debugPrint(token);
+      var body = {
+        "pincode": pincode,
+      };
+      final response = await _api.post(
+        ApiConstants.validatingPincodeApi,
+        body: body,
+        headers: header,
+      );
+      return PincodeResponse.fromJson(response);
+    } catch (e) {
+      print("Eroor is here$e");
+      throw e;
+    }
   }
 }

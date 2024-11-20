@@ -323,58 +323,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     "",
                                                 overflow: TextOverflow.ellipsis,
                                               )),
-                                          trailing: controller.profilledataModel
-                                                      .value.isAdmin ==
-                                                  true
-                                              ? CustomPopupmenu(
-                                                  iconWidget: controller
-                                                              .profilledataModel
-                                                              .value
-                                                              .members?[index]
-                                                              .role ==
-                                                          "1"
-                                                      ? Text(
-                                                          "admin",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.orange,
-                                                              fontSize: 13.sp),
-                                                        )
-                                                      : null,
-                                                  iconColr: AppColors.primary,
-                                                  onSelected: (value) {
-                                                    value == 0
-                                                        ? controller.removeMember(
-                                                            value,
-                                                            controller
-                                                                    .profilledataModel
-                                                                    .value
-                                                                    .members![
-                                                                index])
-                                                        : controller.memberpopuFunction(
-                                                            value,
-                                                            controller
+                                          trailing: CustomPopupmenu(
+                                              iconWidget: controller
+                                                          .profilledataModel
+                                                          .value
+                                                          .members?[index]
+                                                          .role ==
+                                                      "1"
+                                                  ? Text(
+                                                      "admin",
+                                                      style: TextStyle(
+                                                          color: Colors.orange,
+                                                          fontSize: 13.sp),
+                                                    )
+                                                  : const Icon(Icons.more_vert),
+                                              iconColr: AppColors.primary,
+                                              onSelected: (value) {
+                                                value == 0
+                                                    ? controller.removeMember(
+                                                        value,
+                                                        controller
+                                                            .profilledataModel
+                                                            .value
+                                                            .members![index])
+                                                    : controller.memberpopuFunction(
+                                                        value,
+                                                        controller
+                                                            .profilledataModel
+                                                            .value
+                                                            .members![index]);
+                                              },
+                                              itemList: [
+                                                popupMenuModel(
+                                                    name: "Remove", value: 0),
+                                                popupMenuModel(
+                                                    name: controller
                                                                 .profilledataModel
                                                                 .value
-                                                                .members![index]);
-                                                  },
-                                                  itemList: [
-                                                      popupMenuModel(
-                                                          name: "Remove",
-                                                          value: 0),
-                                                      popupMenuModel(
-                                                          name: controller
-                                                                      .profilledataModel
-                                                                      .value
-                                                                      .members?[
-                                                                          index]
-                                                                      .role ==
-                                                                  "1"
-                                                              ? "Dismiss as admin"
-                                                              : "Make group admin ",
-                                                          value: 1),
-                                                    ])
-                                              : const Icon(Icons.more_vert)),
+                                                                .members?[index]
+                                                                .role ==
+                                                            "1"
+                                                        ? "Dismiss as admin"
+                                                        : "Make group admin ",
+                                                    value: 1),
+                                              ])),
                                       separatorBuilder: (context, index) =>
                                           const SizedBox(
                                             height: 5,

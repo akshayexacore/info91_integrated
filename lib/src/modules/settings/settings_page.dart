@@ -49,63 +49,63 @@ class SettingsPage extends StatelessWidget {
                   const SizedBox(
                     height: AppSpacings.xxSmall6,
                   ),
-                  ..._buildProfile(),
+                  ..._buildProfile(), //AFTERTHEDATABINDING
                   const SizedBox(
                     height: AppSpacings.small10,
                   ),
-                  _buildSettingsTile(
-                    icon: 'ic_key.svg',
-                    title: 'Account',
-                    subTitle: 'Security notification, Change number',
-                    onPressed: () {},
-                  ),
-                  _buildSettingsTile(
-                    icon: 'ic_lock.svg',
-                    title: 'Privacy',
-                    subTitle: 'Block contacts, Last seen and online',
-                    onPressed: () {},
-                  ),
-                  _buildSettingsTile(
-                    icon: 'ic_chat.svg',
-                    title: 'Chats',
-                    subTitle: 'Theme, Wallpaper, Chat history',
-                    onPressed: () {},
-                  ),
-                  _buildSettingsTile(
-                    icon: 'ic_emergency_alarn_settings.svg',
-                    title: 'Emergency Alarm',
-                    subTitle: 'Add  recipients',
-                    onPressed: () {},
-                  ),
-                  _buildSettingsTile(
-                    icon: 'ic_notification.svg',
-                    title: 'Notifications',
-                    subTitle: 'Messages, services',
-                    onPressed: () {},
-                  ),
-                  _buildSettingsTile(
-                    icon: 'ic_storage.svg',
-                    title: 'Storage and data',
-                    subTitle: 'Network usage, Auto download',
-                    onPressed: _controller.onStorageAndDataPressed,
-                  ),
-                  _buildSettingsTile(
-                    icon: 'ic_language.svg',
-                    title: 'App language',
-                    subTitle: 'English (device’s language)',
-                    onPressed: _controller.onLanguagePressed,
-                  ),
-                  _buildSettingsTile(
-                    icon: 'ic_help.svg',
-                    title: 'Help',
-                    subTitle: 'Help center, privacy policy',
-                    onPressed: () {},
-                  ),
-                  _buildSettingsTile(
-                    icon: 'ic_invite.svg',
-                    title: 'Invite a friend',
-                    onPressed: () {},
-                  ),
+                  // _buildSettingsTile(
+                  //   icon: 'ic_key.svg',
+                  //   title: 'Account',
+                  //   subTitle: 'Security notification, Change number',
+                  //   onPressed: () {},
+                  // ),
+                  // _buildSettingsTile(
+                  //   icon: 'ic_lock.svg',
+                  //   title: 'Privacy',
+                  //   subTitle: 'Block contacts, Last seen and online',
+                  //   onPressed: () {},
+                  // ),
+                  // _buildSettingsTile(
+                  //   icon: 'ic_chat.svg',
+                  //   title: 'Chats',
+                  //   subTitle: 'Theme, Wallpaper, Chat history',
+                  //   onPressed: () {},
+                  // ),
+                  // _buildSettingsTile(
+                  //   icon: 'ic_emergency_alarn_settings.svg',
+                  //   title: 'Emergency Alarm',
+                  //   subTitle: 'Add  recipients',
+                  //   onPressed: () {},
+                  // ),
+                  // _buildSettingsTile(
+                  //   icon: 'ic_notification.svg',
+                  //   title: 'Notifications',
+                  //   subTitle: 'Messages, services',
+                  //   onPressed: () {},
+                  // ),
+                  // _buildSettingsTile(
+                  //   icon: 'ic_storage.svg',
+                  //   title: 'Storage and data',
+                  //   subTitle: 'Network usage, Auto download',
+                  //   onPressed: _controller.onStorageAndDataPressed,
+                  // ),
+                  // _buildSettingsTile(
+                  //   icon: 'ic_language.svg',
+                  //   title: 'App language',
+                  //   subTitle: 'English (device’s language)',
+                  //   onPressed: _controller.onLanguagePressed,
+                  // ),
+                  // _buildSettingsTile(
+                  //   icon: 'ic_help.svg',
+                  //   title: 'Help',
+                  //   subTitle: 'Help center, privacy policy',
+                  //   onPressed: () {},
+                  // ),
+                  // _buildSettingsTile(
+                  //   icon: 'ic_invite.svg',
+                  //   title: 'Invite a friend',
+                  //   onPressed: () {},
+                  // ),
                   const SizedBox(
                     height: AppSpacings.xMedium,
                   ),
