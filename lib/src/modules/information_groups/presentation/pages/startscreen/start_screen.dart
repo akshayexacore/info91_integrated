@@ -110,7 +110,9 @@ class StartScreen extends StatelessWidget {
                     text: "Contact",
                     // isBorder: true,
                     busy: false,
-                    onPressed: () {},
+                    onPressed: () {
+                      controller.contactClickFun();
+                    },
                     style: AppButtonStyles.appButton.copyWith(
                         backgroundColor:
                             WidgetStatePropertyAll(AppColors.white)),

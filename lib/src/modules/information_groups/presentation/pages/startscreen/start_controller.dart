@@ -52,6 +52,10 @@ class StarScreenController extends GetxController {
     }
   }
 
+  contactClickFun() {
+    Get.toNamed('/group_info', arguments: {"group_id":selectedChatModel?.id});
+  }
+
   Future<void> launchURL(String urls) async {
     final Uri url = Uri.parse(urls);
 

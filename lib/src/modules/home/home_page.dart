@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/coming_new_screen.dart';
 import 'package:info91/src/modules/home/controllers/chats_controller.dart';
 import 'package:info91/src/modules/home/controllers/home_controller.dart';
 import 'package:info91/src/modules/home/widgets/category_icon.dart';
@@ -116,7 +117,9 @@ class HomePage extends StatelessWidget {
                   CategoryIcon(
                     assetIcon: 'ic_special_info.svg',
                     title: 'Special\ninformation',
-                    onPressed: () {},
+                    onPressed: () {
+                       Get.to(() => const ComingSoonPage(appBarName: "Special Information",content:"Stay informed. Something special is coming your way soon!" ,));
+                    },
                   ),
                   CategoryIcon(
                     assetIcon: 'ic_offers.svg',
@@ -147,23 +150,27 @@ class HomePage extends StatelessWidget {
                   CategoryIcon(
                     assetIcon: 'ic_news.svg',
                     title: 'News',
-                    onPressed: () {},
+                    onPressed: () {
+                        Get.to(() => const ComingSoonPage(appBarName: "'News",content:"Exciting news! A new feature is on the way to keep you updated with the latest trends and insights right in the app. Stay tuned for more!" ,));
+                    },
                   ),
                   CategoryIcon(
                     assetIcon: 'ic_find_location.svg',
                     title: 'FInd\nLocation',
-                    onPressed: () {},
+                    onPressed: () {  Get.to(() => const ComingSoonPage(appBarName: "Finad Location",content: "Find Location is on the way! Soon you'll be able to search and navigate with ease right in the app.",));},
                   ),
                   CategoryIcon(
                     assetIcon: 'ic_services_dark.svg',
                     title: 'Services',
                     clr: AppColors.secondary,
-                    onPressed: () {},
+                    onPressed: () {
+                        Get.to(() => const ComingSoonPage(appBarName: "Services",content:"Exciting services are on the way! Stay tuned to access a variety of offerings directly from the app.",));
+                    },
                   ),
                   CategoryIcon(
                     assetIcon: 'ic_classifieds.svg',
                     title: 'Classifieds',
-                    onPressed: () {},
+                    onPressed: () {  Get.to(() => const ComingSoonPage(appBarName: "Classifieds",content:"Classifieds is launching soon! Get ready to buy, sell, and connect with others right in the app." ,));},
                   ),
                 ]),
               ],

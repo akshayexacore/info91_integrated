@@ -52,16 +52,25 @@ class InfoChatListController extends GetxController
         }
       }
     } catch (e) {
+       loading.value = false;
       rethrow;
     }
   }
 
   searchInfoGroup(String value) {
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
+  try{
+   
+       loading.value = true;
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       final response = await _infromationRepository.searchInfoGroup(value);
       searchGroupList.value = response ?? [];
+       loading.value = false;
     });
+  }catch(e){
+       loading.value = false;
+
+  }
   }
 
   nonPublicTileOnTap(int index) {
