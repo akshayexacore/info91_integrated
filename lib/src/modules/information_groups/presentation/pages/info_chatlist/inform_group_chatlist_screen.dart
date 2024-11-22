@@ -50,9 +50,8 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
                           MaterialPageRoute(
                             builder: (context) => InformGroupCreationScreen(),
                           )).then((value) {
-                                    controller.grtInfoGroupList(
-                                        );
-                                  });
+                        controller.grtInfoGroupList();
+                      });
                     }
                   },
                   itemList: [popupMenuModel(name: "Create group", value: 1)],
@@ -78,54 +77,55 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
             ),
             Expanded(
               child: Obx(() {
-              
                 if (controller.searchText.value.isNotEmpty) {
-                  return controller.searchGroupList.isEmpty
-                      ?const Center(child: Text("No Data"))
-                      : ListView.separated(
-                          itemCount: controller.searchGroupList.length,
-                          itemBuilder: (context, index) => ChatListItem(
-                            chat: controller.searchGroupList[index],
-                            isSearch: true,
-                            onTap: () {
-                              controller.publicTileOnTap(index);
-                            },
-                          ),
-                          separatorBuilder: (context, index) => customDivider(),
-                        );
+                  return controller.loading.value
+                      ? Center(child: CircularProgressIndicator())
+                      : controller.searchGroupList.isEmpty
+                          ? const Center(child: Text("No Data"))
+                          : ListView.separated(
+                              itemCount: controller.searchGroupList.length,
+                              itemBuilder: (context, index) => ChatListItem(
+                                chat: controller.searchGroupList[index],
+                                isSearch: true,
+                                onTap: () {
+                                  controller.publicTileOnTap(index);
+                                },
+                              ),
+                              separatorBuilder: (context, index) =>
+                                  customDivider(),
+                            );
                 } else {
-                  if(controller.toggleValue.value == 0){
-                        return controller.chatGroupList.isEmpty
-                      ? const Center(child: Text("No Data"))
-                      : ListView.separated(
-                    itemCount:controller.chatGroupList.length,
-                     
-                    itemBuilder: (context, index) => ChatListItem(
-                      chat: controller.chatGroupList[index]  ,                     
-                      onTap: () {
-                        controller.nonPublicTileOnTap(index);
-                      },
-                    ),
-                    separatorBuilder: (context, index) => customDivider(),
-                  );
-
-                  }else{
-                        return controller.ownchatGroupList.isEmpty
-                      ? const Center(child: Text("No Data"))
-                      : ListView.separated(
-                    itemCount: controller.ownchatGroupList.length,
-                    itemBuilder: (context, index) => ChatListItem(
-                      chat: controller.ownchatGroupList[index],
-                      onTap: () {
-                        controller.nonPublicTileOnTap(index);
-                      },
-                    ),
-                    separatorBuilder: (context, index) => customDivider(),
-                  );
-
+                  if (controller.toggleValue.value == 0) {
+                    return controller.loading.value
+                        ? Center(child: CircularProgressIndicator())
+                        : controller.chatGroupList.isEmpty
+                            ? const Center(child: Text("No Data"))
+                            : ListView.separated(
+                                itemCount: controller.chatGroupList.length,
+                                itemBuilder: (context, index) => ChatListItem(
+                                  chat: controller.chatGroupList[index],
+                                  onTap: () {
+                                    controller.nonPublicTileOnTap(index);
+                                  },
+                                ),
+                                separatorBuilder: (context, index) =>
+                                    customDivider(),
+                              );
+                  } else {
+                    return controller.ownchatGroupList.isEmpty
+                        ? const Center(child: Text("No Data"))
+                        : ListView.separated(
+                            itemCount: controller.ownchatGroupList.length,
+                            itemBuilder: (context, index) => ChatListItem(
+                              chat: controller.ownchatGroupList[index],
+                              onTap: () {
+                                controller.nonPublicTileOnTap(index);
+                              },
+                            ),
+                            separatorBuilder: (context, index) =>
+                                customDivider(),
+                          );
                   }
-                  
-              
                 }
               }),
             ),

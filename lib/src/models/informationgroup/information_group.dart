@@ -170,7 +170,7 @@ class InfoGroupChatListModel {
   final String? status;
   final bool? owngroupFlag;
   final bool? joinedGroupFlag;
-  final String? lastmessage;
+  final LastMessage? lastmessage;
   final String? unReadCount;
   final String? groupAprovedFlag;
 
@@ -216,7 +216,9 @@ class InfoGroupChatListModel {
     return InfoGroupChatListModel(
       id: json['group_id'],
       unReadCount: json['unread_count'],
-      lastmessage: json["last_message"],
+        lastmessage: json['last_message'] != null
+          ? LastMessage.fromJson(json['last_message'])
+          : null,
       joinedGroupFlag: json['joined_flag'] ?? true,
       groupName: json['group_name'],
       groupTableName: json['group_table_name'],
@@ -260,7 +262,7 @@ class InfoGroupChatListModel {
     return {
       'group_id': id,
       "unread_count": unReadCount,
-      "last_message": lastmessage,
+      "last_message":lastmessage?.toJson(),
       'group_name': groupName,
       'group_table_name': groupTableName,
       'groupusers_table_name': groupusersTableName,
@@ -329,7 +331,7 @@ class InfoGroupChatListModel {
       bool? owngroupFlag,
       bool? joinedflad,
       String? unReadCount,
-      String? latMessage,String? groupAprovedFlag}) {
+      LastMessage? latMessage,String? groupAprovedFlag}) {
     return InfoGroupChatListModel(
       id: id ?? this.id,
       groupName: groupName ?? this.groupName,
@@ -366,5 +368,50 @@ class InfoGroupChatListModel {
       groupAprovedFlag: groupAprovedFlag??this.groupAprovedFlag,
       owngroupFlag: owngroupFlag ?? this.owngroupFlag,
     );
+  }
+}
+class LastMessage {
+  final String? message;
+  final String? type;
+  final String? userId;
+  final String? name;
+  final String? phoneNumber;
+  final String? lastMessageTime;
+  final bool? isMe;
+
+  const LastMessage({
+    this.message,
+    this.type,
+    this.userId,
+    this.name,
+    this.phoneNumber,
+    this.lastMessageTime,
+    this.isMe
+  });
+
+  // Factory constructor for creating an instance from JSON
+  factory LastMessage.fromJson(Map<String, dynamic> json) {
+    return LastMessage(
+      message: json['message'] as String?,
+      type: json['type'] as String?,
+      userId: json['user_id'] as String?,
+      name: json['name'] as String?,
+      phoneNumber: json['phone_number'] as String?,
+      lastMessageTime: json['last_message_time'] as String?,
+      isMe: json["is_me"] as bool?
+    );
+  }
+
+  // Method for converting an instance to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'message': message,
+      'type': type,
+      'user_id': userId,
+      'name': name,
+      'phone_number': phoneNumber,
+      'last_message_time': lastMessageTime,
+      "is_me":isMe
+    };
   }
 }

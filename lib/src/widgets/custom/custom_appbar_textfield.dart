@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/widgets/custom/image_view.dart';
 
   class CustomAppBatTexField extends StatefulWidget {
   final TextEditingController cntroler;
@@ -21,7 +23,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
         
         decoration: BoxDecoration(
             color: Colors.white.withOpacity(.1),
-            borderRadius: BorderRadius.circular(12)),
+            borderRadius: BorderRadius.circular(AppRadii.xSmall),),
         child: TextFormField(
           controller: widget.cntroler,
         
@@ -36,14 +38,29 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
           decoration: InputDecoration(
             
               border: InputBorder.none,
-                 contentPadding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-              labelStyle: TextStyle(color: Colors.white),
-              prefixIcon: Icon(
-                Icons.search_rounded,
-                color: Colors.white.withOpacity(.5),
-                size: 28,
-              ),
+
+              labelStyle:const TextStyle(color: Colors.white),
+              prefixIcon:Container(
+                        height: 16,
+                        width: 16 + 9,
+                        padding: const EdgeInsets.only(right: 9),
+                        margin: const EdgeInsets.only(
+                          top: 7,
+                          bottom: 7,
+                          right: 9,
+                          left: 14,
+                        ),
+                        decoration: BoxDecoration(
+                            border: Border(
+                                right: BorderSide(
+                                    color:
+                                        AppColors.white.withOpacity(0.5)))),
+                        child: AppSvgAsset(
+                          "assets/images/ic_search.svg",
+                          fit: BoxFit.contain,
+                          color: AppColors.white.withOpacity(0.5),
+                        ),
+                      ),
              suffixIcon:widget.cntroler.text.isNotEmpty
               ? IconButton(
                   icon: Icon(Icons.close, color: Colors.white,size: 20.sp,),
@@ -59,7 +76,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
                 )
               : null,
               hintText: "Search",
-              hintStyle: TextStyle(color: Colors.white.withOpacity(.5))),
+              hintStyle: TextStyle(color: Colors.white.withOpacity(.5),fontSize: 13.sp)),
         ));
   }
 }

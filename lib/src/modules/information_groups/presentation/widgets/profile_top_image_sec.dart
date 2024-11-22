@@ -100,7 +100,7 @@ Future<ImageProvider> _loadImageProvider() async {
                     CircleAvatar(
                       radius: 35,
                       backgroundColor: Colors.white,
-                      child: circle_image(profileImage, radius: 31),
+                      child: circle_image(avatarUrl:  profileImage, radius: 31),
                     ),
                     if (isAdmin)
                       InkWell(onTap: (){

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/configs/variables.dart';
 import 'package:info91/src/modules/profile/controllers/profile_controller.dart';
 import 'package:info91/src/modules/profile/profile_page.dart';
 import 'package:info91/src/modules/settings/controllers/settings_controller.dart';
@@ -122,7 +123,9 @@ class SettingsPage extends StatelessWidget {
     return [
       AppInkWell(
         onTap: () {
-          Get.toNamed(ProfilePage.routeName);
+          Get.toNamed(ProfilePage.routeName,arguments: {
+            "isRead":true
+          });
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -131,12 +134,17 @@ class SettingsPage extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Obx(() {
-                return AppCircleImage(
-                  image: _profilecontroller.user.value?.image ?? "",
-                  radius: 37,
-                );
-              }),
+             
+                 Obx(
+                  
+                  () {debugPrint( _profilecontroller.user.value?.image.toString());
+                     return AppCircleImage(
+                      image:Variables.user?.image?? _profilecontroller.user.value?.image ?? "",
+                      radius: 37,
+                                     );
+                   }
+                 ),
+              
               const SizedBox(
                 width: 14,
               ),
@@ -147,25 +155,35 @@ class SettingsPage extends StatelessWidget {
                     const SizedBox(
                       height: AppSpacings.small10,
                     ),
-                    Obx(() {
-                      return Text(
-                        _profilecontroller.user.value?.name ?? "",
-                        maxLines: 1,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                        ),
-                      );
-                    }),
-                    Obx(() {
-                      return Text(
-                        _profilecontroller.user.value?.about ?? "",
-                        maxLines: 1,
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      );
-                    }),
+                  
+                      Obx(
+                       () {
+                        debugPrint( _profilecontroller.user.value?.image.toString());
+                          return Text(
+                          Variables.user?.name??  _profilecontroller.user.value?.name ?? "",
+                            maxLines: 1,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          );
+                        }
+                      ),
+                 
+                   
+                       Obx(
+                        () {
+                          debugPrint( _profilecontroller.user.value?.image.toString());
+                           return Text(
+                               Variables.user?.about??   _profilecontroller.user.value?.about ?? "",
+                            maxLines: 1,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                                                 );
+                         }
+                       ),
+                   
                     const SizedBox(
                       height: AppSpacings.xMedium,
                     ),

@@ -37,12 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     popupMenuModel(name: "Group Setting", value: 1)
   ];
 
-  List<String> MediaList = [
-    "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
-    "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
-    "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
-    "https://th.bing.com/th?id=OIP.k-XpRF0EIqlEln1_STXlOAHaE8&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.6&pid=3.1&rm=2",
-  ];
+
 
   @override
   void initState() {
@@ -72,16 +67,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Navigator.pop(context, controller.profilledataModel.value);
                 },
                 actionWidget: [
-                  CustomPopupmenu(
-                    onSelected: (val) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileSettingScreen(),
-                          ));
-                    },
-                    itemList: listModel,
-                  ),
+                  // CustomPopupmenu(
+                  //   onSelected: (val) {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => ProfileSettingScreen(),
+                  //         ));
+                  //   },
+                  //   itemList: listModel,
+                  // ),
                 ],
                 appBarName: controller.profilledataModel.value.groupName ?? "",
               ),
@@ -215,12 +210,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SizedBox(
                               height: 14.h,
                             ),
-                            blusHeading("Banners"),
+                         if(controller.profilledataModel
+                                            .value.banners?.isNotEmpty==true) ...[ blusHeading("Banners"),
                             SizedBox(
                               height: 5.h,
                             ),
                             BannersImageView(
                                 onTap: (index) {
+                                  if (controller
+                                          .profilledataModel.value.isAdmin ==
+                                      true)
                                   Get.toNamed(BannersScreen.routeName,
                                       arguments: {
                                         "group_id": widget.selectedGroupId,
@@ -234,7 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 },
                                 imageList: controller
                                         .profilledataModel.value.banners ??
-                                    []),
+                                    []),] ,
                             SizedBox(
                               height: 5.h,
                             ),
@@ -299,11 +298,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       padding: EdgeInsets.zero,
                                       physics: const ScrollPhysics(),
                                       itemBuilder: (context, index) => ListTile(
-                                          leading: circle_image(
+                                          leading: circle_image(avatarUrl: 
                                             controller.profilledataModel.value
                                                     .members?[index].image ??
                                                 "",
-                                            onTap: (details) {},
+                                            onTap: () {},
                                           ),
                                           title: Text(
                                             controller.profilledataModel.value

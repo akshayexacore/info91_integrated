@@ -142,13 +142,42 @@ class ProfilePage extends StatelessWidget {
                           controller: _controller.textControllerAbout,
                         ),
                         const SizedBox(
+                          height: 15,
+                        ),
+                        AppInputText(
+                          shadow: false,
+                          border: true,
+                          hintText: "Phone",
+                          isRead: true,
+                          keyboardType: TextInputType.name,
+                          controller: _controller.mobileController,
+                        ),
+                        const SizedBox(
                           height: AppSpacings.xxxLarge,
                         ),
+
                         Obx(() {
                           return AppButton(
                               text: "DONE",
                               busy: _controller.busy.value,
                               onPressed: _controller.updateProfile);
+                        }),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Obx(() {
+                          return AppButton(
+                    text: "Logout",
+                    // isBorder: true,
+                    busy: _controller.busy.value,
+                   onPressed: _controller.logout,
+                    style: AppButtonStyles.appButton.copyWith(
+                        backgroundColor:
+                            WidgetStatePropertyAll(AppColors.white)),
+                    textStyle: AppTextStyles.appButton
+                        .copyWith(color: AppColors.black),
+                  );
+                       
                         }),
                       ],
                     ),

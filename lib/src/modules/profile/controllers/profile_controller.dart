@@ -4,15 +4,18 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/configs/variables.dart';
 import 'package:info91/src/models/user.dart';
 import 'package:info91/src/modules/auth/login/login_page.dart';
 import 'package:info91/src/modules/landing/landing_page.dart';
 import 'package:info91/src/resources/auth_repository.dart';
+import 'package:info91/src/resources/shared_preferences_data_provider.dart';
 import 'package:info91/src/resources/user_profile_repository.dart';
 import 'package:info91/src/utils/app_validator.dart';
 import 'package:info91/src/widgets/custom/app_dialog.dart';
 import 'package:info91/src/widgets/tiny/image_view.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileController extends GetxController {
   late var busy = false.obs;
@@ -22,11 +25,12 @@ class ProfileController extends GetxController {
   late final textControllerName = TextEditingController();
   late final textControllerAbout = TextEditingController();
   late final textControllerPincode = TextEditingController();
+    late final mobileController = TextEditingController();
   late final _userProfileRepository = UserProfileRepository();
   late final _authRepository = AuthRepository();
   var errorMessage = ''.obs;
   var user = Rxn<User>();
-
+var isEdit=false.obs;
   late ProgressDialog pr;
   var progress = 0.obs;
   var selectedFile = ''.obs;
@@ -36,10 +40,30 @@ class ProfileController extends GetxController {
     pr = ProgressDialog(Get.context!, isDismissible: false);
 
     getUser();
+       if (Get.arguments != null) {
+      isEdit.value = Get.arguments['isUpdate'] ?? false;
+    
+      
+    } else {
+      debugPrint('No group data found in Get.arguments');
+    }
+    getPhonenUmber();
     super.onInit();
   }
+ Future<void> getPhonenUmber()async {
+  SharedPreferencesDataProvider model=SharedPreferencesDataProvider();
+ mobileController.text=await model.getUserMobile();
+ }
+ Future<void> logoutFunction()async {
+ final SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
 
-  void getUser() async {
+sharedPreferences.clear();
+gotoLoginPage();
+ }
+  void gotoLoginPage() {
+    Get.offAllNamed(LoginPage.routeName);
+  }
+  Future<void >getUser() async {
     try {
       busy(true);
       final response = await _userProfileRepository.getUser();
@@ -47,6 +71,7 @@ class ProfileController extends GetxController {
           'Updating user observable with image: ${response.user?.image}');
       if (response.success) {
         user(response.user);
+        Variables.user=response.user;
         textControllerName.text = user.value?.name ?? '';
         textControllerAbout.text = user.value?.about ?? '';
         textControllerPincode.text = user.value?.pincode ?? "";
@@ -111,6 +136,7 @@ class ProfileController extends GetxController {
           onProgress);
       pr.hide();
       if (response.isSuccess) {
+       await getUser();
         AppDialog.showDialog(
             title: 'Success ',
             content: response.message,

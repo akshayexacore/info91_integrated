@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/chats/chats_page.dart';
+import 'package:info91/src/modules/coming_new_screen.dart';
 import 'package:info91/src/modules/groups/groups_page.dart';
 import 'package:info91/src/modules/home/home_page.dart';
 import 'package:info91/src/modules/landing/controllers/landing_controller.dart';
@@ -37,9 +38,28 @@ class LandingPage extends StatelessWidget {
                 onPageChanged: _controller.onPageChanged,
                 children: [
                   HomePage(),
-                  ChatsPage(),
-                  GroupsPage(),
-                  StatusPage(),
+                  const ComingSoonPage(
+                    appBarName: "",
+                    content:
+                        " A new feature is on the way to enhance your chat experience with the latest trends and insights. Stay tuned for more!",
+                    isAppBAr: false,
+                  ),
+                  const ComingSoonPage(
+                    appBarName: "",
+                    content:
+                        " A new feature is on the way to keep your groups updated with the latest trends and insights right in the app. Stay tuned for more!",
+                    isAppBAr: false,
+                  ),
+                  const ComingSoonPage(
+                    appBarName: "",
+                    content:
+                        "A new feature is on the way to keep your status updates fresh and engaging with the latest trends and insights. Stay tuned for more!",
+                    isAppBAr: false,
+                  ),
+
+                  // ChatsPage(),
+                  // GroupsPage(),
+                  // StatusPage(),
                   // Container(
                   //   color: Colors.white,
                   // )
@@ -48,37 +68,37 @@ class LandingPage extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: Obx(() {
-          if (_controller.enabledFab) {
-            return AppInkWell(
-              borderRadius: 100,
-              onTap: _controller.gotoContactSelect,
-              child: Container(
-                height: 50,
-                width: 50,
-                margin: const EdgeInsets.only(bottom: 10),
-                decoration: BoxDecoration(
-                    color: AppColors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          offset: const Offset(0, 4),
-                          blurRadius: 4,
-                          spreadRadius: 0,
-                          color: Colors.black.withOpacity(0.25))
-                    ],
-                    borderRadius: BorderRadius.circular(100)),
-                child: const Center(
-                  child: AppSvgAsset(
-                    'assets/images/ic_new_message.svg',
-                    height: 25,
-                    width: 25,
-                  ),
-                ),
-              ),
-            );
-          }
-          return const SizedBox();
-        }),
+        // floatingActionButton: Obx(() {
+        //   if (_controller.enabledFab) {
+        //     return AppInkWell(
+        //       borderRadius: 100,
+        //       onTap: _controller.gotoContactSelect,
+        //       child: Container(
+        //         height: 50,
+        //         width: 50,
+        //         margin: const EdgeInsets.only(bottom: 10),
+        //         decoration: BoxDecoration(
+        //             color: AppColors.white,
+        //             boxShadow: [
+        //               BoxShadow(
+        //                   offset: const Offset(0, 4),
+        //                   blurRadius: 4,
+        //                   spreadRadius: 0,
+        //                   color: Colors.black.withOpacity(0.25))
+        //             ],
+        //             borderRadius: BorderRadius.circular(100)),
+        //         child: const Center(
+        //           child: AppSvgAsset(
+        //             'assets/images/ic_new_message.svg',
+        //             height: 25,
+        //             width: 25,
+        //           ),
+        //         ),
+        //       ),
+        //     );
+        //   }
+        //   return const SizedBox();
+        // }),
         bottomNavigationBar: Obx(() {
           return Theme(
             data: Theme.of(context).copyWith(

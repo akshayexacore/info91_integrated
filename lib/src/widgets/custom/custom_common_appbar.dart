@@ -49,7 +49,8 @@ class CustomAppBar extends StatelessWidget {
     return WillPopScope(
       onWillPop: onWillPop,
       child: Container(
-        padding: EdgeInsets.only(left: 20, top: 25, bottom: 12, right: 20),
+        padding:
+            const EdgeInsets.only(left: 20, top: 12, bottom: 12, right: 20),
         color: AppColors.primaryAccent,
         child: SafeArea(
           child: Column(
@@ -60,6 +61,7 @@ class CustomAppBar extends StatelessWidget {
                     icon: const Icon(
                       Icons.arrow_back_ios,
                       color: Colors.white,
+                      
                     ),
                     onPressed: () {
                       if (onBackButtonPress != null) {
@@ -73,7 +75,12 @@ class CustomAppBar extends StatelessWidget {
                     width: 5.w,
                   ),
                   if (isPic) ...[
-                    circle_image(imageUrl ?? "", onTap: imageOntap),
+                    circle_image(
+                        avatarUrl: imageUrl ?? "",
+                        onTap: () {
+                          if(imageOntap!=null){ imageOntap!();}
+                         
+                        }),
                     SizedBox(
                       width: 10.w,
                     ),

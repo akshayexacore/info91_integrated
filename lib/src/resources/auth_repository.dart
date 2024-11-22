@@ -45,7 +45,7 @@ class AuthRepository {
     var body = {'phone_number': phone, "country_code": code};
     final response = await _api
         .get(ApiConstants.reSendOtp, queryParameters: body, headers: {});
-    AppDialog.showToast((response['otp'] ?? '').toString());
+    // AppDialog.showToast((response['otp'] ?? '').toString());
     return BaseResponse.fromJson(response);
   }
 

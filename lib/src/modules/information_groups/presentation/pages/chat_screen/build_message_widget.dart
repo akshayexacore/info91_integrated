@@ -75,6 +75,7 @@ class BuildMessageWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if(!isSameUser && !isMe)Text(message.name??"",style: TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
           message.replyFlag == true
               ? Container(
                   width: w / 1.5,
@@ -194,6 +195,7 @@ class BuildMessageWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+           if(!isSameUser && !isMe)Text(message.name??"",style: TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
           message.replyFlag == true
               ? Container(
                   width: w,

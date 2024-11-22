@@ -191,6 +191,45 @@ class LoginController extends GetxController {
       AppDialog.showSnackBar('Otp Verification Failed', 'Something went wrong');
     } finally {}
   }
+
+
+    void reSendOtp() async {
+    busy(true);
+    try {
+      await requestSmsPermission();
+      if (phone.value.isValid()) {
+        final response = await _authRepository.reSendOtp(
+            phone.value.nsn, phone.value.countryCode);
+
+        if (response.isSuccess) {
+          busy(false);
+        
+            await _authRepository
+                .saveAccessToken('${response.tokenType} ${response.token}');
+            await _authRepository.saveRefreshToken(response.token ?? "");
+            debugPrint("response.result${response.result["id"]}");
+
+            await _userProfileRepository
+                .saveUser(User.fromJson(response.result));
+
+            // showSuccessDialog();
+         
+        } else {
+          busy(false);
+          AppDialog.showSnackBar('Failed to send OTP',
+              'OTP sending failed, please check the number.');
+        }
+      } else {
+        busy(false);
+        AppDialog.showSnackBar(
+            'Invalid phone number', 'Please check the phone number.');
+      }
+    } catch (e) {
+      busy(false);
+      debugPrint(e.toString());
+      AppDialog.showSnackBar('Login Failed', 'Something went wrong.');
+    } finally {}
+  }
 }
 
 void showSuccessDialog() {

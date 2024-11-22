@@ -23,6 +23,7 @@ class AppInputText extends StatelessWidget {
     this.borderColor = AppColors.border,
     this.suffixText,
     this.suffixIcon,
+    this.isRead=false,
     this.radius = AppRadii.medium,
     this.hintTextStyle = AppTextStyles.inputHintText,
     this.textStyle = AppTextStyles.inputText,this.errormessage="",
@@ -51,6 +52,7 @@ class AppInputText extends StatelessWidget {
    final Function? onChanged;
   final String errormessage;
   final bool isError;
+  final bool isRead;
 
   final bool isDense;
 
@@ -79,11 +81,12 @@ class AppInputText extends StatelessWidget {
             cursorColor: cursorColor,
             textAlign: textAlign,onChanged: (value){if(onChanged!=null){onChanged!(value);}},
             maxLines: (minLines != null && minLines! > 1) ? minLines : 1,
-            minLines: minLines,
+            minLines: minLines,readOnly:isRead ,
             inputFormatters: onlyNumbers ? [FilteringTextInputFormatter.digitsOnly] : [],
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
               hintText: hintText,
+              
               prefixIcon: prefixText != null || prefixIcon != null
                   ? Padding(
                       padding: const EdgeInsets.symmetric(

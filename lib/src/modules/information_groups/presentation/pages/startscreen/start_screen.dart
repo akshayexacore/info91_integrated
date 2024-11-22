@@ -124,25 +124,29 @@ class StartScreen extends StatelessWidget {
                   width: 10.w,
                 ),
                 Expanded(
-                  child: AppButton(
-                    text: controller.selectedChatModel?.joinedGroupFlag == false
-                        ? "Join Group"
-                        : 'Message',
-                    busy: false,
-                    onPressed: () {
-                      controller.joinMessageTapFunc();
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => ChatScreen(),
-                      //     ));
-                    },
-                    style: AppButtonStyles.appButton.copyWith(
-                        backgroundColor: WidgetStatePropertyAll(
-                      AppColors.secondary,
-                    )),
-                    textStyle: AppTextStyles.appButton
-                        .copyWith(color: AppColors.white),
+                  child: Obx(
+                     () {
+                      return AppButton(
+                        text: controller.selectedChatModel.value?.joinedGroupFlag == false
+                            ? "Join Group"
+                            : 'Message',
+                        busy: false,
+                        onPressed: () {
+                          controller.joinMessageTapFunc();
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => ChatScreen(),
+                          //     ));
+                        },
+                        style: AppButtonStyles.appButton.copyWith(
+                            backgroundColor: WidgetStatePropertyAll(
+                          AppColors.secondary,
+                        )),
+                        textStyle: AppTextStyles.appButton
+                            .copyWith(color: AppColors.white),
+                      );
+                    }
                   ),
                 ),
               ],

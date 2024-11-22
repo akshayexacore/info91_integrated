@@ -20,6 +20,7 @@ class InfoChatListController extends GetxController
   var ownchatGroupList = <InfoGroupChatListModel>[].obs;
   var chatGroupList = <InfoGroupChatListModel>[].obs;
   var searchGroupList = <InfoGroupChatListModel>[].obs;
+    var totalGroupList = <InfoGroupChatListModel>[].obs;
   Timer? _debounce;
   var loading = false.obs;
   @override
@@ -34,6 +35,7 @@ class InfoChatListController extends GetxController
     try {
       loading.value = true;
       final responseData = await _infromationRepository.grtInfoGroupList();
+      totalGroupList.value=responseData;
       debugPrint("responseData$responseData");
       ;
       loading.value = false;

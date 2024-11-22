@@ -18,7 +18,7 @@ import 'package:info91/src/modules/information_groups/presentation/blocs/chat_sc
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/build_message_widget.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/contact_list.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/profile_screen.dart';
-import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
+
 import 'package:info91/src/resources/infromation_repository.dart';
 import 'package:info91/src/widgets/custom/app_app_bar.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
@@ -90,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       chatController.selectedGroupId = widget.selectedGroupId ?? "";
     }
     chatController.isLoading.value = true;
-    // chatController.startFetchingChats();
+    chatController.startFetchingChats();
   }
 
   String formatMessageTimestamp(DateTime timestamp, int index) {

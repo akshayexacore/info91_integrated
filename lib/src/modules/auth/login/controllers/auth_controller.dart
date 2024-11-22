@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:info91/src/configs/variables.dart';
 import 'package:info91/src/modules/auth/login/login_page.dart';
 import 'package:info91/src/modules/auth/login/welcome_page.dart';
 import 'package:info91/src/modules/landing/landing_page.dart';
@@ -71,6 +72,7 @@ class AuthController extends GetxController {
 
   void logout() {
     _authRepository.logoutUser();
+    Variables.clear();
     Get.offAllNamed(LoginPage.routeName);
   }
 }

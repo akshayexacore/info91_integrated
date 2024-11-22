@@ -10,6 +10,7 @@ import 'package:info91/src/widgets/custom/add_divider.dart';
 import 'package:info91/src/widgets/custom/app_dialog.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:intl/intl.dart';
 
 class ChatListItem extends StatelessWidget {
   final InfoGroupChatListModel chat;
@@ -46,18 +47,30 @@ class ChatListItem extends StatelessWidget {
         style: const TextStyle(fontWeight: FontWeight.bold),
         maxLines: 1,
       ),
-      subtitle: Text(
-        chat.lastmessage ?? "",
-        style: const TextStyle(
-          color: Colors.black,
-          overflow: TextOverflow.ellipsis,
-        ),
-        maxLines: 1,
+      subtitle: Row(
+        children: [
+          Text(
+            chat.lastmessage?.isMe==true?"You : ": "${chat.lastmessage?.name?? ""} : ",
+            style: const TextStyle(
+              color: Colors.black,
+              overflow: TextOverflow.ellipsis,
+            ),
+            maxLines: 1,
+          ),
+          Text(
+            chat.lastmessage?. message?? "",
+            style: const TextStyle(
+              color: Colors.black,
+              overflow: TextOverflow.ellipsis,
+            ),
+            maxLines: 1,
+          ),
+        ],
       ),
       trailing: Column(
         children: [
           Text(
-            chat.lastSendTime ?? '',
+           formatLastMessageTime(chat.lastmessage?.lastMessageTime),
             style: const TextStyle(color: Colors.black, fontSize: 12.0),
           ),
           const SizedBox(height: 5),
@@ -84,6 +97,28 @@ class ChatListItem extends StatelessWidget {
       },
     );
   }
+  String formatLastMessageTime(String? lastMessageTime) {
+  if (lastMessageTime == null) return '';
+
+  // Parse the provided date string
+  DateTime messageDate = DateTime.parse(lastMessageTime);
+  DateTime now = DateTime.now();
+
+  // Check if it's today
+  if (DateFormat('yyyy-MM-dd').format(messageDate) ==
+      DateFormat('yyyy-MM-dd').format(now)) {
+    return DateFormat('HH:mm').format(messageDate); // Show time
+  }
+
+  // Check if it's yesterday
+  if (DateFormat('yyyy-MM-dd').format(messageDate) ==
+      DateFormat('yyyy-MM-dd').format(now.subtract(Duration(days: 1)))) {
+    return 'Yesterday';
+  }
+
+  // Otherwise, show the date
+  return DateFormat('yyyy-MM-dd').format(messageDate);
+}
 }
 
 

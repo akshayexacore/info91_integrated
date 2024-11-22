@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/coming_new_screen.dart';
@@ -7,8 +8,10 @@ import 'package:info91/src/modules/home/controllers/home_controller.dart';
 import 'package:info91/src/modules/home/widgets/category_icon.dart';
 
 import 'package:info91/src/modules/information_groups/presentation/pages/info_chatlist/inform_group_chatlist_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 
 import 'package:info91/src/widgets/custom/app_message_profile_tile.dart';
+import 'package:info91/src/widgets/custom/image_view.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
@@ -19,15 +22,15 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.offWhite,
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(
-          vertical: AppPaddings.large,
-        ),
+      body: SizedBox(
+        // height: MediaQuery.of(context).size.height,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: AppPaddings.xLarge,
+            ),
             _buildCategoriesCard(context),
             const SizedBox(
               height: AppPaddings.xLarge,
@@ -44,21 +47,43 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            Obx(() {
-              return ListView.builder(
-                padding: EdgeInsets.zero,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) => AppMessageProfileTile(
-                  _chatsController.recentChats[index],
-                  onPressed: () {
-                    _chatsController
-                        .gotoChatPage(_chatsController.recentChats[index]);
-                  },
+            Expanded(
+              child: Padding(
+                padding:const EdgeInsets.symmetric(
+                  horizontal: AppPaddings.large,
                 ),
-                itemCount: _chatsController.recentChats.length,
-              );
-            }),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const AppSvgAsset(
+                      'assets/images/coming_soon.svg',
+                      width: 65,
+                      height: 65,
+                      fit: BoxFit.contain,
+                    ),
+                  
+
+                    greynonBoldText(
+                        "Stay tuned! Your recent chats will appear here once this feature goes live.")
+                  ],
+                ),
+              ),
+            ),
+            // Obx(() {
+            //   return ListView.builder(
+            //     padding: EdgeInsets.zero,
+            //     physics: const NeverScrollableScrollPhysics(),
+            //     shrinkWrap: true,
+            //     itemBuilder: (context, index) => AppMessageProfileTile(
+            //       _chatsController.recentChats[index],
+            //       onPressed: () {
+            //         _chatsController
+            //             .gotoChatPage(_chatsController.recentChats[index]);
+            //       },
+            //     ),
+            //     itemCount: _chatsController.recentChats.length,
+            //   );
+            // }),
             const SizedBox(
               height: 50,
             ),
@@ -118,7 +143,11 @@ class HomePage extends StatelessWidget {
                     assetIcon: 'ic_special_info.svg',
                     title: 'Special\ninformation',
                     onPressed: () {
-                       Get.to(() => const ComingSoonPage(appBarName: "Special Information",content:"Stay informed. Something special is coming your way soon!" ,));
+                      Get.to(() => const ComingSoonPage(
+                            appBarName: "Special Information",
+                            content:
+                                "Stay informed. Something special is coming your way soon!",
+                          ));
                     },
                   ),
                   CategoryIcon(
@@ -151,26 +180,46 @@ class HomePage extends StatelessWidget {
                     assetIcon: 'ic_news.svg',
                     title: 'News',
                     onPressed: () {
-                        Get.to(() => const ComingSoonPage(appBarName: "'News",content:"Exciting news! A new feature is on the way to keep you updated with the latest trends and insights right in the app. Stay tuned for more!" ,));
+                      Get.to(() => const ComingSoonPage(
+                            appBarName: "'News",
+                            content:
+                                "Exciting news! A new feature is on the way to keep you updated with the latest trends and insights right in the app. Stay tuned for more!",
+                          ));
                     },
                   ),
                   CategoryIcon(
                     assetIcon: 'ic_find_location.svg',
                     title: 'FInd\nLocation',
-                    onPressed: () {  Get.to(() => const ComingSoonPage(appBarName: "Finad Location",content: "Find Location is on the way! Soon you'll be able to search and navigate with ease right in the app.",));},
+                    onPressed: () {
+                      Get.to(() => const ComingSoonPage(
+                            appBarName: "Finad Location",
+                            content:
+                                "Find Location is on the way! Soon you'll be able to search and navigate with ease right in the app.",
+                          ));
+                    },
                   ),
                   CategoryIcon(
                     assetIcon: 'ic_services_dark.svg',
                     title: 'Services',
                     clr: AppColors.secondary,
                     onPressed: () {
-                        Get.to(() => const ComingSoonPage(appBarName: "Services",content:"Exciting services are on the way! Stay tuned to access a variety of offerings directly from the app.",));
+                      Get.to(() => const ComingSoonPage(
+                            appBarName: "Services",
+                            content:
+                                "Exciting services are on the way! Stay tuned to access a variety of offerings directly from the app.",
+                          ));
                     },
                   ),
                   CategoryIcon(
                     assetIcon: 'ic_classifieds.svg',
                     title: 'Classifieds',
-                    onPressed: () {  Get.to(() => const ComingSoonPage(appBarName: "Classifieds",content:"Classifieds is launching soon! Get ready to buy, sell, and connect with others right in the app." ,));},
+                    onPressed: () {
+                      Get.to(() => const ComingSoonPage(
+                            appBarName: "Classifieds",
+                            content:
+                                "Classifieds is launching soon! Get ready to buy, sell, and connect with others right in the app.",
+                          ));
+                    },
                   ),
                 ]),
               ],

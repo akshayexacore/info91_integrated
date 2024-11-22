@@ -95,6 +95,8 @@ class AppPlaceholderWidget {
       );
 }
 
+
+
 class AppCircleImage extends StatelessWidget {
   const AppCircleImage({
     Key? key,
@@ -103,18 +105,32 @@ class AppCircleImage extends StatelessWidget {
   }) : super(key: key);
 
   final double radius;
-
   final String image;
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(radius),
-        child: CircleAvatar(
-          radius: radius,
-          child: AppNetworkImage(image),
-        ),
+      child: ClipOval(
+        child: image.isEmpty
+            ? Image.asset(
+                'assets/images/defaultimg.png', // Your fallback asset image
+                fit: BoxFit.cover,
+                height: radius * 2,
+                width: radius * 2,
+              )
+            : CachedNetworkImage(
+                imageUrl: image,
+                fit: BoxFit.cover,
+                height: radius * 2,
+                width: radius * 2,
+                placeholder: (context, url) => const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Image.asset(
+                  'assets/images/no_image.svg', // Your fallback asset image
+                  fit: BoxFit.cover,
+                  height: radius * 2,
+                  width: radius * 2,
+                ),
+              ),
       ),
     );
   }
