@@ -224,7 +224,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               Expanded(
                 child: Obx(() {
                   debugPrint(chatController.messages.isEmpty.toString());
-                  return GroupedList<ChatMessage, DateTime>(
+                  return chatController.isLoading.value? Center(child: CircularProgressIndicator()) :GroupedList<ChatMessage, DateTime>(
                       controller: chatController.scrollController,
                       elements: chatController.messages,
                       groupBy: (element) => DateTime.parse(element.date ?? ""),
@@ -309,15 +309,14 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                     alignment: isMe
                                         ? Alignment.centerRight
                                         : Alignment.centerLeft,
-                                    child: Obx(() {
-                                      return Skeletonizer(
-                                        enabled: chatController.isLoading.value,
+                                    child:  Skeletonizer(
+                                        enabled: false,
                                         child: BuildMessageWidget(
                                           messageModel: message,
                                           isSameUser: isSameUser,
                                         ),
-                                      );
-                                    })),
+                                      )),
+                                    
                                 if (chatController.selectedMessage.any(
                                     (contact) =>
                                         contact.messageId ==

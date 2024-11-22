@@ -409,11 +409,11 @@ class BuildMessageWidget extends StatelessWidget {
               ],
             ),
           ),
-          customDivider(),
+          customDivider(clr: AppColors.black),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              customTextButton("View All", onTap: () {
+              customTextButton("View All",clr: AppColors.black, onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(

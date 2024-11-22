@@ -37,8 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     popupMenuModel(name: "Group Setting", value: 1)
   ];
 
-
-
   @override
   void initState() {
     if (widget.model.id == null) {
@@ -210,30 +208,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SizedBox(
                               height: 14.h,
                             ),
-                         if(controller.profilledataModel
-                                            .value.banners?.isNotEmpty==true) ...[ blusHeading("Banners"),
-                            SizedBox(
-                              height: 5.h,
-                            ),
-                            BannersImageView(
-                                onTap: (index) {
-                                  if (controller
-                                          .profilledataModel.value.isAdmin ==
-                                      true)
-                                  Get.toNamed(BannersScreen.routeName,
-                                      arguments: {
-                                        "group_id": widget.selectedGroupId,
-                                        "isUpdate": true,
-                                        "model": controller.profilledataModel
-                                            .value.banners![index]
-                                      })?.then((value) {
-                                    controller.getGroupInfoDetails(
-                                        widget.selectedGroupId);
-                                  });
-                                },
-                                imageList: controller
-                                        .profilledataModel.value.banners ??
-                                    []),] ,
+                            if (controller.profilledataModel.value.banners
+                                    ?.isNotEmpty ==
+                                true) ...[
+                              blusHeading("Banners"),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              BannersImageView(
+                                  onTap: (index) {
+                                    if (controller
+                                            .profilledataModel.value.isAdmin ==
+                                        true) {
+                                      Get.toNamed(BannersScreen.routeName,
+                                          arguments: {
+                                            "group_id": widget.selectedGroupId,
+                                            "isUpdate": true,
+                                            "model": controller
+                                                .profilledataModel
+                                                .value
+                                                .banners![index]
+                                          })?.then((value) {
+                                        controller.getGroupInfoDetails(
+                                            widget.selectedGroupId);
+                                      });
+                                    }
+                                  },
+                                  imageList: controller
+                                          .profilledataModel.value.banners ??
+                                      []),
+                            ],
                             SizedBox(
                               height: 5.h,
                             ),
@@ -298,9 +302,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       padding: EdgeInsets.zero,
                                       physics: const ScrollPhysics(),
                                       itemBuilder: (context, index) => ListTile(
-                                          leading: circle_image(avatarUrl: 
-                                            controller.profilledataModel.value
-                                                    .members?[index].image ??
+                                          contentPadding: EdgeInsets.zero,
+                                          leading: circle_image(
+                                            avatarUrl: controller
+                                                    .profilledataModel
+                                                    .value
+                                                    .members?[index]
+                                                    .image ??
                                                 "",
                                             onTap: () {},
                                           ),
@@ -322,13 +330,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     "",
                                                 overflow: TextOverflow.ellipsis,
                                               )),
-                                          trailing: CustomPopupmenu(
-                                              iconWidget: controller
-                                                          .profilledataModel
-                                                          .value
-                                                          .members?[index]
-                                                          .role ==
-                                                      "1"
+                                          trailing:controller
+                                          .profilledataModel.value.isAdmin ==
+                                      false?(controller.profilledataModel.value.members?[index].role ?? "") == "1"?Text(
+                                                      "admin",
+                                                      style: TextStyle(
+                                                          color: Colors.orange,
+                                                          fontSize: 13.sp),
+                                                    )
+                                                  : const Icon(Icons.more_vert): CustomPopupmenu(
+                                              iconWidget: (controller.profilledataModel.value.members?[index].role ?? "") == "1"
                                                   ? Text(
                                                       "admin",
                                                       style: TextStyle(
@@ -455,7 +466,7 @@ class BannersImageView extends StatelessWidget {
     this.onTap,
   });
   final PageController _pageController = PageController(
-      viewportFraction: 0.95,
+      viewportFraction: 1,
       keepPage: false // Set this to less than 1.0 to show the next page
       );
   @override
@@ -484,9 +495,12 @@ class BannersImageView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 5.h,
+                  height: 10.h,
                 ),
-                greynonBoldText(imageList[index].title ?? ""),
+                greynonBoldText(imageList[index].title ?? "",
+                    fontWeight: FontWeight.w500,
+                    size: 15.sp,
+                    color: AppColors.text),
                 SizedBox(
                   height: 5.h,
                 ),

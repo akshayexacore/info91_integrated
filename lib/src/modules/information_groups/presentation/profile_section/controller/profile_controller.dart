@@ -8,15 +8,22 @@ import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/resources/infromation_repository.dart';
 import 'package:info91/src/widgets/custom/app_dialog.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 class InfoProfileController extends GetxController {
   var profilledataModel = GroupProfileModel().obs;
   var isLoading = false.obs;
   String groupId = "";
   final _infromationRepository = InfromationRepository();
-
+  late ProgressDialog pr;
   var selectedFile = ''.obs;
+  @override
+  void onInit() {
+    pr = ProgressDialog(Get.context!, isDismissible: false);
 
+  
+    super.onInit();
+  }
   Future<void> uploadFile() async {
     final response =
         await _infromationRepository.uploadFile(selectedFile.value, groupId);
@@ -74,17 +81,27 @@ class InfoProfileController extends GetxController {
   }
 
   Future<void> memberpopuFunction(int value, Member model) async {
+   try{ 
+    // await pr.show();
+    //   pr.update(message: "Updating ...");
     final response = await _infromationRepository.changeGroupUserStatuse(
         status: value.toString(),
         role: model.role=="0"?"1":"0" ,
         groupid: groupId,
         userId: model.userId ?? "");
-    print("data.data1${response.data1}");
+      // pr.hide();
     if (response.data1) {
       getGroupInfoDetails(groupId);
     } else {
       // Get.back();
       AppDialog.showToast(response.data2, isSucess: response.data1);
+    }}catch (_) {
+      pr.hide();
+      
+      
+    } finally {
+    
+      pr.hide();
     }
   }
 
