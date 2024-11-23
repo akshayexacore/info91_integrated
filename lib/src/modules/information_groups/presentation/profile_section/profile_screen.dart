@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -16,6 +18,7 @@ import 'package:info91/src/modules/information_groups/presentation/widgets/custo
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 import 'package:info91/src/widgets/custom/custom_circle_image.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
+import 'package:info91/src/widgets/tiny/app_button.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../widgets/custom_image_card.dart';
@@ -87,324 +90,340 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   enabled: controller.isLoading.value,
                   child: Column(
                     children: [
-                      ProfileTopImageSec(
-                        isAdmin:
-                            controller.profilledataModel.value.isAdmin ?? false,
-                        profileImage:
-                            controller.profilledataModel.value.profileImage ??
-                                "",
-                        onCoverChange: () {
-                          controller.showUploadOptions(isCrop: false);
-                        },
-                        onProfileChange: () {
-                          controller.showUploadOptions(isCrop: true);
-                        },
-                        backGroundImage:
-                            controller.profilledataModel.value.coverImage ?? "",
-                      ),
+                      appbarSec(),
                       SizedBox(
                         height: 50.h,
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: marginWidth),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            greyBoldText(
-                                controller.profilledataModel.value.groupName ??
-                                    "",
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.text,
-                                size: 16.sp),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            blusHeading("About Us"),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            greyBoldText(
-                                controller.profilledataModel.value.purpose ??
-                                    "",
-                                color: AppColors.text,
-                                size: 15.sp),
-
-                            SizedBox(
-                              height: 15.h,
-                            ),
-                            Text(
-                              widget.model.createdAt ?? "",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            SizedBox(
-                              height: 13.h,
-                            ),
-                            SizedBox(
-                              height: 13.h,
-                            ),
-                            blusHeading("Media"),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            Container(
-                              height: 100.h,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) =>
-                                    customImageCard(
-                                  index: index,
-                                  imageCount: controller.profilledataModel.value
-                                          .mediaList?.imageList?.length ??
-                                      0,
-                                  imageUrl: controller
-                                          .profilledataModel
-                                          .value
-                                          .mediaList
-                                          ?.imageList?[index]
-                                          .message ??
-                                      "",
-                                  width: 110.w,
-                                  onImageTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              GaleryViewScreen(
-                                            mediaModel: controller
-                                                .profilledataModel
-                                                .value
-                                                .mediaList!,
-                                          ),
-                                        ));
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: marginWidth),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                greyBoldText(
+                                    controller.profilledataModel.value
+                                            .groupName ??
+                                        "",
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.text,
+                                    size: 16.sp),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                blusHeading("About Us"),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                greyBoldText(
+                                    controller
+                                            .profilledataModel.value.purpose ??
+                                        "",
+                                    color: AppColors.text,
+                                    size: 15.sp),
+                                SizedBox(
+                                  height: 15.h,
+                                ),
+                                Text(
+                                  widget.model.createdAt ?? "",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                SizedBox(
+                                  height: 13.h,
+                                ),
+                                SizedBox(
+                                  height: 13.h,
+                                ),
+                                blusHeading("Media"),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                Container(
+                                  height: 100.h,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) =>
+                                        customImageCard(
+                                      index: index,
+                                      imageCount: controller
+                                              .profilledataModel
+                                              .value
+                                              .mediaList
+                                              ?.imageList
+                                              ?.length ??
+                                          0,
+                                      imageUrl: controller
+                                              .profilledataModel
+                                              .value
+                                              .mediaList
+                                              ?.imageList?[index]
+                                              .message ??
+                                          "",
+                                      width: 110.w,
+                                      onImageTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  GaleryViewScreen(
+                                                mediaModel: controller
+                                                    .profilledataModel
+                                                    .value
+                                                    .mediaList!,
+                                              ),
+                                            ));
+                                      },
+                                    ),
+                                    itemCount: (controller
+                                                    .profilledataModel
+                                                    .value
+                                                    .mediaList
+                                                    ?.imageList
+                                                    ?.length ??
+                                                0) <
+                                            3
+                                        ? (controller.profilledataModel.value
+                                                .mediaList?.imageList?.length ??
+                                            0)
+                                        : 3,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 14.h,
+                                ),
+                                CustomArrowTextbutton(
+                                  buttonName: "Group info",
+                                  onTap: () {
+                                    Get.toNamed('/group_info', arguments: {
+                                      "group_id": widget.selectedGroupId
+                                    });
+                                    ;
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //       builder: (context) => GroupInfo(),
+                                    //     ));
                                   },
                                 ),
-                                itemCount: (controller.profilledataModel.value
-                                                .mediaList?.imageList?.length ??
-                                            0) <
-                                        3
-                                    ? (controller.profilledataModel.value
-                                            .mediaList?.imageList?.length ??
-                                        0)
-                                    : 3,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 14.h,
-                            ),
-                            CustomArrowTextbutton(
-                              buttonName: "Group info",
-                              onTap: () {
-                                Get.toNamed('/group_info', arguments: {
-                                  "group_id": widget.selectedGroupId
-                                });
-                                ;
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //       builder: (context) => GroupInfo(),
-                                //     ));
-                              },
-                            ),
-                            SizedBox(
-                              height: 14.h,
-                            ),
-                            if (controller.profilledataModel.value.banners
-                                    ?.isNotEmpty ==
-                                true) ...[
-                              blusHeading("Banners"),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              BannersImageView(
-                                  onTap: (index) {
-                                    if (controller
-                                            .profilledataModel.value.isAdmin ==
-                                        true) {
+                                SizedBox(
+                                  height: 14.h,
+                                ),
+                                if (controller.profilledataModel.value.banners
+                                        ?.isNotEmpty ==
+                                    true) ...[
+                                  blusHeading("Banners"),
+                                  SizedBox(
+                                    height: 5.h,
+                                  ),
+                                  BannersImageView(
+                                      onTap: (index) {
+                                        if (controller.profilledataModel.value
+                                                .isAdmin ==
+                                            true) {
+                                          Get.toNamed(BannersScreen.routeName,
+                                              arguments: {
+                                                "group_id":
+                                                    widget.selectedGroupId,
+                                                "isUpdate": true,
+                                                "model": controller
+                                                    .profilledataModel
+                                                    .value
+                                                    .banners![index]
+                                              })?.then((value) {
+                                            controller.getGroupInfoDetails(
+                                                widget.selectedGroupId);
+                                          });
+                                        }
+                                      },
+                                      imageList: controller.profilledataModel
+                                              .value.banners ??
+                                          []),
+                                ],
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                if (controller
+                                        .profilledataModel.value.isAdmin ==
+                                    true)
+                                  CustomArrowTextbutton(
+                                    buttonName: "Add Banners",
+                                    onTap: () {
                                       Get.toNamed(BannersScreen.routeName,
                                           arguments: {
                                             "group_id": widget.selectedGroupId,
-                                            "isUpdate": true,
-                                            "model": controller
-                                                .profilledataModel
-                                                .value
-                                                .banners![index]
+                                            "isUpdate": false
                                           })?.then((value) {
                                         controller.getGroupInfoDetails(
                                             widget.selectedGroupId);
                                       });
-                                    }
-                                  },
-                                  imageList: controller
-                                          .profilledataModel.value.banners ??
-                                      []),
-                            ],
-                            SizedBox(
-                              height: 5.h,
-                            ),
 
-                            if (controller.profilledataModel.value.isAdmin ==
-                                true)
-                              CustomArrowTextbutton(
-                                buttonName: "Add Banners",
-                                onTap: () {
-                                  Get.toNamed(BannersScreen.routeName,
-                                      arguments: {
-                                        "group_id": widget.selectedGroupId,
-                                        "isUpdate": false
-                                      })?.then((value) {
-                                    controller.getGroupInfoDetails(
-                                        widget.selectedGroupId);
-                                  });
-
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //       builder: (context) => GroupInfo(),
-                                  //     ));
-                                },
-                              ),
-                            SizedBox(
-                              height: 15.h,
-                            ),
-
-                            blusHeading("Group Members"),
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: 5.h),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  greynonBoldText(
-                                      "${controller.profilledataModel.value.memberCount ?? 0} members"),
-                                  SizedBox(
-                                    height: 5.h,
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //       builder: (context) => GroupInfo(),
+                                      //     ));
+                                    },
                                   ),
-                                  if (controller
-                                          .profilledataModel.value.isAdmin ==
-                                      true)
-                                    TextButton.icon(
-                                      onPressed: () {
-                                        Get.toNamed(AddMembersScreen.routeName,
-                                            arguments: {
-                                              "group_id": controller.groupId
-                                            })?.then((value) {
-                                          controller.getGroupInfoDetails(
-                                              controller.groupId);
-                                        });
-                                      },
-                                      label: blusHeading("Add Members"),
-                                      icon: const Icon(
-                                        Icons.add,
-                                        color: AppColors.secondary,
-                                      ),
+                                SizedBox(
+                                  height: 15.h,
+                                ),
+                                blusHeading("Group Members"),
+                                SizedBox(
+                                  height: 8.h,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 12.h, horizontal: marginWidth),
+                            color: AppColors.primary.withOpacity(.1),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                greynonBoldText(
+                                    "${controller.profilledataModel.value.memberCount ?? 0} members",
+                                    size: 13.sp),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                if (controller
+                                        .profilledataModel.value.isAdmin ==
+                                    true)
+                                  TextButton.icon(
+                                    onPressed: () {
+                                      Get.toNamed(AddMembersScreen.routeName,
+                                          arguments: {
+                                            "group_id": controller.groupId
+                                          })?.then((value) {
+                                        controller.getGroupInfoDetails(
+                                            controller.groupId);
+                                      });
+                                    },
+                                    label: blusHeading("Add Members"),
+                                    icon: const Icon(
+                                      Icons.add,
+                                      color: AppColors.secondary,
                                     ),
-                                  ListView.separated(
-                                      shrinkWrap: true,
+                                    style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero,
-                                      physics: const ScrollPhysics(),
-                                      itemBuilder: (context, index) => ListTile(
-                                          contentPadding: EdgeInsets.zero,
-                                          leading: circle_image(
-                                            avatarUrl: controller
-                                                    .profilledataModel
-                                                    .value
-                                                    .members?[index]
-                                                    .image ??
-                                                "",
-                                            onTap: () {},
-                                          ),
-                                          title: Text(
-                                            controller.profilledataModel.value
-                                                    .members?[index].name ??
-                                                "",
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          subtitle: SizedBox(
-                                              width: 400.w,
-                                              child: Text(
-                                                controller
-                                                        .profilledataModel
-                                                        .value
-                                                        .members?[index]
-                                                        .about ??
-                                                    "",
-                                                overflow: TextOverflow.ellipsis,
-                                              )),
-                                          trailing:controller
-                                          .profilledataModel.value.isAdmin ==
-                                      false?(controller.profilledataModel.value.members?[index].role ?? "") == "1"?Text(
-                                                      "admin",
-                                                      style: TextStyle(
-                                                          color: Colors.orange,
-                                                          fontSize: 13.sp),
-                                                    )
-                                                  : const Icon(Icons.more_vert): CustomPopupmenu(
-                                              iconWidget: (controller.profilledataModel.value.members?[index].role ?? "") == "1"
-                                                  ? Text(
-                                                      "admin",
-                                                      style: TextStyle(
-                                                          color: Colors.orange,
-                                                          fontSize: 13.sp),
-                                                    )
-                                                  : const Icon(Icons.more_vert),
-                                              iconColr: AppColors.primary,
-                                              onSelected: (value) {
-                                                value == 0
-                                                    ? controller.removeMember(
-                                                        value,
-                                                        controller
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                  ),
+                                SizedBox(
+                                  height: 8.h,
+                                ),
+                                ListView.separated(
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.zero,
+                                    physics: const ScrollPhysics(),
+                                    itemBuilder: (context, index) => ListTile(
+                                        contentPadding: EdgeInsets.zero,
+                                        leading: circle_image(
+                                          avatarUrl: controller
+                                                  .profilledataModel
+                                                  .value
+                                                  .members?[index]
+                                                  .image ??
+                                              "",
+                                          onTap: () {},
+                                        ),
+                                        title: Text(
+                                          controller.profilledataModel.value
+                                                  .members?[index].name ??
+                                              "",
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        subtitle: SizedBox(
+                                            width: 400.w,
+                                            child: Text(
+                                              controller.profilledataModel.value
+                                                      .members?[index].about ??
+                                                  "",
+                                              overflow: TextOverflow.ellipsis,
+                                            )),
+                                        trailing: controller.profilledataModel
+                                                    .value.isAdmin ==
+                                                false
+                                            ? (controller
                                                             .profilledataModel
                                                             .value
-                                                            .members![index])
-                                                    : controller.memberpopuFunction(
-                                                        value,
-                                                        controller
-                                                            .profilledataModel
-                                                            .value
-                                                            .members![index]);
-                                              },
-                                              itemList: [
-                                                popupMenuModel(
-                                                    name: "Remove", value: 0),
-                                                popupMenuModel(
-                                                    name: controller
+                                                            .members?[index]
+                                                            .role ??
+                                                        "") ==
+                                                    "1"
+                                                ? Text(
+                                                    "Admin",
+                                                    style: TextStyle(
+                                                        color: Colors.orange,
+                                                        fontSize: 13.sp),
+                                                  )
+                                                : const Icon(Icons.more_vert)
+                                            : CustomPopupmenu(
+                                                iconWidget: (controller
                                                                 .profilledataModel
                                                                 .value
                                                                 .members?[index]
-                                                                .role ==
-                                                            "1"
-                                                        ? "Dismiss as admin"
-                                                        : "Make group admin ",
-                                                    value: 1),
-                                              ])),
-                                      separatorBuilder: (context, index) =>
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                      itemCount: controller.profilledataModel
-                                              .value.members?.length ??
-                                          0)
-                                ],
-                              ),
-                            )
-                            // Container(
-                            //   color: Colors.red,
-                            //   height: 55,
-                            //   child: ListView.builder(
-                            //     itemBuilder: (context, index) => Container(
-                            //         child: Column(
-                            //       children: [
-                            //         Container(
-                            //             height: 50.h,
-                            //             width: 40.w,
-                            //             child: Image.network(
-                            //                 "https://th.bing.com/th?id=OIP.qn_LIjRBjyml3lSSiw6oHwHaE7&w=306&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2"))
-                            //       ],
-                            //     )),
-                            //   ),
-                            // )
-                          ],
-                        ),
+                                                                .role ??
+                                                            "") ==
+                                                        "1"
+                                                    ? Text(
+                                                        "Admin",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.orange,
+                                                            fontSize: 13.sp),
+                                                      )
+                                                    : const Icon(
+                                                        Icons.more_vert),
+                                                iconColr: AppColors.primary,
+                                                onSelected: (value) {
+                                                  value == 0
+                                                      ? controller.removeMember(
+                                                          value,
+                                                          controller
+                                                              .profilledataModel
+                                                              .value
+                                                              .members![index])
+                                                      : controller.memberpopuFunction(
+                                                          value,
+                                                          controller
+                                                              .profilledataModel
+                                                              .value
+                                                              .members![index]);
+                                                },
+                                                itemList: [
+                                                    popupMenuModel(
+                                                        name: "Remove",
+                                                        value: 0),
+                                                    popupMenuModel(
+                                                        name: controller
+                                                                    .profilledataModel
+                                                                    .value
+                                                                    .members?[
+                                                                        index]
+                                                                    .role ==
+                                                                "1"
+                                                            ? "Dismiss as admin"
+                                                            : "Make group admin ",
+                                                        value: 1),
+                                                  ])),
+                                    separatorBuilder: (context, index) =>
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                    itemCount: controller.profilledataModel
+                                            .value.members?.length ??
+                                        0)
+                              ],
+                            ),
+                          ),
+                          bottomSec()
+                        ],
                       )
                     ],
                   ),
@@ -414,6 +433,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
           )
         ],
       ),
+    );
+  }
+
+  Container bottomSec() {
+    return Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: marginWidth, vertical: 5),
+                          height: 100,
+                          width: double.infinity,
+                          color: AppColors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextButton.icon(
+                                onPressed: () {},
+                                label: blusHeading("Mute this Group"),
+                                icon: const Icon(
+                                  Icons.notifications_off,
+                                  color: AppColors.secondary,
+                                ),
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ),
+                              ),
+                              // SizedBox(height:5.h,),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 25),
+                                child: customTextButton(
+                                  "Exit Group",
+                                  onTap: () {},
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w400,
+                                      color: AppColors.red,
+                                      fontSize: 15.sp),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+  }
+
+  ProfileTopImageSec appbarSec() {
+    return ProfileTopImageSec(
+      isAdmin: controller.profilledataModel.value.isAdmin ?? false,
+      profileImage: controller.profilledataModel.value.profileImage ?? "",
+      onCoverChange: () {
+        controller.showUploadOptions(isCrop: false);
+      },
+      onProfileChange: () {
+        controller.showUploadOptions(isCrop: true);
+      },
+      backGroundImage: controller.profilledataModel.value.coverImage ?? "",
     );
   }
 }
