@@ -15,6 +15,7 @@ import 'package:info91/src/modules/information_groups/presentation/profile_secti
 import 'package:info91/src/modules/information_groups/presentation/profile_section/profile_setting_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_arrow_button.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
+import 'package:info91/src/modules/information_groups/presentation/widgets/gallery_page.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 import 'package:info91/src/widgets/custom/custom_circle_image.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
@@ -329,7 +330,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   .members?[index]
                                                   .image ??
                                               "",
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.push(
+                                              Get.context!,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    GalleryPhotoViewWrapper(
+                                                  galleryItems: [
+                                                    GalleryItem(
+                                                        id: "id:1",
+                                                        resource: controller
+                                                                .profilledataModel
+                                                                .value
+                                                                .members?[index]
+                                                                .image ??
+                                                            "")
+                                                  ],
+                                                  backgroundDecoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.black,
+                                                  ),
+                                                  initialIndex: 0,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
                                         title: Text(
                                           controller.profilledataModel.value
@@ -438,48 +465,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Container bottomSec() {
     return Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: marginWidth, vertical: 5),
-                          height: 100,
-                          width: double.infinity,
-                          color: AppColors.white,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextButton.icon(
-                                onPressed: () {},
-                                label: blusHeading("Mute this Group"),
-                                icon: const Icon(
-                                  Icons.notifications_off,
-                                  color: AppColors.secondary,
-                                ),
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                ),
-                              ),
-                              // SizedBox(height:5.h,),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 25),
-                                child: customTextButton(
-                                  "Exit Group",
-                                  onTap: () {},
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w400,
-                                      color: AppColors.red,
-                                      fontSize: 15.sp),
-                                ),
-                              )
-                            ],
-                          ),
-                        );
+      padding: EdgeInsets.symmetric(horizontal: marginWidth, vertical: 5),
+      height: 100,
+      width: double.infinity,
+      color: AppColors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextButton.icon(
+            onPressed: () {},
+            label: blusHeading("Mute this Group"),
+            icon: const Icon(
+              Icons.notifications_off,
+              color: AppColors.secondary,
+            ),
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+          ),
+          // SizedBox(height:5.h,),
+          Padding(
+            padding: const EdgeInsets.only(left: 25),
+            child: customTextButton(
+              "Exit Group",
+              onTap: () {
+                controller.leaveInfoGoupAPi()
+;              },
+              style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.red,
+                  fontSize: 15.sp),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   ProfileTopImageSec appbarSec() {
     return ProfileTopImageSec(
       isAdmin: controller.profilledataModel.value.isAdmin ?? false,
       profileImage: controller.profilledataModel.value.profileImage ?? "",
+      profileViewOnTap: (){
+           Navigator.push(
+                                              Get.context!,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    GalleryPhotoViewWrapper(
+                                                  galleryItems: [
+                                                    GalleryItem(
+                                                        id: "id:1",
+                                                        resource: controller.profilledataModel.value.profileImage ?? "")
+                                                  ],
+                                                  backgroundDecoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.black,
+                                                  ),
+                                                  initialIndex: 0,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                ),
+                                              ),
+                                            );
+      },
       onCoverChange: () {
         controller.showUploadOptions(isCrop: false);
       },

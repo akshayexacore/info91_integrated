@@ -31,4 +31,5 @@ class ApiConstants {
   static String contactSyncApi = "/contactSync";
   static String addUsersToGroupApi = "/addUsersToGroup";
   static String changeGroupUserStatusApi = "/changeGroupUserStatus";
+  static String leaveInfoGroupApi = "/leaveGroup";
 }

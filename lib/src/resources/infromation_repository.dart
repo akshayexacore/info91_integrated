@@ -481,4 +481,30 @@ class InfromationRepository {
       rethrow;
     }
   }
+  Future<DoubleResponse> leaveInfoGoupAPi(
+      {
+      required String groupid,
+      
+      }) async {
+    try {
+     
+      final response = await _api.post(
+        ApiConstants.leaveInfoGroupApi,
+        body: {
+          "group_id": groupid,
+        
+        },
+        headers: {},
+      );
+     
+
+      if (response['statusCode'] == 200) {
+        return DoubleResponse(true, response['message']);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

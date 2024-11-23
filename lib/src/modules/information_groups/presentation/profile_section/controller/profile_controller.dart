@@ -8,6 +8,7 @@ import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/resources/infromation_repository.dart';
 import 'package:info91/src/widgets/custom/app_dialog.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 class InfoProfileController extends GetxController {
@@ -268,5 +269,25 @@ class InfoProfileController extends GetxController {
             maxChildSize: 1,
             initialChildSize: 0.4),
         backgroundColor: AppColors.white);
+  }
+   Future<void> leaveInfoGoupAPi() async {
+    try {
+  
+      Get.context!.loaderOverlay.show();
+      
+      var response = await _infromationRepository.leaveInfoGoupAPi(groupid: groupId);
+      if(response.data1){
+          AppDialog.showToast(response.data2);
+      }else{
+          getGroupInfoDetails(groupId);
+   AppDialog.showToast(response.data2);
+      }
+     
+    } catch (_) {
+      AppDialog.showToast("Something went wrong! Try again.",);
+   
+    } finally {
+      Get.context!.loaderOverlay.hide();
+    }
   }
 }

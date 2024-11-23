@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/routes/routes.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import 'modules/splash/splash_page.dart';
 
@@ -17,12 +18,19 @@ class App extends StatelessWidget {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      onGenerateTitle: (BuildContext context) => 'info91',
-      theme: AppThemes.appTheme,
-      initialRoute: SplashPage.routeName,
-      getPages: Routes.getPages,
+    return GlobalLoaderOverlay(
+        useDefaultLoading: false,
+        disableBackButton: true,
+        closeOnBackButton: false,
+        overlayWholeScreen: true,
+        
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        onGenerateTitle: (BuildContext context) => 'info91',
+        theme: AppThemes.appTheme,
+        initialRoute: SplashPage.routeName,
+        getPages: Routes.getPages,
+      ),
     );
   }
 }
