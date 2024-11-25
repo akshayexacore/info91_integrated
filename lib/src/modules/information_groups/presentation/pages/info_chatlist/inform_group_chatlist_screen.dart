@@ -48,7 +48,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => InformGroupCreationScreen(),
+                            builder: (context) => const InformGroupCreationScreen(),
                           )).then((value) {
                         controller.grtInfoGroupList();
                       });

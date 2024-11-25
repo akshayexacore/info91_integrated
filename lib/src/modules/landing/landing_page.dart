@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
-import 'package:info91/src/modules/chats/chats_page.dart';
 import 'package:info91/src/modules/coming_new_screen.dart';
-import 'package:info91/src/modules/groups/groups_page.dart';
+
 import 'package:info91/src/modules/home/home_page.dart';
 import 'package:info91/src/modules/landing/controllers/landing_controller.dart';
-import 'package:info91/src/modules/status/status_page.dart';
+
 import 'package:info91/src/widgets/custom/app_app_bar.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/custom/app_popup_menu_button.dart';
-import 'package:info91/src/widgets/tiny/app_back_button.dart';
+
 import 'package:info91/src/widgets/tiny/image_view.dart';
 
 class LandingPage extends StatelessWidget {
@@ -234,49 +233,49 @@ class LandingPage extends StatelessWidget {
   Widget _buildPrimaryAppBarAction({VoidCallback? onContactPressed}) {
     return Row(
       children: [
-        AppInkWell(
-          onTap: onContactPressed,
-          child: const AppSvgAsset(
-            'assets/images/ic_contact_book.svg',
-            color: AppColors.white,
-          ),
-        ),
-        const SizedBox(
-          width: 16,
-        ),
-        AppInkWell(
-          onTap: () {},
-          child: const AppSvgAsset(
-            'assets/images/ic_bell.svg',
-            color: AppColors.white,
-          ),
-        ),
-        const SizedBox(
-          width: 16,
-        ),
+        // AppInkWell(
+        //   onTap: onContactPressed,
+        //   child: const AppSvgAsset(
+        //     'assets/images/ic_contact_book.svg',
+        //     color: AppColors.white,
+        //   ),
+        // ),
+        // const SizedBox(
+        //   width: 16,
+        // ),
+        // AppInkWell(
+        //   onTap: () {},
+        //   child: const AppSvgAsset(
+        //     'assets/images/ic_bell.svg',
+        //     color: AppColors.white,
+        //   ),
+        // ),
+        // const SizedBox(
+        //   width: 16,
+        // ),
         Obx(() {
           return AppPopupMenuButton(
             children: [
-              AppPopupMenuItem(
-                title: _controller.enableChatSelection.isTrue
-                    ? 'Clear Selection'
-                    : 'Select Chats',
-                icon: 'ic_select_chat.svg',
-                onPressed: () {
-                  _controller.onChatSelectionSelected(
-                      _controller.enableChatSelection.isFalse);
-                },
-              ),
-              AppPopupMenuItem(
-                title: 'Starred Messages',
-                icon: 'ic_starred_message.svg',
-                onPressed: _controller.gotoStarredMessages,
-              ),
-              AppPopupMenuItem(
-                title: 'Archive Chats',
-                icon: 'ic_archive.svg',
-                onPressed: _controller.onArchiveChat,
-              ),
+              // AppPopupMenuItem(
+              //   title: _controller.enableChatSelection.isTrue
+              //       ? 'Clear Selection'
+              //       : 'Select Chats',
+              //   icon: 'ic_select_chat.svg',
+              //   onPressed: () {
+              //     _controller.onChatSelectionSelected(
+              //         _controller.enableChatSelection.isFalse);
+              //   },
+              // ),
+              // AppPopupMenuItem(
+              //   title: 'Starred Messages',
+              //   icon: 'ic_starred_message.svg',
+              //   onPressed: _controller.gotoStarredMessages,
+              // ),
+              // AppPopupMenuItem(
+              //   title: 'Archive Chats',
+              //   icon: 'ic_archive.svg',
+              //   onPressed: _controller.onArchiveChat,
+              // ),
               // AppPopupMenuItem(
               //   title: 'Broadcast list',
               //   icon: 'ic_broadcast_list.svg',

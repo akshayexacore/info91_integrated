@@ -15,29 +15,31 @@ import 'package:info91/src/widgets/custom/custom_divider.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
 
 class InformGroupCreationScreen extends StatefulWidget {
- const InformGroupCreationScreen({super.key});
+  const InformGroupCreationScreen({super.key});
 
   @override
-  State<InformGroupCreationScreen> createState() => _InformGroupCreationScreenState();
+  State<InformGroupCreationScreen> createState() =>
+      _InformGroupCreationScreenState();
 }
 
 class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
-  final GroupCreationController _controller =
-      Get.put(GroupCreationController(),  );
-      @override
-      void initState() {
+  final GroupCreationController _controller = Get.put(
+    GroupCreationController(),
+  );
+  @override
+  void initState() {
     // TODO: implement initState
     super.initState();
-    _controller.  clear();
-   _controller.   getFirstCategory();
+    _controller.clear();
+    _controller.getFirstCategory();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-      _controller.clear();
-       Get.back();
+        _controller.clear();
+        Get.back();
         return true; // Allow the back navigation
       },
       child: Scaffold(
@@ -47,7 +49,7 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
           CustomAppBar(
             imageUrl: "",
             appBarName: "Create Group",
-            onBackButtonPress: (){
+            onBackButtonPress: () {
               // Get.delete<GroupCreationController>();
               Get.back();
               _controller.clear();
@@ -64,8 +66,9 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
               padding: EdgeInsets.symmetric(horizontal: marginWidth),
               child: Form(
                 key: _controller.formkey,
-                child: Obx((){
-                  debugPrint("controller value${ _controller.category2Controller.value.text}");
+                child: Obx(() {
+                  debugPrint(
+                      "controller value${_controller.category2Controller.value.text}");
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -77,22 +80,26 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                       SizedBox(
                         height: 15.h,
                       ),
-                        
-                      Obx((){
+
+                      Obx(() {
                         return CustomDropDownWidget<String>(
                           title: "Type",
-                          suffixIconData: _controller.typeController.value.isEmpty?Icons.arrow_drop_down:Icons.arrow_drop_down,
+                          suffixIconData:
+                              _controller.typeController.value.isEmpty
+                                  ? Icons.arrow_drop_down
+                                  : Icons.arrow_drop_down,
                           getItemTAble: (ak) => ak,
                           onChanged: (va) {
-                            _controller.typeController.value = va ?? "";
+                            // _controller.typeController.value = va ?? "";
+                            _controller.typeController.value =  "";
                             // if(_controller.typeController.value=="business" && _controller.planList.isNotEmpty)
                             _controller.getPlanList();
                           },
                           itemList: ["business", "non-business"],
                           selectedItem: "",
-                        );}
-                      ),
-                        
+                        );
+                      }),
+
                       SizedBox(
                         height: 10.h,
                       ),
@@ -121,7 +128,8 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                       SizedBox(
                         height: 15.h,
                       ),
-                      greyContentText("Please select a category and a subcategory"),
+                      greyContentText(
+                          "Please select a category and a subcategory"),
                       SizedBox(
                         height: 15.h,
                       ),
@@ -130,10 +138,10 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                           debugPrint(_controller.firstCategoryList.toString());
                           return CustomDropDownWidget<Category>(
                               title: "Category1",
-                              getItemTAble: (ak) => ak.firstCategoryName??"",
+                              getItemTAble: (ak) => ak.firstCategoryName ?? "",
                               onChanged: (va) {
                                 _controller.categoryOneSelection(va);
-                        
+
                                 print(
                                     "clearing${_controller.selectedCategory2.value}");
                               },
@@ -142,7 +150,7 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                                   Category(firstCategoryName: "ok", id: 1));
                         },
                       ),
-                        
+
                       // NewInputCard(
                       //   controller: _controller.category1Controller,
                       //   title: "Category1",
@@ -165,7 +173,8 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                                 _controller.category2Selection(va);
                               },
                               itemList: _controller.secondCatList ?? [],
-                              selectedItem:_controller.selectedCategory2.value);
+                              selectedItem:
+                                  _controller.selectedCategory2.value);
                         },
                       ),
                       // NewInputCard(
@@ -178,7 +187,7 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                       SizedBox(
                         height: 15.h,
                       ),
-                        
+
                       Obx(
                         () {
                           debugPrint(_controller.secondCatList.toString());
@@ -186,9 +195,11 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                               title: "Category3",
                               getItemLabel: (ak) => ak.thirdCategoryName ?? "",
                               onChanged: (va) {
-                                _controller.category3Selection(va);},
+                                _controller.category3Selection(va);
+                              },
                               itemList: _controller.thirdCatList ?? [],
-                              selectedItem: _controller.selectedCategory3.value);
+                              selectedItem:
+                                  _controller.selectedCategory3.value);
                         },
                       ),
                       // NewInputCard(
@@ -212,7 +223,8 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => ValidityScreen(),
+                                            builder: (context) =>
+                                                ValidityScreen(),
                                           ));
                                     },
                                   ),
@@ -220,29 +232,39 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                                     height: 15.h,
                                   ),
                                   Obx(() {
-                                    return _controller.selectedPlanModel.value.id!= 0
+                                    return _controller
+                                                .selectedPlanModel.value.id !=
+                                            0
                                         ? CustomSpcaeBetweenText(
                                             leftText: _controller
-                                                    .selectedPlanModel.value.planName ??
+                                                    .selectedPlanModel
+                                                    .value
+                                                    .planName ??
                                                 "",
                                             rightText: ((_controller
-                                                            .selectedPlanModel.
-                                                           value .tax ??
+                                                            .selectedPlanModel
+                                                            .value
+                                                            .tax ??
                                                         0) +
-                                                    (_controller.selectedPlanModel
-                                                           .value .amount ??
+                                                    (_controller
+                                                            .selectedPlanModel
+                                                            .value
+                                                            .amount ??
                                                         0))
                                                 .toStringAsFixed(2),
                                           )
                                         : SizedBox();
                                   }),
+                                  SizedBox(
+                                    height: 15.h,
+                                  ),
                                 ],
                               )
                             : SizedBox();
                       }),
                     ],
-                  );}
-                ),
+                  );
+                }),
               ),
             ),
           ))

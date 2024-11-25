@@ -87,17 +87,23 @@ class InfoChatListController extends GetxController
     } else {
       debugPrint(
           "ownchatGroupList[index].profileImage${ownchatGroupList[index].profileImage}");
-      Get.to(ChatScreen(
-        selectedGroupId: ownchatGroupList[index].id,
-        model: GroupProfileModel(
-            groupName: ownchatGroupList[index].groupName,
-            alternativeNumber: ownchatGroupList[index].alternativeNumber,
-            profileImage: ownchatGroupList[index].profileImage),
-      ))?.then((_) {
+            Get.toNamed(StartScreen.routName,
+          arguments: {'group': ownchatGroupList[index]})?.then((_) {
         // This will be called when you return to the previous page
 
         grtInfoGroupList(); // Call fetchData to refresh the data
       });
+      // Get.to(ChatScreen(
+      //   selectedGroupId: ownchatGroupList[index].id,
+      //   model: GroupProfileModel(
+      //       groupName: ownchatGroupList[index].groupName,
+      //       alternativeNumber: ownchatGroupList[index].alternativeNumber,
+      //       profileImage: ownchatGroupList[index].profileImage),
+      // ))?.then((_) {
+      //   // This will be called when you return to the previous page
+
+      //   grtInfoGroupList(); // Call fetchData to refresh the data
+      // });
     }
   }
   publicTileOnTap(int index) {
