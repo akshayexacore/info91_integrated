@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:info91/src/configs/filepicker.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
@@ -24,12 +25,31 @@ class BannerController extends GetxController {
   Future<void> pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      filePath.value = pickedFile.path;
+      cropImage(pickedFile.path);
       if (imagePath.isNotEmpty) {
         imagePath.value = "";
       }
     } else {
       Get.snackbar("Error", "No image selected");
+    }
+  }
+
+  void cropImage(String image) async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+        sourcePath: image,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        compressQuality: 80,
+        cropStyle: CropStyle.rectangle,
+        uiSettings: [
+          AndroidUiSettings(
+            lockAspectRatio: true,
+          ),
+          IOSUiSettings(
+            aspectRatioLockEnabled: true,
+          )
+        ]);
+    if (croppedFile != null) {
+      filePath(croppedFile.path);
     }
   }
 

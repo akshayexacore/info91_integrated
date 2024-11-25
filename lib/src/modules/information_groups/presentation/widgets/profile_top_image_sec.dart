@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/widgets/custom/custom_circle_image.dart';
 
 class ProfileTopImageSec extends StatelessWidget {
@@ -89,7 +90,7 @@ class ProfileTopImageSec extends StatelessWidget {
                           }
                           // pickFromCamera();
                         },
-                        child: isAdmin ? roundCamera() : SizedBox(),
+                        child: isAdmin ? RoundIcons() : SizedBox(),
                       ),
                     )
                   ],
@@ -111,20 +112,18 @@ class ProfileTopImageSec extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 35,
                           backgroundColor: Colors.white,
-                          child:
-                              circle_image(avatarUrl: profileImage, radius: 31,onTap: (){
-                                
-                              }),
+                          child: circle_image(
+                              avatarUrl: profileImage,
+                              radius: 31,
+                              onTap: () {}),
                         ),
                       ),
                       if (isAdmin)
-                        InkWell(
-                            onTap: () {
-                              if (onProfileChange != null) {
-                                onProfileChange!();
-                              }
-                            },
-                            child: const roundCamera())
+                        Positioned(
+                            bottom: -5,
+                            right: 0,
+                            child: CustomRoundIcons(
+                                onProfileChange: onProfileChange)),
                     ],
                   ),
                 ),
@@ -134,8 +133,32 @@ class ProfileTopImageSec extends StatelessWidget {
   }
 }
 
-class roundCamera extends StatelessWidget {
-  const roundCamera({
+class CustomRoundIcons extends StatelessWidget {
+  const CustomRoundIcons({
+    super.key,
+    required this.onProfileChange,
+  });
+
+  final Function? onProfileChange;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () {
+          if (onProfileChange != null) {
+            onProfileChange!();
+          }
+        },
+        child: const CircleAvatar(
+          radius: 15,
+          backgroundColor: AppColors.primary,
+          child: Icon(Icons.edit, color: AppColors.white, size: 17),
+        ));
+  }
+}
+
+class RoundIcons extends StatelessWidget {
+  const RoundIcons({
     super.key,
   });
 

@@ -9,10 +9,9 @@ import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/add_members.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/banners_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/gallery_view_screen/gfallery_view_screen.dart';
-import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_screen.dart';
+
 import 'package:info91/src/modules/information_groups/presentation/profile_section/controller/profile_controller.dart';
 
-import 'package:info91/src/modules/information_groups/presentation/profile_section/profile_setting_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_arrow_button.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/gallery_page.dart';
@@ -28,7 +27,7 @@ import '../widgets/profile_top_image_sec.dart';
 class ProfileScreen extends StatefulWidget {
   final String selectedGroupId;
   final GroupProfileModel model;
-  ProfileScreen(
+  const ProfileScreen(
       {super.key, required this.selectedGroupId, required this.model});
 
   @override
@@ -68,18 +67,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onBackButtonPress: () {
                   Navigator.pop(context, controller.profilledataModel.value);
                 },
-                actionWidget: [
-                  // CustomPopupmenu(
-                  //   onSelected: (val) {
-                  //     Navigator.push(
-                  //         context,
-                  //         MaterialPageRoute(
-                  //           builder: (context) => ProfileSettingScreen(),
-                  //         ));
-                  //   },
-                  //   itemList: listModel,
-                  // ),
-                ],
                 appBarName: controller.profilledataModel.value.groupName ?? "",
               ),
             );
@@ -129,7 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 Text(
                                   widget.model.createdAt ?? "",
-                                  style: TextStyle(color: Colors.grey),
+                                  style: const TextStyle(color: Colors.grey),
                                 ),
                                 SizedBox(
                                   height: 13.h,
@@ -141,7 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 SizedBox(
                                   height: 10.h,
                                 ),
-                                Container(
+                                SizedBox(
                                   height: 100.h,
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
@@ -200,7 +187,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Get.toNamed('/group_info', arguments: {
                                       "group_id": widget.selectedGroupId
                                     });
-                                    ;
+
                                     // Navigator.push(
                                     //     context,
                                     //     MaterialPageRoute(
@@ -239,7 +226,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         }
                                       },
                                       imageList: controller.profilledataModel
-                                              .value.banners ??
+                                              .value.banners?.reversed
+                                              .toList() ??
                                           []),
                                 ],
                                 SizedBox(
@@ -490,8 +478,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: customTextButton(
               "Exit Group",
               onTap: () {
-                controller.leaveInfoGoupAPi()
-;              },
+                controller.leaveInfoGoupAPi();
+              },
               style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w400,
                   color: AppColors.red,
@@ -507,27 +495,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ProfileTopImageSec(
       isAdmin: controller.profilledataModel.value.isAdmin ?? false,
       profileImage: controller.profilledataModel.value.profileImage ?? "",
-      profileViewOnTap: (){
-           Navigator.push(
-                                              Get.context!,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    GalleryPhotoViewWrapper(
-                                                  galleryItems: [
-                                                    GalleryItem(
-                                                        id: "id:1",
-                                                        resource: controller.profilledataModel.value.profileImage ?? "")
-                                                  ],
-                                                  backgroundDecoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.black,
-                                                  ),
-                                                  initialIndex: 0,
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                ),
-                                              ),
-                                            );
+      profileViewOnTap: () {
+        Navigator.push(
+          Get.context!,
+          MaterialPageRoute(
+            builder: (context) => GalleryPhotoViewWrapper(
+              galleryItems: [
+                GalleryItem(
+                    id: "id:1",
+                    resource:
+                        controller.profilledataModel.value.profileImage ?? "")
+              ],
+              backgroundDecoration: const BoxDecoration(
+                color: Colors.black,
+              ),
+              initialIndex: 0,
+              scrollDirection: Axis.horizontal,
+            ),
+          ),
+        );
       },
       onCoverChange: () {
         controller.showUploadOptions(isCrop: false);
@@ -550,7 +536,7 @@ void _showOptions(BuildContext context, Offset position, String memberName) {
       MediaQuery.of(context).size.height - position.dy,
     ),
     items: [
-      PopupMenuItem(
+      const PopupMenuItem(
         value: 'Make Admin',
         child: Row(
           children: [
@@ -560,7 +546,7 @@ void _showOptions(BuildContext context, Offset position, String memberName) {
           ],
         ),
       ),
-      PopupMenuItem(
+      const PopupMenuItem(
         value: 'Remove Member',
         child: Row(
           children: [

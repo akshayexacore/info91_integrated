@@ -22,9 +22,9 @@ class InfoProfileController extends GetxController {
   void onInit() {
     pr = ProgressDialog(Get.context!, isDismissible: false);
 
-  
     super.onInit();
   }
+
   Future<void> uploadFile() async {
     final response =
         await _infromationRepository.uploadFile(selectedFile.value, groupId);
@@ -82,26 +82,24 @@ class InfoProfileController extends GetxController {
   }
 
   Future<void> memberpopuFunction(int value, Member model) async {
-   try{ 
-    // await pr.show();
-    //   pr.update(message: "Updating ...");
-    final response = await _infromationRepository.changeGroupUserStatuse(
-        status: value.toString(),
-        role: model.role=="0"?"1":"0" ,
-        groupid: groupId,
-        userId: model.userId ?? "");
+    try {
+      // await pr.show();
+      //   pr.update(message: "Updating ...");
+      final response = await _infromationRepository.changeGroupUserStatuse(
+          status: value.toString(),
+          role: model.role == "0" ? "1" : "0",
+          groupid: groupId,
+          userId: model.userId ?? "");
       // pr.hide();
-    if (response.data1) {
-      getGroupInfoDetails(groupId);
-    } else {
-      // Get.back();
-      AppDialog.showToast(response.data2, isSucess: response.data1);
-    }}catch (_) {
+      if (response.data1) {
+        getGroupInfoDetails(groupId);
+      } else {
+        // Get.back();
+        AppDialog.showToast(response.data2, isSucess: response.data1);
+      }
+    } catch (_) {
       pr.hide();
-      
-      
     } finally {
-    
       pr.hide();
     }
   }
@@ -270,22 +268,23 @@ class InfoProfileController extends GetxController {
             initialChildSize: 0.4),
         backgroundColor: AppColors.white);
   }
-   Future<void> leaveInfoGoupAPi() async {
+
+  Future<void> leaveInfoGoupAPi() async {
     try {
-  
       Get.context!.loaderOverlay.show();
-      
-      var response = await _infromationRepository.leaveInfoGoupAPi(groupid: groupId);
-      if(response.data1){
-          AppDialog.showToast(response.data2);
-      }else{
-          getGroupInfoDetails(groupId);
-   AppDialog.showToast(response.data2);
+
+      var response =
+          await _infromationRepository.leaveInfoGoupAPi(groupid: groupId);
+      if (response.data1) {
+        AppDialog.showToast(response.data2);
+      } else {
+        getGroupInfoDetails(groupId);
+        AppDialog.showToast(response.data2);
       }
-     
     } catch (_) {
-      AppDialog.showToast("Something went wrong! Try again.",);
-   
+      AppDialog.showToast(
+        "Something went wrong! Try again.",
+      );
     } finally {
       Get.context!.loaderOverlay.hide();
     }

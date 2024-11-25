@@ -167,17 +167,16 @@ class ProfilePage extends StatelessWidget {
                         ),
                         Obx(() {
                           return AppButton(
-                    text: "Logout",
-                    // isBorder: true,
-                    busy: _controller.busy.value,
-                   onPressed: _controller.logout,
-                    style: AppButtonStyles.appButton.copyWith(
-                        backgroundColor:
-                            WidgetStatePropertyAll(AppColors.white)),
-                    textStyle: AppTextStyles.appButton
-                        .copyWith(color: AppColors.black),
-                  );
-                       
+                            text: "Logout",
+                            // isBorder: true,
+                            busy: _controller.busy.value,
+                            onPressed: _controller.logout,
+                            style: AppButtonStyles.appButton.copyWith(
+                                backgroundColor:
+                                    WidgetStatePropertyAll(AppColors.white)),
+                            textStyle: AppTextStyles.appButton
+                                .copyWith(color: AppColors.black),
+                          );
                         }),
                       ],
                     ),
