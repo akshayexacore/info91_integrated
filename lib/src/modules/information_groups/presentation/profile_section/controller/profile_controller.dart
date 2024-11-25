@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -195,11 +196,11 @@ class InfoProfileController extends GetxController {
                             children: [
                               CircleAvatar(
                                   radius:
-                                      MediaQuery.sizeOf(context).width * 0.1,
+                                      30.r,
                                   backgroundColor: AppColors.secondary,
                                   child: const AppAssetImage(
                                     "assets/images/ic_camera.png",
-                                    height: 24,
+                                    height: 20,
                                   )),
                               const SizedBox(
                                 height: 8,
@@ -219,7 +220,7 @@ class InfoProfileController extends GetxController {
                             children: [
                               CircleAvatar(
                                   radius:
-                                      MediaQuery.sizeOf(context).width * 0.1,
+                                      30.r,
                                   backgroundColor: AppColors.secondary,
                                   child: const AppAssetImage(
                                     "assets/images/ic_gallery.png",
@@ -241,7 +242,7 @@ class InfoProfileController extends GetxController {
                             children: [
                               CircleAvatar(
                                   radius:
-                                      MediaQuery.sizeOf(context).width * 0.1,
+                                      30.r,
                                   backgroundColor: AppColors.secondary,
                                   child: const AppAssetImage(
                                     "assets/images/ic_delete.png",

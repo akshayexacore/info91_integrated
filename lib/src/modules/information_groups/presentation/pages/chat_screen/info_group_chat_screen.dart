@@ -44,7 +44,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final ChatScreenController chatController = Get.put(ChatScreenController());
   FocusNode searchFocusnOde = FocusNode();
   FilePickerHelper filePickerHelper = FilePickerHelper();
-  InfromationRepository _repository = InfromationRepository();
+ final InfromationRepository _repository = InfromationRepository();
   Animation<Offset>? _animation;
   AnimationController? _animationController1;
   Tween<Offset>? _animationTween;

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/widgets/custom/custom_circle_image.dart';
@@ -80,19 +80,15 @@ class ProfileTopImageSec extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Padding(
+                   isAdmin ? Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 17.w, vertical: 8.h),
-                      child: InkWell(
-                        onTap: () {
-                          if (onCoverChange != null) {
-                            onCoverChange!();
-                          }
-                          // pickFromCamera();
-                        },
-                        child: isAdmin ? RoundIcons() : SizedBox(),
-                      ),
-                    )
+                      child: CustomRoundIcons(onProfileChange: (){
+                        if (onCoverChange != null) {
+                              onCoverChange!();
+                            }
+                      },),
+                    ): SizedBox()
                   ],
                 ),
               ),
@@ -101,29 +97,29 @@ class ProfileTopImageSec extends StatelessWidget {
                   top: 152.h,
                   left: 18.w,
                   child: Stack(
-                    clipBehavior: Clip.none,
+                    // clipBehavior: Clip.none,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          if (profileViewOnTap != null) {
-                            profileViewOnTap!();
-                          }
-                        },
-                        child: CircleAvatar(
-                          radius: 35,
-                          backgroundColor: Colors.white,
-                          child: circle_image(
-                              avatarUrl: profileImage,
-                              radius: 31,
-                              onTap: () {}),
-                        ),
+                      CircleAvatar(
+                        radius: 35,
+                        backgroundColor: Colors.white,
+                        child: circle_image(
+                            avatarUrl: profileImage,
+                            radius: 31,
+                            onTap: () { if (profileViewOnTap != null) {
+                          profileViewOnTap!();
+                        }}),
                       ),
                       if (isAdmin)
-                        Positioned(
-                            bottom: -5,
-                            right: 0,
-                            child: CustomRoundIcons(
-                                onProfileChange: onProfileChange)),
+                       
+                        InkWell(
+                            onTap: () {
+                              if (onProfileChange != null) {
+                                onProfileChange!();
+                              }
+                            },
+                            child:  CustomRoundIcons(onProfileChange: (){ if (onProfileChange != null) {
+                                onProfileChange!();
+                              }},))
                     ],
                   ),
                 ),
