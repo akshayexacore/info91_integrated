@@ -161,6 +161,10 @@ class _NewInputCardState extends State<NewInputCard> {
                         maxLines: widget.maxLines,
                         controller: widget.controller,
                         obscureText: show,
+                        style:const TextStyle(
+                          decoration: TextDecoration.none,
+                          decorationThickness: 0,
+                        ),
                         validator: widget.showValidator
                             ? widget.validator ??
                                 (value) {
@@ -294,6 +298,8 @@ class CustomDropDownWidget<T> extends StatelessWidget {
   final String Function(T) getItemTAble;
   final bool isValidator;
 
+  final VoidCallback? onSuffixIcon;
+
   const CustomDropDownWidget(
       {super.key,
       required this.title,
@@ -303,6 +309,7 @@ class CustomDropDownWidget<T> extends StatelessWidget {
       required this.itemList,
       this.isValidator = false,
       required this.onChanged,
+      this.onSuffixIcon,
       required this.selectedItem,
       this.hintText});
 
@@ -365,7 +372,10 @@ class CustomDropDownWidget<T> extends StatelessWidget {
             iconStyleData: IconStyleData(
                 icon: InkWell(
                   onTap: () {
-                    debugPrint("clicking the event");
+                    debugPrint("clearing function calling");
+                    if (onSuffixIcon != null) {
+                      onSuffixIcon!();
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 0),
@@ -387,7 +397,8 @@ class CustomDropDownWidget<T> extends StatelessWidget {
                 ),
               );
             }).toList(),
-            onChanged: onChanged),
+            onChanged: onChanged,
+            value: itemList.contains(selectedItem) ? selectedItem : null),
       ],
     );
   }
@@ -402,6 +413,8 @@ class CustomDropSearcDownWidget<T> extends StatelessWidget {
   final ValueChanged<T?> onChanged;
   final String Function(T) getItemLabel;
   final bool isValidator;
+  final IconData? suffixIconData;
+  final VoidCallback? onSuffixiconFunc;
   const CustomDropSearcDownWidget({
     super.key,
     required this.title,
@@ -409,7 +422,9 @@ class CustomDropSearcDownWidget<T> extends StatelessWidget {
     required this.getItemLabel,
     required this.itemList,
     required this.onChanged,
+    this.suffixIconData,
     this.isValidator = false,
+    this.onSuffixiconFunc,
     required this.selectedItem,
     this.hintText,
   });
@@ -439,10 +454,25 @@ class CustomDropSearcDownWidget<T> extends StatelessWidget {
               focusColor: Colors.transparent,
             ),
           ),
+          dropdownButtonProps: DropdownButtonProps(
+            icon: InkWell(
+              onTap: () {
+                if (onSuffixiconFunc != null) {
+                  onSuffixiconFunc!();
+                }
+              },
+              child: Icon(
+                suffixIconData ??
+                    Icons.arrow_drop_down, // Replace with your desired icon
+                size: 20,
+                color: Colors.black.withOpacity(0.6),
+              ),
+            ),
+          ),
           popupProps: PopupProps.menu(
             fit: FlexFit.loose,
             // showSearchBox: true, // Enable the search feature
-            searchFieldProps: TextFieldProps(
+            searchFieldProps: const TextFieldProps(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: "Search",

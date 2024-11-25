@@ -19,9 +19,11 @@ class GroupCreationController extends GetxController {
   var thirdCatList = <ThirdCategoryModel>[].obs;
   var planList = <PlanModel>[].obs;
   var selectedCategory2 = Rxn<SecondCategory>();
+    var selectedCategory1 = Rxn<Category>();
   var selectedCategory3 = Rxn<ThirdCategoryModel>();
+  
   var selectedItem = Rxn<SecondCategory>();
- var selectedPlanModel = Rx<PlanModel>(PlanModel());
+  var selectedPlanModel = Rx<PlanModel>(PlanModel());
   var planId = 0.obs;
   var isBusy = false.obs;
 
@@ -30,44 +32,52 @@ class GroupCreationController extends GetxController {
 
   @override
   void onInit() {
-   debugPrint("After getFirstCategory calssssl${selectedItem.value?.secondCategoryName}");
-     clear();
+    debugPrint(
+        "After getFirstCategory calssssl${selectedItem.value?.secondCategoryName}");
+    clear();
     getFirstCategory();
-  
-  
+
     super.onInit();
   }
-void onClose() {
-  // Dispose of all TextEditingControllers to free up resources
-  groupNameController.value.dispose();
-  purposeController.value.dispose();
-  category1Controller.value.dispose();
-  category2Controller.value.dispose();
-  category3Controller.value.dispose();
-  
-  super.onClose(); // Always call super.onClose() last
-}
+
+  void onClose() {
+    // Dispose of all TextEditingControllers to free up resources
+    groupNameController.value.dispose();
+    purposeController.value.dispose();
+    category1Controller.value.dispose();
+    category2Controller.value.dispose();
+    category3Controller.value.dispose();
+
+    super.onClose(); // Always call super.onClose() last
+  }
+
   setPlanModel(PlanModel model) {
     selectedPlanModel.value = model;
   }
-  clear(){
+
+  clear() {
     groupNameController.value.clear();
-  purposeController.value.clear();
-  category1Controller.value.clear();
-  category2Controller.value.clear();
-  typeController.value="";
-  category3Controller.value.clear();
- firstCategoryList .clear();
-   secondCatList.clear();
-   thirdCatList .clear();
-
-   selectedCategory2.value=SecondCategory();
- selectedCategory3.value = ThirdCategoryModel();
-   selectedItem .value= SecondCategory();
+    purposeController.value.clear();
+    category1Controller.value.clear();
+    category2Controller.value.clear();
+    typeController.value = "";
+    category3Controller.value.clear();
+    firstCategoryList.clear();
+    secondCatList.clear();
+    thirdCatList.clear();
+    selectedCategory2.value =null;
+    selectedCategory3.value = null;
+    selectedCategory1.value=null;
+    selectedItem.value = null;
+    
 //  selectedPlanModel= PlanModel();
-
   }
 
+  typeValueClear() {
+    if (typeController.value.isNotEmpty) {
+      typeController.value = "";
+    }
+  }
 
   void createGroupFun() async {
     isBusy(true);
@@ -108,14 +118,17 @@ void onClose() {
         createGroupFun();
       }
     }
-  }int getSelectedPalnIndex(){
+  }
+
+  int getSelectedPalnIndex() {
     int? index = planList.indexWhere((plan) => plan.id == planId.value);
-return index;
+    return index;
   }
 
   categoryOneSelection(va) {
     if (va.id.toString() != category1Controller.value.text) {
-      category1Controller.value.text = va?.id.toString() ?? "";
+      category1Controller.value.text = va?.id.toString() ?? "";   
+       selectedCategory1.value = va;
       category2Controller.value.clear();
 
       category3Controller.value.clear();
@@ -125,6 +138,33 @@ return index;
       thirdCatList.clear();
       getSecondCategory(category1Controller.value.text);
     }
+  }    categoryOneClear() {
+    if (selectedCategory1.value!=null) {
+      category1Controller.value.text =  "";   
+       selectedCategory1.value = null;
+      category2Controller.value.clear();
+      category3Controller.value.clear();
+      selectedCategory2.value = null;
+      selectedCategory3.value = null;
+      thirdCatList.clear();
+      secondCatList.clear();
+    }
+  }
+   categorytwoClear() {
+    if (selectedCategory2.value!=null) {
+      category2Controller.value.clear();
+      category3Controller.value.clear();
+      selectedCategory2.value = null;
+      selectedCategory3.value = null;
+      thirdCatList.clear();
+    }
+  }
+  categoryThreelear(){ 
+    if (selectedCategory3.value!=null) {
+
+      selectedCategory3.value = null;
+        category3Controller.value.clear();
+        }
   }
 
   category2Selection(va) {
@@ -136,21 +176,22 @@ return index;
 
       getThirdCategory(category2Controller.value.text);
     }
-  }
+  }  
 
   category3Selection(va) {
     category3Controller.value.text = va?.id.toString() ?? "";
-    selectedCategory3.value=va;
+    selectedCategory3.value = va;
   }
 
   getFirstCategory() async {
-      debugPrint("calling initially");
+    debugPrint("calling initially");
 
-try {   final response = await _infromationRepository.getFirstCategory();
-    firstCategoryList.value = response;}catch(e){
+    try {
+      final response = await _infromationRepository.getFirstCategory();
+      firstCategoryList.value = response;
+    } catch (e) {
       debugPrint("the error is $e");
     }
-  
   }
 
   getSecondCategory(String id) async {

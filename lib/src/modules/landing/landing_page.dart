@@ -253,8 +253,7 @@ class LandingPage extends StatelessWidget {
         // const SizedBox(
         //   width: 16,
         // ),
-        Obx(() {
-          return AppPopupMenuButton(
+     AppPopupMenuButton(
             children: [
               // AppPopupMenuItem(
               //   title: _controller.enableChatSelection.isTrue
@@ -287,8 +286,8 @@ class LandingPage extends StatelessWidget {
                 onPressed: _controller.gotoSettings,
               ),
             ],
-          );
-        }),
+          ),
+     
         const SizedBox(
           width: 10,
         )

@@ -83,6 +83,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
                       : controller.searchGroupList.isEmpty
                           ? const Center(child: Text("No Data"))
                           : ListView.separated(
+                             padding: EdgeInsets.zero,
                               itemCount: controller.searchGroupList.length,
                               itemBuilder: (context, index) => ChatListItem(
                                 chat: controller.searchGroupList[index],
@@ -101,6 +102,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
                         : controller.chatGroupList.isEmpty
                             ? const Center(child: Text("No Data"))
                             : ListView.separated(
+                               padding: EdgeInsets.zero,
                                 itemCount: controller.chatGroupList.length,
                                 itemBuilder: (context, index) => ChatListItem(
                                   chat: controller.chatGroupList[index],
@@ -115,6 +117,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
                     return controller.ownchatGroupList.isEmpty
                         ? const Center(child: Text("No Data"))
                         : ListView.separated(
+                           padding: EdgeInsets.zero,
                             itemCount: controller.ownchatGroupList.length,
                             itemBuilder: (context, index) => ChatListItem(
                               chat: controller.ownchatGroupList[index],

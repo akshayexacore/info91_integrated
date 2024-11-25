@@ -27,7 +27,10 @@ import 'package:info91/src/widgets/custom/image_view.dart';
         child: TextFormField(
           controller: widget.cntroler,
         
-          style: TextStyle(color: Colors.white),
+          style:const TextStyle(
+      decoration: TextDecoration.none,
+      decorationThickness: 0,color: AppColors.white
+    ),
           onChanged: (String va) {
             if (widget.onChangeFunction != null) {
               widget.onChangeFunction!(va);

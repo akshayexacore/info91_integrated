@@ -87,16 +87,16 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                           suffixIconData:
                               _controller.typeController.value.isEmpty
                                   ? Icons.arrow_drop_down
-                                  : Icons.arrow_drop_down,
+                                  : Icons.clear,
                           getItemTAble: (ak) => ak,
+                          onSuffixIcon: _controller.typeValueClear,
                           onChanged: (va) {
-                            // _controller.typeController.value = va ?? "";
-                            _controller.typeController.value =  "";
+                            _controller.typeController.value = va ?? "";
                             // if(_controller.typeController.value=="business" && _controller.planList.isNotEmpty)
                             _controller.getPlanList();
                           },
-                          itemList: ["business", "non-business"],
-                          selectedItem: "",
+                          itemList: const ["business", "non-business"],
+                          selectedItem: _controller.typeController.value,
                         );
                       }),
 
@@ -106,9 +106,11 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                       NewInputCard(
                         label: "Enter group name",
                         showValidator: true,
+                    
                         validatorMessage: "Please enter group name",
                         controller: _controller.groupNameController.value,
-                        title: "Group Name",
+                        title: "Group Name", height: 80,
+                        maxLines: 3,
                       ),
                       SizedBox(
                         height: 15.h,
@@ -137,17 +139,19 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                         () {
                           debugPrint(_controller.firstCategoryList.toString());
                           return CustomDropDownWidget<Category>(
-                              title: "Category1",
+                              title: "Category1", 
+                              suffixIconData:
+                                  _controller.selectedCategory1.value == null
+                                      ? Icons.arrow_drop_down
+                                      : Icons.clear,
                               getItemTAble: (ak) => ak.firstCategoryName ?? "",
+                              onSuffixIcon: _controller.categoryOneClear,
                               onChanged: (va) {
                                 _controller.categoryOneSelection(va);
-
-                                print(
-                                    "clearing${_controller.selectedCategory2.value}");
                               },
                               itemList: _controller.firstCategoryList ?? [],
                               selectedItem:
-                                  Category(firstCategoryName: "ok", id: 1));
+                                  _controller.selectedCategory1.value);
                         },
                       ),
 
@@ -166,6 +170,11 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                           debugPrint(_controller.secondCatList.toString());
                           return CustomDropSearcDownWidget<SecondCategory>(
                               title: "Category2",
+                              suffixIconData:
+                                  _controller.selectedCategory2.value == null
+                                      ? Icons.arrow_drop_down
+                                      : Icons.clear,
+                              onSuffixiconFunc: _controller.categorytwoClear,
                               isValidator:
                                   _controller.selectedCategory2.value == null,
                               getItemLabel: (ak) => ak.secondCategoryName ?? "",
@@ -193,10 +202,15 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                           debugPrint(_controller.secondCatList.toString());
                           return CustomDropSearcDownWidget<ThirdCategoryModel>(
                               title: "Category3",
+                              suffixIconData:
+                                  _controller.selectedCategory3.value == null
+                                      ? Icons.arrow_drop_down
+                                      : Icons.clear,
                               getItemLabel: (ak) => ak.thirdCategoryName ?? "",
                               onChanged: (va) {
                                 _controller.category3Selection(va);
                               },
+                              onSuffixiconFunc: _controller.categoryThreelear,
                               itemList: _controller.thirdCatList ?? [],
                               selectedItem:
                                   _controller.selectedCategory3.value);
@@ -262,6 +276,9 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                               )
                             : SizedBox();
                       }),
+                      SizedBox(
+                                    height: 35.h,
+                                  ),
                     ],
                   );
                 }),
