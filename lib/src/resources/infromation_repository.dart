@@ -14,7 +14,7 @@ import 'package:info91/src/resources/shared_preferences_data_provider.dart';
 import 'package:info91/src/resources/user_profile_repository.dart';
 import 'package:info91/src/utils/api_base_helper.dart';
 import 'package:info91/src/utils/response-utils.dart';
-import 'package:info91/src/widgets/custom/app_dialog.dart';
+
 
 class InfromationRepository {
   final ApiBaseHelper _api = ApiBaseHelper();
@@ -492,6 +492,36 @@ class InfromationRepository {
         ApiConstants.leaveInfoGroupApi,
         body: {
           "group_id": groupid,
+        
+        },
+        headers: {},
+      );
+     
+
+      if (response['statusCode'] == 200) {
+        return DoubleResponse(true, response['message']);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+   Future<DoubleResponse> editGroupNameAndAbout(
+      {
+      required String groupid,
+      required String name,
+      required String about,
+      
+      }) async {
+    try {
+     
+      final response = await _api.post(
+        ApiConstants.groupNameUpdateApi,
+        body: {
+          "group_id": groupid,
+          "purpose":about,
+          "group_name":name
         
         },
         headers: {},

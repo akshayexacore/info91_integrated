@@ -27,6 +27,8 @@ import 'package:info91/src/modules/information_groups/presentation/profile_secti
 import 'package:info91/src/modules/information_groups/presentation/profile_section/banners_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/controller/addmember_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/controller/banner_controller.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/controller/group_profile_edition_controler.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/group_profile_edition.dart';
 import 'package:info91/src/modules/landing/controllers/landing_controller.dart';
 import 'package:info91/src/modules/landing/landing_page.dart';
 import 'package:info91/src/modules/network_usage/controllers/network_usage_controller.dart';
@@ -87,6 +89,13 @@ class Routes {
         binding: BindingsBuilder(() {
           Get.lazyPut(() => ProfileController());
           Get.lazyPut(() => AuthController());
+        })),
+          GetPage(
+        name: GroupNameDisEdition.route,
+        page: () => GroupNameDisEdition(),
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => GroupProfileEditionController());
+
         })),
     GetPage(
         name: LandingPage.routeName,

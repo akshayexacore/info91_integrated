@@ -5,6 +5,8 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
+import 'package:info91/src/modules/information_groups/presentation/profile_section/group_profile_edition.dart';
+import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
 
 import 'package:info91/src/resources/infromation_repository.dart';
 import 'package:info91/src/widgets/custom/app_dialog.dart';
@@ -19,6 +21,7 @@ class InfoProfileController extends GetxController {
   final _infromationRepository = InfromationRepository();
   late ProgressDialog pr;
   var selectedFile = ''.obs;
+  var popuMenuList = [popupMenuModel(name: "Edit Name & About", value: 3)];
   @override
   void onInit() {
     pr = ProgressDialog(Get.context!, isDismissible: false);
@@ -34,6 +37,18 @@ class InfoProfileController extends GetxController {
       profilledataModel.value = response.data2;
     } else {
       AppDialog.showSnackBar('Failed ', response.data2);
+    }
+  }
+
+  void popupMenuSelectionFun(int val) {
+    if (val == 3) {
+      Get.toNamed(GroupNameDisEdition.route, arguments: {"group_id": groupId,"name":profilledataModel.value.groupName,"about":profilledataModel.value.purpose})
+          ?.then((value) {
+        if (value != null) {
+          getGroupInfoDetails(groupId);
+        }
+      });
+      ;
     }
   }
 
@@ -195,8 +210,7 @@ class InfoProfileController extends GetxController {
                           child: Column(
                             children: [
                               CircleAvatar(
-                                  radius:
-                                      30.r,
+                                  radius: 30.r,
                                   backgroundColor: AppColors.secondary,
                                   child: const AppAssetImage(
                                     "assets/images/ic_camera.png",
@@ -219,8 +233,7 @@ class InfoProfileController extends GetxController {
                           child: Column(
                             children: [
                               CircleAvatar(
-                                  radius:
-                                      30.r,
+                                  radius: 30.r,
                                   backgroundColor: AppColors.secondary,
                                   child: const AppAssetImage(
                                     "assets/images/ic_gallery.png",
@@ -241,8 +254,7 @@ class InfoProfileController extends GetxController {
                           child: Column(
                             children: [
                               CircleAvatar(
-                                  radius:
-                                      30.r,
+                                  radius: 30.r,
                                   backgroundColor: AppColors.secondary,
                                   child: const AppAssetImage(
                                     "assets/images/ic_delete.png",

@@ -289,10 +289,12 @@ class ChatScreenController extends GetxController {
   }
 
   void startFetchingChats() {
-    chatFetchTimer = Timer.periodic(
-      Duration(seconds: fetchIntervalSeconds),
-      (_) => viewMessage(),
-    );
+    // chatFetchTimer = Timer.periodic(
+    //   Duration(seconds: fetchIntervalSeconds),
+    //   (_) =>
+    //   viewMessage(),
+    // );
+     viewMessage();
   }
 
   void addMessages() {
@@ -424,7 +426,7 @@ class ChatScreenController extends GetxController {
     final response = await _infromationRepository.fileUpload(
       file: file,
     );
-
+print("sssreragsgddddddddddddddddd$response");
     if (response.data1) {
       sendMessage1(type, messsageType: response.data2["fileName"]);
     } else {}

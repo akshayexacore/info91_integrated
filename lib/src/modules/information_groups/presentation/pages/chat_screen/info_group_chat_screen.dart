@@ -90,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       chatController.selectedGroupId = widget.selectedGroupId ?? "";
     }
     chatController.isLoading.value = true;
-    // chatController.startFetchingChats();
+    chatController.startFetchingChats();
   }
 
   String formatMessageTimestamp(DateTime timestamp, int index) {
@@ -507,7 +507,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 onTap: () async {
                   final response = await filePickerHelper.pickFiles(
                       "image", context, "gallery");
-                  chatController.fileUpload(response, "image");
+                      debugPrint("testttttssssssssss$response");
+                      if(response.isNotEmpty){
+                      chatController.fileUpload(response, "image");
+                      }
+                  
                 },
               ),
               InkWell(

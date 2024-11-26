@@ -36,9 +36,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final InfoProfileController controller = Get.put(InfoProfileController());
-  List<popupMenuModel> listModel = [
-    popupMenuModel(name: "Group Setting", value: 1)
-  ];
+
 
   @override
   void initState() {
@@ -63,7 +61,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               enabled: controller.isLoading.value,
               child: CustomAppBar(
                 imageUrl: controller.profilledataModel.value.profileImage,
-                isPic: true,
+                isPic: true,actionWidget: [      
+                  CustomPopupmenu(
+                  onSelected: (val) {
+                    controller.popupMenuSelectionFun(val);
+              
+                  },
+                  itemList:controller.popuMenuList
+                  ,
+                )],
                 onBackButtonPress: () {
                   Navigator.pop(context, controller.profilledataModel.value);
                 },

@@ -32,4 +32,5 @@ class ApiConstants {
   static String addUsersToGroupApi = "/addUsersToGroup";
   static String changeGroupUserStatusApi = "/changeGroupUserStatus";
   static String leaveInfoGroupApi = "/leaveGroup";
+  static String groupNameUpdateApi = "/groupNameUpdate";
 }

@@ -14,16 +14,17 @@ class FilePickerHelper {
   late File _imageFile;
   FilePickerResult? result;
 
-  Future<String > pickFiles(String filetype, BuildContext context, String? source,
+  Future<String> pickFiles(
+      String filetype, BuildContext context, String? source,
       {Function(dynamic)? onDone}) async {
     switch (filetype) {
       case 'image':
-    String data=    await _handleImageSelection(context, source, onDone);
-    return data;
+        String data = await _handleImageSelection(context, source, onDone);
+        return data;
         break;
       case 'MultipleFile':
-   String file=     await _handleMultipleFileSelection(context);
-   return file;
+        String file = await _handleMultipleFileSelection(context);
+        return file;
         break;
       default:
         print('Unsupported file type');
@@ -46,9 +47,9 @@ class FilePickerHelper {
     );
 
     if (FilePickerResult == null) {
-  //  if (Navigator.canPop(context)) {
-  //     Navigator.pop(context); // Only pop if the dialog is open
-  //   }
+      //  if (Navigator.canPop(context)) {
+      //     Navigator.pop(context); // Only pop if the dialog is open
+      //   }
       return "";
     }
     List<File> files =
@@ -58,6 +59,7 @@ class FilePickerHelper {
     _imageFile = files[0];
     if (_isVideo(_imageFile)) {
       _showImagePreviewDialog(context, source, _imageFile, onDone);
+      // return _imageFile.path;
     } else {
       var compressedImage = await compressFile(_imageFile);
       _imageFile = File(compressedImage.path);
@@ -65,16 +67,14 @@ class FilePickerHelper {
       if (await _isFileSizeWithinLimit(
         compressedImage,
       )) {
-
-return compressedImage.path;
+        return compressedImage.path;
         // _showImagePreviewDialog(context, source, _imageFile, onDone);
       } else {
         _showSizeExceedDialog(context);
         return "";
       }
-     
     }
-     return "";
+    return "";
   }
 
   Future<String> _handleMultipleFileSelection(BuildContext context) async {
@@ -88,16 +88,15 @@ return compressedImage.path;
 
     for (PlatformFile file in result!.files) {
       if (_isFileSizeWithinLimitFromSize(file.size, maxSizeInMB: 5)) {
-        return file.path??"";
+        return file.path ?? "";
         // Handle file upload
         print('File path: ${file.path}');
         print('File size: ${file.size}');
       } else {
         _showSizeExceedDialog(context);
       }
-    
     }
-      return "";
+    return "";
   }
 
   Future<XFile> compressFile(File file) async {
@@ -172,7 +171,7 @@ return compressedImage.path;
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              icon:  Icon(
+                              icon: Icon(
                                 Icons.close,
                                 color: Colors.white,
                                 size: 25.sp,
@@ -193,33 +192,31 @@ return compressedImage.path;
                                 fit: BoxFit.fitHeight,
                               ))),
                     ),
-                    SizedBox(
-                      height: 60.h,
-                    ),
+                 Spacer(),
                     Column(
                       children: [
-                        Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: marginWidth),
-                          child: TextFormField(
-                              decoration: InputDecoration(
-                                  fillColor: AppColors.white,
-                                  hintText: "Add a caption.....",
-                                  hintStyle: GoogleFonts.poppins(
-                                      color: AppColors.black,
-                                      fontWeight: FontWeight.w400),
-                                  filled: true,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 4),
-                                  border: borderStyle(),
-                                  errorBorder: borderStyle(),
-                                  focusedBorder: borderStyle(),
-                                  enabledBorder: borderStyle(),
-                                  disabledBorder: borderStyle())),
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
+                        // Padding(
+                        //   padding:
+                        //       EdgeInsets.symmetric(horizontal: marginWidth),
+                        //   child: TextFormField(
+                        //       decoration: InputDecoration(
+                        //           fillColor: AppColors.white,
+                        //           hintText: "Add a caption.....",
+                        //           hintStyle: GoogleFonts.poppins(
+                        //               color: AppColors.black,
+                        //               fontWeight: FontWeight.w400),
+                        //           filled: true,
+                        //           contentPadding: const EdgeInsets.symmetric(
+                        //               vertical: 10, horizontal: 4),
+                        //           border: borderStyle(),
+                        //           errorBorder: borderStyle(),
+                        //           focusedBorder: borderStyle(),
+                        //           enabledBorder: borderStyle(),
+                        //           disabledBorder: borderStyle())),
+                        // ),
+                        // SizedBox(
+                        //   height: 20.h,
+                        // ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 20),
                           child: ListTile(
@@ -310,6 +307,7 @@ class _VideoPlayerWidgetState extends State<_VideoPlayerWidget> {
 
   @override
   void dispose() {
+    _controller.pause();
     _controller.dispose();
     super.dispose();
   }
@@ -362,16 +360,21 @@ class _VideoPlayerWidgetState extends State<_VideoPlayerWidget> {
                 },
               ),
               Expanded(
-                child: Slider(
-                  value: _controller.value.position.inSeconds.toDouble(),
-                  min: 0.0,
-                  max: _controller.value.duration.inSeconds.toDouble(),
-                  onChanged: (value) {
-                    setState(() {
-                      _controller.seekTo(Duration(seconds: value.toInt()));
-                    });
-                  },
-                ),
+                child: _controller.value.isInitialized
+                    ? Slider(
+                        value: _controller.value.position.inSeconds.toDouble(),
+                        min: 0.0,
+                        max: _controller.value.duration.inSeconds.toDouble(),
+                        onChanged: (value) {
+                          _controller.seekTo(Duration(seconds: value.toInt()));
+                        },
+                      )
+                    : Slider(
+                        value: 0.0,
+                        min: 0.0,
+                        max: 1.0,
+                        onChanged: (_) {},
+                      ),
               ),
               Text(
                 _formatDuration(_controller.value.duration),
