@@ -18,6 +18,7 @@ import 'package:info91/src/modules/information_groups/presentation/blocs/chat_sc
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/build_message_widget.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/contact_list.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/profile_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/widgets/custom_avatarwithimageicon.dart';
 
 import 'package:info91/src/resources/infromation_repository.dart';
 import 'package:info91/src/widgets/custom/app_app_bar.dart';
@@ -29,6 +30,8 @@ import 'package:info91/src/widgets/custom/reply_chat_message_tile.dart';
 import 'package:info91/src/widgets/tiny/app_back_button.dart';
 
 import 'package:intl/intl.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:record/record.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -50,6 +53,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   AnimationController? _animationController1;
   Tween<Offset>? _animationTween;
   String msgdate = '';
+  final AudioRecorder _recorder = AudioRecorder();
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
+  Duration _audioDuration = Duration.zero;
+  Duration _currentPosition = Duration.zero;
 
   GroupProfileModel model = GroupProfileModel();
   @override
@@ -77,6 +85,19 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         curve: Curves.ease,
       ),
     );
+       _audioPlayer.durationStream.listen((duration) {
+      setState(() {
+        _audioDuration = duration ?? Duration.zero;
+      });
+    });
+
+    _audioPlayer.positionStream.listen((position) {
+      setState(() {
+        _currentPosition = position;
+      });
+    });
+
+   
   }
 
   getProfileData() async {
@@ -725,7 +746,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   decoration: InputDecoration(
                     contentPadding:
                         const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-                    hintText: 'Type your message here',
+                    hintText: chatController.isRecording.value?"Recording":'Type your message here',
                     hintStyle: GoogleFonts.poppins(
                         fontSize: 12.5.sp,
                         color: AppColors.text.withOpacity(.75)),
@@ -768,7 +789,34 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-              ),
+              ),  SizedBox(width: 10.w,),
+               CustomCircleIconWidget(
+                          radius: 21.r,
+                          iconData: Icons.mic_none,
+                          iconSize: 20,
+                          iconColor: AppColors.primary,
+                          backgroundClr: AppColors.primary.withOpacity(.2),
+                          onCange: () {},
+                          onLongPress: () async {
+                            debugPrint("recording check${_recorder.hasPermission()}");
+                            if (await _recorder.hasPermission()) {
+                            chatController.onLongPress(_recorder);}
+                          },
+                          onLongPressEnd: () async {
+                            debugPrint("recording end${chatController.isRecording.value}");
+                            if (chatController.isRecording.value) {
+                              final String? path = await _recorder.stop();
+                              if (path != null) {
+                                chatController.isRecording.value =
+                                    false;
+                                chatController.filePath.value =
+                                    path;
+                                chatController.stopRecordingTimer();
+                                chatController.fileUpload(chatController.filePath.value, "audio");
+                              }
+                            }
+                          },
+                        ),
               Obx(() => IconButton(
                     icon: chatController.isTextFieldEmpty.value
                         ? Icon(

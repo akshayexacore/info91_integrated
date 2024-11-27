@@ -19,6 +19,9 @@ import 'package:info91/src/widgets/custom/app_dialog.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:record/record.dart';
 import 'package:xid/xid.dart';
 import 'dart:math';
 
@@ -30,6 +33,17 @@ class ChatScreenController extends GetxController {
   String selectedGroupId = '';
   final _infromationRepository = InfromationRepository();
   get selectedMoreThanOne => selectedMessage.length != 1;
+
+  var isRecording = false.obs;
+  var isDragging = false.obs;
+  var isDelete = false.obs;
+  var dragPosition = 0.0;
+  var isPlaying = false.obs;
+  var filePath = ''.obs;
+  var recordingDuration = Duration.zero.obs;
+
+  Timer? _recordingTimer;
+
   List<Map<String, dynamic>> messagesData = [
     {
       "message_id": "20241107140957348901b9",
@@ -278,7 +292,19 @@ class ChatScreenController extends GetxController {
     super.dispose();
     _disposeOverlayEntry();
     chatFetchTimer?.cancel();
-     chatFetchTimer = null;
+    chatFetchTimer = null;
+  }
+
+  void startRecordingTimer() {
+    recordingDuration.value = Duration.zero;
+    _recordingTimer?.cancel();
+    _recordingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      recordingDuration.value += Duration(seconds: 1);
+    });
+  }
+
+  void stopRecordingTimer() {
+    _recordingTimer?.cancel();
   }
 
   void _disposeOverlayEntry() {
@@ -294,7 +320,17 @@ class ChatScreenController extends GetxController {
     //   (_) =>
     //   viewMessage(),
     // );
-     viewMessage();
+    viewMessage();
+  }
+
+  onLongPress(AudioRecorder _recorder) async {
+    final Directory apdirctry = await getApplicationDocumentsDirectory();
+    final String path = join(apdirctry.path, "recording.wav");
+    await _recorder.start(RecordConfig(), path: path);
+
+    isRecording.value = true;
+    filePath.value = '';
+    startRecordingTimer();
   }
 
   void addMessages() {
@@ -377,12 +413,13 @@ class ChatScreenController extends GetxController {
     );
   }
 
-  Future<void> sendMessage1(String type, {dynamic? messsageType,String? groupId}) async {
+  Future<void> sendMessage1(String type,
+      {dynamic? messsageType, String? groupId}) async {
     _disposeOverlayEntry();
     var xid = Xid();
 
     final response = await _infromationRepository.sendMessage(
-        groupId: groupId??selectedGroupId,
+        groupId: groupId ?? selectedGroupId,
         type: type,
         message: messsageType ?? searchController.text.trim(),
         replyFlag: isReplay.value,
@@ -422,13 +459,14 @@ class ChatScreenController extends GetxController {
     isLoading.value = false;
   }
 
-  Future<void> fileUpload(String file, String type,{String? groupId}) async {
+  Future<void> fileUpload(String file, String type, {String? groupId}) async {
     final response = await _infromationRepository.fileUpload(
       file: file,
     );
-print("sssreragsgddddddddddddddddd$response");
+    print("sssreragsgddddddddddddddddd$response");
     if (response.data1) {
-      sendMessage1(type, messsageType: response.data2["fileName"],groupId: groupId);
+      sendMessage1(type,
+          messsageType: response.data2["fileName"], groupId: groupId);
     } else {}
   }
 

@@ -1,7 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/configs/filepicker.dart';
+
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class VideoPlayerScreen2 extends StatefulWidget {
   final bool looping;
@@ -87,6 +94,125 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen2> {
           );
         }
       },
+    );
+  }
+}
+
+
+class VideoMessageBubble extends StatefulWidget {
+  final String videoPath;
+  final String timestamp;
+  final String videoDuration;
+  final bool isSender;
+  final String videoSize;
+  final VoidCallback onTap;
+
+  const VideoMessageBubble({
+    Key? key,
+    required this.videoPath,
+    required this.timestamp,
+    required this.videoDuration,
+     required this.onTap,
+    required this.isSender,required this.videoSize,
+  }) : super(key: key);
+
+  @override
+  State<VideoMessageBubble> createState() => _VideoMessageBubbleState();
+}
+
+class _VideoMessageBubbleState extends State<VideoMessageBubble> {
+  String? thumbnailPath;
+
+  Future<void> generateThumbnail() async {
+    try {
+      final path = await VideoThumbnail.thumbnailFile(
+        video:widget. videoPath, // Replace with a valid URL
+        imageFormat: ImageFormat.PNG,
+        maxWidth: 250,
+        quality: 75,
+      );
+      setState(() {
+        thumbnailPath = path;
+      });
+    } catch (e) {
+      print("Error generating thumbnail: $e");
+    }
+  }
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes);
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$minutes:$seconds";
+  }
+ @override
+  void initState() {
+    super.initState();
+    generateThumbnail();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: SizedBox(width: 250.w,
+      height: 300.h,
+        // margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        
+        child: Stack(
+                alignment: Alignment.center,
+          children: [
+            ClipRRect(
+               borderRadius: BorderRadius.circular(12),
+              child: thumbnailPath != null
+                  ? Image.file(File(thumbnailPath!), width: 300,fit: BoxFit.fitWidth, )
+                  : const CircularProgressIndicator(),
+            ),const Icon(
+                    Icons.play_circle_fill,
+                    color: Colors.white,
+                    size: 50,
+                  ),
+                   Positioned(
+                   bottom: 5,
+              left: 5,
+              right: 5,
+                    
+            
+              child: Row(
+                // mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(children: [
+                   Icon(
+                      Icons.videocam,
+                      color: Colors.white,
+                      size: 20.sp,
+                    ),
+                const    SizedBox(width: 2,),
+                    Text(
+                    widget.videoSize ?? "",
+                    style: GoogleFonts.poppins(
+                        color: AppColors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 11.sp),
+                  ),
+                  ],),
+                  Text(
+                    widget.timestamp ?? "",
+                    style: GoogleFonts.poppins(
+                        color: AppColors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 11.sp),
+                  ),
+                  
+                  // if (isMe) _buildMessageStatus(message.messageStatus ?? ""),
+                ],
+              ),
+            ),
+                  
+          ],
+        ),
+      ),
     );
   }
 }

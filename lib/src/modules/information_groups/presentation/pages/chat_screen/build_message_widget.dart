@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/configs/filepicker.dart';
 import 'package:info91/src/models/informationgroup/chat_model.dart';
 import 'package:info91/src/modules/information_groups/presentation/blocs/chat_screen_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/contactSelected_view_screen.dart';
@@ -48,7 +49,7 @@ class BuildMessageWidget extends StatelessWidget {
       case "document":
         return _buildDocumentMessage(messageModel, context,
             isSameUser: isSameUser);
-      case MessageType.audio:
+      case "audio":
         return _buildAudioMessage(messageModel);
       case "video":
         return _buildVideoMessage(messageModel,context,
@@ -375,7 +376,7 @@ class BuildMessageWidget extends StatelessWidget {
               ? Container(
                   width: w / 1.5,
                   padding:
-                      EdgeInsets.only(top: 5, right: 5, bottom: 5, left: 7),
+                     const EdgeInsets.only(top: 5, right: 5, bottom: 5, left: 7),
                   decoration: BoxDecoration(
                       // border: Border.all(color: ColorPalette.primary),
                       borderRadius: BorderRadius.only(
@@ -441,37 +442,39 @@ class BuildMessageWidget extends StatelessWidget {
                   ),
                 )
               : SizedBox(),
-        //  VideoPlayerScreen2(
-        //    autoplay: false,
-        //    looping: true,
-        //    me: false,
-        //    videoUrl: message.message ?? "",
-        //    alignmentGeometry: Alignment.topLeft,
-        //    // videoPlayerController:
-        //    //     VideoPlayerController.network(
-        //    //   messageList[index].message ?? "",
-        //    // ),
-        //  ),
+         VideoMessageBubble(
+        isSender: isReplyMe,
+        videoDuration: message.fileSize??"",
+        videoPath: message.message??"",videoSize: message.fileSize??"",
+        timestamp:message.time??"" ,
+        onTap: (){
+          showVideoPreviewDialog(context,model: message);
+        },
+           // videoPlayerController:
+           //     VideoPlayerController.network(
+           //   messageList[index].message ?? "",
+           // ),
+         ),
        
-          Align(
-            alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  message.time ?? "",
-                  style: GoogleFonts.poppins(
-                      color: Color(0xff666666),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 11.sp),
-                ),
-                SizedBox(
-                  width: 1.w,
-                ),
-                if (isMe) _buildMessageStatus(message.messageStatus ?? ""),
-              ],
-            ),
-          ),
+          // Align(
+          //   alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+          //   child: Row(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: [
+          //       Text(
+          //         message.time ?? "",
+          //         style: GoogleFonts.poppins(
+          //             color: Color(0xff666666),
+          //             fontWeight: FontWeight.w400,
+          //             fontSize: 11.sp),
+          //       ),
+          //       SizedBox(
+          //         width: 1.w,
+          //       ),
+          //       if (isMe) _buildMessageStatus(message.messageStatus ?? ""),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
