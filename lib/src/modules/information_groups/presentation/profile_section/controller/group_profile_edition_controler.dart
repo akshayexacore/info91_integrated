@@ -37,7 +37,7 @@ class GroupProfileEditionController extends GetxController {
           name: groupNameController.text.trim(),
           about: aboutController.text.trim());
       if (response.data1) {
-        Get.back();
+        Get.back(result: true);
         AppDialog.showToast(
           response.data2,
         );

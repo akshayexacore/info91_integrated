@@ -14,6 +14,7 @@ import 'package:info91/src/models/informationgroup/chat_model.dart';
 import 'package:info91/src/modules/information_groups/presentation/blocs/chat_screen_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/contactSelected_view_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/widgets/VideoPlayerScreen2.dart';
 
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 import 'package:info91/src/widgets/custom/custom_divider.dart';
@@ -49,8 +50,9 @@ class BuildMessageWidget extends StatelessWidget {
             isSameUser: isSameUser);
       case MessageType.audio:
         return _buildAudioMessage(messageModel);
-      case MessageType.video:
-        return _buildVideoMessage(messageModel);
+      case "video":
+        return _buildVideoMessage(messageModel,context,
+            isSameUser: isSameUser);
       case "reply":
         return _buildReplyMessage(messageModel);
       case "contact":
@@ -105,12 +107,12 @@ class BuildMessageWidget extends StatelessWidget {
                               left: -1,
                               top: 2,
                               child: message.replyDetails?.type == "image"
-                                  ? Icon(
+                                  ?const Icon(
                                       Icons.image,
                                       size: 16,
                                     )
                                   : message.replyDetails?.type == "video"
-                                      ? Icon(
+                                      ? const Icon(
                                           Icons.video_library,
                                           size: 16,
                                         )
@@ -145,7 +147,7 @@ class BuildMessageWidget extends StatelessWidget {
                     ],
                   ),
                 )
-              : SizedBox(),
+              :const SizedBox(),
           Linkify(
             linkStyle: GoogleFonts.poppins(decorationColor: Colors.blue),
             onOpen: (link) async {
@@ -195,7 +197,7 @@ class BuildMessageWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           if(!isSameUser && !isMe)Text(message.name??"",style: TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
+           if(!isSameUser && !isMe)Text(message.name??"",style:const TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
           message.replyFlag == true
               ? Container(
                   width: w,
@@ -354,10 +356,124 @@ class BuildMessageWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildVideoMessage(ChatMessage message) {
-    return ListTile(
-      title: Text(message.message ?? ""),
-      subtitle: Text(message.userId ?? ""),
+  Widget _buildVideoMessage(ChatMessage message, BuildContext context,
+      {required bool isSameUser}) {
+     double w1 = MediaQuery.of(context).size.width;
+    double w = w1 > 700 ? 400 : w1;
+    bool isMe = message.isMe ?? false;
+    bool isReplyMe = true;
+    return commonBuildMessageOuter(
+      message: message,
+      context: context,
+      isSameUser: isSameUser,
+      isMe: isMe,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if(!isSameUser && !isMe)Text(message.name??"",style: TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
+          message.replyFlag == true
+              ? Container(
+                  width: w / 1.5,
+                  padding:
+                      EdgeInsets.only(top: 5, right: 5, bottom: 5, left: 7),
+                  decoration: BoxDecoration(
+                      // border: Border.all(color: ColorPalette.primary),
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(7),
+                          topLeft: Radius.circular(7)),
+                      color: isMe ? AppColors.replyWhite : Color(0xff666666)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          isReplyMe == true
+                              ? "you"
+                              : "${message.replyDetails?.name.toString().toTitleCase()}",
+                          style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary)),
+                      Container(
+                          child: Stack(
+                        children: [
+                          Positioned(
+                              left: -1,
+                              top: 2,
+                              child: message.replyDetails?.type == "image"
+                                  ? Icon(
+                                      Icons.image,
+                                      size: 16,
+                                    )
+                                  : message.replyDetails?.type == "video"
+                                      ? Icon(
+                                          Icons.video_library,
+                                          size: 16,
+                                        )
+                                      : message.replyDetails?.type == "audio"
+                                          ? Icon(Icons.mic, size: 16)
+                                          : message.replyDetails?.type ==
+                                                  "document"
+                                              ? Icon(Icons.file_copy, size: 16)
+                                              : SizedBox()),
+                          message.replyDetails?.type == "text" ||
+                                  message.replyDetails?.type ==
+                                      MessageType.mention
+                              ? Text(
+                                  message.replyDetails?.message ?? "",
+                                  softWrap: true,
+                                  textScaler: TextScaler.linear(1),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: Text(
+                                    message.replyDetails?.message ?? "",
+                                    softWrap: true,
+                                    textScaler: TextScaler.linear(1),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                        ],
+                      ))
+                    ],
+                  ),
+                )
+              : SizedBox(),
+        //  VideoPlayerScreen2(
+        //    autoplay: false,
+        //    looping: true,
+        //    me: false,
+        //    videoUrl: message.message ?? "",
+        //    alignmentGeometry: Alignment.topLeft,
+        //    // videoPlayerController:
+        //    //     VideoPlayerController.network(
+        //    //   messageList[index].message ?? "",
+        //    // ),
+        //  ),
+       
+          Align(
+            alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  message.time ?? "",
+                  style: GoogleFonts.poppins(
+                      color: Color(0xff666666),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 11.sp),
+                ),
+                SizedBox(
+                  width: 1.w,
+                ),
+                if (isMe) _buildMessageStatus(message.messageStatus ?? ""),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

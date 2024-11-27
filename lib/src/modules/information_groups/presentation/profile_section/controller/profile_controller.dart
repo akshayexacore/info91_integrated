@@ -42,9 +42,12 @@ class InfoProfileController extends GetxController {
 
   void popupMenuSelectionFun(int val) {
     if (val == 3) {
-      Get.toNamed(GroupNameDisEdition.route, arguments: {"group_id": groupId,"name":profilledataModel.value.groupName,"about":profilledataModel.value.purpose})
-          ?.then((value) {
-        if (value != null) {
+      Get.toNamed(GroupNameDisEdition.route, arguments: {
+        "group_id": groupId,
+        "name": profilledataModel.value.groupName,
+        "about": profilledataModel.value.purpose
+      })?.then((value) {
+        if (value) {
           getGroupInfoDetails(groupId);
         }
       });

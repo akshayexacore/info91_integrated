@@ -20,6 +20,8 @@ import 'package:info91/src/modules/forward/controllers/forward_controller.dart';
 import 'package:info91/src/modules/forward/forward_page.dart';
 import 'package:info91/src/modules/groups/controllers/groups_controller.dart';
 import 'package:info91/src/modules/home/controllers/home_controller.dart';
+import 'package:info91/src/modules/information_groups/presentation/blocs/chat_screen_controller.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_controller.dart';
@@ -68,6 +70,13 @@ class Routes {
         binding: BindingsBuilder(() {
           Get.lazyPut(() => LoginController());
           Get.lazyPut(() => AuthController());
+        })),
+    GetPage(
+        name: ChatScreen.routeName,
+        page: () => ChatScreen(),
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => ChatScreenController());
+          
         })),
     GetPage(
         name: LoginPage.routeName,

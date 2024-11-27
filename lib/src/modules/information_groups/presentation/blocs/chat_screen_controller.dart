@@ -377,12 +377,12 @@ class ChatScreenController extends GetxController {
     );
   }
 
-  Future<void> sendMessage1(String type, {dynamic? messsageType}) async {
+  Future<void> sendMessage1(String type, {dynamic? messsageType,String? groupId}) async {
     _disposeOverlayEntry();
     var xid = Xid();
 
     final response = await _infromationRepository.sendMessage(
-        groupId: selectedGroupId,
+        groupId: groupId??selectedGroupId,
         type: type,
         message: messsageType ?? searchController.text.trim(),
         replyFlag: isReplay.value,
@@ -422,13 +422,13 @@ class ChatScreenController extends GetxController {
     isLoading.value = false;
   }
 
-  Future<void> fileUpload(String file, String type) async {
+  Future<void> fileUpload(String file, String type,{String? groupId}) async {
     final response = await _infromationRepository.fileUpload(
       file: file,
     );
 print("sssreragsgddddddddddddddddd$response");
     if (response.data1) {
-      sendMessage1(type, messsageType: response.data2["fileName"]);
+      sendMessage1(type, messsageType: response.data2["fileName"],groupId: groupId);
     } else {}
   }
 

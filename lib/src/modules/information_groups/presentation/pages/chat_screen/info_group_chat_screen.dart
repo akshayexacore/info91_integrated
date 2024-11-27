@@ -34,6 +34,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 class ChatScreen extends StatefulWidget {
   final String? selectedGroupId;
   final GroupProfileModel? model;
+  static const routeName="/infoChatscreen";
   ChatScreen({super.key, this.selectedGroupId, this.model});
 
   @override
@@ -224,7 +225,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               Expanded(
                 child: Obx(() {
                   debugPrint(chatController.messages.isEmpty.toString());
-                  return chatController.isLoading.value? Center(child: CircularProgressIndicator()) :GroupedList<ChatMessage, DateTime>(
+                  return chatController.isLoading.value?const Center(child: CircularProgressIndicator()) :GroupedList<ChatMessage, DateTime>(
                       controller: chatController.scrollController,
                       elements: chatController.messages,
                       groupBy: (element) => DateTime.parse(element.date ?? ""),
@@ -506,8 +507,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     color: AppColors.secondary),
                 onTap: () async {
                   final response = await filePickerHelper.pickFiles(
-                      "image", context, "gallery");
-                      debugPrint("testttttssssssssss$response");
+                      "image", context, "gallery",groupId:widget.selectedGroupId );
+                  
                       if(response.isNotEmpty){
                       chatController.fileUpload(response, "image");
                       }

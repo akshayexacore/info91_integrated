@@ -7,6 +7,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'dart:io';
 
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/information_groups/presentation/blocs/chat_screen_controller.dart';
 import 'package:video_player/video_player.dart';
 
 class FilePickerHelper {
@@ -16,12 +17,12 @@ class FilePickerHelper {
 
   Future<String> pickFiles(
       String filetype, BuildContext context, String? source,
-      {Function(dynamic)? onDone}) async {
+      {Function(dynamic)? onDone,String? groupId}) async {
     switch (filetype) {
       case 'image':
-        String data = await _handleImageSelection(context, source, onDone);
+        String data = await _handleImageSelection(context, source, onDone,groupId:groupId);
         return data;
-        break;
+     
       case 'MultipleFile':
         String file = await _handleMultipleFileSelection(context);
         return file;
@@ -40,7 +41,7 @@ class FilePickerHelper {
   }
 
   Future<String> _handleImageSelection(
-      BuildContext context, String? source, Function(dynamic)? onDone) async {
+      BuildContext context, String? source, Function(dynamic)? onDone,{String? groupId}) async {
     final FilePickerResult = await FilePicker.platform.pickFiles(
       type: FileType.media, // This allows picking both images and videos
       // allowMultiple: true,
@@ -58,7 +59,7 @@ class FilePickerHelper {
     print("files$files");
     _imageFile = files[0];
     if (_isVideo(_imageFile)) {
-      _showImagePreviewDialog(context, source, _imageFile, onDone);
+      _showImagePreviewDialog(context, source, _imageFile, onDone,groupId:groupId);
       // return _imageFile.path;
     } else {
       var compressedImage = await compressFile(_imageFile);
@@ -134,7 +135,7 @@ class FilePickerHelper {
   }
 
   void _showImagePreviewDialog(BuildContext context, String? source,
-      File imageFile, Function(dynamic)? onDone) {
+      File imageFile, Function(dynamic)? onDone,{String? groupId}) {
     InputBorder? borderStyle() {
       return OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
@@ -158,90 +159,88 @@ class FilePickerHelper {
               color: Colors.black,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 25.sp,
-                              )),
-                        ],
-                      ),
-                    ),
-                    Center(
-                      child: _isVideo(imageFile) // Check if it's a video
-                          ? _VideoPlayerWidget(file: imageFile)
-                          : SizedBox(
-                              height: MediaQuery.of(context).size.height / 1.6,
-                              child: Center(
-                                  child: Image.file(
-                                imageFile,
-                                width: MediaQuery.of(context).size.width,
-                                height: 500.h,
-                                fit: BoxFit.fitHeight,
-                              ))),
-                    ),
-                 Spacer(),
-                    Column(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        // Padding(
-                        //   padding:
-                        //       EdgeInsets.symmetric(horizontal: marginWidth),
-                        //   child: TextFormField(
-                        //       decoration: InputDecoration(
-                        //           fillColor: AppColors.white,
-                        //           hintText: "Add a caption.....",
-                        //           hintStyle: GoogleFonts.poppins(
-                        //               color: AppColors.black,
-                        //               fontWeight: FontWeight.w400),
-                        //           filled: true,
-                        //           contentPadding: const EdgeInsets.symmetric(
-                        //               vertical: 10, horizontal: 4),
-                        //           border: borderStyle(),
-                        //           errorBorder: borderStyle(),
-                        //           focusedBorder: borderStyle(),
-                        //           enabledBorder: borderStyle(),
-                        //           disabledBorder: borderStyle())),
-                        // ),
-                        // SizedBox(
-                        //   height: 20.h,
-                        // ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          child: ListTile(
-                            focusColor: Colors.red,
-                            title: Text("Akshay",
-                                style: GoogleFonts.poppins(
-                                  color: AppColors.white,
-                                )),
-                            trailing: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: IconButton(
-                                onPressed: () {
-                                  // Handle file upload
-                                  Navigator.pop(context);
-                                },
-                                icon: Icon(Icons.send),
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                        )
+                        IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 25.sp,
+                            )),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  Center(
+                    child: _isVideo(imageFile) // Check if it's a video
+                        ? _VideoPlayerWidget(file: imageFile)
+                        : SizedBox(
+                            height: MediaQuery.of(context).size.height / 1.6,
+                            child: Center(
+                                child: Image.file(
+                              imageFile,
+                              width: MediaQuery.of(context).size.width,
+                              height: 500.h,
+                              fit: BoxFit.fitHeight,
+                            ))),
+                  ),
+               
+                  Column(mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Padding(
+                      //   padding:
+                      //       EdgeInsets.symmetric(horizontal: marginWidth),
+                      //   child: TextFormField(
+                      //       decoration: InputDecoration(
+                      //           fillColor: AppColors.white,
+                      //           hintText: "Add a caption.....",
+                      //           hintStyle: GoogleFonts.poppins(
+                      //               color: AppColors.black,
+                      //               fontWeight: FontWeight.w400),
+                      //           filled: true,
+                      //           contentPadding: const EdgeInsets.symmetric(
+                      //               vertical: 10, horizontal: 4),
+                      //           border: borderStyle(),
+                      //           errorBorder: borderStyle(),
+                      //           focusedBorder: borderStyle(),
+                      //           enabledBorder: borderStyle(),
+                      //           disabledBorder: borderStyle())),
+                      // ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: ListTile(
+                          focusColor: Colors.red,
+                          title: Text("Akshay",
+                              style: GoogleFonts.poppins(
+                                color: AppColors.white,
+                              )),
+                          trailing: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: IconButton(
+                              onPressed: () {
+                               ChatScreenController().fileUpload(imageFile.path, "video",groupId: groupId);
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(Icons.send),
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
               ),
             ),
           );

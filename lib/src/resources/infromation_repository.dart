@@ -521,8 +521,6 @@ class InfromationRepository {
         body: {
           "group_id": groupid,
           "purpose":about,
-          "group_name":name
-        
         },
         headers: {},
       );
