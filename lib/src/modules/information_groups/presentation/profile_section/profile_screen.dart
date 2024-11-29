@@ -191,7 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   buttonName: "Group info",
                                   onTap: () {
                                     Get.toNamed('/group_info', arguments: {
-                                      "group_id": widget.selectedGroupId
+                                      "group_id": widget.selectedGroupId,
                                     });
 
                                     // Navigator.push(

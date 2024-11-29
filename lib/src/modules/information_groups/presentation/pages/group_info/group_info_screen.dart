@@ -47,7 +47,8 @@ class GroupInfo extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (controller.dataModel.value.isAdmin == true) ...[
+                        if (controller.dataModel.value.isAdmin == true &&
+                            !controller.isNonEdit.value) ...[
                           commonGap,
                           blusHeading("Contact Details"),
                           commonGap,
@@ -98,13 +99,17 @@ class GroupInfo extends StatelessWidget {
                             controller:
                                 controller.googleMapControllerController,
                             title: "Google map link",
-                          ),
+                          ),  commonGap,
                         ] else ...[
                           commonGap,
                           blusHeading("Contact Details"),
                           commonGap,
                           groupInfoDoubleText("Mobile Number",
-                              controller.mobileNumberController.text),
+                              controller.mobileNumberController.text,
+                              onTap: () {
+                            controller.saveContact(
+                                controller.mobileNumberController.text);
+                          }),
                           groupInfoDoubleText(
                               "Alternative Number",
                               controller
@@ -139,7 +144,8 @@ class GroupInfo extends StatelessWidget {
     );
   }
 
-  Widget groupInfoDoubleText(String heading, String content) {
+  Widget groupInfoDoubleText(String heading, String content,
+      {Function? onTap}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -147,7 +153,13 @@ class GroupInfo extends StatelessWidget {
         SizedBox(
           height: 8.h,
         ),
-        greyBoldText(content, fontWeight: FontWeight.w400),
+        InkWell(
+            onTap: () {
+              if (onTap != null) {
+                onTap!();
+              }
+            },
+            child: greyBoldText(content, fontWeight: FontWeight.w400)),
         SizedBox(
           height: 15.h,
         ),

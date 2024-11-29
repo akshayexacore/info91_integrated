@@ -29,6 +29,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
+import 'package:voice_message_package/voice_message_package.dart';
 
 class BuildMessageWidget extends StatelessWidget {
   final ChatMessage messageModel;
@@ -50,7 +51,8 @@ class BuildMessageWidget extends StatelessWidget {
         return _buildDocumentMessage(messageModel, context,
             isSameUser: isSameUser);
       case "audio":
-        return _buildAudioMessage(messageModel);
+        return _buildAudioMessage(messageModel,context,
+            isSameUser: isSameUser);
       case "video":
         return _buildVideoMessage(messageModel,context,
             isSameUser: isSameUser);
@@ -350,10 +352,128 @@ class BuildMessageWidget extends StatelessWidget {
   //   );
   // }
 
-  Widget _buildAudioMessage(ChatMessage message) {
-    return ListTile(
-      title: Text(message.message ?? ""),
-      subtitle: Text(message.userId ?? ""),
+  Widget _buildAudioMessage(ChatMessage message, BuildContext context,
+      {required bool isSameUser}) {
+     double w1 = MediaQuery.of(context).size.width;
+    double w = w1 > 700 ? 400 : w1;
+    bool isMe = message.isMe ?? false;
+    bool isReplyMe = true;
+    return commonBuildMessageOuter(
+      message: message,
+      context: context,
+      isSameUser: isSameUser,
+      isMe: isMe,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if(!isSameUser && !isMe)Text(message.name??"",style:const TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
+          message.replyFlag == true
+              ? Container(
+                  width: w / 1.5,
+                  padding:
+                     const EdgeInsets.only(top: 5, right: 5, bottom: 5, left: 7),
+                  decoration: BoxDecoration(
+                      // border: Border.all(color: ColorPalette.primary),
+                      borderRadius:const BorderRadius.only(
+                          topRight: Radius.circular(7),
+                          topLeft: Radius.circular(7)),
+                      color: isMe ? AppColors.replyWhite : Color(0xff666666)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          isReplyMe == true
+                              ? "you"
+                              : "${message.replyDetails?.name.toString().toTitleCase()}",
+                          style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary)),
+                      Container(
+                          child: Stack(
+                        children: [
+                          Positioned(
+                              left: -1,
+                              top: 2,
+                              child: message.replyDetails?.type == "image"
+                                  ? Icon(
+                                      Icons.image,
+                                      size: 16,
+                                    )
+                                  : message.replyDetails?.type == "video"
+                                      ? Icon(
+                                          Icons.video_library,
+                                          size: 16,
+                                        )
+                                      : message.replyDetails?.type == "audio"
+                                          ? Icon(Icons.mic, size: 16)
+                                          : message.replyDetails?.type ==
+                                                  "document"
+                                              ? Icon(Icons.file_copy, size: 16)
+                                              : SizedBox()),
+                          message.replyDetails?.type == "text" ||
+                                  message.replyDetails?.type ==
+                                      MessageType.mention
+                              ? Text(
+                                  message.replyDetails?.message ?? "",
+                                  softWrap: true,
+                                  textScaler: TextScaler.linear(1),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: Text(
+                                    message.replyDetails?.message ?? "",
+                                    softWrap: true,
+                                    textScaler: TextScaler.linear(1),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                        ],
+                      ))
+                    ],
+                  ),
+                )
+              :const SizedBox(),
+      VoiceMessageView(
+        circlesColor: AppColors.primary,
+        backgroundColor: isMe?AppColors.white:AppColors.primary.withOpacity(.2),
+        activeSliderColor: AppColors.primary.withOpacity(.2),
+        time:  message.time??"",
+      controller: VoiceController(
+                              audioSrc: message.message ?? "",
+                              maxDuration: const Duration(hours:1),
+                              isFile: false,
+                              onComplete: () {},
+                              onPause: () {},
+                              onPlaying: () {},
+                            ),
+                           
+                            )
+       
+          // Align(
+          //   alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+          //   child: Row(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: [
+          //       Text(
+          //         message.time ?? "",
+          //         style: GoogleFonts.poppins(
+          //             color: Color(0xff666666),
+          //             fontWeight: FontWeight.w400,
+          //             fontSize: 11.sp),
+          //       ),
+          //       SizedBox(
+          //         width: 1.w,
+          //       ),
+          //       if (isMe) _buildMessageStatus(message.messageStatus ?? ""),
+          //     ],
+          //   ),
+          // ),
+        ],
+      ),
     );
   }
 
@@ -715,8 +835,9 @@ class _BuildChatImageState extends State<BuildChatImage> {
         message: widget.message,
         isMe: isMe,
         isSameUser: widget.isSameUser,
-        child: SizedBox(
+        child: Container(
           width: 250.w,
+          
           child: Column(
             children: [
               ClipRRect(
@@ -739,14 +860,14 @@ class _BuildChatImageState extends State<BuildChatImage> {
                             widget.message.message ?? "",
                           ),
                           width: 250,
-                          height: 200,
+                          height: 250,
                           allowUpscaling: true,
                           policy: ResizeImagePolicy.fit)),
                   Positioned(
                       child: _downloadStatus[widget.message.message] != true
                           ? BlurryContainer(
                               color: Colors.transparent,
-                              child: Container(
+                              child: SizedBox(
                                   height: 20,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,

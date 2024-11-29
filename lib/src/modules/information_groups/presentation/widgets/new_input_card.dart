@@ -154,7 +154,7 @@ class _NewInputCardState extends State<NewInputCard> {
                     )
                   : Container(
                       alignment: Alignment.topLeft,
-                      height: widget.height,
+                      // height: widget.height,
                       child: TextFormField(
                         textAlignVertical: TextAlignVertical.center,
                         readOnly: widget.readOnly,
