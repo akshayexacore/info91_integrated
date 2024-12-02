@@ -78,19 +78,19 @@ class RecipientsAddPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      ...profiles
-                          .map((profile) => Obx(() {
-                                return AppProfileTile(
-                                  profile,
-                                  onPressed: () {
-                                    _controller.onSelectedContact(profile);
-                                  },
-                                  enableCheckbox: true,
-                                  selected: _controller.selectedContacts
-                                      .contains(profile),
-                                );
-                              }))
-                          .toList()
+                      // ...profiles
+                      //     .map((profile) => Obx(() {
+                      //           return AppProfileTile(
+                      //             profile,
+                      //             onPressed: () {
+                      //               _controller.onSelectedContact(profile);
+                      //             },
+                      //             enableCheckbox: true,
+                      //             selected: _controller.selectedContacts
+                      //                 .contains(profile),
+                      //           );
+                      //         }))
+                      //     .toList()
                     ],
                   );
                 },
@@ -117,12 +117,12 @@ class RecipientsAddPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                ..._controller.selectedProfiles
-                    .map((profile) => AppProfileTile(
-                          profile,
-                          enableClose: true,
-                        ))
-                    .toList()
+                // ..._controller.selectedProfiles
+                //     .map((profile) => AppProfileTile(
+                //           profile,
+                //           enableClose: true,
+                //         ))
+                //     .toList()
               ],
             ),
           )

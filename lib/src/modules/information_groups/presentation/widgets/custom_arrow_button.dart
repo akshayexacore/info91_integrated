@@ -38,12 +38,12 @@ class CustomArrowTextbutton extends StatelessWidget {
                   Text(
                     buttonName,
                     style:
-                        TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
+                        TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
                   ),
                   const Spacer(),
                   Icon(
                     Icons.arrow_forward_ios,
-                    color: Colors.grey,
+                    color: Color(0xff5F6368),
                     size: 17.sp,
                   )
                 ],

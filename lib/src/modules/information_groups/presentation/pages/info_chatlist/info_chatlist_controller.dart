@@ -2,17 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:info91/src/models/informationgroup/group_profile.dart';
+
 import 'package:info91/src/models/informationgroup/information_group.dart';
 
-import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_screen.dart';
 
 import 'package:info91/src/resources/infromation_repository.dart';
 
 class InfoChatListController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  ScrollController _scrollController = ScrollController();
   final _infromationRepository = InfromationRepository();
   var serchController = TextEditingController().obs;
   var toggleValue = 0.obs;

@@ -8,6 +8,7 @@ import 'package:info91/src/modules/information_groups/presentation/pages/startsc
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/new_input_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
+import 'package:info91/src/utils/app_validator.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -56,6 +57,11 @@ class GroupInfo extends StatelessWidget {
                             controller: controller.mobileNumberController,
                             title: "Mobile Number",
                             keyType: TextInputType.phone,
+                             suffixIcon: Icons.call,
+                            ontap: () {
+                              controller.saveContact(
+                                  controller.mobileNumberController.text);
+                            },
                           ),
                           commonGap,
                           NewInputCard(
@@ -88,18 +94,37 @@ class GroupInfo extends StatelessWidget {
                           NewInputCard(
                             controller: controller.websiteLinkController,
                             title: "Website link",
+                            isLink: true,
+                             suffixIcon:Icons.visibility,
+                            ontap: () {
+                              controller.launchURL(
+                                  controller.websiteLinkController.text);
+                            },
                           ),
                           commonGap,
                           NewInputCard(
                             controller: controller.youtubeLinkController,
                             title: "Youtube link",
+                            isLink: true,
+                            suffixIcon:Icons.visibility,
+                            ontap: () {
+                              controller.launchURL(
+                                  controller.youtubeLinkController.text);
+                            },
                           ),
                           commonGap,
                           NewInputCard(
                             controller:
                                 controller.googleMapControllerController,
                             title: "Google map link",
-                          ),  commonGap,
+                            isLink: true,
+                             suffixIcon: Icons.visibility,
+                            ontap: () {
+                              controller.launchURL(controller
+                                  .googleMapControllerController.text);
+                            },
+                          ),
+                          commonGap,
                         ] else ...[
                           commonGap,
                           blusHeading("Contact Details"),
@@ -125,11 +150,28 @@ class GroupInfo extends StatelessWidget {
                           blusHeading("Others"),
                           commonGap,
                           groupInfoDoubleText("Website link",
-                              controller.websiteLinkController.text),
+                              controller.websiteLinkController.text, onTap: () {
+                            controller.launchURL(
+                                controller.websiteLinkController.text);
+                          }),
                           groupInfoDoubleText("Youtube link",
-                              controller.youtubeLinkController.text),
+                              controller.youtubeLinkController.text, onTap: () {
+                                if(controller.youtubeLinkController.text.trim().isNotEmpty){
+                               
+                                    controller.launchURL(
+                                controller.youtubeLinkController.text);
+                                }
+                          
+                          }),
                           groupInfoDoubleText("Google map link",
-                              controller.googleMapControllerController.text),
+                              controller.googleMapControllerController.text,
+                              onTap: () {
+                                if(  controller.googleMapControllerController.text.trim().isNotEmpty){
+                                    controller.launchURL(
+                                controller.googleMapControllerController.text);
+                                }
+                          
+                          }),
                         ],
                         commonGap,
                       ],

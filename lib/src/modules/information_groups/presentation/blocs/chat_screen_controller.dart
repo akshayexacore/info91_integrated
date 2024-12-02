@@ -565,7 +565,11 @@ class ChatScreenController extends GetxController {
 
   void onForwardPressed() {
     _disposeOverlayEntry();
-    Get.toNamed(ForwardPage.routeName)?.then((value) {
+    print(" the selectedGroupId$selectedGroupId");
+    Get.toNamed(ForwardPage.routeName,arguments: {
+      "selected":selectedMessage,
+      "group_id":selectedGroupId,
+    })?.then((value) {
       if (value is bool && value) {
         selectedMessage.clear();
         reSetSelctionMessageList();

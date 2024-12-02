@@ -94,8 +94,8 @@ class ProfileTopImageSec extends StatelessWidget {
               ),
               if (isProfile)
                 Positioned(
-                  top: 152.h,
-                  left: 18.w,
+                  top: 145.h,
+                  left: marginWidth,
                   child: Stack(
                     // clipBehavior: Clip.none,
                     children: [

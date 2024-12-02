@@ -18,6 +18,7 @@ class ChatMessage {
   final String? date;
   final String? time;
   final bool? isMe;
+  final bool? fwdFlag;
   final bool isSelcted;
   final String? reaction;
   final String? fileName;
@@ -32,6 +33,7 @@ class ChatMessage {
     this.userId,
     this.type,
     this.fileName,
+    this.fwdFlag,
     this.message,this.contactList,
     this.isSelcted=false,
     this.isMe,this.reaction,
@@ -68,6 +70,7 @@ class ChatMessage {
     String? date,
     String? time,
     bool? isMe,
+    bool? fwdFlag,
     String? reaction,
     String? fileName,
      List<ContactModel>?contactList, 
@@ -94,6 +97,7 @@ class ChatMessage {
       name: name ?? this.name,
       replyType: replyType ?? this.replyType,
       date: date ?? this.date,
+      fwdFlag: fwdFlag??this.fwdFlag,
       time: time ?? this.time,
       replyDetails: replyDetails ?? this.replyDetails,
       fileSize: fileSize??this.fileSize,
@@ -105,6 +109,7 @@ class ChatMessage {
     return ChatMessage(
       messageId: json['message_id'] as String?,
       isMe: json["is_me"] as bool?,
+      fwdFlag: json["fwd_flag"] as bool?,
       userId: json['user_id'] as String?,
       type: json['type'] as String?,
       message: json['message'] as String?,
@@ -142,6 +147,7 @@ class ChatMessage {
       'user_id': userId,
       'type': type,
       "is_me":isMe,
+      "fwd_flag":fwdFlag,
       'message': message,
       'message_status': messageStatus,
       'created_at': createdAt,

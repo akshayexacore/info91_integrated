@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/forward/controllers/forward_controller.dart';
@@ -7,12 +8,20 @@ import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/custom/app_profile_tile.dart';
 import 'package:info91/src/widgets/tiny/image_view.dart';
 
-class ForwardPage extends StatelessWidget {
+class ForwardPage extends StatefulWidget {
   ForwardPage({super.key});
 
   static const routeName = '/forward';
 
+  @override
+  State<ForwardPage> createState() => _ForwardPageState();
+}
+
+class _ForwardPageState extends State<ForwardPage> {
   final _controller = Get.find<ForwardController>();
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +29,9 @@ class ForwardPage extends StatelessWidget {
       body: Column(
         children: [
           AppAppBar(
+            onchange: (String value){
+              _controller.searchFunction(value??"");
+            },
               showSearch: true,
               leading: const Text(
                 'Forward',
@@ -45,7 +57,7 @@ class ForwardPage extends StatelessWidget {
                     final enableButton =
                         _controller.selectedContacts.isNotEmpty;
                     return AppInkWell(
-                      onTap: enableButton ? _controller.onSendPressed : null,
+                      onTap: enableButton ? _controller.onSend : null,
                       child: Text(
                         'Send',
                         style: TextStyle(
@@ -62,52 +74,33 @@ class ForwardPage extends StatelessWidget {
               )),
           Expanded(
             child: Obx(() {
-              return ListView.builder(
+              debugPrint(_controller.filtercontacts.toString());
+              return _controller.filtercontacts.isEmpty?_controller.searchValue.isNotEmpty?noDataDesighn( "No Result found for \"${_controller.searchValue.value}\""):Text("No data"):                         
+              ListView.builder(
+                 itemCount: _controller.filtercontacts.length,
                 padding: const EdgeInsets.symmetric(
                   vertical: 15,
                 ),
                 physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
                 itemBuilder: (context, index) {
-                  final key = _controller.contacts.keys.elementAt(index);
-                  final profiles = _controller.contacts.values.elementAt(index);
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppPaddings.large,
-                        ),
-                        child: SizedBox(
-                          width: 48,
-                          child: Center(
-                            child: Text(
-                              key,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      ...profiles
-                          .map((profile) => Obx(() {
-                                return AppProfileTile(
-                                  profile,
-                                  onPressed: () {
-                                    _controller.onSelectedContact(profile);
-                                  },
-                                  enableCheckbox: true,
-                                  selected: _controller.selectedContacts
-                                      .contains(profile),
-                                );
-                              }))
-                          .toList()
-                    ],
-                  );
-                },
-                itemCount: _controller.contacts.length,
+                  // final key = _controller.contacts.keys.elementAt(index);
+                  final profiles = _controller.filtercontacts[index];
+                  return  Obx(() {
+                    debugPrint(_controller.filtercontacts[index].toString());
+                            return AppProfileTile(
+                              profiles,
+                              onPressed: () {
+                                _controller.onSelectedContact(profiles);
+                              },
+                              enableCheckbox: true,
+                              selected: _controller.selectedContacts
+                                  .contains(profiles),
+                            );
+                          
+                });
+               
+                }
               );
             }),
           ),
@@ -120,6 +113,11 @@ class ForwardPage extends StatelessWidget {
       }),
     );
   }
+
+  Widget noDataDesighn(String message){return Padding(
+    padding:  EdgeInsets.symmetric(vertical: 20.h),
+    child: Text(message,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17.sp),),
+  );}
 
   Widget _buildSelectedContacts() {
     return Container(
@@ -136,11 +134,21 @@ class ForwardPage extends StatelessWidget {
         ],
       ),
       child: Obx(() {
+         WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_controller. scrollController.hasClients) {
+        _controller .   scrollController.animateTo(
+          _controller .scrollController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          }
+        });
         return ListView.separated(
           padding: const EdgeInsets.symmetric(
             horizontal: AppPaddings.large,
           ),
           scrollDirection: Axis.horizontal,
+           controller:_controller.scrollController, 
           itemBuilder: (context, index) {
             return Center(
               child: SizedBox(
@@ -159,7 +167,7 @@ class ForwardPage extends StatelessWidget {
                         child: Stack(
                           children: [
                             AppCircleImage(
-                              image: _controller.selectedContacts[index].imgUrl,
+                              image: _controller.selectedContacts[index].profileImage??"",
                               radius: 20,
                             ),
                             const Positioned(
@@ -176,7 +184,7 @@ class ForwardPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      _controller.selectedContacts[index].name.split(' ').first,
+                      _controller.selectedContacts[index].groupName??"".split(' ').first,
                       style: const TextStyle(fontSize: 13),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,

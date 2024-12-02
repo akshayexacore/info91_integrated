@@ -14,7 +14,7 @@ import 'package:info91/src/widgets/custom/custom_divider.dart';
 
 import 'package:toggle_switch/toggle_switch.dart';
 
-class InfoGroupChatListScreen extends StatefulWidget {
+class InfoGroupChatListScreen extends StatefulWidget {static const routeName="/infochatlist";
   const InfoGroupChatListScreen({super.key});
 
   @override
@@ -79,7 +79,7 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
               child: Obx(() {
                 if (controller.searchText.value.isNotEmpty) {
                   return controller.loading.value
-                      ? Center(child: CircularProgressIndicator())
+                      ?const Center(child: CircularProgressIndicator())
                       : controller.searchGroupList.isEmpty
                           ? const Center(child: Text("No Data"))
                           : ListView.separated(

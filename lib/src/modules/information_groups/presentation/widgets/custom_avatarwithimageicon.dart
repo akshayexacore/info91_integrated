@@ -38,7 +38,7 @@ class ReusableAvatarWithIcon extends StatelessWidget {
   }
 }
 
-class CustomCircleIconWidget extends StatelessWidget {
+class CustomCircleIconWidget extends StatefulWidget {
   final VoidCallback onCange;
   final Color backgroundClr;
   final Widget? centerWidget;
@@ -61,23 +61,64 @@ class CustomCircleIconWidget extends StatelessWidget {
       this.onLongPressEnd});
 
   @override
+  State<CustomCircleIconWidget> createState() => _CustomCircleIconWidgetState();
+}
+
+class _CustomCircleIconWidgetState extends State<CustomCircleIconWidget> {
+  Offset _position = Offset.zero;
+ double _radius =20.0; 
+ double _positionX = 0.0; 
+  void _onLongPressStart(LongPressStartDetails details) {
+     _radius = 30.0;
+    setState(() {
+      _position = details.localPosition;
+      _positionX = details.localPosition.dx;
+    });
+   
+  }
+
+  void _onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
+    setState(() {
+      _position = details.localPosition;
+        _positionX = details.localPosition.dx; 
+       print("sssssssssssssssd$_position");  // Update the position as the user slides
+    });
+  }
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: onCange,
-        onLongPress: onLongPress,
+        onTap: widget.onCange,
+        onLongPress: widget.onLongPress,
         onLongPressEnd: (va) {
-          onLongPressEnd!();
+          _radius=20;
+           _positionX = 0.0;
+          setState(() {
+            
+          });
+          widget.onLongPressEnd!();
         },
-        child: CircleAvatar(
-          backgroundColor: backgroundClr,
-          radius: radius,
-          child: centerWidget != null
-              ? centerWidget
+        onLongPressStart: _onLongPressStart,
+        onLongPressMoveUpdate: _onLongPressMoveUpdate,
+        
+        child: AnimatedContainer(
+        
+        duration: Duration(milliseconds: 150), // Duration of the radius increase
+        curve: Curves.easeOut, // Smooth curve for the bounce effect
+        width: _radius * 2, // Width is twice the radius
+        height: _radius * 2, 
+        
+        // Height is twice the radius
+        decoration: BoxDecoration(
+          color: widget.backgroundClr,
+          shape: BoxShape.circle,
+        ),
+          child: widget.centerWidget != null
+              ? widget.centerWidget
               : Center(
                   child: Icon(
-                  iconData,
-                  color: iconColor,
-                  size: iconSize.sp,
+                  widget.iconData,
+                  color: widget.iconColor,
+                  size: widget.iconSize.sp,
                 )),
         ));
   }

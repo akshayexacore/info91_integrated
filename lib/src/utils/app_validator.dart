@@ -54,4 +54,19 @@ class AppValidator{
     RegExp rex = RegExp(r"^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$");
     return rex.hasMatch(str);
   }
+ static bool isValidUrl(String text) {
+  final RegExp urlRegExp = RegExp(
+    r'^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$', // URL matching pattern
+    caseSensitive: false,
+    multiLine: false,
+  );
+  return urlRegExp.hasMatch(text);
+}
+  bool isValidYouTubeLink(String url) {
+    final RegExp youtubeRegex = RegExp(
+      r'^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$',
+      caseSensitive: false,
+    );
+    return youtubeRegex.hasMatch(url);
+  }
 }

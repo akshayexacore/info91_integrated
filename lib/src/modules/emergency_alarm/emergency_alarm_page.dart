@@ -101,15 +101,15 @@ class EmergencyAlarmPage extends StatelessWidget {
               ),
             ),
           ),
-          Obx(() {
-            return Column(
-              children: _controller.profiles
-                  .map((profile) => AppProfileTile(
-                        profile,
-                      ))
-                  .toList(),
-            );
-          }),
+          // Obx(() {
+          //   return Column(
+          //     children: _controller.profiles
+          //         .map((profile) => AppProfileTile(
+          //               profile,
+          //             ))
+          //         .toList(),
+          //   );
+          // }),
           const SizedBox(
             height: AppSpacings.xSmall,
           ),

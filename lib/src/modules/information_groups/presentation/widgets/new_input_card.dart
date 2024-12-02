@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:info91/src/utils/app_validator.dart';
 
 class NewInputCard extends StatefulWidget {
   final double fontsize;
@@ -23,6 +24,9 @@ class NewInputCard extends StatefulWidget {
   final String title;
   final String? hint;
   final TextInputType? keyType;
+  final bool isLink;
+  final VoidCallback? ontap;
+  final IconData? suffixIcon;
 
   final bool password;
   final bool direction;
@@ -35,17 +39,20 @@ class NewInputCard extends StatefulWidget {
     this.hint,
     this.formatter = false,
     this.readOnly = false,
+    this.isLink=false,
     this.password = false,
     this.direction = false,
     this.showValidator = false,
     required this.title,
     this.validatorMessage,
+    this.ontap,
     this.colors = const Color(0xffC3C7C9),
     this.maxLines = 1,
     this.height = 50,
     this.fontsize = 13,
     this.validator,
     this.keyType,
+    this.suffixIcon,
   });
 
   @override
@@ -159,12 +166,20 @@ class _NewInputCardState extends State<NewInputCard> {
                         textAlignVertical: TextAlignVertical.center,
                         readOnly: widget.readOnly,
                         maxLines: widget.maxLines,
-                        controller: widget.controller,
+                        controller: widget.controller,onTap: (){
+                          if(widget.ontap!=null){
+                            widget.ontap!();
+                          }
+
+                        },
                         obscureText: show,
-                        style:const TextStyle(
-                          decoration: TextDecoration.none,
-                          decorationThickness: 0,
-                        ),
+                        style: TextStyle(
+                           decoration:widget.isLink?AppValidator.isValidUrl( widget.controller.text.trim())? TextDecoration.underline:TextDecoration.none:TextDecoration.none,
+                          decorationThickness: widget.isLink? AppValidator.isValidUrl( widget.controller.text.trim())?1:0:0,
+                          color:  widget.isLink?AppValidator.isValidUrl( widget.controller.text.trim())?Colors.blue:Colors.black:Colors.black,
+                        ),onChanged: (va){
+                           setState(() {});
+                        },
                         validator: widget.showValidator
                             ? widget.validator ??
                                 (value) {
@@ -205,7 +220,22 @@ class _NewInputCardState extends State<NewInputCard> {
                                     setState(() {});
                                   },
                                 )
-                              : null,
+                              :widget.suffixIcon!=null?IconButton(
+                                  icon: show
+                                      ?  Icon(
+                                         widget.suffixIcon,
+                                          size: 18,
+                                        )
+                                      :  Icon(
+                                           widget.suffixIcon,
+                                          size: 18,
+                                        ),
+                                  onPressed: () {
+                                   if(widget.ontap!=null){
+                                    widget.ontap!();
+                                   }
+                                  },
+                                ): null,
                           labelStyle: const TextStyle(
                             fontSize: 13,
                             //fontStyle: FontStyle.italic,

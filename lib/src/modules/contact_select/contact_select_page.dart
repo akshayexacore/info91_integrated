@@ -138,14 +138,14 @@ class ContactSelectPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      ...profiles
-                          .map((profile) => AppProfileTile(
-                                profile,
-                                onPressed: () {
-                                  _controller.gotoChatPage(profile);
-                                },
-                              ))
-                          .toList()
+                      // ...profiles
+                      //     .map((profile) => AppProfileTile(
+                      //           profile,
+                      //           onPressed: () {
+                      //             _controller.gotoChatPage(profile);
+                      //           },
+                      //         ))
+                      //     .toList()
                     ],
                   );
                 },

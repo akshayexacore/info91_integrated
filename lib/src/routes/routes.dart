@@ -24,6 +24,8 @@ import 'package:info91/src/modules/information_groups/presentation/blocs/chat_sc
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/info_chatlist/info_chatlist_controller.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/info_chatlist/inform_group_chatlist_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/add_members.dart';
 import 'package:info91/src/modules/information_groups/presentation/profile_section/banners_screen.dart';
@@ -84,6 +86,13 @@ class Routes {
         binding: BindingsBuilder(() {
           Get.lazyPut(() => LoginController());
           Get.lazyPut(() => AuthController());
+        })),
+          GetPage(
+        name: InfoGroupChatListScreen.routeName,
+        page: () => LoginPage(),
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => InfoChatListController());
+      
         })),
     GetPage(
         name: OtpPage.routeName,
@@ -152,6 +161,7 @@ class Routes {
         page: () => ForwardPage(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => ForwardController());
+          Get.lazyPut(() => InfoChatListController());
         })),
     GetPage(
         name: ChatInfoPage.routeName,

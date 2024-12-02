@@ -50,7 +50,7 @@ class CustomAppBar extends StatelessWidget {
       onWillPop: onWillPop,
       child: Container(
         padding:
-            const EdgeInsets.only(left: 20, top: 12, bottom: 12, right: 20),
+            const EdgeInsets.only(top: 12, bottom: 12, ),
         color: AppColors.primaryAccent,
         child: SafeArea(
           child: Column(
@@ -60,7 +60,7 @@ class CustomAppBar extends StatelessWidget {
                   IconButton(
                     icon:  Icon(
                       Icons.arrow_back_ios,
-                      color: Colors.white,size: 18.sp,
+                      color: Colors.white,size: 20.sp,
                       
                     ),
                     onPressed: () {
@@ -87,7 +87,7 @@ class CustomAppBar extends StatelessWidget {
                   ],
                   Text(appBarName,
                       style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.white,
                           fontSize: 15.sp)),
                   const Spacer(),

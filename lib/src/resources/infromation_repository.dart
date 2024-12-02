@@ -535,4 +535,34 @@ class InfromationRepository {
       rethrow;
     }
   }
+
+
+    Future<DoubleResponse> onSend(
+      {
+      required String fromGroupUserId,
+      required List<String> groupIds,
+      required List<String> messageIds,
+      
+      }) async {
+    try {
+     
+      final response = await _api.post(
+        ApiConstants.forwardMessageApi,
+        body: {
+          "frm_group_user_id": fromGroupUserId,
+          "group_ids":groupIds,
+          "message_ids":messageIds
+        },
+        headers: {},
+      );
+     debugPrint(response.toString());
+      if (response['statusCode'] == 200) {
+        return DoubleResponse(true, response['message']);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

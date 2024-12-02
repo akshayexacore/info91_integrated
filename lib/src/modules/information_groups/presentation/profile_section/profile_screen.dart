@@ -16,9 +16,11 @@ import 'package:info91/src/modules/information_groups/presentation/widgets/custo
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/gallery_page.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
+import 'package:info91/src/utils/app_formatter.dart';
 import 'package:info91/src/widgets/custom/custom_circle_image.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
+import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../widgets/custom_image_card.dart';
@@ -86,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       appbarSec(),
                       SizedBox(
-                        height: 50.h,
+                        height: 40.h,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,27 +103,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     controller.profilledataModel.value
                                             .groupName ??
                                         "",
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     color: AppColors.text,
                                     size: 16.sp),
                                 SizedBox(
-                                  height: 10.h,
+                                  height:9.h,
                                 ),
                                 blusHeading("About Us"),
                                 SizedBox(
-                                  height: 10.h,
+                                  height: 9.h,
                                 ),
                                 greyBoldText(
                                     controller
                                             .profilledataModel.value.purpose ??
                                         "",
-                                    color: AppColors.text,
+                                    color: AppColors.text,fontWeight: FontWeight.w400,
                                     size: 15.sp),
                                 SizedBox(
                                   height: 15.h,
                                 ),
                                 Text(
-                                  widget.model.createdAt ?? "",
+                                 "Created by ${controller
+                                            .profilledataModel.value.createdBy }/${ AppFormatter.formatStringDateToDyMMMMd(widget.model.createdAt??"")}",
                                   style: const TextStyle(color: Colors.grey),
                                 ),
                                 SizedBox(
@@ -187,19 +190,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 SizedBox(
                                   height: 14.h,
                                 ),
-                                CustomArrowTextbutton(
-                                  buttonName: "Group info",
-                                  onTap: () {
-                                    Get.toNamed('/group_info', arguments: {
-                                      "group_id": widget.selectedGroupId,
-                                    });
-
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //       builder: (context) => GroupInfo(),
-                                    //     ));
-                                  },
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: CustomArrowTextbutton(
+                                        buttonName: "Group info",
+                                        onTap: () {
+                                          Get.toNamed('/group_info', arguments: {
+                                            "group_id": widget.selectedGroupId,
+                                          });
+                                      
+                                          // Navigator.push(
+                                          //     context,
+                                          //     MaterialPageRoute(
+                                          //       builder: (context) => GroupInfo(),
+                                          //     ));
+                                        },
+                                      ),
+                                    ),SizedBox(
+                                  width:15.w,
+                                ),
+                                if (controller
+                                        .profilledataModel.value.isAdmin ==
+                                    true)
+                                  Expanded(
+                                    child: CustomArrowTextbutton(
+                                      buttonName: "Add Banners",
+                                      onTap: () {
+                                        Get.toNamed(BannersScreen.routeName,
+                                            arguments: {
+                                              "group_id": widget.selectedGroupId,
+                                              "isUpdate": false
+                                            })?.then((value) {
+                                          controller.getGroupInfoDetails(
+                                              widget.selectedGroupId);
+                                        });
+                                    
+                                        // Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //       builder: (context) => GroupInfo(),
+                                        //     ));
+                                      },
+                                    ),
+                                  ),
+                                  ],
                                 ),
                                 SizedBox(
                                   height: 14.h,
@@ -236,31 +271,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               .toList() ??
                                           []),
                                 ],
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                if (controller
-                                        .profilledataModel.value.isAdmin ==
-                                    true)
-                                  CustomArrowTextbutton(
-                                    buttonName: "Add Banners",
-                                    onTap: () {
-                                      Get.toNamed(BannersScreen.routeName,
-                                          arguments: {
-                                            "group_id": widget.selectedGroupId,
-                                            "isUpdate": false
-                                          })?.then((value) {
-                                        controller.getGroupInfoDetails(
-                                            widget.selectedGroupId);
-                                      });
-
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //       builder: (context) => GroupInfo(),
-                                      //     ));
-                                    },
-                                  ),
+                                
                                 SizedBox(
                                   height: 15.h,
                                 ),

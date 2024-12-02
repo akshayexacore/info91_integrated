@@ -56,7 +56,11 @@ class AppFormatter {
   static String formatDyMMMMd(DateTime date) {
     return DateFormat('dd MMM yyyy').format(date);
   }
-
+static String formatStringDateToDyMMMMd(String date){
+     DateTime parsedDate = DateTime.parse(date);
+      String formattedDate = DateFormat("d MMMM y").format(parsedDate);
+      return formattedDate;
+}
   static String formatDoubleTimeString(double time) {
     int rounded = time.round();
     if(rounded>12){

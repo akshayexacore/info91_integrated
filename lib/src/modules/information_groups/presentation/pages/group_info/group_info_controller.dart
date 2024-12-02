@@ -95,4 +95,15 @@ void saveContact(String contact) async {
               print("the erro r is $e");
             }
   }
+    Future<void> launchURL(String urls) async {
+    final Uri url = Uri.parse(urls);
+try{ if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $url';
+    }}catch(e){
+      AppDialog.showSnackBar("Error", "Invalid Url");
+    }
+   
+  }
 }

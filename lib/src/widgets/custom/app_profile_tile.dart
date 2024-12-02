@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/models/informationgroup/information_group.dart';
 import 'package:info91/src/models/profile.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/tiny/app_check_box.dart';
@@ -17,7 +18,7 @@ class AppProfileTile extends StatelessWidget {
 
   final VoidCallback? onPressed;
 
-  final Profile profile;
+  final InfoGroupChatListModel profile;
 
   final bool enableCheckbox;
 
@@ -36,7 +37,7 @@ class AppProfileTile extends StatelessWidget {
         child: Row(
           children: [
             AppCircleImage(
-              image: profile.imgUrl,
+              image: profile.profileImage??"",
               radius: 24,
             ),
             const SizedBox(
@@ -53,7 +54,7 @@ class AppProfileTile extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          profile.name,
+                          profile.groupName??"",
                           maxLines: 1,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
@@ -67,7 +68,7 @@ class AppProfileTile extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    profile.about,
+                    profile.alternativeNumber??"",
                     maxLines: 1,
                     style: const TextStyle(
                       fontSize: 14,

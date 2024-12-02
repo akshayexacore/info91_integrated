@@ -9,6 +9,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/configs/filepicker.dart';
 import 'package:info91/src/models/informationgroup/chat_model.dart';
@@ -685,9 +686,11 @@ class _BuildChatImageState extends State<BuildChatImage> {
   Map<String, bool> _downloadloading = {};
 
   Future<void> _downloadImage(String imageUrl) async {
-    setState(() {
+  try{
+      setState(() {
       _downloadloading[imageUrl] = true;
-    });
+    });  
+    await _requestPermission();
     final response = await http.get(Uri.parse(imageUrl));
     final directory = await getApplicationDocumentsDirectory();
     _localPath = directory.path;
@@ -695,12 +698,19 @@ class _BuildChatImageState extends State<BuildChatImage> {
     final filePath = '$_localPath/${imageUrl.split('/').last}';
     final file = File(filePath);
     await file.writeAsBytes(response.bodyBytes);
-    // await ImageGallerySaver.saveFile(file.path);
+      final result = await ImageGallerySaver.saveImage(
+        Uint8List.fromList(response.bodyBytes),
+        quality: 80,
+        name: imageUrl.split('/').last,
+      );
     setState(() {
       _downloadloading[imageUrl] = false;
       _downloadStatus[imageUrl] = true;
       print("download${_downloadStatus[imageUrl]}");
     });
+  }catch(e){
+    debugPrint("the image downlaoding error${e}");
+  }
   }
 
   Future<void> requestStoragePermission() async {
@@ -746,22 +756,30 @@ class _BuildChatImageState extends State<BuildChatImage> {
   Future<void> _checkPermissionsAndImageExistence() async {
     // Request storage permission at runtime
     if (await _requestStoragePermission()) {
+      print("Storage permissionn");
       _checkDownloaded(
-          "https://www.sureteam.co.uk/wp-content/uploads/2019/06/New_healthy_working_system.jpeg");
+         widget. message.message??"");
     } else {
       print("Storage permission denied");
     }
   }
-
-  Future<bool> _requestStoragePermission() async {
-    var status = await Permission.storage.status;
-
-    if (!status.isGranted) {
-      status = await Permission.storage.request();
-    }
-
-    return status.isGranted;
+  Future<void> _requestPermission() async {
+  if (await Permission.storage.isDenied) {
+    await Permission.storage.request();
   }
+}
+
+
+
+Future<bool> _requestStoragePermission() async {
+  if (Platform.isAndroid && (Platform.version.startsWith('10') || Platform.version.startsWith('11'))) {
+
+    return await Permission.photos.request().isGranted;
+  } else {
+    // For devices below Android 10, we can use legacy storage permissions
+    return await Permission.storage.request().isGranted;
+  }
+}
 
   @override
   void initState() {
@@ -769,19 +787,27 @@ class _BuildChatImageState extends State<BuildChatImage> {
     super.initState();
   }
 
-  Future<void> _checkDownloaded(String imageUrl) async {
+Future<void> _checkDownloaded(String imageUrl) async {
+  try {
     final directory = await getApplicationDocumentsDirectory();
     _localPath = directory.path;
     final filePath = '$_localPath/${imageUrl.split('/').last}';
     final file = File(filePath);
 
-    bool exists = await _isImageInGallery(imageUrl);
-    print("ssssssssssssssssss${exists}");
+    // Check if file exists in local directory
+    bool exists = await file.exists();
+
+    print("File existence in local path: $exists");
+
     setState(() {
       _downloadStatus[imageUrl] = exists;
-      _downloadloading[imageUrl] = exists;
+      _downloadloading[imageUrl] = false; // Loading should be false
     });
+  } catch (e) {
+    debugPrint("Error checking file existence: $e");
   }
+}
+
 
   Future<bool> _isImageInGallery(String imageUrl) async {
     try {
@@ -854,7 +880,7 @@ class _BuildChatImageState extends State<BuildChatImage> {
                       },
                       // width: 200,
                       // height: 200,
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                       image: ResizeImage(
                           NetworkImage(
                             widget.message.message ?? "",
@@ -867,6 +893,8 @@ class _BuildChatImageState extends State<BuildChatImage> {
                       child: _downloadStatus[widget.message.message] != true
                           ? BlurryContainer(
                               color: Colors.transparent,
+                              height: 200.h,
+                              width: 250.w,
                               child: SizedBox(
                                   height: 20,
                                   child: Row(
@@ -880,7 +908,7 @@ class _BuildChatImageState extends State<BuildChatImage> {
                                         child: _downloadloading[
                                                     widget.message.message] !=
                                                 true
-                                            ? Card(
+                                            ? const Card(
                                                 color: Color.fromARGB(
                                                     147, 255, 255, 255),
                                                 child: Row(
@@ -900,12 +928,10 @@ class _BuildChatImageState extends State<BuildChatImage> {
                                                     )
                                                   ],
                                                 ))
-                                            : CircularProgressIndicator(),
+                                            :const CircularProgressIndicator(),
                                       ),
                                     ],
                                   )),
-                              height: 200.h,
-                              width: 250.w,
                             )
                           : SizedBox())
                 ]),
@@ -1049,7 +1075,22 @@ Widget commonBuildMessageOuter(
                   color: isMe ? AppColors.lightChat : AppColors.white,
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: IntrinsicWidth(child: child)),
+                child: IntrinsicWidth(
+                  child: Column(
+                    crossAxisAlignment:CrossAxisAlignment.start,
+                    children: [
+                    if(message.fwdFlag==true)  Row(children: [
+                      Icon(Icons.arrow_forward,size: 16.sp,),
+                      SizedBox(width: 5,),
+                     const Text("Forwarded",style: TextStyle(color: AppColors.primary,))
+                        
+                  
+                      ],),
+                      SizedBox(height: 5,),
+                      IntrinsicWidth(child: child),
+                    ],
+                  ),
+                )),
             Positioned(
               bottom: -4,
               right: isMe ? null : AppSpacings.xxSmall2,

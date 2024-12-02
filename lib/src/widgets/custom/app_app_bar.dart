@@ -14,6 +14,7 @@ class AppAppBar extends StatelessWidget {
     this.leading,
     this.action,
     this.bottom,
+    this.onchange,
     this.autoImplyLeading = true,
     this.showSearch = true,
     this.isDialogue = false,
@@ -37,6 +38,7 @@ class AppAppBar extends StatelessWidget {
   final double leadingPadding;
   final VoidCallback? onClose;
   final bool disableActionPadding;
+  final Function? onchange; 
 
   @override
   Widget build(BuildContext context) {
@@ -152,11 +154,17 @@ class AppAppBar extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: TextField(
+                        child: TextFormField(onChanged: (value){
+                          if(onchange!=null){
+                            onchange!(value);
+                          }
+
+                        },
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: AppColors.white,
+                            
                           ),
                           decoration: InputDecoration(
                               isDense: true,

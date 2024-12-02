@@ -125,7 +125,7 @@ class AppCircleImage extends StatelessWidget {
                 width: radius * 2,
                 placeholder: (context, url) => const CircularProgressIndicator(),
                 errorWidget: (context, url, error) => Image.asset(
-                  'assets/images/no_image.svg', // Your fallback asset image
+                  'assets/images/defaultimg.png', // Your fallback asset image
                   fit: BoxFit.cover,
                   height: radius * 2,
                   width: radius * 2,
