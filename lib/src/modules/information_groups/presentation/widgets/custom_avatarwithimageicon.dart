@@ -47,9 +47,10 @@ class CustomCircleIconWidget extends StatefulWidget {
   final Color iconColor;
   final VoidCallback? onLongPress;
   final VoidCallback? onLongPressEnd;
+  final Function? onLongPressMoveUpdate;
   final double iconSize;
   const CustomCircleIconWidget(
-      {super.key,
+      {super.key,this.onLongPressMoveUpdate,
       this.iconColor = AppColors.white,
       required this.onCange,
       this.radius = 12.5,
@@ -66,12 +67,14 @@ class CustomCircleIconWidget extends StatefulWidget {
 
 class _CustomCircleIconWidgetState extends State<CustomCircleIconWidget> {
   Offset _position = Offset.zero;
+   Offset _startPosition = Offset.zero;
  double _radius =20.0; 
  double _positionX = 0.0; 
+ double deltaX=0.0;
   void _onLongPressStart(LongPressStartDetails details) {
      _radius = 30.0;
     setState(() {
-      _position = details.localPosition;
+      _startPosition = details.localPosition;
       _positionX = details.localPosition.dx;
     });
    
@@ -81,7 +84,13 @@ class _CustomCircleIconWidgetState extends State<CustomCircleIconWidget> {
     setState(() {
       _position = details.localPosition;
         _positionX = details.localPosition.dx; 
-       print("sssssssssssssssd$_position");  // Update the position as the user slides
+         deltaX = _position.dx - _startPosition.dx;
+        if(widget.onLongPressMoveUpdate!=null){
+         widget. onLongPressMoveUpdate!(deltaX);
+         if(deltaX<-65){   deltaX=0.0;}
+      
+        }
+       print("sssssssssssssssd$deltaX");  // Update the position as the user slides
     });
   }
   @override
@@ -92,6 +101,7 @@ class _CustomCircleIconWidgetState extends State<CustomCircleIconWidget> {
         onLongPressEnd: (va) {
           _radius=20;
            _positionX = 0.0;
+           deltaX=0.0;
           setState(() {
             
           });
@@ -101,7 +111,7 @@ class _CustomCircleIconWidgetState extends State<CustomCircleIconWidget> {
         onLongPressMoveUpdate: _onLongPressMoveUpdate,
         
         child: AnimatedContainer(
-        
+        margin: EdgeInsets.only(right: deltaX.abs()),
         duration: Duration(milliseconds: 150), // Duration of the radius increase
         curve: Curves.easeOut, // Smooth curve for the bounce effect
         width: _radius * 2, // Width is twice the radius

@@ -565,4 +565,32 @@ class InfromationRepository {
       rethrow;
     }
   }
+  
+    Future<DoubleResponse> downLoadFiles(
+      {
+      required String messageids,
+      required String groupId,
+     
+      
+      }) async {
+    try {
+     
+      final response = await _api.post(
+        ApiConstants.dowloadFileApi,
+        body: {
+            "message_ids":[messageids],
+            "group_id":groupId,
+        },
+        headers: {},
+      );
+     debugPrint(response.toString());
+      if (response['statusCode'] == 200) {
+        return DoubleResponse(true, response['message']);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

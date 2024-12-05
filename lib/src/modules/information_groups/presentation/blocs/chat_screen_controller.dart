@@ -291,6 +291,7 @@ class ChatScreenController extends GetxController {
   void dispose() {
     super.dispose();
     _disposeOverlayEntry();
+    scrollController.dispose();
     chatFetchTimer?.cancel();
     chatFetchTimer = null;
   }
@@ -365,7 +366,12 @@ class ChatScreenController extends GetxController {
   bool isTextfielIsEmty(String val) {
     return val.isEmpty;
   }
-
+  String formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$minutes:$seconds";
+  }
   void hideGallery() {
     isGalleryVisible.value = false;
   } //imageanddocumenandvideoselctionfunction var imageFile = Rx<File?>(null);
@@ -430,11 +436,15 @@ class ChatScreenController extends GetxController {
       print("calliing sendmessage1${messages.value.length}");
 
       isReplay.value = false;
-      scrollController.animateTo(
-        0.0,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          0.0,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      } else {
+        print("ScrollController is not attached to any scrollable widget.");
+      }
     } else {}
   }
 
@@ -566,9 +576,9 @@ class ChatScreenController extends GetxController {
   void onForwardPressed() {
     _disposeOverlayEntry();
     print(" the selectedGroupId$selectedGroupId");
-    Get.toNamed(ForwardPage.routeName,arguments: {
-      "selected":selectedMessage,
-      "group_id":selectedGroupId,
+    Get.toNamed(ForwardPage.routeName, arguments: {
+      "selected": selectedMessage,
+      "group_id": selectedGroupId,
     })?.then((value) {
       if (value is bool && value) {
         selectedMessage.clear();

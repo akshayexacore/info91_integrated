@@ -26,6 +26,7 @@ class ChatMessage {
   final ReplyDetails? replyDetails;
   final String? fileSize;
   final String? fileType;
+  final bool? fileDownloadFlag;
   
 
   ChatMessage({
@@ -48,6 +49,7 @@ class ChatMessage {
     this.fileSize,
     this.date,
     this.time,
+    this.fileDownloadFlag,
     this.replyDetails,
     this.fileType,
   });
@@ -72,6 +74,7 @@ class ChatMessage {
     bool? isMe,
     bool? fwdFlag,
     String? reaction,
+    bool? fileDownloadFlag,
     String? fileName,
      List<ContactModel>?contactList, 
     ReplyDetails? replyDetails,
@@ -101,6 +104,7 @@ class ChatMessage {
       time: time ?? this.time,
       replyDetails: replyDetails ?? this.replyDetails,
       fileSize: fileSize??this.fileSize,
+      fileDownloadFlag: fileDownloadFlag??this.fileDownloadFlag
     );
   }
 
@@ -124,6 +128,7 @@ class ChatMessage {
       phoneNumber: json['phone_number'] as String?,
       name: json['name'] as String?,
       replyType: json['reply_type'] as String?,
+      fileDownloadFlag: json["file_download_flag"] as bool?,
        contactList: (json['contact_list'] as List)
           .map((contact) => ContactModel.fromJson(contact))
           .toList(),
@@ -162,6 +167,7 @@ class ChatMessage {
       'time': time,
       "filesize":fileSize,
       "filename":fileName,
+      "file_download_flag":fileDownloadFlag,
       'reply_details': replyDetails?.toJson(),
     };
   }

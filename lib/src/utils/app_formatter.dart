@@ -73,6 +73,18 @@ static String formatStringDateToDyMMMMd(String date){
     int rounded = time.round();
     return  "${rounded.toString().padLeft(2,"0")}:00"; //;
   }
+  
+  
+  static bool isCurrentDate(String date){
+     DateTime parsedDate = DateTime.parse(date);
+  DateTime currentDate = DateTime.now();
+
+  // Compare dates (ignoring time)
+  bool isCurrentDate = parsedDate.year == currentDate.year &&
+      parsedDate.month == currentDate.month &&
+      parsedDate.day == currentDate.day;
+      return isCurrentDate;
+  }
 
   static toAge(DateTime? dateTime) {
     int age = 0;

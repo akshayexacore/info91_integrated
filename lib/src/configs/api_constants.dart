@@ -34,4 +34,5 @@ class ApiConstants {
   static String leaveInfoGroupApi = "/leaveGroup";
   static String groupNameUpdateApi = "/groupNameUpdate";
   static String forwardMessageApi = "/forwardMessage";
+  static String dowloadFileApi = "/downloadFiles";
 }

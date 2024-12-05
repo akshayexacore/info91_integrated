@@ -57,7 +57,7 @@ var selectedChatModel = Rxn<InfoGroupChatListModel>();
   }
 
   contactClickFun() {
-    Get.toNamed('/group_info', arguments: {"group_id":selectedChatModel.value?.id,"non_edit":true});
+    Get.toNamed('/group_info', arguments: {"group_id":selectedChatModel.value?.id});
   }
 
   Future<void> launchURL(String urls) async {

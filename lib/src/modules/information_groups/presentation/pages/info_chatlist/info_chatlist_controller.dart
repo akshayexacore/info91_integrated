@@ -23,7 +23,7 @@ class InfoChatListController extends GetxController
   var loading = false.obs;
   @override
   void onInit() {
-    loading.value = true;
+    // loading.value = true;
     grtInfoGroupList();
     // TODO: implement onInit
     super.onInit();
@@ -31,12 +31,12 @@ class InfoChatListController extends GetxController
 
   grtInfoGroupList() async {
     try {
-      loading.value = true;
+   if(ownchatGroupList.isEmpty  && chatGroupList.isEmpty)   loading.value = true;
       final responseData = await _infromationRepository.grtInfoGroupList();
       totalGroupList.value=responseData;
       debugPrint("responseData$responseData");
       ;
-      loading.value = false;
+    loading.value = false;
       if (responseData != null) {
         chatGroupList.clear();
         ownchatGroupList.clear();

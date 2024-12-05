@@ -167,9 +167,9 @@ class _NewInputCardState extends State<NewInputCard> {
                         readOnly: widget.readOnly,
                         maxLines: widget.maxLines,
                         controller: widget.controller,onTap: (){
-                          if(widget.ontap!=null){
-                            widget.ontap!();
-                          }
+                          // if(widget.ontap!=null){
+                          //   widget.ontap!();
+                          // }
 
                         },
                         obscureText: show,
@@ -220,7 +220,7 @@ class _NewInputCardState extends State<NewInputCard> {
                                     setState(() {});
                                   },
                                 )
-                              :widget.suffixIcon!=null?IconButton(
+                              :widget.suffixIcon!=null?widget.controller.text.trim().isNotEmpty? IconButton(
                                   icon: show
                                       ?  Icon(
                                          widget.suffixIcon,
@@ -235,7 +235,7 @@ class _NewInputCardState extends State<NewInputCard> {
                                     widget.ontap!();
                                    }
                                   },
-                                ): null,
+                                ):null: null,
                           labelStyle: const TextStyle(
                             fontSize: 13,
                             //fontStyle: FontStyle.italic,

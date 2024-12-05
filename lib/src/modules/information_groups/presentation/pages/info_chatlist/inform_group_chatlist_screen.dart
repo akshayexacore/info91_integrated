@@ -31,47 +31,11 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
         resizeToAvoidBottomInset: true,
         body: Column(
           children: [
-            CustomAppBar(
-              appBarName: "Information Groups",
-              isTextield: true,
-              textEditingController: controller.serchController.value,
-              onChangeFunction: (va) {
-                controller.searchText.value = va;
-                controller.searchInfoGroup(va);
-                // setState(() {});
-              },
-              actionWidget: [
-                CustomPopupmenu(
-                  onSelected: (val) {
-                    if (val == 1) {
-                      // Get.off(InformGroupCreationScreen);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const InformGroupCreationScreen(),
-                          )).then((value) {
-                        controller.grtInfoGroupList();
-                      });
-                    }
-                  },
-                  itemList: [popupMenuModel(name: "Create group", value: 1)],
-                )
-              ],
-            ),
+            appbarSec(context),
             const SizedBox(
               height: 40,
             ),
-            Obx(() {
-              debugPrint(
-                  "controller.serchController.value.text.isEmpty${controller.serchController.value.text.trim().isEmpty}");
-              return controller.searchText.value.isEmpty
-                  ? toggleSwitch(
-                      onToggle: (val) {
-                        controller.toggleValue.value = val;
-                      },
-                      toggleValue: controller.toggleValue.value)
-                  : Container();
-            }),
+            toggleSec(),
             SizedBox(
               height: 10.h,
             ),
@@ -134,6 +98,50 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
             ),
           ],
         ));
+  }
+
+  Obx toggleSec() {
+    return Obx(() {
+            debugPrint(
+                "controller.serchController.value.text.isEmpty${controller.serchController.value.text.trim().isEmpty}");
+            return controller.searchText.value.isEmpty
+                ? toggleSwitch(
+                    onToggle: (val) {
+                      controller.toggleValue.value = val;
+                    },
+                    toggleValue: controller.toggleValue.value)
+                : Container();
+          });
+  }
+
+  CustomAppBar appbarSec(BuildContext context) {
+    return CustomAppBar(
+            appBarName: "Information Groups",
+            isTextield: true,
+            textEditingController: controller.serchController.value,
+            onChangeFunction: (va) {
+              controller.searchText.value = va;
+              controller.searchInfoGroup(va);
+              // setState(() {});
+            },
+            actionWidget: [
+              CustomPopupmenu(
+                onSelected: (val) {
+                  if (val == 1) {
+                    // Get.off(InformGroupCreationScreen);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const InformGroupCreationScreen(),
+                        )).then((value) {
+                      controller.grtInfoGroupList();
+                    });
+                  }
+                },
+                itemList: [popupMenuModel(name: "Create group", value: 1)],
+              )
+            ],
+          );
   }
 
   ToggleSwitch toggleSwitch({Function? onToggle, required int toggleValue}) {

@@ -16,9 +16,12 @@ import 'package:info91/src/models/informationgroup/chat_model.dart';
 import 'package:info91/src/modules/information_groups/presentation/blocs/chat_screen_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/contactSelected_view_screen.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/VideoPlayerScreen2.dart';
+import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
 
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
+import 'package:info91/src/resources/infromation_repository.dart';
 import 'package:info91/src/widgets/custom/custom_divider.dart';
 import 'package:info91/src/widgets/custom/custom_image_popup.dart';
 import 'package:info91/src/widgets/custom/image_view.dart';
@@ -35,8 +38,12 @@ import 'package:voice_message_package/voice_message_package.dart';
 class BuildMessageWidget extends StatelessWidget {
   final ChatMessage messageModel;
   final bool isSameUser;
+  final String groupId;
   BuildMessageWidget(
-      {super.key, required this.messageModel, required this.isSameUser});
+      {super.key,
+      required this.messageModel,
+      required this.isSameUser,
+      required this.groupId});
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +54,16 @@ class BuildMessageWidget extends StatelessWidget {
         return BuildChatImage(
           message: messageModel,
           isSameUser: isSameUser,
+          groupId: groupId,
         );
       case "document":
         return _buildDocumentMessage(messageModel, context,
             isSameUser: isSameUser);
       case "audio":
-        return _buildAudioMessage(messageModel,context,
+        return _buildAudioMessage(messageModel, context,
             isSameUser: isSameUser);
       case "video":
-        return _buildVideoMessage(messageModel,context,
+        return _buildVideoMessage(messageModel, context,
             isSameUser: isSameUser);
       case "reply":
         return _buildReplyMessage(messageModel);
@@ -81,7 +89,10 @@ class BuildMessageWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if(!isSameUser && !isMe)Text(message.name??"",style: TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
+          if (!isSameUser && !isMe)
+            Text(message.name ?? "",
+                style: TextStyle(
+                    color: AppColors.primary, fontWeight: FontWeight.bold)),
           message.replyFlag == true
               ? Container(
                   width: w / 1.5,
@@ -111,7 +122,7 @@ class BuildMessageWidget extends StatelessWidget {
                               left: -1,
                               top: 2,
                               child: message.replyDetails?.type == "image"
-                                  ?const Icon(
+                                  ? const Icon(
                                       Icons.image,
                                       size: 16,
                                     )
@@ -151,7 +162,7 @@ class BuildMessageWidget extends StatelessWidget {
                     ],
                   ),
                 )
-              :const SizedBox(),
+              : const SizedBox(),
           Linkify(
             linkStyle: GoogleFonts.poppins(decorationColor: Colors.blue),
             onOpen: (link) async {
@@ -201,7 +212,10 @@ class BuildMessageWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           if(!isSameUser && !isMe)Text(message.name??"",style:const TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
+          if (!isSameUser && !isMe)
+            Text(message.name ?? "",
+                style: const TextStyle(
+                    color: AppColors.primary, fontWeight: FontWeight.bold)),
           message.replyFlag == true
               ? Container(
                   width: w,
@@ -355,7 +369,7 @@ class BuildMessageWidget extends StatelessWidget {
 
   Widget _buildAudioMessage(ChatMessage message, BuildContext context,
       {required bool isSameUser}) {
-     double w1 = MediaQuery.of(context).size.width;
+    double w1 = MediaQuery.of(context).size.width;
     double w = w1 > 700 ? 400 : w1;
     bool isMe = message.isMe ?? false;
     bool isReplyMe = true;
@@ -367,15 +381,18 @@ class BuildMessageWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if(!isSameUser && !isMe)Text(message.name??"",style:const TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
+          if (!isSameUser && !isMe)
+            Text(message.name ?? "",
+                style: const TextStyle(
+                    color: AppColors.primary, fontWeight: FontWeight.bold)),
           message.replyFlag == true
               ? Container(
                   width: w / 1.5,
-                  padding:
-                     const EdgeInsets.only(top: 5, right: 5, bottom: 5, left: 7),
+                  padding: const EdgeInsets.only(
+                      top: 5, right: 5, bottom: 5, left: 7),
                   decoration: BoxDecoration(
                       // border: Border.all(color: ColorPalette.primary),
-                      borderRadius:const BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(7),
                           topLeft: Radius.circular(7)),
                       color: isMe ? AppColors.replyWhite : Color(0xff666666)),
@@ -437,23 +454,23 @@ class BuildMessageWidget extends StatelessWidget {
                     ],
                   ),
                 )
-              :const SizedBox(),
-      VoiceMessageView(
-        circlesColor: AppColors.primary,
-        backgroundColor: isMe?AppColors.white:AppColors.primary.withOpacity(.2),
-        activeSliderColor: AppColors.primary.withOpacity(.2),
-        time:  message.time??"",
-      controller: VoiceController(
-                              audioSrc: message.message ?? "",
-                              maxDuration: const Duration(hours:1),
-                              isFile: false,
-                              onComplete: () {},
-                              onPause: () {},
-                              onPlaying: () {},
-                            ),
-                           
-                            )
-       
+              : const SizedBox(),
+          VoiceMessageView(
+            circlesColor: AppColors.primary,
+            backgroundColor:
+                isMe ? AppColors.white : AppColors.primary.withOpacity(.2),
+            activeSliderColor: AppColors.primary.withOpacity(.2),
+            time: message.time ?? "",
+            controller: VoiceController(
+              audioSrc: message.message ?? "",
+              maxDuration: const Duration(hours: 1),
+              isFile: false,
+              onComplete: () {},
+              onPause: () {},
+              onPlaying: () {},
+            ),
+          )
+
           // Align(
           //   alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
           //   child: Row(
@@ -480,7 +497,7 @@ class BuildMessageWidget extends StatelessWidget {
 
   Widget _buildVideoMessage(ChatMessage message, BuildContext context,
       {required bool isSameUser}) {
-     double w1 = MediaQuery.of(context).size.width;
+    double w1 = MediaQuery.of(context).size.width;
     double w = w1 > 700 ? 400 : w1;
     bool isMe = message.isMe ?? false;
     bool isReplyMe = true;
@@ -492,12 +509,15 @@ class BuildMessageWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if(!isSameUser && !isMe)Text(message.name??"",style: TextStyle(color: AppColors.primary,fontWeight: FontWeight.bold)),
+          if (!isSameUser && !isMe)
+            Text(message.name ?? "",
+                style: TextStyle(
+                    color: AppColors.primary, fontWeight: FontWeight.bold)),
           message.replyFlag == true
               ? Container(
                   width: w / 1.5,
-                  padding:
-                     const EdgeInsets.only(top: 5, right: 5, bottom: 5, left: 7),
+                  padding: const EdgeInsets.only(
+                      top: 5, right: 5, bottom: 5, left: 7),
                   decoration: BoxDecoration(
                       // border: Border.all(color: ColorPalette.primary),
                       borderRadius: BorderRadius.only(
@@ -563,20 +583,20 @@ class BuildMessageWidget extends StatelessWidget {
                   ),
                 )
               : SizedBox(),
-         VideoMessageBubble(
-        isSender: isReplyMe,
-        videoDuration: message.fileSize??"",
-        videoPath: message.message??"",videoSize: message.fileSize??"",
-        timestamp:message.time??"" ,
-        onTap: (){
-          showVideoPreviewDialog(context,model: message);
-        },
-           // videoPlayerController:
-           //     VideoPlayerController.network(
-           //   messageList[index].message ?? "",
-           // ),
-         ),
-       
+          VideoMessageBubble(
+            isSender: isReplyMe,
+            videoDuration: message.fileSize ?? "",
+            videoPath: message.message ?? "", videoSize: message.fileSize ?? "",
+            timestamp: message.time ?? "",
+            onTap: () {
+              showVideoPreviewDialog(context, model: message);
+            },
+            // videoPlayerController:
+            //     VideoPlayerController.network(
+            //   messageList[index].message ?? "",
+            // ),
+          ),
+
           // Align(
           //   alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
           //   child: Row(
@@ -620,7 +640,6 @@ class BuildMessageWidget extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            
             leading: AppCustomCirleProfileIamge(
               isStringImag: false,
               memoryImage: null,
@@ -653,12 +672,12 @@ class BuildMessageWidget extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              customTextButton("View All",clr: AppColors.black, onTap: () {
+              customTextButton("View All", clr: AppColors.black, onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => SelectedContactListView(
-                          contactList:message.contactList??[]),
+                          contactList: message.contactList ?? []),
                     ));
               })
             ],
@@ -672,7 +691,12 @@ class BuildMessageWidget extends StatelessWidget {
 class BuildChatImage extends StatefulWidget {
   final ChatMessage message;
   final bool isSameUser;
-  BuildChatImage({super.key, required this.message, required this.isSameUser});
+  final String groupId;
+  const BuildChatImage(
+      {super.key,
+      required this.message,
+      required this.isSameUser,
+      required this.groupId});
 
   @override
   State<BuildChatImage> createState() => _BuildChatImageState();
@@ -680,37 +704,46 @@ class BuildChatImage extends StatefulWidget {
 
 class _BuildChatImageState extends State<BuildChatImage> {
   late String _localPath;
-
+  final InfromationRepository _repository = InfromationRepository();
   Map<String, bool> _downloadStatus = {};
+  List<customPopupmenuButton> item = [
+    customPopupmenuButton(label: "Download", value: "1"),
 
+    // customPopupmenuButton(label: "Channel",value: "2"),
+  ];
   Map<String, bool> _downloadloading = {};
 
   Future<void> _downloadImage(String imageUrl) async {
-  try{
+    try {
       setState(() {
-      _downloadloading[imageUrl] = true;
-    });  
-    await _requestPermission();
-    final response = await http.get(Uri.parse(imageUrl));
-    final directory = await getApplicationDocumentsDirectory();
-    _localPath = directory.path;
+        _downloadloading[imageUrl] = true;
+      });
+      await _requestPermission();
+      final response = await http.get(Uri.parse(imageUrl));
+      final directory = await getApplicationDocumentsDirectory();
+      _localPath = directory.path;
 
-    final filePath = '$_localPath/${imageUrl.split('/').last}';
-    final file = File(filePath);
-    await file.writeAsBytes(response.bodyBytes);
-      final result = await ImageGallerySaver.saveImage(
+      final filePath = '$_localPath/${imageUrl.split('/').last}';
+      final file = File(filePath);
+      await file.writeAsBytes(response.bodyBytes);
+   await ImageGallerySaver.saveImage(
         Uint8List.fromList(response.bodyBytes),
         quality: 80,
         name: imageUrl.split('/').last,
       );
-    setState(() {
-      _downloadloading[imageUrl] = false;
-      _downloadStatus[imageUrl] = true;
-      print("download${_downloadStatus[imageUrl]}");
-    });
-  }catch(e){
-    debugPrint("the image downlaoding error${e}");
-  }
+
+      if (widget.message.fileDownloadFlag != true)
+        final data = await _repository.downLoadFiles(
+            messageids: widget.message.messageId ?? "",
+            groupId: widget.groupId);
+      setState(() {
+        _downloadloading[imageUrl] = false;
+        _downloadStatus[imageUrl] = true;
+        print("download${_downloadStatus[imageUrl]}");
+      });
+    } catch (e) {
+      debugPrint("the image downlaoding error${e}");
+    }
   }
 
   Future<void> requestStoragePermission() async {
@@ -757,29 +790,28 @@ class _BuildChatImageState extends State<BuildChatImage> {
     // Request storage permission at runtime
     if (await _requestStoragePermission()) {
       print("Storage permissionn");
-      _checkDownloaded(
-         widget. message.message??"");
+      _checkDownloaded(widget.message.message ?? "");
     } else {
       print("Storage permission denied");
     }
   }
+
   Future<void> _requestPermission() async {
-  if (await Permission.storage.isDenied) {
-    await Permission.storage.request();
+    if (await Permission.storage.isDenied) {
+      await Permission.storage.request();
+    }
   }
-}
 
-
-
-Future<bool> _requestStoragePermission() async {
-  if (Platform.isAndroid && (Platform.version.startsWith('10') || Platform.version.startsWith('11'))) {
-
-    return await Permission.photos.request().isGranted;
-  } else {
-    // For devices below Android 10, we can use legacy storage permissions
-    return await Permission.storage.request().isGranted;
+  Future<bool> _requestStoragePermission() async {
+    if (Platform.isAndroid &&
+        (Platform.version.startsWith('10') ||
+            Platform.version.startsWith('11'))) {
+      return await Permission.photos.request().isGranted;
+    } else {
+      // For devices below Android 10, we can use legacy storage permissions
+      return await Permission.storage.request().isGranted;
+    }
   }
-}
 
   @override
   void initState() {
@@ -787,27 +819,26 @@ Future<bool> _requestStoragePermission() async {
     super.initState();
   }
 
-Future<void> _checkDownloaded(String imageUrl) async {
-  try {
-    final directory = await getApplicationDocumentsDirectory();
-    _localPath = directory.path;
-    final filePath = '$_localPath/${imageUrl.split('/').last}';
-    final file = File(filePath);
+  Future<void> _checkDownloaded(String imageUrl) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      _localPath = directory.path;
+      final filePath = '$_localPath/${imageUrl.split('/').last}';
+      final file = File(filePath);
 
-    // Check if file exists in local directory
-    bool exists = await file.exists();
+      // Check if file exists in local directory
+      bool exists = await file.exists();
 
-    print("File existence in local path: $exists");
+      print("File existence in local path: $exists");
 
-    setState(() {
-      _downloadStatus[imageUrl] = exists;
-      _downloadloading[imageUrl] = false; // Loading should be false
-    });
-  } catch (e) {
-    debugPrint("Error checking file existence: $e");
+      setState(() {
+        _downloadStatus[imageUrl] = exists;
+        _downloadloading[imageUrl] = false; // Loading should be false
+      });
+    } catch (e) {
+      debugPrint("Error checking file existence: $e");
+    }
   }
-}
-
 
   Future<bool> _isImageInGallery(String imageUrl) async {
     try {
@@ -863,7 +894,6 @@ Future<void> _checkDownloaded(String imageUrl) async {
         isSameUser: widget.isSameUser,
         child: Container(
           width: 250.w,
-          
           child: Column(
             children: [
               ClipRRect(
@@ -880,17 +910,50 @@ Future<void> _checkDownloaded(String imageUrl) async {
                       },
                       // width: 200,
                       // height: 200,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       image: ResizeImage(
-                          NetworkImage(
-                            widget.message.message ?? "",
+                        NetworkImage(
+                          widget.message.message ?? "",
+                        ),
+                        width: 350,
+                        height: 250,
+                        allowUpscaling: true,
+                      )),
+                  if (widget.message.fileDownloadFlag == true)
+                    Positioned(
+                      top: 0, // Adjust as needed for padding
+                      right: 8, // Adjust as needed for padding
+                      child: GestureDetector(
+                        onTap: () {
+                          // Handle tap on AdminTableDotIcon
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            color: isMe ? Colors.white : Colors.black,
+                            shape: BoxShape.circle,
                           ),
-                          width: 250,
-                          height: 250,
-                          allowUpscaling: true,
-                          policy: ResizeImagePolicy.fit)),
+                          child: Center(
+                            child: AdminTableDotIcon(
+                              height: 30,
+                              clr: Colors.transparent,
+                              iconClr: Colors.black,
+                              icons: Icons.expand_more,
+                              iconSize: 20,
+                              mouseHoverFunc: (val) {},
+                              valueList: item,
+                              onTap: (val) {
+                                _downloadImage(widget.message.message ?? "");
+                                // Handle popup menu item selection
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   Positioned(
-                      child: _downloadStatus[widget.message.message] != true
+                      child: widget.message.fileDownloadFlag != true
                           ? BlurryContainer(
                               color: Colors.transparent,
                               height: 200.h,
@@ -928,12 +991,12 @@ Future<void> _checkDownloaded(String imageUrl) async {
                                                     )
                                                   ],
                                                 ))
-                                            :const CircularProgressIndicator(),
+                                            : const CircularProgressIndicator(),
                                       ),
                                     ],
                                   )),
                             )
-                          : SizedBox())
+                          : SizedBox()),
                 ]),
               ),
 
@@ -1077,16 +1140,27 @@ Widget commonBuildMessageOuter(
                 ),
                 child: IntrinsicWidth(
                   child: Column(
-                    crossAxisAlignment:CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                    if(message.fwdFlag==true)  Row(children: [
-                      Icon(Icons.arrow_forward,size: 16.sp,),
-                      SizedBox(width: 5,),
-                     const Text("Forwarded",style: TextStyle(color: AppColors.primary,))
-                        
-                  
-                      ],),
-                      SizedBox(height: 5,),
+                      if (message.fwdFlag == true)
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.arrow_forward,
+                              size: 16.sp,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            const Text("Forwarded",
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                ))
+                          ],
+                        ),
+                      SizedBox(
+                        height: 5,
+                      ),
                       IntrinsicWidth(child: child),
                     ],
                   ),

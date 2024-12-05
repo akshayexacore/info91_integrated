@@ -21,6 +21,7 @@ import 'package:info91/src/modules/information_groups/presentation/profile_secti
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_avatarwithimageicon.dart';
 
 import 'package:info91/src/resources/infromation_repository.dart';
+import 'package:info91/src/utils/app_formatter.dart';
 import 'package:info91/src/widgets/custom/app_app_bar.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/custom/build_appbar_widgets.dart';
@@ -249,8 +250,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       : GroupedList<ChatMessage, DateTime>(
                           controller: chatController.scrollController,
                           elements: chatController.messages,
-                          groupBy: (element) =>
-                              DateTime.parse(element.date ?? ""),
+                          groupBy: (element){print("searching date${element.date}");
+                            return  DateTime.parse(element.date ?? "");},
+                             
                           // element.date,
 
                           groupComparator: (value1, value2) =>
@@ -270,7 +272,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                       vertical: AppPaddings.xxxSmall4,
                                     ),
                                     child: Text(
-                                      chatController.messages[index].time ?? "",
+                                    AppFormatter.isCurrentDate( chatController.messages[index].date ?? "") ?"Today": chatController.messages[index].date ?? "",
                                       // DateFormat("MMM dd, yyyy").format(
                                       //     chatController.messages[index].dateTime),
                                       style: const TextStyle(
@@ -341,6 +343,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                           child: BuildMessageWidget(
                                             messageModel: message,
                                             isSameUser: isSameUser,
+                                            groupId:chatController.selectedGroupId,
                                           ),
                                         )),
                                     if (chatController.selectedMessage.any(
@@ -733,7 +736,25 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           child: Row(
             children: <Widget>[
               Expanded(
-                child: TextField(
+                child:chatController.isRecording.value?Container(
+               padding:
+                        const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+                  decoration: BoxDecoration(
+                    borderRadius:  BorderRadius.circular(15),color: AppColors.google,
+                    
+
+                ),child: Row(crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.delete,color: Colors.red,),
+                    SizedBox(width: 10,),
+                  
+                 Text(chatController.formatDuration( chatController.recordingDuration.value)), const Spacer(),  Padding(
+                   padding: const EdgeInsets.only(right: 5.0),
+                   child: Text("Slide to cancel"),
+                 ), 
+
+                  ],),
+                ): TextField(
                   controller: controller,
                   focusNode: focusnode,
                   onTap: () {
@@ -796,11 +817,20 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              SizedBox(
+             if(!chatController.isRecording.value) SizedBox(
                 width: 10.w,
               ),
               CustomCircleIconWidget(
-                radius: 21.r,
+                radius: 21.r,onLongPressMoveUpdate: (value){
+                  print("valuesssssssssssssssss$value");
+                  
+                  if(value<-65){
+            chatController.isRecording.value = false;
+                      chatController.filePath.value = "";
+                      chatController.stopRecordingTimer();
+                }
+
+                },
                 iconData: Icons.mic_none,
                 iconSize: 20,
                 iconColor: AppColors.primary,
