@@ -5,6 +5,7 @@ import 'package:info91/src/models/informationgroup/pincode_validation_model.dart
 import 'package:info91/src/models/user.dart';
 import 'package:info91/src/resources/auth_repository.dart';
 import 'package:info91/src/utils/api_base_helper.dart';
+import 'package:info91/src/utils/response-utils.dart';
 
 import 'shared_preferences_data_provider.dart';
 
@@ -62,6 +63,25 @@ class UserProfileRepository {
     } catch (e) {
       print("Eroor is here$e");
       throw e;
+    }
+  }
+     Future<DoubleResponse> logout(
+     ) async {
+    try {
+     
+      final response = await _api.post(
+        ApiConstants.logoutApi,
+     
+        headers: {},
+      );
+     debugPrint(response.toString());
+      if (response['statusCode'] == 200) {
+        return DoubleResponse(true, response['message']);
+      } else {
+        return DoubleResponse(false, response['message']);
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }

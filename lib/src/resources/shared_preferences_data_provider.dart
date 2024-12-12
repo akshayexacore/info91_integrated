@@ -11,7 +11,7 @@ class SharedPreferencesDataProvider {
   static const String userMail = 'user_mail';
   static const String userImage = 'user_image';
   static const String shouldAskRatingFor = 'should_ask_rating_for';
-
+   static const String fcmTokenKey = 'fcm_token';
 
   Future<bool> clear() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -32,6 +32,14 @@ class SharedPreferencesDataProvider {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(refresh, refreshToken);
   }
+   Future<bool> saveFcmToken(String fcmToken) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(fcmTokenKey, fcmToken);
+  }
+  Future<String> getFcmToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(fcmTokenKey
+    ) ?? '';}
 
   Future<String> getRefreshToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
