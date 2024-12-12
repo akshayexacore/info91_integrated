@@ -9,7 +9,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+// import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/configs/filepicker.dart';
 import 'package:info91/src/models/informationgroup/chat_model.dart';
@@ -726,11 +726,11 @@ class _BuildChatImageState extends State<BuildChatImage> {
       final filePath = '$_localPath/${imageUrl.split('/').last}';
       final file = File(filePath);
       await file.writeAsBytes(response.bodyBytes);
-   await ImageGallerySaver.saveImage(
-        Uint8List.fromList(response.bodyBytes),
-        quality: 80,
-        name: imageUrl.split('/').last,
-      );
+  //  await ImageGallerySaver.saveImage(
+  //       Uint8List.fromList(response.bodyBytes),
+  //       quality: 80,
+  //       name: imageUrl.split('/').last,
+  //     );
 
       if (widget.message.fileDownloadFlag != true)
         final data = await _repository.downLoadFiles(
