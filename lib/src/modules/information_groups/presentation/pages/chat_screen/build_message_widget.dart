@@ -7,8 +7,10 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gallery_saver_plus/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 // import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/configs/filepicker.dart';
@@ -726,16 +728,20 @@ class _BuildChatImageState extends State<BuildChatImage> {
       final filePath = '$_localPath/${imageUrl.split('/').last}';
       final file = File(filePath);
       await file.writeAsBytes(response.bodyBytes);
+ final val=     await GallerySaver.saveImage(filePath);
+ debugPrint("the value of downlaoded file is here$val");
+ debugPrint("the value of downlaoded file is here${widget.message.fileDownloadFlag}");
   //  await ImageGallerySaver.saveImage(
   //       Uint8List.fromList(response.bodyBytes),
   //       quality: 80,
   //       name: imageUrl.split('/').last,
   //     );
 
-      if (widget.message.fileDownloadFlag != true)
-        final data = await _repository.downLoadFiles(
+      if (widget.message.fileDownloadFlag != true){      final data = await _repository.downLoadFiles(
             messageids: widget.message.messageId ?? "",
             groupId: widget.groupId);
+             debugPrint("the value of downlaoded file is here$data");}
+  
       setState(() {
         _downloadloading[imageUrl] = false;
         _downloadStatus[imageUrl] = true;

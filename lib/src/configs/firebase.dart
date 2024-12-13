@@ -170,12 +170,12 @@ _preferences.saveFcmToken(fcmToken??"");
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
+            boxShadow: const [
+            BoxShadow(
                 color: Colors.black26,
                 blurRadius: 10,
                 spreadRadius: 1,
-                offset: const Offset(0, 5),
+                offset: Offset(0, 5),
               ),
             ],
           ),
@@ -186,7 +186,7 @@ _preferences.saveFcmToken(fcmToken??"");
               Row(
                 children: [
                   // Replace this with your custom circle asset image function
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 20,
                     backgroundImage: AssetImage("assets/images/app_new_icon.png"),
                   ),
@@ -231,7 +231,8 @@ _preferences.saveFcmToken(fcmToken??"");
         ),
       ),
     ),
-    barrierDismissible: false, // Prevent dismissal by tapping outside
+    barrierDismissible: true, 
+      barrierColor: Colors.transparent, // Prevent dismissal by tapping outside
   );
 
   // Automatically dismiss the dialog after 2 seconds
