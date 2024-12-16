@@ -89,7 +89,7 @@ class _GaleryViewScreenState extends State<GaleryViewScreen>
           crossAxisSpacing: 10.w,
           mainAxisSpacing: 10.w,
         ),
-        itemBuilder: (context, index) => customImageCard(
+        itemBuilder: (context, index) => CustomImageCard(
           imageUrl: widget.mediaModel.imageList?[index].message ?? "",
           isVideo: isVideo,
           onImageTap: () {

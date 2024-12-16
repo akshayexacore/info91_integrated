@@ -475,7 +475,9 @@ class MediaList {
           .toList(),
     );
   }
-
+ List<MediaItem> get totalList {
+    return [...imageList??[], ...videoList??[], ...audioList??[], ...documentList??[]];
+  }
   Map<String, dynamic> toJson() {
     return {
       'image_list': imageList?.map((e) => e.toJson()).toList(),

@@ -21,6 +21,8 @@ class InfoProfileController extends GetxController {
   final _infromationRepository = InfromationRepository();
   late ProgressDialog pr;
   var selectedFile = ''.obs;
+
+  var totalMediaList=<MediaItem>[].obs;
   var popuMenuList = [popupMenuModel(name: "Edit Name & About", value: 3)];
   @override
   void onInit() {
@@ -73,6 +75,8 @@ class InfoProfileController extends GetxController {
       final response = await _infromationRepository.getProfileData(id ?? "");
       debugPrint("getGroupInfoDetails calling${response.memberCount}");
       profilledataModel.value = response;
+      MediaList model=MediaList();
+     totalMediaList.value = [ ...?profilledataModel.value.mediaList?.imageList, ...?profilledataModel.value.mediaList?.audioList, ...?profilledataModel.value.mediaList?.videoList, ...?profilledataModel.value.mediaList?.documentList ];
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;

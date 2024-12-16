@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
@@ -19,140 +18,149 @@ class BannersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomAppBar(
-            imageUrl: "",
-            imageOntap: () {},
-            appBarName: "Banners",
-            actionWidget: [
-              if (_controller.isEdit.value)
-                customTextButton("Delete", onTap: () {
-                  _controller.deleteBanner();
-                })
-            ],
-          ),
-          Expanded(
-              child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: marginWidth),
-            child: Form(
-              key: _controller.formKey,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  greyContentText(
-                      "You can add up to 10 photos with your current plan, and they will be automatically removed after 30 days."),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  Obx(() {
-                    debugPrint(
-                        "_controller.imagePath.value${_controller.checkImageExist()}");
-                    return Stack(
-                      children: [
-                        SizedBox(
-                          height: 180.h,
-                          width: double.infinity,
-                          child: _controller.checkImageExist() == false
-                              ? Center(
-                                  child: IconButton(
-                                    onPressed: () {
-                                      _controller.pickImage();
-                                    },
-                                    icon: const Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.black54,
-                                      size: 30,
-                                    ),
-                                  ),
-                                )
-                              : ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12.r)),
-                                  child: _controller.imagePath.value.isNotEmpty
-                                      ? Image.network(
-                                          fit: BoxFit.cover,
-                                          _controller.imagePath.value)
-                                      : Image.file(
-                                          File(_controller.filePath.value),
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                          height: 150,
-                                        ),
-                                ),
-                        ),
-                        if (_controller.checkImageExist())
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: InkWell(
-                              onTap: () {
-                                _controller.clearImage();
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: CircleAvatar(
-                                    radius: 18.r,
-                                    backgroundColor: AppColors.primary,
-                                    child: const Icon(
-                                      Icons.delete,
-                                      color: AppColors.white,
-                                    )),
-                              ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomAppBar(
+                  imageUrl: "",
+                  imageOntap: () {},
+                  appBarName: "Banners",
+                  actionWidget: [
+                    if (_controller.isEdit.value)
+                      customTextButton("Delete", onTap: () {
+                        _controller.deleteBanner();
+                      })
+                  ],
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: marginWidth),
+                    child: SingleChildScrollView(
+                      child: Form(
+                        key: _controller.formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 15.h),
+                            greyContentText(
+                              "You can add up to 10 photos with your current plan, and they will be automatically removed after 30 days.",
                             ),
-                          )
-                      ],
-                    );
-                  }),
-                  SizedBox(
-                    height: 15.h,
+                            SizedBox(height: 15.h),
+                            Obx(() {
+                              debugPrint(
+                                  "_controller.imagePath.value${_controller.checkImageExist()}");
+                              return Stack(
+                                children: [
+                                  SizedBox(
+                                    height: 180.h,
+                                    width: double.infinity,
+                                    child: _controller.checkImageExist() ==
+                                            false
+                                        ? Center(
+                                            child: IconButton(
+                                              onPressed: _controller.pickImage,
+                                              icon: const Icon(
+                                                Icons.camera_alt,
+                                                color: Colors.black54,
+                                                size: 30,
+                                              ),
+                                            ),
+                                          )
+                                        : ClipRRect(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(12.r)),
+                                            child: _controller
+                                                    .imagePath.value.isNotEmpty
+                                                ? Image.network(
+                                                    fit: BoxFit.cover,
+                                                    _controller.imagePath.value,
+                                                  )
+                                                : Image.file(
+                                                    File(_controller
+                                                        .filePath.value),
+                                                    fit: BoxFit.cover,
+                                                    width: double.infinity,
+                                                    height: 150,
+                                                  ),
+                                          ),
+                                  ),
+                                  if (_controller.checkImageExist())
+                                    Align(
+                                      alignment: Alignment.topRight,
+                                      child: InkWell(
+                                        onTap: _controller.clearImage,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: CircleAvatar(
+                                            radius: 18.r,
+                                            backgroundColor: AppColors.primary,
+                                            child: const Icon(
+                                              Icons.delete,
+                                              color: AppColors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                ],
+                              );
+                            }),
+                            SizedBox(height: 15.h),
+                            NewInputCard(
+                              controller: _controller.titleController,
+                              title: "Title",
+                              showValidator: true,
+                            ),
+                            SizedBox(height: 15.h),
+                            NewInputCard(
+                              controller: _controller.descriptionController,
+                              title: "Description",
+                              maxLines: 3,
+                              height: 90,
+                              showValidator: true,
+                            ),
+                            SizedBox(height: 15.h),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  NewInputCard(
-                    controller: _controller.titleController,
-                    title: "Title",
-                    showValidator: true,
-                    // isBorder: false,
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  NewInputCard(
-                    controller: _controller.descriptionController,
-                    title: "Description",
-                    maxLines: 3,
-                    height: 90,
-                    showValidator: true,
-                    // isBorder: false,
-                  ),
-                  const Spacer(),
-                  Obx(() {
-                    return AppButton(
-                      text: _controller.isEdit.value ? "Update" : "Save",
-                      busy: _controller.isBusy.value,
-                      // icon: Icons.camera_alt,
-                      onPressed: () {
-                        _controller.isEdit.value
-                            ?_controller.upDateBanner()
-                            : _controller.createBanner();
-                      },
-                      style: AppButtonStyles.appButton.copyWith(
-                          backgroundColor:
-                              const WidgetStatePropertyAll(AppColors.white)),
-                      textStyle: AppTextStyles.appButton
-                          .copyWith(color: AppColors.black),
-                    );
-                  }),
-                  SizedBox(
-                    height: 15.h,
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
-          ))
-        ],
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Obx(() {
+                return Padding(
+                  padding:  EdgeInsets.symmetric(horizontal: marginWidth,vertical: 20.h),
+                  child: AppButton(
+                    text: _controller.isEdit.value ? "Update" : "Save",
+                    busy: _controller.isBusy.value,
+                    onPressed: () {
+                      if (_controller.isEdit.value) {
+                        _controller.upDateBanner();
+                      } else {
+                        _controller.createBanner();
+                      }
+                    },
+                    style: AppButtonStyles.appButton.copyWith(
+                      backgroundColor:
+                          const WidgetStatePropertyAll(AppColors.white),
+                    ),
+                    textStyle:
+                        AppTextStyles.appButton.copyWith(color: AppColors.black),
+                  ),
+                );
+              }),
+            ),
+            SizedBox(height: 15.h),
+          ],
+        ),
       ),
     );
   }

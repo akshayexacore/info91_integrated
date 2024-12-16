@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -39,7 +37,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final InfoProfileController controller = Get.put(InfoProfileController());
 
-
   @override
   void initState() {
     if (widget.model.id == null) {
@@ -63,15 +60,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               enabled: controller.isLoading.value,
               child: CustomAppBar(
                 imageUrl: controller.profilledataModel.value.profileImage,
-                isPic: true,actionWidget: [      
+                isPic: true,
+                actionWidget: [
                   CustomPopupmenu(
-                  onSelected: (val) {
-                    controller.popupMenuSelectionFun(val);
-              
-                  },
-                  itemList:controller.popuMenuList
-                  ,
-                )],
+                    onSelected: (val) {
+                      controller.popupMenuSelectionFun(val);
+                    },
+                    itemList: controller.popuMenuList,
+                  )
+                ],
                 onBackButtonPress: () {
                   Navigator.pop(context, controller.profilledataModel.value);
                 },
@@ -107,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     color: AppColors.text,
                                     size: 16.sp),
                                 SizedBox(
-                                  height:9.h,
+                                  height: 9.h,
                                 ),
                                 blusHeading("About Us"),
                                 SizedBox(
@@ -117,14 +114,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     controller
                                             .profilledataModel.value.purpose ??
                                         "",
-                                    color: AppColors.text,fontWeight: FontWeight.w400,
+                                    color: AppColors.text,
+                                    fontWeight: FontWeight.w400,
                                     size: 15.sp),
                                 SizedBox(
                                   height: 15.h,
                                 ),
                                 Text(
-                                 "Created by ${controller
-                                            .profilledataModel.value.createdBy }/${ AppFormatter.formatStringDateToDyMMMMd(widget.model.createdAt??"")}",
+                                  "Created by ${controller.profilledataModel.value.createdBy}/${AppFormatter.formatStringDateToDyMMMMd(widget.model.createdAt ?? "")}",
                                   style: const TextStyle(color: Colors.grey),
                                 ),
                                 SizedBox(
@@ -141,52 +138,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   height: 100.h,
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) =>
-                                        customImageCard(
-                                      index: index,
-                                      imageCount: controller
-                                              .profilledataModel
-                                              .value
-                                              .mediaList
-                                              ?.imageList
-                                              ?.length ??
-                                          0,
-                                      imageUrl: controller
-                                              .profilledataModel
-                                              .value
-                                              .mediaList
-                                              ?.imageList?[index]
-                                              .message ??
-                                          "",
-                                      width: 110.w,
-                                      onImageTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  GaleryViewScreen(
-                                                mediaModel: controller
-                                                    .profilledataModel
-                                                    .value
-                                                    .mediaList!,
-                                              ),
-                                            ));
-                                      },
-                                    ),
+                                    itemBuilder: (context, index) {
+                                      print(
+                                          "ccccccc${controller.totalMediaList[index].type}");
+                                      return mediaSection(
+                                        controller.totalMediaList[index],
+                                        index,
+                                      );
+                                    },
                                     itemCount: (controller
-                                                    .profilledataModel
-                                                    .value
-                                                    .mediaList
-                                                    ?.imageList
-                                                    ?.length ??
+                                                    .totalMediaList.length ??
                                                 0) <
                                             3
-                                        ? (controller.profilledataModel.value
-                                                .mediaList?.imageList?.length ??
+                                        ? (controller.totalMediaList.length ??
                                             0)
                                         : 3,
                                   ),
                                 ),
+                                // SizedBox(
+                                //   height: 100.h,
+                                //   child: ListView.builder(
+                                //     scrollDirection: Axis.horizontal,
+                                //     itemBuilder: (context, index) =>
+                                //         customImageCard(
+                                //       index: index,
+                                //       imageCount: controller
+                                //               .profilledataModel
+                                //               .value
+                                //               .mediaList
+                                //               ?.imageList
+                                //               ?.length ??
+                                //           0,
+                                //       imageUrl: controller
+                                //               .profilledataModel
+                                //               .value
+                                //               .mediaList
+                                //               ?.imageList?[index]
+                                //               .message ??
+                                //           "",
+                                //       width: 110.w,
+                                //       onImageTap: () {
+                                //         Navigator.push(
+                                //             context,
+                                //             MaterialPageRoute(
+                                //               builder: (context) =>
+                                //                   GaleryViewScreen(
+                                //                 mediaModel: controller
+                                //                     .profilledataModel
+                                //                     .value
+                                //                     .mediaList!,
+                                //               ),
+                                //             ));
+                                //       },
+                                //     ),
+                                //     itemCount: (controller
+                                //                     .profilledataModel
+                                //                     .value
+                                //                     .mediaList
+                                //                     ?.imageList
+                                //                     ?.length ??
+                                //                 0) <
+                                //             3
+                                //         ? (controller.profilledataModel.value
+                                //                 .mediaList?.imageList?.length ??
+                                //             0)
+                                //         : 3,
+                                //   ),
+                                // ),
                                 SizedBox(
                                   height: 14.h,
                                 ),
@@ -196,10 +214,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       child: CustomArrowTextbutton(
                                         buttonName: "Group info",
                                         onTap: () {
-                                          Get.toNamed('/group_info', arguments: {
-                                            "group_id": widget.selectedGroupId,
-                                          });
-                                      
+                                          Get.toNamed('/group_info',
+                                              arguments: {
+                                                "group_id":
+                                                    widget.selectedGroupId,
+                                              });
+
                                           // Navigator.push(
                                           //     context,
                                           //     MaterialPageRoute(
@@ -207,33 +227,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           //     ));
                                         },
                                       ),
-                                    ),SizedBox(
-                                  width:15.w,
-                                ),
-                                if (controller
-                                        .profilledataModel.value.isAdmin ==
-                                    true)
-                                  Expanded(
-                                    child: CustomArrowTextbutton(
-                                      buttonName: "Add Banners",
-                                      onTap: () {
-                                        Get.toNamed(BannersScreen.routeName,
-                                            arguments: {
-                                              "group_id": widget.selectedGroupId,
-                                              "isUpdate": false
-                                            })?.then((value) {
-                                          controller.getGroupInfoDetails(
-                                              widget.selectedGroupId);
-                                        });
-                                    
-                                        // Navigator.push(
-                                        //     context,
-                                        //     MaterialPageRoute(
-                                        //       builder: (context) => GroupInfo(),
-                                        //     ));
-                                      },
                                     ),
-                                  ),
+                                    SizedBox(
+                                      width: 15.w,
+                                    ),
+                                    if (controller
+                                            .profilledataModel.value.isAdmin ==
+                                        true)
+                                      Expanded(
+                                        child: CustomArrowTextbutton(
+                                          buttonName: "Add Banners",
+                                          onTap: () {
+                                            Get.toNamed(BannersScreen.routeName,
+                                                arguments: {
+                                                  "group_id":
+                                                      widget.selectedGroupId,
+                                                  "isUpdate": false
+                                                })?.then((value) {
+                                              controller.getGroupInfoDetails(
+                                                  widget.selectedGroupId);
+                                            });
+
+                                            // Navigator.push(
+                                            //     context,
+                                            //     MaterialPageRoute(
+                                            //       builder: (context) => GroupInfo(),
+                                            //     ));
+                                          },
+                                        ),
+                                      ),
                                   ],
                                 ),
                                 SizedBox(
@@ -271,7 +293,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               .toList() ??
                                           []),
                                 ],
-                                
+
                                 SizedBox(
                                   height: 15.h,
                                 ),
@@ -508,6 +530,86 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget mediaSection(MediaItem media, int index) {
+    return media.type == "image"
+        ? CustomImageCard(
+            index: index,
+            onPicTap: () {
+              Navigator.push(
+                Get.context!,
+                MaterialPageRoute(
+                  builder: (context) => GalleryPhotoViewWrapper(
+                    galleryItems: [
+                      GalleryItem(
+                          id: "id:1",
+                          resource:
+                              controller.totalMediaList.value[index].message ??
+                                  "")
+                    ],
+                    backgroundDecoration: const BoxDecoration(
+                      color: Colors.black,
+                    ),
+                    initialIndex: 0,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                ),
+              );
+            },
+            imageCount: controller.totalMediaList.length ?? 0,
+            imageUrl: media.message ?? "",
+            width: 110.w,
+            onImageTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GaleryViewScreen(
+                      mediaModel: controller.profilledataModel.value.mediaList!,
+                    ),
+                  ));
+            },
+          )
+        : media.type == "audio"
+            ? CustomMediaAudioCard(
+                index: index,
+                imageCount: controller.totalMediaList.length ?? 0,
+                imageUrl: media.message ?? "",
+                width: 110.w,
+                   onPicTap: () {
+              Navigator.push(
+                Get.context!,
+                MaterialPageRoute(
+                  builder: (context) => GalleryPhotoViewWrapper(
+                    galleryItems: [
+                      GalleryItem(
+                          id: "id:1",
+                          isAudio: true,
+                          resource:
+                              controller.totalMediaList.value[index].message ??
+                                  "")
+                    ],
+                    backgroundDecoration: const BoxDecoration(
+                      color: Colors.black,
+                    ),
+                    initialIndex: 0,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                ),
+              );
+            },
+                onImageTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GaleryViewScreen(
+                          mediaModel:
+                              controller.profilledataModel.value.mediaList!, 
+                        ),
+                      ));
+                },
+              )
+            : Container();
+  }
+
   ProfileTopImageSec appbarSec() {
     return ProfileTopImageSec(
       isAdmin: controller.profilledataModel.value.isAdmin ?? false,
@@ -613,7 +715,7 @@ class BannersImageView extends StatelessWidget {
                       onTap!(index);
                     }
                   },
-                  child: customImageCard(
+                  child: CustomImageCard(
                     width: double.infinity,
                     height: 150.h,
                     imageUrl: imageList[index].image ?? "",
