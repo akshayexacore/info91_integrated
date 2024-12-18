@@ -513,7 +513,7 @@ class BuildMessageWidget extends StatelessWidget {
         children: [
           if (!isSameUser && !isMe)
             Text(message.name ?? "",
-                style: TextStyle(
+                style:const TextStyle(
                     color: AppColors.primary, fontWeight: FontWeight.bold)),
           message.replyFlag == true
               ? Container(
@@ -544,7 +544,7 @@ class BuildMessageWidget extends StatelessWidget {
                               left: -1,
                               top: 2,
                               child: message.replyDetails?.type == "image"
-                                  ? Icon(
+                                  ? const Icon(
                                       Icons.image,
                                       size: 16,
                                     )
@@ -557,8 +557,8 @@ class BuildMessageWidget extends StatelessWidget {
                                           ? Icon(Icons.mic, size: 16)
                                           : message.replyDetails?.type ==
                                                   "document"
-                                              ? Icon(Icons.file_copy, size: 16)
-                                              : SizedBox()),
+                                              ?const Icon(Icons.file_copy, size: 16)
+                                              :const SizedBox()),
                           message.replyDetails?.type == "text" ||
                                   message.replyDetails?.type ==
                                       MessageType.mention

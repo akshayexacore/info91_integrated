@@ -106,10 +106,14 @@ class VideoMessageBubble extends StatefulWidget {
   final bool isSender;
   final String videoSize;
   final VoidCallback onTap;
+  final double width;
+  final double height;
 
   const VideoMessageBubble({
     Key? key,
     required this.videoPath,
+    this.width=250,
+    this.height=300,
     required this.timestamp,
     required this.videoDuration,
      required this.onTap,
@@ -128,7 +132,7 @@ class _VideoMessageBubbleState extends State<VideoMessageBubble> {
       final path = await VideoThumbnail.thumbnailFile(
         video:widget. videoPath, // Replace with a valid URL
         imageFormat: ImageFormat.PNG,
-        maxWidth: 250,
+        maxWidth:widget. width.toInt(),
         quality: 75,
       );
       setState(() {
@@ -155,8 +159,8 @@ class _VideoMessageBubbleState extends State<VideoMessageBubble> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onTap,
-      child: SizedBox(width: 250.w,
-      height: 300.h,
+      child: SizedBox(width: widget.width.w,
+      height:  widget.height.h,
         // margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         
         child: Stack(

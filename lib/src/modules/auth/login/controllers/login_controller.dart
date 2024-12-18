@@ -203,14 +203,15 @@ class LoginController extends GetxController {
         if (response.success) 
         {
           final token=await _preferences.getFcmToken();
-          print("the token is here${FirebaseApi.fcmToken}");
-          await _authRepository.upDateFcmToken(
-               fcmken: FirebaseApi.fcmToken??"");
+         
           await _authRepository
           
               .saveAccessToken('${response.tokenType} ${response.token}');
           await _authRepository.saveRefreshToken(response.refreshToken);
           await _userProfileRepository.saveUser(response.user!);
+           print("the token is here${FirebaseApi.fcmToken}");
+          await _authRepository.upDateFcmToken(
+               fcmken: FirebaseApi.fcmToken??"");
           showSuccessDialog();
         } else {
           AppDialog.showSnackBar('Otp Verification Failed', response.message);

@@ -61,6 +61,7 @@ class HomePage extends StatelessWidget {
                       height: 65,
                       fit: BoxFit.contain,
                     ),
+                    SizedBox(height: 20.h,),
                   
 
                     greynonBoldText(

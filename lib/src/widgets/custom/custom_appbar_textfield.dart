@@ -20,7 +20,7 @@ import 'package:info91/src/widgets/custom/image_view.dart';
   @override
   Widget build(BuildContext context) {
     return Container(
-        
+        margin: EdgeInsets.symmetric(horizontal: marginWidth),
         decoration: BoxDecoration(
             color: Colors.white.withOpacity(.1),
             borderRadius: BorderRadius.circular(AppRadii.xSmall),),

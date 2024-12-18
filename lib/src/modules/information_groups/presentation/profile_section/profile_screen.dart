@@ -136,7 +136,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 SizedBox(
                                   height: 100.h,
-                                  child: ListView.builder(
+                                  child: ListView.separated(
+                                    separatorBuilder: (context, index) =>SizedBox(width:.5.w,),
                                     scrollDirection: Axis.horizontal,
                                     itemBuilder: (context, index) {
                                       print(
@@ -363,6 +364,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     GalleryPhotoViewWrapper(
+                                                      
                                                   galleryItems: [
                                                     GalleryItem(
                                                         id: "id:1",
@@ -539,6 +541,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Get.context!,
                 MaterialPageRoute(
                   builder: (context) => GalleryPhotoViewWrapper(
+                              headingText: controller.totalMediaList[index].name ,
+                    subHeadingText:AppFormatter.formatStringDayDateStringWithTime(controller.totalMediaList[index].createdAt??""),
                     galleryItems: [
                       GalleryItem(
                           id: "id:1",
@@ -571,18 +575,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : media.type == "audio"
             ? CustomMediaAudioCard(
                 index: index,
+                duration:"ss" ,
                 imageCount: controller.totalMediaList.length ?? 0,
-                imageUrl: media.message ?? "",
+               imageUrl: media.message ?? "",
                 width: 110.w,
                    onPicTap: () {
               Navigator.push(
                 Get.context!,
                 MaterialPageRoute(
                   builder: (context) => GalleryPhotoViewWrapper(
+                    headingText: controller.totalMediaList[index].name ,
+                    subHeadingText:AppFormatter.formatStringDayDateStringWithTime(controller.totalMediaList[index].createdAt??"") ,
                     galleryItems: [
                       GalleryItem(
                           id: "id:1",
                           isAudio: true,
+                        
                           resource:
                               controller.totalMediaList.value[index].message ??
                                   "")
@@ -607,7 +615,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ));
                 },
               )
-            : Container();
+            :media.type == "video"
+            ? CustomMediaVideoCard(
+                index: index,
+                duration:"ss" ,
+                imageCount: controller.totalMediaList.length ?? 0,
+               videoUrl: media.message ?? "",
+                width: 110.w,
+                   onPicTap: () {
+              Navigator.push(
+                Get.context!,
+                MaterialPageRoute(
+                  builder: (context) => GalleryPhotoViewWrapper(
+                    headingText: controller.totalMediaList[index].name ,
+                    subHeadingText:AppFormatter.formatStringDayDateStringWithTime(controller.totalMediaList[index].createdAt??"") ,
+                    galleryItems: [
+                      GalleryItem(
+                          id: "id:1",
+                          isVideo: true,
+                        
+                          resource:
+                              controller.totalMediaList.value[index].message ??
+                                  "")
+                    ],
+                    backgroundDecoration: const BoxDecoration(
+                      color: Colors.black,
+                    ),
+                    initialIndex: 0,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                ),
+              );
+            },
+                onImageTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GaleryViewScreen(
+                          mediaModel:
+                              controller.profilledataModel.value.mediaList!, 
+                        ),
+                      ));
+                },
+              ):Container();
   }
 
   ProfileTopImageSec appbarSec() {

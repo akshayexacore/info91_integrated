@@ -7,6 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/configs/filepicker.dart';
+import 'package:info91/src/utils/app_formatter.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:just_audio/just_audio.dart';
@@ -20,7 +22,7 @@ class GalleryPhotoViewWrapper extends StatefulWidget {
     this.initialIndex = 0,
     this.headingText,
     required this.galleryItems,
-    this.scrollDirection = Axis.horizontal,
+    this.scrollDirection = Axis.horizontal, this.subHeadingText,
   }) : pageController = PageController(initialPage: initialIndex);
 
   final LoadingBuilder? loadingBuilder;
@@ -32,6 +34,7 @@ class GalleryPhotoViewWrapper extends StatefulWidget {
   final List<GalleryItem> galleryItems;
   final Axis scrollDirection;
   final String? headingText;
+   final String? subHeadingText;
 
   @override
   State<StatefulWidget> createState() {
@@ -69,18 +72,30 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
               onPageChanged: onPageChanged,
               scrollDirection: widget.scrollDirection,
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: SafeArea(
-                  child: Align(
-                      alignment: Alignment.topRight,
+            SafeArea(
+                child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      width: double.maxFinite,
+                      padding: EdgeInsets.symmetric(horizontal: marginWidth),
+                      height: 60.sp,
+                      color: AppColors.primary,
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(widget.headingText ?? ""),
-                          Spacer(),
+                          Column(mainAxisAlignment: MainAxisAlignment.center,
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(widget.headingText ?? "",style:AppTextStyles.appBarTitle),
+                              if(widget.subHeadingText!=null) Text(widget.subHeadingText ?? "",style:AppTextStyles.appContent.copyWith(color: AppColors.white)),
+                            ],
+                          ),
+                          SizedBox(height: 2.sp,),
+                                                       
+                        const  Spacer(),
                           IconButton(
                             onPressed: Get.back,
-                            icon: Icon(
+                            icon:const Icon(
                               Icons.close,
                               color: Colors.white,
                             ),
@@ -89,8 +104,8 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
                             highlightColor: AppColors.primary,
                           ),
                         ],
-                      ))),
-            )
+                      ),
+                    )))
           ],
         ),
       ),
@@ -115,7 +130,16 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
         maxScale: PhotoViewComputedScale.covered * 4.1,
         heroAttributes: PhotoViewHeroAttributes(tag: item.id),
       );
-    } else {
+    } else if (item.isVideo) {
+      return PhotoViewGalleryPageOptions.customChild(
+        child: NetworkVideoPlayerWidget(videoUrl:  item.resource),
+        initialScale: PhotoViewComputedScale.contained,
+        minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
+        maxScale: PhotoViewComputedScale.covered * 4.1,
+        heroAttributes: PhotoViewHeroAttributes(tag: item.id),
+      );
+    }
+    else {
       return PhotoViewGalleryPageOptions(
         imageProvider: CachedNetworkImageProvider(item.resource),
         initialScale: PhotoViewComputedScale.contained,
@@ -133,12 +157,14 @@ class GalleryItem {
     required this.resource,
     this.isFile = false,
     this.isAudio = false,
+    this.isVideo=false
   });
 
   final String id;
   final String resource;
   final bool isFile;
   final bool isAudio;
+    final bool isVideo;
 }
 
 class AudioPlayerWidget extends StatefulWidget {
@@ -206,13 +232,13 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       children: [
         SizedBox(
          
-          height: MediaQuery.of(context).size.height/1.2,
+          height: MediaQuery.of(context).size.height/1.156,
           child: Center(child: Icon(Icons.headphones,size: 120.sp,color: Colors.white,))),
-          Spacer(),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
+           const Spacer(),
+           Padding(
+            padding: const EdgeInsets.all(8.0),
+              child: Row(
+             children: [
               IconButton(
                 icon: Icon(
                   _isPlaying ? Icons.pause : Icons.play_arrow,

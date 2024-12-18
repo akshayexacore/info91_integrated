@@ -189,9 +189,11 @@ class MovyApiInterceptor implements InterceptorContract {
   @override
   Future<BaseRequest> interceptRequest({required BaseRequest request}) async {
     String token = await AuthRepository().getAccessToken();
+    print("the token is here$token");
     if(token.isNotEmpty) {
       request.headers["Authorization"] = token;
     }
+    print("the headers is here${ request.headers}");
     request.headers['Content-Type'] = 'application/json';
     return request;
   }

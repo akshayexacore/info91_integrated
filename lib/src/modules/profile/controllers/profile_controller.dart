@@ -97,8 +97,9 @@ gotoLoginPage();
   }
 
   _logout()async {
-    _authRepository.logoutUser();
+    
     await _userProfileRepository.logout();
+    _authRepository.logoutUser();
     Get.offAllNamed(LoginPage.routeName);
   }
 

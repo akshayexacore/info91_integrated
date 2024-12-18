@@ -53,6 +53,10 @@ class AppFormatter {
   static String formatDayDateStringWithTime(DateTime date) {
     return DateFormat("EEE, d MMM ''yy hh:mm a").format(date);
   }
+    static String formatStringDayDateStringWithTime(String date) {
+           DateTime parsedDate = DateTime.parse(date);
+    return DateFormat('d MMMM, hh.mm a').format(parsedDate);
+  }
   static String formatDyMMMMd(DateTime date) {
     return DateFormat('dd MMM yyyy').format(date);
   }

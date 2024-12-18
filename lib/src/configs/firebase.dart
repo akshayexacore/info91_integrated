@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 import 'package:info91/src/resources/shared_preferences_data_provider.dart';
 import 'package:info91/src/resources/user_profile_repository.dart';
 import 'package:info91/src/widgets/custom/app_circle_image.dart';
@@ -20,7 +21,7 @@ class FirebaseApi {
   FirebaseApi(this.context);
   static String? fcmToken;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
- late final _preferences = SharedPreferencesDataProvider();
+  late final _preferences = SharedPreferencesDataProvider();
   Future<void> initNotification() async {
     await _firebaseMessaging.requestPermission();
     debugPrint("Permission requested");
@@ -28,10 +29,10 @@ class FirebaseApi {
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
     debugPrint("Auto-init enabled");
 
-   fcmToken = await _firebaseMessaging.getToken();
+    fcmToken = await _firebaseMessaging.getToken();
     debugPrint("FCM token: $fcmToken");
 
-_preferences.saveFcmToken(fcmToken??"");
+    _preferences.saveFcmToken(fcmToken ?? "");
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
@@ -47,23 +48,22 @@ _preferences.saveFcmToken(fcmToken??"");
     debugPrint("Background message handler set");
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      debugPrint("Foreground Notification: ${message.notification?.title}");
+      debugPrint("Foreground Notification: ${message.data}");
       if (message.notification != null) {
-        debugPrint("Foreground Notification: ${message.notification?.title}");
+        debugPrint("Foreground Notification: ${message.data}");
         // showPopup(context, message.notification?.title ?? "", message.notification?.body ?? "");
-        showPopup( message.notification?.title ?? "", message.notification?.body ?? "");
+        showPopup(message.data["group_id"] ?? "",
+            message.notification?.body ?? "");
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       debugPrint("Notification clicked: ${message.data}");
       // showPopup(context, message.notification?.title ?? "", message.notification?.body ?? "");
-      showPopup(message.notification?.title ?? "", message.notification?.body ?? "");
+      showPopup(
+        message.data["group_id"] ?? "", message.notification?.body ?? "");
     });
   }
-
-
-
 
 // void showPopup(BuildContext context, String title, String body) {
 //   OverlayEntry overlayEntry = OverlayEntry(
@@ -157,82 +157,100 @@ _preferences.saveFcmToken(fcmToken??"");
 //   });
 // }
 
-
- void showPopup(String title, String body) {
+   void showPopup(String data, String body) {
   Get.dialog(
     Align(
       alignment: Alignment.topCenter,
       child: Material(
         color: Colors.transparent,
-        child: Container(
-          // margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
-          padding: const EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: const [
-            BoxShadow(
-                color: Colors.black26,
-                blurRadius: 10,
-                spreadRadius: 1,
-                offset: Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  // Replace this with your custom circle asset image function
-                  const CircleAvatar(
-                    radius: 20,
-                    backgroundImage: AssetImage("assets/images/app_new_icon.png"),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      "info91",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14.sp,
-                        color: AppColors.text,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Text(
-                    "now",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14.sp,
-                      color: AppColors.text,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Icon(
-                    Icons.notifications,
-                    color: Colors.grey,
-                    size: 13.sp,
+        child: GestureDetector(
+          onTap: () {
+            if (Get.isDialogOpen == true) {
+              Get.to(ChatScreen(
+                selectedGroupId: data,
+              ));
+            }
+          },
+          child: Dismissible(
+            key: UniqueKey(),
+            direction: DismissDirection.horizontal,
+            onDismissed: (direction) {
+              // Close the dialog when swiped away
+              if (Get.isDialogOpen == true) {
+                Get.back();
+              }
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10.0),
+              padding: const EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14.r),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    spreadRadius: 1,
+                    offset: Offset(0, 5),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
-              Text(
-                body,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black54,
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 20,
+                        backgroundImage:
+                            AssetImage("assets/images/app_new_icon.png"),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          "info91",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14.sp,
+                            color: AppColors.text,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(
+                        "now",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.sp,
+                          color: AppColors.text,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Icon(
+                        Icons.notifications,
+                        color: Colors.grey,
+                        size: 13.sp,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    body,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
     ),
-    barrierDismissible: true, 
-      barrierColor: Colors.transparent, // Prevent dismissal by tapping outside
+    barrierDismissible: true,
+    barrierColor: Colors.transparent,
   );
 
   // Automatically dismiss the dialog after 2 seconds
@@ -243,8 +261,4 @@ _preferences.saveFcmToken(fcmToken??"");
   });
 }
 
-
-
 }
-
-

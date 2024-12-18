@@ -76,7 +76,7 @@ class InfoProfileController extends GetxController {
       debugPrint("getGroupInfoDetails calling${response.memberCount}");
       profilledataModel.value = response;
       MediaList model=MediaList();
-     totalMediaList.value = [ ...?profilledataModel.value.mediaList?.imageList, ...?profilledataModel.value.mediaList?.audioList, ...?profilledataModel.value.mediaList?.videoList, ...?profilledataModel.value.mediaList?.documentList ];
+     totalMediaList.value = [...?profilledataModel.value.mediaList?.videoList, ...?profilledataModel.value.mediaList?.imageList, ...?profilledataModel.value.mediaList?.audioList, ...?profilledataModel.value.mediaList?.videoList, ...?profilledataModel.value.mediaList?.documentList ];
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;

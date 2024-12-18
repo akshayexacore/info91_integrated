@@ -25,7 +25,8 @@ class StartScreen extends StatelessWidget {
           Obx(() {
             return CustomAppBar(
               imageUrl: controller.responseModel.value.profileImage,
-              appBarName: "Lorem Ipsum",
+              appBarName:controller.responseModel.value.groupName ?? "",
+              isPic: true,
             );
           }),
           Obx(() {
