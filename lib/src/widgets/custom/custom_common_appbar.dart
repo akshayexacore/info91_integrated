@@ -77,6 +77,7 @@ class CustomAppBar extends StatelessWidget {
                   if (isPic) ...[
                     circle_image(
                         avatarUrl: imageUrl ?? "",
+                        name: appBarName,
                         onTap: () {
                           if(imageOntap!=null){ imageOntap!();}
                          

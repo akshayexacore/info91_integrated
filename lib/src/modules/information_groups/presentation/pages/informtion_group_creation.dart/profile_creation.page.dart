@@ -10,6 +10,7 @@ import 'package:info91/src/modules/information_groups/presentation/widgets/custo
 import 'package:info91/src/modules/information_groups/presentation/widgets/custome_space_between_text.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/new_input_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
+import 'package:info91/src/utils/app_validator.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 import 'package:info91/src/widgets/custom/custom_divider.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
@@ -106,23 +107,109 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                       NewInputCard(
                         label: "Enter group name",
                         showValidator: true,
-                    
+
                         validatorMessage: "Please enter group name",
                         controller: _controller.groupNameController.value,
                         title: "Group Name", height: 80,
-                        maxLines: 3,
+                        // maxLines: 3,
+                      ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+
+                      NewInputCard(
+                        label: "Enter your email",
+                        showValidator: true,
+
+                        validatorMessage: "Please enter email",
+                        controller: _controller.emailCotroller.value,
+                        title: "Email", height: 80,
+                        validator: (value) {
+                          bool emailValidate =
+                              AppValidator.validateMail(value ?? "");
+                          if (value == null || !emailValidate) {
+                            return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
+                        // maxLines: 3,
                       ),
                       SizedBox(
                         height: 15.h,
                       ),
                       NewInputCard(
                         controller: _controller.purposeController.value,
-                        title: "Purpose",
+                        title: "Address",
                         showValidator: true,
                         validatorMessage: "Please enter purpose",
                         height: 90,
                         maxLines: 3,
                       ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+
+                         Obx(() {
+                         return 
+                            NewInputCard(
+                            controller: _controller.key1Controller.value,
+                            title: "Key 1",
+                            label: "Enter key one",
+                            showValidator: true,
+                            validatorMessage: "",
+                            
+                            onChange: (va) {
+                              _controller.keyCheckExistFunction(va);
+                            },
+                            errorText: _controller.isNameValid.value==false?"Key already exists":null,
+                          );
+                        }
+                      ),
+                        Obx(() {
+                         return 
+                          Text  (_controller.isNameValid.value==false?"Key already exists":"",style: TextStyle(color: AppColors.red),
+                           
+                          );
+                        }
+                      ),
+
+
+
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: NewInputCard(
+                              controller: _controller.key2Controller.value,
+                              title: "Key2",
+                              label: "Enter key two",
+                              // showValidator: true,
+                              // validatorMessage: "",
+                              onChange: (va) {
+                                // _controller.extractKeys();
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          Expanded(
+                            child: NewInputCard(
+                              controller: _controller.key3Controller.value,
+                              title: "Key3",
+                              label: "Enter key three",
+                              // showValidator: true,
+                              // validatorMessage: "",
+                              onChange: (va) {
+                                // _controller.extractKeys();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+
                       SizedBox(
                         height: 15.h,
                       ),
@@ -139,7 +226,7 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                         () {
                           debugPrint(_controller.firstCategoryList.toString());
                           return CustomDropDownWidget<Category>(
-                              title: "Category1", 
+                              title: "Category1",
                               suffixIconData:
                                   _controller.selectedCategory1.value == null
                                       ? Icons.arrow_drop_down
@@ -277,8 +364,8 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                             : SizedBox();
                       }),
                       SizedBox(
-                                    height: 35.h,
-                                  ),
+                        height: 35.h,
+                      ),
                     ],
                   );
                 }),

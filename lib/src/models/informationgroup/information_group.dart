@@ -18,6 +18,10 @@ class InformationGroupCreationModel {
   final String? websiteLink;
   final String? youtubeLink;
   final String? googleMapLink;
+  final String? tagKey1;
+  final String? tagKey2;
+  final String? tagKey3;
+   final String? email;
 
   const InformationGroupCreationModel({
     this.groupName,
@@ -39,6 +43,10 @@ class InformationGroupCreationModel {
     this.websiteLink,
     this.youtubeLink,
     this.googleMapLink,
+    this.tagKey1,
+    this.tagKey2,
+    this.tagKey3,
+    this.email,
   });
 
   // From JSON
@@ -48,7 +56,7 @@ class InformationGroupCreationModel {
       groupTableName: json['group_table_name'],
       groupUsersTableName: json['groupusers_table_name'],
       type: json['type'],
-      purpose: json['purpose'],
+      purpose: json['address'],
       category1: json['category1'],
       category2: json['category2'],
       category3: json['category3'],
@@ -63,6 +71,10 @@ class InformationGroupCreationModel {
       websiteLink: json['website_link'],
       youtubeLink: json['youtube_link'],
       googleMapLink: json['googlemap_link'],
+      email:  json['email'],
+      tagKey1:  json['tag_key_1'],
+      tagKey2:  json['tag_key_2'],
+      tagKey3:  json['tag_key_3'],
     );
   }
 
@@ -73,7 +85,7 @@ class InformationGroupCreationModel {
       'group_table_name': groupTableName,
       'groupusers_table_name': groupUsersTableName,
       'type': type,
-      'purpose': purpose,
+      'address': purpose,
       'category1': category1,
       'category2': category2,
       'category3': category3,
@@ -88,6 +100,12 @@ class InformationGroupCreationModel {
       'website_link': websiteLink,
       'youtube_link': youtubeLink,
       'googlemap_link': googleMapLink,
+      'email':email,
+      "tag_key_1":tagKey1,
+      "tag_key_2":tagKey2,
+      "tag_key_3":tagKey3
+
+      
     };
   }
 
@@ -112,6 +130,10 @@ class InformationGroupCreationModel {
     String? websiteLink,
     String? youtubeLink,
     String? googleMapLink,
+    String ? email,
+    String? key1,
+    String? key2,
+    String? key3
   }) {
     return InformationGroupCreationModel(
       groupName: groupName ?? this.groupName,

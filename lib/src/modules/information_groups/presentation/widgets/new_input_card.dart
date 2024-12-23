@@ -27,6 +27,8 @@ class NewInputCard extends StatefulWidget {
   final bool isLink;
   final VoidCallback? ontap;
   final IconData? suffixIcon;
+  final Function? onChange;
+  final String? errorText; 
 
   final bool password;
   final bool direction;
@@ -40,6 +42,7 @@ class NewInputCard extends StatefulWidget {
     this.formatter = false,
     this.readOnly = false,
     this.isLink=false,
+    this.errorText,
     this.password = false,
     this.direction = false,
     this.showValidator = false,
@@ -52,7 +55,7 @@ class NewInputCard extends StatefulWidget {
     this.fontsize = 13,
     this.validator,
     this.keyType,
-    this.suffixIcon,
+    this.suffixIcon, this.onChange,
   });
 
   @override
@@ -178,7 +181,10 @@ class _NewInputCardState extends State<NewInputCard> {
                           decorationThickness: widget.isLink? AppValidator.isValidUrl( widget.controller.text.trim())?1:0:0,
                           color:  widget.isLink?AppValidator.isValidUrl( widget.controller.text.trim())?Colors.blue:Colors.black:Colors.black,
                         ),onChanged: (va){
-                           setState(() {});
+                          if(widget.onChange!=null){
+                            widget.onChange!(va);
+                          }
+                          //  setState(() {});
                         },
                         validator: widget.showValidator
                             ? widget.validator ??
@@ -236,6 +242,7 @@ class _NewInputCardState extends State<NewInputCard> {
                                    }
                                   },
                                 ):null: null,
+                                
                           labelStyle: const TextStyle(
                             fontSize: 13,
                             //fontStyle: FontStyle.italic,

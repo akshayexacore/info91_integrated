@@ -39,12 +39,12 @@ class ChatListItem extends StatelessWidget {
                       width: 10,
                       child: const CircularProgressIndicator()),
                   errorWidget: (context, url, error) =>
-                      Image.asset("assets/images/defaultimg.png"),
+                      InitialTextCircleAvatar(contactName: chat.groupName??"",),
                   fit: BoxFit.cover,
                   width: 50, // Match CircleAvatar's diameter
                   height: 50,
                 )
-              : Image.asset("assets/images/defaultimg.png"),
+              : InitialTextCircleAvatar(contactName: chat.groupName??"",),
         ),
       ),
       title: Text(

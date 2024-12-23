@@ -31,6 +31,11 @@ class InfoGroupDataModel {
   final bool? owngroupFlag;
   final bool? joinedGroupFlag;
   final bool? isAdmin;
+   final String? address;
+    final String? email;
+     final String? tagKey1;
+     final String? tagKey2;
+     final String? tagKey3;
 
   InfoGroupDataModel(
       {this.id,
@@ -63,6 +68,11 @@ class InfoGroupDataModel {
       this.updatedAt,
       this.status,
       this.owngroupFlag,
+      this.address,
+      this.email,
+      this.tagKey1,
+      this.tagKey2,
+      this.tagKey3,
       this.joinedGroupFlag,
       this.isAdmin});
 
@@ -88,6 +98,14 @@ class InfoGroupDataModel {
       planId: json['plan_id'] as int?,
       expireDate: json['expire_date'] as String?,
       createdBy: json['created_by'] as String?,
+      email:json['email'] as String? ,
+      tagKey1: json['tag_key_1'] as String?,
+      tagKey2: json['tag_key_2'] as String?,
+      tagKey3: json['tag_key_3'] as String?,
+      address:  json['address'] as String?,
+
+
+
       mobileNumber: json['mobile_number'] as String?,
       alternativeNumber: json['alternative_number'] as String?,
       whatsappNumber: json['whatsapp_number'] as String?,
@@ -134,6 +152,11 @@ class InfoGroupDataModel {
       'alternative_number': alternativeNumber,
       'whatsapp_number': whatsappNumber,
       'timings': timings,
+      "address":address,
+      "email":email,
+      "tag_key_1":tagKey1,
+      "tag_key_2":tagKey2,
+      "tag_key_3":tagKey3,
       'contact_time': contactTime,
       'holidays': holidays,
       'website_link': websiteLink,

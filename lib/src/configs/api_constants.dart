@@ -37,4 +37,5 @@ class ApiConstants {
   static String dowloadFileApi = "/downloadFiles";
    static String updateFcmTokenApi = "/updateFcmToken";
    static String logoutApi = "/logout";
+   static String keyCheckExistApi = "/keyCheckExist";
 }

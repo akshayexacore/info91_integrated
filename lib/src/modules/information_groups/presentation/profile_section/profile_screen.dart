@@ -271,6 +271,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   BannersImageView(
                                       onTap: (index) {
+                                        print("controller.profilledataModel.valueisAdmin${controller.profilledataModel.value
+                                                .isAdmin } ");
                                         if (controller.profilledataModel.value
                                                 .isAdmin ==
                                             true) {
@@ -351,7 +353,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     physics: const ScrollPhysics(),
                                     itemBuilder: (context, index) => ListTile(
                                         contentPadding: EdgeInsets.zero,
-                                        leading: circle_image(
+                                        leading: circle_image(name:  controller
+                                                  .profilledataModel
+                                                  .value
+                                                  .members?[index]
+                                                  .name ??
+                                              "",
                                           avatarUrl: controller
                                                   .profilledataModel
                                                   .value
@@ -664,6 +671,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ProfileTopImageSec(
       isAdmin: controller.profilledataModel.value.isAdmin ?? false,
       profileImage: controller.profilledataModel.value.profileImage ?? "",
+      groupame:  controller.profilledataModel.value.groupName??"" ,
+
       profileViewOnTap: () {
         Navigator.push(
           Get.context!,
@@ -759,17 +768,16 @@ class BannersImageView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InkWell(
-                  onTap: () {
-                    if (onTap != null) {
-                      onTap!(index);
-                    }
-                  },
-                  child: CustomImageCard(
-                    width: double.infinity,
-                    height: 150.h,
-                    imageUrl: imageList[index].image ?? "",
-                  ),
+                CustomImageCard(
+                  width: double.infinity,
+                  height: 150.h,
+                  onPicTap:() {
+                  print("clicking here");
+                  if (onTap != null) {
+                    onTap!(index);
+                  }
+                },
+                  imageUrl: imageList[index].image ?? "",
                 ),
                 SizedBox(
                   height: 10.h,

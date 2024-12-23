@@ -7,6 +7,7 @@ import 'package:info91/src/modules/information_groups/presentation/profile_secti
 import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_scaffold.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/expandable_widget.dart';
+import 'package:info91/src/modules/information_groups/presentation/widgets/gallery_page.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/icon.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/profile_top_image_sec.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
@@ -30,11 +31,14 @@ class StartScreen extends StatelessWidget {
             );
           }),
           Obx(() {
-            return ProfileTopImageSec(
-              isProfile: false,
-              backGroundImage: controller.responseModel.value.coverImage ?? "",
-              profileImage:
-                  "https://s3-alpha-sig.figma.com/img/35e8/9d9d/e5b9d1d23149590ef05ef35d5019c1af?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qqj9NDxLQ62C0Qg6~MQQSZ5GaRk~u1~DGuRCFkGIyzxIl9ro~QiH7sKpqES3Vfh2Vz5rHPZZq-Xrq9vaz840HBavPUgmr34V3lTXCeUFze9Sg1lXyvkmXSqqyfDnQiJegGLhcnDZP30ip7Wo77D-YFZhJlDKg58UjFcyr80mbwpErKO0YaT-ndZOroyuXHDiH6oBJwj-odwRH55Vlaaj5TTraPFHMchFJhJ1dv6atYIIwFyukiF2HplWCzSrtwLJZtWY9DxPb-WNP37NSQTFOROBZ-lwJv7svxE7zMkQWeD5lLjhxTWUGCMMqCwGnHVouLxxO8E0Y5CD~z1db~6aeQ__",
+            return Container(
+              margin:  EdgeInsets.symmetric(vertical: 2.h),
+              child: ProfileTopImageSec(
+                isProfile: false,groupame: controller.responseModel.value.groupName??"" ,
+                backGroundImage: controller.responseModel.value.coverImage ?? "",
+                profileImage:
+                    "https://s3-alpha-sig.figma.com/img/35e8/9d9d/e5b9d1d23149590ef05ef35d5019c1af?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qqj9NDxLQ62C0Qg6~MQQSZ5GaRk~u1~DGuRCFkGIyzxIl9ro~QiH7sKpqES3Vfh2Vz5rHPZZq-Xrq9vaz840HBavPUgmr34V3lTXCeUFze9Sg1lXyvkmXSqqyfDnQiJegGLhcnDZP30ip7Wo77D-YFZhJlDKg58UjFcyr80mbwpErKO0YaT-ndZOroyuXHDiH6oBJwj-odwRH55Vlaaj5TTraPFHMchFJhJ1dv6atYIIwFyukiF2HplWCzSrtwLJZtWY9DxPb-WNP37NSQTFOROBZ-lwJv7svxE7zMkQWeD5lLjhxTWUGCMMqCwGnHVouLxxO8E0Y5CD~z1db~6aeQ__",
+              ),
             );
           }),
           Expanded(child: Obx(() {
@@ -95,8 +99,31 @@ class StartScreen extends StatelessWidget {
                   SizedBox(
                     height: 15.h,
                   ),
-                  BannersImageView(
-                      imageList: controller.responseModel.value.banners ??
+                  BannersImageView(onTap: (index){
+                     Navigator.push(
+                                              Get.context!,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    GalleryPhotoViewWrapper(
+                                                      
+                                                  galleryItems: [
+                                                    GalleryItem(
+                                                        id: "id:1",
+                                                        resource:controller.responseModel.value.banners?.reversed.toList()[index].image??
+                                                            "")
+                                                  ],
+                                                  backgroundDecoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.black,
+                                                  ),
+                                                  initialIndex: 0,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                ),
+                                              ),
+                                            );
+                  },
+                      imageList: controller.responseModel.value.banners?.reversed.toList() ??
                           []) // Spacer()
                 ],
               ),

@@ -15,10 +15,12 @@ class ProfileTopImageSec extends StatelessWidget {
   final Function? onCoverChange;
   final Function? profileViewOnTap;
   final bool isProfile;
+  final String groupame;
   const ProfileTopImageSec(
       {super.key,
       required this.backGroundImage,
       required this.profileImage,
+      required this.groupame,
       this.isAdmin = false,
       this.profileViewOnTap,
       this.isProfile = true,
@@ -104,6 +106,7 @@ class ProfileTopImageSec extends StatelessWidget {
                         backgroundColor: Colors.white,
                         child: circle_image(
                             avatarUrl: profileImage,
+                            name: groupame,
                             radius: 31,
                             onTap: () { if (profileViewOnTap != null) {
                           profileViewOnTap!();

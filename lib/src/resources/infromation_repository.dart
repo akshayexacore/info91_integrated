@@ -209,6 +209,22 @@ class InfromationRepository {
     }
   }
 
+  Future<DoubleResponse> keyCheckExistFunction(String keyile,) async {
+    final response = await _api.post(
+      ApiConstants.keyCheckExistApi,
+      body: {"tag_key_1": keyile},
+      headers: {},
+  
+    );
+    debugPrint("response is here$response");
+
+    if (response['statusCode'] == 200) {
+      return DoubleResponse(true,response['message']);
+    } else {
+      return DoubleResponse(false, response['message']);
+    }
+  }
+
   Future<DoubleResponse> uploadCoverPic(String file, String group_id) async {
     final response = await _api.postMultipart(
       ApiConstants.groupCovPicUpdateApi,

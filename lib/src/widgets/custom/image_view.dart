@@ -170,6 +170,18 @@ Widget buildContactAvatar(Uint8List? memoryImag,String contactName) {
   // }
    else {
     
+    return InitialTextCircleAvatar(contactName: contactName,);
+  }
+}
+
+class InitialTextCircleAvatar extends StatelessWidget {
+  final String contactName;
+  const InitialTextCircleAvatar({
+    super.key,required this.contactName,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return CircleAvatar(
       child: Text(
         contactName != null && contactName!.isNotEmpty

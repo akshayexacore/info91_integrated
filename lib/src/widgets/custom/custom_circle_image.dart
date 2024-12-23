@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:info91/src/widgets/custom/image_view.dart';
 
 Widget circle_image({
   required String avatarUrl,
   double radius = 20.0,
   VoidCallback? onTap,
+    String? name,
 }) {
   return InkWell(
     onTap: onTap,
@@ -16,7 +18,7 @@ Widget circle_image({
           imageUrl: avatarUrl,
           placeholder: (context, url) => CircularProgressIndicator(), // Show loading indicator
           errorWidget: (context, url, error) =>
-              Image.asset("assets/images/defaultimg.png"), // Fallback image on error
+              InitialTextCircleAvatar(contactName: name??"",), // Fallback image on error
           fit: BoxFit.cover,
           width: radius * 2,
           height: radius * 2,
