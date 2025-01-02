@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/auth/login/login_page.dart';
 import 'package:info91/src/modules/profile/controllers/profile_controller.dart';
 import 'package:info91/src/widgets/custom/app_app_bar.dart';
 import 'package:info91/src/widgets/tiny/app_back_button.dart';
@@ -19,6 +20,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final canPop = ModalRoute.of(context)?.canPop ?? false;
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -33,7 +35,9 @@ class ProfilePage extends StatelessWidget {
               leadingPadding: 10,
               leading: AppBackButton(
                 color: AppColors.white,
-                onPressed: Get.back,
+                onPressed: (){
+                  if (canPop) { Get.back(); } else { Get.toNamed(LoginPage.routeName); }
+                },
               ),
               titleWidget: const Text(
                 'Profile',

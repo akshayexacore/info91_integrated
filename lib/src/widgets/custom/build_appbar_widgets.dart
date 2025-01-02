@@ -6,12 +6,14 @@ import 'package:info91/src/widgets/custom/image_view.dart';
 Widget buildOption(
     String s, {
     VoidCallback? onPressed,
+    Color? iconClr,
+    EdgeInsetsGeometry? Paddings,
   }) {
     return AppInkWell(
       borderRadius: 24,
       onTap: onPressed,
       child: Padding(
-        padding: const EdgeInsets.all(
+        padding:Paddings?? const EdgeInsets.all(
           AppPaddings.small / 2,
         ),
         child: SizedBox(
@@ -20,7 +22,7 @@ Widget buildOption(
             child: Center(
                 child: AppSvgAsset(
               'assets/images/$s',
-              color: AppColors.white,
+              color:iconClr?? AppColors.white,
             ))),
       ),
     );

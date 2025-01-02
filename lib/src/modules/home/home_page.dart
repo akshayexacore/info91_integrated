@@ -22,8 +22,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.offWhite,
-      body: SizedBox(
-        // height: MediaQuery.of(context).size.height,
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -47,44 +46,26 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding:const EdgeInsets.symmetric(
-                  horizontal: AppPaddings.large,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const AppSvgAsset(
-                      'assets/images/coming_soon.svg',
-                      width: 65,
-                      height: 65,
-                      fit: BoxFit.contain,
-                    ),
-                    SizedBox(height: 20.h,),
-                  
-
-                    greynonBoldText(
-                        "Stay tuned! Your recent chats will appear here once this feature goes live.")
-                  ],
-                ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppPaddings.large,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const AppSvgAsset(
+                    'assets/images/coming_soon.svg',
+                    width: 65,
+                    height: 65,
+                    fit: BoxFit.contain,
+                  ),
+                  SizedBox(height: 20.h,),
+                  greynonBoldText(
+                    "Stay tuned! Your recent chats will appear here once this feature goes live."
+                  )
+                ],
               ),
             ),
-            // Obx(() {
-            //   return ListView.builder(
-            //     padding: EdgeInsets.zero,
-            //     physics: const NeverScrollableScrollPhysics(),
-            //     shrinkWrap: true,
-            //     itemBuilder: (context, index) => AppMessageProfileTile(
-            //       _chatsController.recentChats[index],
-            //       onPressed: () {
-            //         _chatsController
-            //             .gotoChatPage(_chatsController.recentChats[index]);
-            //       },
-            //     ),
-            //     itemCount: _chatsController.recentChats.length,
-            //   );
-            // }),
             const SizedBox(
               height: 50,
             ),
@@ -153,13 +134,26 @@ class HomePage extends StatelessWidget {
                   ),
                   CategoryIcon(
                     assetIcon: 'ic_offers.svg',
-                    title: 'Offers\nand info',
-                    onPressed: () {},
+                    title: 'Offers and info',
+                    onPressed: () {
+                           Get.to(() => const ComingSoonPage(
+                            appBarName: "Offers\nand info",
+                            content:
+                                "Stay informed. Something special is coming your way soon!",
+                          ));
+                    },
                   ),
                   CategoryIcon(
                     assetIcon: 'ic_emergency.svg',
                     title: 'Emergency alarm',
-                    onPressed: _controller.onEmergencyAlarmPressed,
+                         onPressed: () {
+                           Get.to(() => const ComingSoonPage(
+                            appBarName: "Emergency alarm",
+                            content:
+                                "Stay informed. Something special is coming your way soon!",
+                          ));
+                    },
+                    // onPressed: _controller.onEmergencyAlarmPressed,
                   ),
                 ]),
                 const TableRow(children: [
@@ -190,10 +184,10 @@ class HomePage extends StatelessWidget {
                   ),
                   CategoryIcon(
                     assetIcon: 'ic_find_location.svg',
-                    title: 'FInd\nLocation',
+                    title: 'Find\nLocation',
                     onPressed: () {
                       Get.to(() => const ComingSoonPage(
-                            appBarName: "Finad Location",
+                            appBarName: "Find Location",
                             content:
                                 "Find Location is on the way! Soon you'll be able to search and navigate with ease right in the app.",
                           ));

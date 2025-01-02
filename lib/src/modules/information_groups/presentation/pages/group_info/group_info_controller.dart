@@ -22,7 +22,9 @@ class GroupInfpController extends GetxController {
   TextEditingController websiteLinkController = TextEditingController();
   TextEditingController youtubeLinkController = TextEditingController();
   TextEditingController googleMapControllerController = TextEditingController();
-
+ TextEditingController emailController = TextEditingController();
+  TextEditingController key1Controller = TextEditingController();
+  TextEditingController key2ControllerController = TextEditingController();
   var groupId;
   @override
   void onInit() {

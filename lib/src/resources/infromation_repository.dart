@@ -132,6 +132,7 @@ class InfromationRepository {
       });
       return dataLIst;
     } catch (e) {
+      print("the errorr$e");
       throw e;
     }
   }

@@ -129,13 +129,7 @@ class BannersScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              ],
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Obx(() {
+                Obx(() {
                 return Padding(
                   padding:  EdgeInsets.symmetric(horizontal: marginWidth,vertical: 20.h),
                   child: AppButton(
@@ -157,7 +151,9 @@ class BannersScreen extends StatelessWidget {
                   ),
                 );
               }),
+              ],
             ),
+          
             SizedBox(height: 15.h),
           ],
         ),

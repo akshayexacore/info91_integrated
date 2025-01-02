@@ -19,32 +19,34 @@ class ComingSoonPage extends StatelessWidget {
         children: [
          if(isAppBAr) CustomAppBar(appBarName: appBarName),
           Expanded(
-              child: Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(
-                height:isAppBAr? MediaQuery.of(context).size.height / 1.9:MediaQuery.of(context).size.height / 3,
-                width: MediaQuery.of(context).size.width,
-                // color: Colors.red,
-                child:  Center(
-                  child: AppSvgAsset(
-                    'assets/images/coming_soon.svg',
-                    width: 100.h,
-                    height: 110.h,
-                    fit: BoxFit.contain,
+              child: SingleChildScrollView(
+                child: Padding(
+                            padding:
+                  EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+                            child:
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                SizedBox(
+                  height:isAppBAr? MediaQuery.of(context).size.height / 1.9:MediaQuery.of(context).size.height / 3,
+                  width: MediaQuery.of(context).size.width,
+                  // color: Colors.red,
+                  child:  Center(
+                    child: AppSvgAsset(
+                      'assets/images/coming_soon.svg',
+                      width: 100.h,
+                      height: 110.h,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
-              ),
-              greynonBoldText("Exciting new Feature",size: 24.sp,color: AppColors.text),
-               SizedBox(height: 15.h,),
-              greynonBoldText("Coming \nSoon!",size: 48.sp,color: AppColors.secondary,fontWeight: FontWeight.bold,height: 1.h),
-            //  Spacer(),
-             
-              greynonBoldText(content,size:15.sp )
-            ]),
-          ))
+                greynonBoldText("Exciting new Feature",size: 24.sp,color: AppColors.text),
+                 SizedBox(height: 15.h,),
+                greynonBoldText("Coming \nSoon!",size: 48.sp,color: AppColors.secondary,fontWeight: FontWeight.bold,height: 1.h),
+                            //  Spacer(),
+                             
+                greynonBoldText(content,size:15.sp )
+                            ]),
+                          ),
+              ))
         ],
       ),
     );

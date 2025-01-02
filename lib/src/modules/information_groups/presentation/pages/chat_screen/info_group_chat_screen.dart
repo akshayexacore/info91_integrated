@@ -250,9 +250,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       : GroupedList<ChatMessage, DateTime>(
                           controller: chatController.scrollController,
                           elements: chatController.messages,
-                          groupBy: (element){print("searching date${element.date}");
-                            return  DateTime.parse(element.date ?? "");},
-                             
+                          groupBy: (element) {
+                            print("searching date${element.date}");
+                            return DateTime.parse(element.date ?? "");
+                          },
+
                           // element.date,
 
                           groupComparator: (value1, value2) =>
@@ -272,7 +274,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                       vertical: AppPaddings.xxxSmall4,
                                     ),
                                     child: Text(
-                                    AppFormatter.isCurrentDate( chatController.messages[index].date ?? "") ?"Today": chatController.messages[index].date ?? "",
+                                      AppFormatter.isCurrentDate(chatController
+                                                  .messages[index].date ??
+                                              "")
+                                          ? "Today"
+                                          : chatController
+                                                  .messages[index].date ??
+                                              "",
                                       // DateFormat("MMM dd, yyyy").format(
                                       //     chatController.messages[index].dateTime),
                                       style: const TextStyle(
@@ -334,18 +342,45 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                 },
                                 child: Stack(
                                   children: [
-                                    Align(
-                                        alignment: isMe
-                                            ? Alignment.centerRight
-                                            : Alignment.centerLeft,
-                                        child: Skeletonizer(
-                                          enabled: false,
-                                          child: BuildMessageWidget(
-                                            messageModel: message,
-                                            isSameUser: isSameUser,
-                                            groupId:chatController.selectedGroupId,
-                                          ),
-                                        )),
+                                    Row(
+                                      mainAxisAlignment: isMe
+                                          ? MainAxisAlignment.end
+                                          : MainAxisAlignment.start,
+                                      children: [
+                                        if (message.type == "image" &&
+                                            isSameUser)
+                                          buildOption('ic_forward.svg',
+                                              iconClr: AppColors.primary,
+                                              Paddings: EdgeInsets.zero,
+                                              onPressed: () {
+                                            chatController
+                                                .onMediaForward([message]);
+                                          }),
+                                        Align(
+                                            alignment: isMe
+                                                ? Alignment.centerRight
+                                                : Alignment.centerLeft,
+                                            child: Skeletonizer(
+                                              enabled: false,
+                                              child: BuildMessageWidget(
+                                                messageModel: message,
+                                                isSameUser: isSameUser,
+                                                groupId: chatController
+                                                    .selectedGroupId,
+                                              ),
+                                            )),
+                                              if (message.type == "image" &&
+                                            !isSameUser)
+                                          buildOption('ic_forward.svg',
+                                              iconClr: AppColors.primary,
+                                              Paddings: EdgeInsets.zero,
+                                              onPressed: () {
+                                            chatController
+                                                .onMediaForward([message]);
+                                          }),
+                                            
+                                      ],
+                                    ),
                                     if (chatController.selectedMessage.any(
                                         (contact) =>
                                             contact.messageId ==
@@ -736,100 +771,112 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           child: Row(
             children: <Widget>[
               Expanded(
-                child:chatController.isRecording.value?Container(
-               padding:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-                  decoration: BoxDecoration(
-                    borderRadius:  BorderRadius.circular(15),color: AppColors.google,
-                    
-
-                ),child: Row(crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.delete,color: Colors.red,),
-                    SizedBox(width: 10,),
-                  
-                 Text(chatController.formatDuration( chatController.recordingDuration.value)), const Spacer(),  Padding(
-                   padding: const EdgeInsets.only(right: 5.0),
-                   child: Text("Slide to cancel"),
-                 ), 
-
-                  ],),
-                ): TextField(
-                  controller: controller,
-                  focusNode: focusnode,
-                  onTap: () {
-                    chatController.hideEmojiPicker();
-                    chatController.hideGallery();
-                  },
-                  onChanged: (val) {
-                    chatController.checkTextFieldEmpty(val);
-                  },
-                  style: const TextStyle(
-                    decoration: TextDecoration.none,
-                    decorationThickness: 0,
-                  ),
-                  decoration: InputDecoration(
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-                    hintText: chatController.isRecording.value
-                        ? "Recording"
-                        : 'Type your message here',
-                    hintStyle: GoogleFonts.poppins(
-                        fontSize: 12.5.sp,
-                        color: AppColors.text.withOpacity(.75)),
-                    filled: true,
-                    fillColor: AppColors.google,
-                    border: border,
-                    errorBorder: border,
-                    enabledBorder: border,
-                    focusedBorder: border,
-                    prefixIcon: Obx(() => IconButton(
-                          icon: Icon(
-                            chatController.isEmojiVisible.value
-                                ? Icons.keyboard
-                                : Icons.sentiment_satisfied_outlined,
-                            color: AppColors.primary,
-                            size: 24.sp,
+                child: chatController.isRecording.value
+                    ? Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 4),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: AppColors.google,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(chatController.formatDuration(
+                                chatController.recordingDuration.value)),
+                            const Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 5.0),
+                              child: Text("Slide to cancel"),
+                            ),
+                          ],
+                        ),
+                      )
+                    : TextField(
+                        controller: controller,
+                        focusNode: focusnode,
+                        onTap: () {
+                          chatController.hideEmojiPicker();
+                          chatController.hideGallery();
+                        },
+                        onChanged: (val) {
+                          chatController.checkTextFieldEmpty(val);
+                        },
+                        style: const TextStyle(
+                          decoration: TextDecoration.none,
+                          decorationThickness: 0,
+                        ),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 4),
+                          hintText: chatController.isRecording.value
+                              ? "Recording"
+                              : 'Type your message here',
+                          hintStyle: GoogleFonts.poppins(
+                              fontSize: 12.5.sp,
+                              color: AppColors.text.withOpacity(.75)),
+                          filled: true,
+                          fillColor: AppColors.google,
+                          border: border,
+                          errorBorder: border,
+                          enabledBorder: border,
+                          focusedBorder: border,
+                          prefixIcon: Obx(() => IconButton(
+                                icon: Icon(
+                                  chatController.isEmojiVisible.value
+                                      ? Icons.keyboard
+                                      : Icons.sentiment_satisfied_outlined,
+                                  color: AppColors.primary,
+                                  size: 24.sp,
+                                ),
+                                onPressed: () {
+                                  chatController.toggleEmojiPicker();
+                                  print(chatController.isEmojiVisible.value);
+                                  if (chatController.isEmojiVisible.isTrue) {
+                                    searchFocusnOde
+                                        .unfocus(); // Hide the keyboard
+                                  } else {
+                                    searchFocusnOde
+                                        .requestFocus(); // Show the keyboard
+                                  }
+                                },
+                              )),
+                          suffixIcon: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: AppInkWell(
+                              onTap: chatController.toggleGallery,
+                              borderRadius: 50,
+                              child: const AppSvgAsset(
+                                'assets/images/ic_attach.svg',
+                                width: 24,
+                                height: 24,
+                              ),
+                            ),
                           ),
-                          onPressed: () {
-                            chatController.toggleEmojiPicker();
-                            print(chatController.isEmojiVisible.value);
-                            if (chatController.isEmojiVisible.isTrue) {
-                              searchFocusnOde.unfocus(); // Hide the keyboard
-                            } else {
-                              searchFocusnOde
-                                  .requestFocus(); // Show the keyboard
-                            }
-                          },
-                        )),
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: AppInkWell(
-                        onTap: chatController.toggleGallery,
-                        borderRadius: 50,
-                        child: const AppSvgAsset(
-                          'assets/images/ic_attach.svg',
-                          width: 24,
-                          height: 24,
                         ),
                       ),
-                    ),
-                  ),
+              ),
+              if (!chatController.isRecording.value)
+                SizedBox(
+                  width: 10.w,
                 ),
-              ),
-             if(!chatController.isRecording.value) SizedBox(
-                width: 10.w,
-              ),
               CustomCircleIconWidget(
-                radius: 21.r,onLongPressMoveUpdate: (value){
+                radius: 21.r,
+                onLongPressMoveUpdate: (value) {
                   print("valuesssssssssssssssss$value");
-                  
-                  if(value<-65){
-            chatController.isRecording.value = false;
-                      chatController.filePath.value = "";
-                      chatController.stopRecordingTimer();
-                }
 
+                  if (value < -65) {
+                    chatController.isRecording.value = false;
+                    chatController.filePath.value = "";
+                    chatController.stopRecordingTimer();
+                  }
                 },
                 iconData: Icons.mic_none,
                 iconSize: 20,

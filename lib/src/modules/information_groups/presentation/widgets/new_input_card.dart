@@ -205,7 +205,7 @@ class _NewInputCardState extends State<NewInputCard> {
                               ]
                             : null,
                         decoration: InputDecoration(
-                          filled: true,
+                          filled: true,contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
 
                           fillColor: widget.readOnly
                               ? const Color(0xffF2F3F5).withOpacity(.2)

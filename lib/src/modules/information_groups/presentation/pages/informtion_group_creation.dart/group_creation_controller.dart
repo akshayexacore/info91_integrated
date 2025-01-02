@@ -14,7 +14,7 @@ class GroupCreationController extends GetxController {
   var category1Controller = TextEditingController().obs;
   var category2Controller = TextEditingController().obs;
   var category3Controller = TextEditingController().obs;
-  List<String> _keys = [];
+  
  var isNameValid = true.obs; // Tracks validation
   var errorMessage = ''.obs; 
   var key1Controller = TextEditingController().obs;
@@ -87,7 +87,7 @@ class GroupCreationController extends GetxController {
     selectedCategory1.value = null;
     selectedItem.value = null;
     emailCotroller.value.clear();
-    isNameValid.value=false;
+    isNameValid.value=true;
 
 //  selectedPlanModel= PlanModel();
   }

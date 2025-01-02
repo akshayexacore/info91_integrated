@@ -39,10 +39,10 @@ Widget blusHeading(String name) {
   );
 }
 
-Widget greynonBoldText(String name, {double? size, Color? color,FontWeight? fontWeight,double? height}) {
+Widget greynonBoldText(String name, {double? size, Color? color,FontWeight? fontWeight,double? height,TextOverflow? overFlow}) {
   return Text(
-    name,
-    style: GoogleFonts.poppins(fontSize: size ?? 13.sp, color: color,fontWeight:fontWeight?? FontWeight.normal, height: height ),
+    name,overflow: overFlow,
+    style: GoogleFonts.poppins(fontSize: size ?? 13.sp, color: color,fontWeight:fontWeight?? FontWeight.normal, height: height),
   );
 }
 

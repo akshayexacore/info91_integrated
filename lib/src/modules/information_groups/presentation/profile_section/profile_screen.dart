@@ -785,6 +785,7 @@ class BannersImageView extends StatelessWidget {
                 greynonBoldText(imageList[index].title ?? "",
                     fontWeight: FontWeight.w500,
                     size: 15.sp,
+                    overFlow: TextOverflow.ellipsis,
                     color: AppColors.text),
                 SizedBox(
                   height: 5.h,

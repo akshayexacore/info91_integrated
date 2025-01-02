@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/tiny/image_view.dart';
@@ -24,8 +25,8 @@ class CategoryIcon extends StatelessWidget {
             onTap: onPressed,
             borderRadius: 100,
             child: Container(
-              height: 63,
-              width: 63,
+              height: 60.h,
+              width: 60.w,
               padding: const EdgeInsets.all(11),
               decoration: BoxDecoration(
                   color: AppColors.white,
@@ -40,8 +41,8 @@ class CategoryIcon extends StatelessWidget {
               child: Center(
                 child: AppSvgAsset(
                   'assets/images/$assetIcon',
-                  width: 40,
-                  height: 40,color: clr??null,
+                  width: 35.w,
+                  height: 35.h,color: clr??null,
                   fit: BoxFit.contain,
                 ),
               ),

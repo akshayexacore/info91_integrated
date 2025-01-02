@@ -4,11 +4,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:info91/src/configs/app_styles.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/group_info/group_info_controller.dart';
-import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_controller.dart';
-import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/new_input_card.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
-import 'package:info91/src/utils/app_validator.dart';
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -72,8 +69,8 @@ class GroupInfo extends StatelessWidget {
                           ),
                           // commonGap,
                           // NewInputCard(
-                          //   controller: controller.whatsappNumberController,
-                          //   title: "Whatsapp Number",
+                          //   controller: controller.email,
+                          //   title: "email",
                           //   keyType: TextInputType.phone,
                           // ),
                           commonGap,

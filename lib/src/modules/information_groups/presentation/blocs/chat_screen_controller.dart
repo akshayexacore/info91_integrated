@@ -316,11 +316,11 @@ class ChatScreenController extends GetxController {
   }
 
   void startFetchingChats() {
-    // chatFetchTimer = Timer.periodic(
-    //   Duration(seconds: fetchIntervalSeconds),
-    //   (_) =>
-    //   viewMessage(),
-    // );
+    chatFetchTimer = Timer.periodic(
+      Duration(seconds: fetchIntervalSeconds),
+      (_) =>
+      viewMessage(),
+    );
     viewMessage();
   }
 
@@ -574,6 +574,19 @@ class ChatScreenController extends GetxController {
   }
 
   void onForwardPressed() {
+    _disposeOverlayEntry();
+    print(" the selectedGroupId$selectedGroupId");
+    Get.toNamed(ForwardPage.routeName, arguments: {
+      "selected": selectedMessage,
+      "group_id": selectedGroupId,
+    })?.then((value) {
+      if (value is bool && value) {
+        selectedMessage.clear();
+        reSetSelctionMessageList();
+      }
+    });
+  }
+  void onMediaForward(List<ChatMessage>selectedMessage) {
     _disposeOverlayEntry();
     print(" the selectedGroupId$selectedGroupId");
     Get.toNamed(ForwardPage.routeName, arguments: {

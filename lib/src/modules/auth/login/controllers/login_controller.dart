@@ -209,7 +209,7 @@ class LoginController extends GetxController {
               .saveAccessToken('${response.tokenType} ${response.token}');
           await _authRepository.saveRefreshToken(response.refreshToken);
           await _userProfileRepository.saveUser(response.user!);
-           print("the token is here${FirebaseApi.fcmToken}");
+           print("the token is here${token}");
           await _authRepository.upDateFcmToken(
                fcmken: FirebaseApi.fcmToken??"");
           showSuccessDialog();

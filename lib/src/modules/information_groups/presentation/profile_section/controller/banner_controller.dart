@@ -37,8 +37,9 @@ class BannerController extends GetxController {
   void cropImage(String image) async {
     CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: image,
-        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        aspectRatio: const CropAspectRatio(ratioX: 3, ratioY: 4),
         compressQuality: 80,
+     aspectRatioPresets: [ CropAspectRatioPreset.original, CropAspectRatioPreset.ratio3x2, CropAspectRatioPreset.ratio4x3, CropAspectRatioPreset.ratio16x9 ],
         cropStyle: CropStyle.rectangle,
         uiSettings: [
           AndroidUiSettings(

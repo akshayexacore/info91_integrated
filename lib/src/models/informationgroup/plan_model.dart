@@ -22,12 +22,13 @@ class PlanModel {
   });
 
   factory PlanModel.fromJson(Map<String, dynamic> json) {
+   print("ddE${json['tax'].runtimeType}");
     return PlanModel(
       id: json['id'],
       planName: json['plan_name'],
-      amount: json['amount'],
-      duration: json['duration'],
-      tax: json['tax'],
+   amount: json['amount'] != null ? (json['amount'] as num).toDouble() : null, 
+      duration:  json['duration'] != null ? (json['duration'] as num).toInt() : null,
+      tax: json['tax'] != null ? (json['tax'] as num).toDouble() : null,
       totalMembers: json['total_members'],
       status: json['status'],
       createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
