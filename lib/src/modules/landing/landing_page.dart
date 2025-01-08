@@ -11,6 +11,7 @@ import 'package:info91/src/widgets/custom/app_ink_well.dart';
 import 'package:info91/src/widgets/custom/app_popup_menu_button.dart';
 
 import 'package:info91/src/widgets/tiny/image_view.dart';
+import 'package:upgrader/upgrader.dart';
 
 class LandingPage extends StatelessWidget {
   LandingPage({super.key});
@@ -27,142 +28,144 @@ class LandingPage extends StatelessWidget {
 
         return true; // Prevents the default back navigation
       },
-      child: Scaffold(
-        body: Column(
-          children: [
-            _buildPrimaryAppBar(),
-            Expanded(
-              child: PageView(
-                controller: _controller.tabController,
-                onPageChanged: _controller.onPageChanged,
-                children: [
-                  HomePage(),
-                  const ComingSoonPage(
-                    appBarName: "",
-                    content:
-                        " A new feature is on the way to enhance your chat experience with the latest trends and insights. Stay tuned for more!",
-                    isAppBAr: false,
+      child: UpgradeAlert(
+        child: Scaffold(
+          body: Column(
+            children: [
+              _buildPrimaryAppBar(),
+              Expanded(
+                child: PageView(
+                  controller: _controller.tabController,
+                  onPageChanged: _controller.onPageChanged,
+                  children: [
+                    HomePage(),
+                    const ComingSoonPage(
+                      appBarName: "",
+                      content:
+                          " A new feature is on the way to enhance your chat experience with the latest trends and insights. Stay tuned for more!",
+                      isAppBAr: false,
+                    ),
+                    const ComingSoonPage(
+                      appBarName: "",
+                      content:
+                          " A new feature is on the way to keep your groups updated with the latest trends and insights right in the app. Stay tuned for more!",
+                      isAppBAr: false,
+                    ),
+                    const ComingSoonPage(
+                      appBarName: "",
+                      content:
+                          "A new feature is on the way to keep your status updates fresh and engaging with the latest trends and insights. Stay tuned for more!",
+                      isAppBAr: false,
+                    ),
+        
+                    // ChatsPage(),
+                    // GroupsPage(),
+                    // StatusPage(),
+                    // Container(
+                    //   color: Colors.white,
+                    // )
+                  ],
+                ),
+              ),
+            ],
+          ),
+          // floatingActionButton: Obx(() {
+          //   if (_controller.enabledFab) {
+          //     return AppInkWell(
+          //       borderRadius: 100,
+          //       onTap: _controller.gotoContactSelect,
+          //       child: Container(
+          //         height: 50,
+          //         width: 50,
+          //         margin: const EdgeInsets.only(bottom: 10),
+          //         decoration: BoxDecoration(
+          //             color: AppColors.white,
+          //             boxShadow: [
+          //               BoxShadow(
+          //                   offset: const Offset(0, 4),
+          //                   blurRadius: 4,
+          //                   spreadRadius: 0,
+          //                   color: Colors.black.withOpacity(0.25))
+          //             ],
+          //             borderRadius: BorderRadius.circular(100)),
+          //         child: const Center(
+          //           child: AppSvgAsset(
+          //             'assets/images/ic_new_message.svg',
+          //             height: 25,
+          //             width: 25,
+          //           ),
+          //         ),
+          //       ),
+          //     );
+          //   }
+          //   return const SizedBox();
+          // }),
+          bottomNavigationBar: Obx(() {
+            return Theme(
+              data: Theme.of(context).copyWith(
+                splashColor: Colors.transparent,
+              ),
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: AppColors.white,
+                currentIndex: _controller.currentIndex.value,
+                showUnselectedLabels: true,
+                selectedItemColor: AppColors.secondary,
+                unselectedItemColor: AppColors.text,
+                selectedFontSize: 12,
+                unselectedFontSize: 12,
+                onTap: _controller.onBottomNavigationTap,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: AppSvgAsset(
+                      'assets/images/ic_home.svg',
+                      color: _controller.currentIndex.value == 0
+                          ? AppColors.secondary
+                          : AppColors.text,
+                    ),
+                    label: 'Home',
                   ),
-                  const ComingSoonPage(
-                    appBarName: "",
-                    content:
-                        " A new feature is on the way to keep your groups updated with the latest trends and insights right in the app. Stay tuned for more!",
-                    isAppBAr: false,
+                  BottomNavigationBarItem(
+                    icon: AppSvgAsset(
+                      'assets/images/ic_chats.svg',
+                      color: _controller.currentIndex.value == 1
+                          ? AppColors.secondary
+                          : AppColors.text,
+                    ),
+                    label: 'Chats',
                   ),
-                  const ComingSoonPage(
-                    appBarName: "",
-                    content:
-                        "A new feature is on the way to keep your status updates fresh and engaging with the latest trends and insights. Stay tuned for more!",
-                    isAppBAr: false,
+                  BottomNavigationBarItem(
+                    icon: AppSvgAsset(
+                      'assets/images/ic_groups.svg',
+                      color: _controller.currentIndex.value == 2
+                          ? AppColors.secondary
+                          : AppColors.text,
+                    ),
+                    label: 'Groups',
                   ),
-
-                  // ChatsPage(),
-                  // GroupsPage(),
-                  // StatusPage(),
-                  // Container(
-                  //   color: Colors.white,
-                  // )
+                  BottomNavigationBarItem(
+                    icon: AppSvgAsset(
+                      'assets/images/ic_status.svg',
+                      color: _controller.currentIndex.value == 3
+                          ? AppColors.secondary
+                          : AppColors.text,
+                    ),
+                    label: 'Status',
+                  ),
+                  // BottomNavigationBarItem(
+                  //   icon: AppSvgAsset(
+                  //     'assets/images/ic_services_dark.svg',
+                  //     color: _controller.currentIndex.value == 4
+                  //         ? AppColors.secondary
+                  //         : AppColors.text,
+                  //   ),
+                  //   label: 'Services',
+                  // ),
                 ],
               ),
-            ),
-          ],
+            );
+          }),
         ),
-        // floatingActionButton: Obx(() {
-        //   if (_controller.enabledFab) {
-        //     return AppInkWell(
-        //       borderRadius: 100,
-        //       onTap: _controller.gotoContactSelect,
-        //       child: Container(
-        //         height: 50,
-        //         width: 50,
-        //         margin: const EdgeInsets.only(bottom: 10),
-        //         decoration: BoxDecoration(
-        //             color: AppColors.white,
-        //             boxShadow: [
-        //               BoxShadow(
-        //                   offset: const Offset(0, 4),
-        //                   blurRadius: 4,
-        //                   spreadRadius: 0,
-        //                   color: Colors.black.withOpacity(0.25))
-        //             ],
-        //             borderRadius: BorderRadius.circular(100)),
-        //         child: const Center(
-        //           child: AppSvgAsset(
-        //             'assets/images/ic_new_message.svg',
-        //             height: 25,
-        //             width: 25,
-        //           ),
-        //         ),
-        //       ),
-        //     );
-        //   }
-        //   return const SizedBox();
-        // }),
-        bottomNavigationBar: Obx(() {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              splashColor: Colors.transparent,
-            ),
-            child: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: AppColors.white,
-              currentIndex: _controller.currentIndex.value,
-              showUnselectedLabels: true,
-              selectedItemColor: AppColors.secondary,
-              unselectedItemColor: AppColors.text,
-              selectedFontSize: 12,
-              unselectedFontSize: 12,
-              onTap: _controller.onBottomNavigationTap,
-              items: [
-                BottomNavigationBarItem(
-                  icon: AppSvgAsset(
-                    'assets/images/ic_home.svg',
-                    color: _controller.currentIndex.value == 0
-                        ? AppColors.secondary
-                        : AppColors.text,
-                  ),
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: AppSvgAsset(
-                    'assets/images/ic_chats.svg',
-                    color: _controller.currentIndex.value == 1
-                        ? AppColors.secondary
-                        : AppColors.text,
-                  ),
-                  label: 'Chats',
-                ),
-                BottomNavigationBarItem(
-                  icon: AppSvgAsset(
-                    'assets/images/ic_groups.svg',
-                    color: _controller.currentIndex.value == 2
-                        ? AppColors.secondary
-                        : AppColors.text,
-                  ),
-                  label: 'Groups',
-                ),
-                BottomNavigationBarItem(
-                  icon: AppSvgAsset(
-                    'assets/images/ic_status.svg',
-                    color: _controller.currentIndex.value == 3
-                        ? AppColors.secondary
-                        : AppColors.text,
-                  ),
-                  label: 'Status',
-                ),
-                // BottomNavigationBarItem(
-                //   icon: AppSvgAsset(
-                //     'assets/images/ic_services_dark.svg',
-                //     color: _controller.currentIndex.value == 4
-                //         ? AppColors.secondary
-                //         : AppColors.text,
-                //   ),
-                //   label: 'Services',
-                // ),
-              ],
-            ),
-          );
-        }),
       ),
     );
   }

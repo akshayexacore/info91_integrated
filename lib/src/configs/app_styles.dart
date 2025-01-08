@@ -93,6 +93,9 @@ class AppThemes {
     scaffoldBackgroundColor: AppColors.splashBackground,
     fontFamily: AppFonts.primaryFontFamily,
     textTheme: textDefault,
+       textSelectionTheme: TextSelectionThemeData(
+      cursorColor: AppColors.white, // Set the active cursor color globally
+    ),
     primaryColor: AppColors.primary,
     primarySwatch: AppColors.primaryAppSwatch,
     splashColor: AppColors.primary.withOpacity(0.4),

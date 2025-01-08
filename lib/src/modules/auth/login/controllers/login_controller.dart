@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:country_picker/country_picker.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
@@ -35,7 +36,7 @@ class LoginController extends GetxController {
 
   late final _authRepository = AuthRepository();
   late final _userProfileRepository = UserProfileRepository();
- late final _preferences = SharedPreferencesDataProvider();
+  late final _preferences = SharedPreferencesDataProvider();
   late final _authController = Get.find<AuthController>();
 
   var country = Country.parse("IN").obs;
@@ -56,8 +57,8 @@ class LoginController extends GetxController {
     if (!status.isGranted) {
       await Permission.sms.request();
     }
-  }  
-  
+  }
+
   Future<String> _initDeviceId() async {
     String? deviceId;
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -68,7 +69,8 @@ class LoginController extends GetxController {
         deviceId = androidInfo.id; // Use `androidId` for Android
       } else if (Platform.isIOS) {
         var iosInfo = await deviceInfoPlugin.iosInfo;
-        deviceId = iosInfo.identifierForVendor; // Use `identifierForVendor` for iOS
+        deviceId =
+            iosInfo.identifierForVendor; // Use `identifierForVendor` for iOS
       } else {
         deviceId = 'Unsupported platform';
       }
@@ -76,7 +78,7 @@ class LoginController extends GetxController {
       deviceId = 'Failed to get device ID';
     }
 
-   return deviceId??"";
+    return deviceId ?? "";
   }
 
   void verifyPhone() async {
@@ -84,15 +86,15 @@ class LoginController extends GetxController {
     try {
       await requestSmsPermission();
       if (phone.value.isValid()) {
-        final deviceId=await _initDeviceId();
+        final deviceId = await _initDeviceId();
         final response = await _authRepository.sendOtp(
-            phone.value.nsn, phone.value.countryCode,deviceId);
+            phone.value.nsn, phone.value.countryCode, deviceId);
 
         if (response.isSuccess) {
           busy(false);
           if (response.exist == true) {
-            final token=await _preferences.getFcmToken();
-               print("the token is here1${FirebaseApi.fcmToken}");
+            final token = await _preferences.getFcmToken();
+            print("the token is here1${FirebaseApi.fcmToken}");
             await _authRepository
                 .saveAccessToken('${response.tokenType} ${response.token}');
             await _authRepository.saveRefreshToken(response.token ?? "");
@@ -101,8 +103,7 @@ class LoginController extends GetxController {
             await _userProfileRepository
                 .saveUser(User.fromJson(response.result));
             await _authRepository.upDateFcmToken(
-               fcmken: FirebaseApi.fcmToken
-               ??"");
+                fcmken: FirebaseApi.fcmToken ?? "");
             _authController.gotoLandingPage();
             // showSuccessDialog();
           } else {
@@ -200,18 +201,23 @@ class LoginController extends GetxController {
         final response = await _authRepository.verifyOtp(
             phone.value, textControllerOtp.text);
 
-        if (response.success) 
-        {
-          final token=await _preferences.getFcmToken();
-         
+        if (response.success) {
+          String token = await _preferences.getFcmToken();
+          if (token.isEmpty || token == null) {
+            late final _preferences = SharedPreferencesDataProvider();
+            final FirebaseMessaging _firebaseMessaging =
+                FirebaseMessaging.instance;
+            token = await _firebaseMessaging.getToken() ?? "";
+
+            _preferences.saveFcmToken(token ?? "");
+          }
+
           await _authRepository
-          
               .saveAccessToken('${response.tokenType} ${response.token}');
           await _authRepository.saveRefreshToken(response.refreshToken);
           await _userProfileRepository.saveUser(response.user!);
-           print("the token is here${token}");
-          await _authRepository.upDateFcmToken(
-               fcmken: FirebaseApi.fcmToken??"");
+          print("the token is here${token}");
+          await _authRepository.upDateFcmToken(fcmken: token ?? "");
           showSuccessDialog();
         } else {
           AppDialog.showSnackBar('Otp Verification Failed', response.message);
@@ -269,4 +275,3 @@ class LoginController extends GetxController {
 void showSuccessDialog() {
   Get.dialog(const LoginSuccessDialog(), barrierDismissible: false);
 }
-  

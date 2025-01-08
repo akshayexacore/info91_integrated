@@ -34,10 +34,12 @@ class InfoChatListController extends GetxController
    if(ownchatGroupList.isEmpty  && chatGroupList.isEmpty)   loading.value = true;
       final responseData = await _infromationRepository.grtInfoGroupList();
       totalGroupList.value=responseData;
-      debugPrint("responseData$responseData");
+      // chatGroupList.value=responseData;
+      debugPrint("responseData${chatGroupList.value.length}");
       ;
     loading.value = false;
       if (responseData != null) {
+        debugPrint("responseDatasss$responseData");
         chatGroupList.clear();
         ownchatGroupList.clear();
         for (var item in responseData) {
@@ -46,12 +48,14 @@ class InfoChatListController extends GetxController
               ownchatGroupList.add(item);
               break;
             case false:
-              chatGroupList.add(item);
+              // chatGroupList.add(item);
               break;
           }
         }
       }
+       chatGroupList.value=responseData;
     } catch (e) {
+      print("the errro ishere $e");
        loading.value = false;
       rethrow;
     }

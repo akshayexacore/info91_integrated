@@ -321,7 +321,7 @@ class ChatScreenController extends GetxController {
       (_) =>
       viewMessage(),
     );
-    viewMessage();
+    // viewMessage();
   }
 
   onLongPress(AudioRecorder _recorder) async {

@@ -82,7 +82,7 @@ class StartScreen extends StatelessWidget {
                     height: 8.h,
                   ),
                   greyContentText(
-                    "${controller.responseModel.value.memberCount ?? ""} members",
+                    "${controller.responseModel.value.memberCount ?? ""} Suscribers",
                   ),
                   SizedBox(
                     height: 15.h,
@@ -156,7 +156,7 @@ class StartScreen extends StatelessWidget {
                      () {
                       return AppButton(
                         text: controller.selectedChatModel.value?.joinedGroupFlag == false
-                            ? "Join Group"
+                            ? "Suscribe"
                             : 'Message',
                         busy: false,
                         onPressed: () {

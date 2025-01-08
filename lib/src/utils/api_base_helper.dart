@@ -246,7 +246,7 @@ class ExpiredTokenRetryPolicy extends RetryPolicy {
           if(!Get.isRegistered<AuthController>()){
             Get.create(() => AuthController());
           }
-          Get.find<AuthController>().logout();
+          // Get.find<AuthController>().logout();
           AppDialog.showToast("Session expired! Please login.");
           return false;
         }

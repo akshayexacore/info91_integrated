@@ -138,16 +138,16 @@ class ProfilePage extends StatelessWidget {
                         const SizedBox(
                           height: 15,
                         ),
-                        AppInputText(
-                          shadow: false,
-                          border: true,
-                          hintText: "About",
-                          keyboardType: TextInputType.name,
-                          controller: _controller.textControllerAbout,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
+                        // AppInputText(
+                        //   shadow: false,
+                        //   border: true,
+                        //   hintText: "About",
+                        //   keyboardType: TextInputType.name,
+                        //   controller: _controller.textControllerAbout,
+                        // ),
+                        // const SizedBox(
+                        //   height: 15,
+                        // ),
                         AppInputText(
                           shadow: false,
                           border: true,

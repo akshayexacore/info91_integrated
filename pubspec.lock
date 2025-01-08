@@ -1029,6 +1029,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  os_detect:
+    dependency: transitive
+    description:
+      name: os_detect
+      sha256: e704fb99aa30b2b9a284d87a28eef9ba262f68c25c963d5eb932f54cad07784f
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   overlay_support:
     dependency: "direct main"
     description:
@@ -1570,6 +1578,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  upgrader:
+    dependency: "direct main"
+    description:
+      name: upgrader
+      sha256: eb5a4888873d7998605306c4212491efdff8e59ee609d946dbcd6df83598d004
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.3.1"
   url_launcher:
     dependency: "direct main"
     description:
@@ -1650,6 +1666,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  version:
+    dependency: transitive
+    description:
+      name: version
+      sha256: "3d4140128e6ea10d83da32fef2fa4003fccbf6852217bb854845802f04191f94"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.2"
   video_player:
     dependency: "direct main"
     description:
