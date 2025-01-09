@@ -149,9 +149,7 @@ class _OtpPageState extends State<OtpPage> {
                       // ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+               Spacer(),
                   const SizedBox(
                     height: 10,
                   ),

@@ -14,12 +14,9 @@ class GroupCreationController extends GetxController {
   var category1Controller = TextEditingController().obs;
   var category2Controller = TextEditingController().obs;
   var category3Controller = TextEditingController().obs;
-  
- var isNameValid = true.obs; // Tracks validation
+
   var errorMessage = ''.obs; 
-  var key1Controller = TextEditingController().obs;
-  var key2Controller = TextEditingController().obs;
-  var key3Controller = TextEditingController().obs;
+  
   var emailCotroller = TextEditingController().obs;
   //  String? key1, key2, key3;
   var firstCategoryList = <Category>[].obs;
@@ -55,11 +52,10 @@ class GroupCreationController extends GetxController {
     category1Controller.value.dispose();
     category2Controller.value.dispose();
     category3Controller.value.dispose();
-    key1Controller.value.dispose();
+   
     emailCotroller.value.dispose();
-    key2Controller.value.dispose();
-    key3Controller.value.dispose();
-    isNameValid.value=true;
+   
+  
     
 
     super.onClose(); // Always call super.onClose() last
@@ -79,15 +75,13 @@ class GroupCreationController extends GetxController {
     firstCategoryList.clear();
     secondCatList.clear();
     thirdCatList.clear();
-    key1Controller.value.clear();
-    key2Controller.value.clear();
-    key3Controller.value.clear();
+   
     selectedCategory2.value = null;
     selectedCategory3.value = null;
     selectedCategory1.value = null;
     selectedItem.value = null;
     emailCotroller.value.clear();
-    isNameValid.value=true;
+
 
 //  selectedPlanModel= PlanModel();
   }
@@ -116,9 +110,6 @@ class GroupCreationController extends GetxController {
         planId: planId.value,
         purpose: purposeController.value.text,
         type: typeController.value,
-        tagKey1: key1Controller.value.text,
-        tagKey2: key2Controller.value.text,
-        tagKey3: key3Controller.value.text,
         email: emailCotroller.value.text);
     debugPrint("the model is Here${model.tagKey1}  ");
     try {
@@ -228,22 +219,7 @@ class GroupCreationController extends GetxController {
     }
   }
 
-  Future<void> keyCheckExistFunction(String key,) async {
-    try {
-      final response = await _infromationRepository.keyCheckExistFunction(key);
-      if(response.data1){
-        isNameValid.value=true; 
-        errorMessage.value="";
-       
-      }
-      else{
-        isNameValid.value=false;
-         errorMessage.value=response.data2;
-      }
-    } catch (e) {
-      print("the error is here$e");
-    }
-  }
+
 
   getSecondCategory(String id) async {
     final response = await _infromationRepository.getSecondCategory(id);

@@ -286,6 +286,7 @@ class _NewInputCardState extends State<NewInputCard> {
                     controller: widget.controller,
                     obscureText: show,
                     decoration: InputDecoration(
+                      
                       suffixIcon: widget.password
                           ? IconButton(
                               icon: show

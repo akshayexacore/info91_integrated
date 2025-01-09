@@ -13,6 +13,11 @@ class GroupInfpController extends GetxController {
   var dataModel = InfoGroupDataModel().obs;
   var isLoading = false.obs;
   var isNonEdit=false.obs;
+   var isNameValid = true.obs; //
+var errorMessage = ''.obs; 
+var key1Controller = TextEditingController().obs;
+  var key2Controller = TextEditingController().obs;
+  var key3Controller = TextEditingController().obs;
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController alterNativeMobileNumberController =
       TextEditingController();
@@ -23,8 +28,7 @@ class GroupInfpController extends GetxController {
   TextEditingController youtubeLinkController = TextEditingController();
   TextEditingController googleMapControllerController = TextEditingController();
  TextEditingController emailController = TextEditingController();
-  TextEditingController key1Controller = TextEditingController();
-  TextEditingController key2ControllerController = TextEditingController();
+
   var groupId;
   @override
   void onInit() {
@@ -56,6 +60,9 @@ class GroupInfpController extends GetxController {
         websiteLinkController.text = response.websiteLink ?? "";
         youtubeLinkController.text = response.youtubeLink ?? "";
         googleMapControllerController.text = response.googlemapLink ?? "";
+        key1Controller.value.text=response.tagKey1 ?? "";
+         key2Controller.value.text=response.tagKey2 ?? "";
+          key3Controller.value.text=response.tagKey3 ?? "";
 
 
         isLoading.value = false;
@@ -76,7 +83,9 @@ void saveContact(String contact) async {
     }
   }
   Future<void> updateInfoData() async {
-   try {final response = await _infromationRepository.updateInfoData(
+   try {
+    if(isNameValid.value){
+       final response = await _infromationRepository.updateInfoData(
         model: InfoGroupDataModel(
             id: groupId,
             mobileNumber: mobileNumberController.text.trim(),
@@ -84,6 +93,9 @@ void saveContact(String contact) async {
             whatsappNumber: whatsappNumberController.text.trim(),
             contactTime: contactTimeController.text.trim(),
             holidays: holidaysController.text.trim(),
+            tagKey1: key1Controller.value.text.trim(),
+             tagKey2: key2Controller.value.text.trim(),
+             tagKey3: key3Controller.value.text.trim(),
             websiteLink: websiteLinkController.text.trim(),
             youtubeLink: youtubeLinkController.text.trim(),
             googlemapLink: googleMapControllerController.text.trim()));
@@ -93,7 +105,13 @@ void saveContact(String contact) async {
             }else{
                AppDialog.showSnackBar('Error',
               response.data2);
-            }}catch(e){
+            }
+    }else{
+       AppDialog.showSnackBar('Error',
+              "Key one value is already exist");
+    }
+    
+   }catch(e){
               print("the erro r is $e");
             }
   }
@@ -107,5 +125,21 @@ try{ if (await canLaunchUrl(url)) {
       AppDialog.showSnackBar("Error", "Invalid Url");
     }
    
+  }
+    Future<void> keyCheckExistFunction(String key,) async {
+    try {
+      final response = await _infromationRepository.keyCheckExistFunction(key);
+      if(response.data1){
+        isNameValid.value=true; 
+        errorMessage.value="";
+       
+      }
+      else{
+        isNameValid.value=false;
+         errorMessage.value=response.data2;
+      }
+    } catch (e) {
+      print("the error is here$e");
+    }
   }
 }

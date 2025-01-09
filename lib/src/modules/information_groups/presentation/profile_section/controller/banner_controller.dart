@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -34,25 +36,45 @@ class BannerController extends GetxController {
     }
   }
 
-  void cropImage(String image) async {
-    CroppedFile? croppedFile = await ImageCropper().cropImage(
-        sourcePath: image,
-        aspectRatio: const CropAspectRatio(ratioX: 3, ratioY: 4),
-        compressQuality: 80,
-     aspectRatioPresets: [ CropAspectRatioPreset.original, CropAspectRatioPreset.ratio3x2, CropAspectRatioPreset.ratio4x3, CropAspectRatioPreset.ratio16x9 ],
-        cropStyle: CropStyle.rectangle,
-        uiSettings: [
-          AndroidUiSettings(
-            lockAspectRatio: true,
-          ),
-          IOSUiSettings(
-            aspectRatioLockEnabled: true,
-          )
-        ]);
-    if (croppedFile != null) {
+ void cropImage(String image) async {
+  CroppedFile? croppedFile = await ImageCropper().cropImage(
+    sourcePath: image,
+    compressQuality: 80,
+    aspectRatioPresets: [
+      CropAspectRatioPreset.original,
+      CropAspectRatioPreset.ratio3x2,
+      CropAspectRatioPreset.ratio4x3, // A4 aspect ratio approximation
+      CropAspectRatioPreset.ratio16x9,
+    ],
+    aspectRatio: const CropAspectRatio(ratioX: 7, ratioY: 3), // 350x50 ratio
+    cropStyle: CropStyle.rectangle,
+    uiSettings: [
+      AndroidUiSettings(
+        lockAspectRatio: false, // Allow free cropping
+        toolbarTitle: 'Crop Image',
+      ),
+      IOSUiSettings(
+        aspectRatioLockEnabled: false, // Allow free cropping
+      ),
+    ],
+  );
+
+  if (croppedFile != null) {
+    // Validate the cropped image size
+    final File croppedImage = File(croppedFile.path);
+    final decodedImage = await decodeImageFromList(croppedImage.readAsBytesSync());
+
+    if (decodedImage.width >= 350 && decodedImage.height >= 150) {
+      // Valid size, proceed with the cropped image
       filePath(croppedFile.path);
+    } else {
+      print("The cropped image does not meet the minimum size requirements.");
+     AppDialog.showSnackBar('Error', 'The cropped image does not meet the minimum size requirements.');
+      // Notify the user or ask them to recrop.
     }
   }
+}
+
 
   bool checkImageExist() {
     debugPrint(" Get.arguments['fasss']${imagePath.value}");

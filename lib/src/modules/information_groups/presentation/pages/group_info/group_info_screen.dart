@@ -61,12 +61,82 @@ class GroupInfo extends StatelessWidget {
                             },
                           ),
                           commonGap,
+                          
                           NewInputCard(
                             controller:
                                 controller.alterNativeMobileNumberController,
                             keyType: TextInputType.phone,
                             title: "Alternative Number",
                           ),
+                          commonGap,
+                          Obx(() {
+                         return 
+                            NewInputCard(
+                            controller: controller.key1Controller.value,
+                            title: "Key 1",
+                            label: "Enter key one",
+                            showValidator: true,
+                            validatorMessage: "",
+                            
+                            onChange: (va) {
+                              controller.keyCheckExistFunction(va);
+                            },
+                            errorText: controller.isNameValid.value==false?"Key already exists":null,
+                          );
+                        }
+                      ),
+                        Obx(() {
+                         return 
+                          Text  (controller.isNameValid.value==false?"Key already exists":"",style: TextStyle(color: AppColors.red),
+                           
+                          );
+                        }
+                      ),
+
+
+
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: NewInputCard(
+                              controller: controller.key2Controller.value,
+                              title: "Key2",
+                              label: "Enter key two",
+                              // showValidator: true,
+                              // validatorMessage: "",
+                              onChange: (va) {
+                                // _controller.extractKeys();
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          Expanded(
+                            child: NewInputCard(
+                              controller: controller.key3Controller.value,
+                              title: "Key3",
+                              label: "Enter key three",
+                              // showValidator: true,
+                              // validatorMessage: "",
+                              onChange: (va) {
+                                // _controller.extractKeys();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(
+                        height: 15.h,
+                      ),
+
+
+
+
                           // commonGap,
                           // NewInputCard(
                           //   controller: controller.email,

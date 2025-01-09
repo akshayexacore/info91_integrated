@@ -37,6 +37,7 @@ class InfoProfileController extends GetxController {
     debugPrint("response.data1${response.data1}${response.data2}");
     if (response.data1) {
       profilledataModel.value = response.data2;
+      AppDialog.showSnackBar('Success ',"Profile updated successfully");
     } else {
       AppDialog.showSnackBar('Failed ', response.data2);
     }
@@ -58,22 +59,23 @@ class InfoProfileController extends GetxController {
   }
 
   Future<void> uploadCoverPic() async {
+    print("is calling");
     final response = await _infromationRepository.uploadCoverPic(
         selectedFile.value, groupId);
-    debugPrint("response.data1${response.data1}${response.data2}");
     if (response.data1) {
       profilledataModel.value = response.data2;
+       AppDialog.showSnackBar('Success ',"Cover photo updated successfully");
     } else {
       AppDialog.showSnackBar('Failed ', response.data2);
     }
   }
 
   Future<void> getGroupInfoDetails(String id) async {
-    debugPrint("getGroupInfoDetails calling");
+   
     try {
       // isLoading.value = true;
       final response = await _infromationRepository.getProfileData(id ?? "");
-      debugPrint("getGroupInfoDetails calling${response.memberCount}");
+      
       profilledataModel.value = response;
       MediaList model=MediaList();
      totalMediaList.value = [...?profilledataModel.value.mediaList?.videoList, ...?profilledataModel.value.mediaList?.imageList, ...?profilledataModel.value.mediaList?.audioList, ...?profilledataModel.value.mediaList?.videoList, ...?profilledataModel.value.mediaList?.documentList ];

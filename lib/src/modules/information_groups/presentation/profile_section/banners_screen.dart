@@ -46,7 +46,7 @@ class BannersScreen extends StatelessWidget {
                           children: [
                             SizedBox(height: 15.h),
                             greyContentText(
-                              "You can add up to 10 photos with your current plan, and they will be automatically removed after 30 days.",
+                              "You can add up to 10 photos with your current plan",
                             ),
                             SizedBox(height: 15.h),
                             Obx(() {

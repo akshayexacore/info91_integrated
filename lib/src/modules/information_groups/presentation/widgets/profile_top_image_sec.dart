@@ -60,6 +60,8 @@ class ProfileTopImageSec extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double logicalWidth = 1080 / MediaQuery.of(context).devicePixelRatio;
+    final double logicalHeight = 504 / MediaQuery.of(context).devicePixelRatio;
     return FutureBuilder<ImageProvider>(
         future: _loadImageProvider(),
         builder: (context, snapshot) {
@@ -70,8 +72,8 @@ class ProfileTopImageSec extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               Container(
-                height: 180.h,
-                width: double.infinity,
+                height: logicalHeight,
+                width: logicalWidth,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: imageProvider,
@@ -82,15 +84,19 @@ class ProfileTopImageSec extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                   isAdmin ? Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 17.w, vertical: 8.h),
-                      child: CustomRoundIcons(onProfileChange: (){
-                        if (onCoverChange != null) {
-                              onCoverChange!();
-                            }
-                      },),
-                    ): SizedBox()
+                    isAdmin
+                        ? Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 17.w, vertical: 8.h),
+                            child: CustomRoundIcons(
+                              onProfileChange: () {
+                                if (onCoverChange != null) {
+                                  onCoverChange!();
+                                }
+                              },
+                            ),
+                          )
+                        : SizedBox()
                   ],
                 ),
               ),
@@ -108,24 +114,38 @@ class ProfileTopImageSec extends StatelessWidget {
                             avatarUrl: profileImage,
                             name: groupame,
                             radius: 31,
-                            onTap: () { if (profileViewOnTap != null) {
-                          profileViewOnTap!();
-                        }}),
+                            onTap: () {
+                              if (profileViewOnTap != null) {
+                                profileViewOnTap!();
+                              }
+                            }),
                       ),
                       if (isAdmin)
-                       
-                        InkWell(
-                            onTap: () {
-                              if (onProfileChange != null) {
-                                onProfileChange!();
-                              }
-                            },
-                            child:  CustomRoundIcons(onProfileChange: (){ if (onProfileChange != null) {
-                                onProfileChange!();
-                              }},))
+                        InkWell(onTap: () {
+                          if (onProfileChange != null) {
+                            onProfileChange!();
+                          }
+                        }, child: CustomRoundIcons(
+                          onProfileChange: () {
+                            if (onProfileChange != null) {
+                              onProfileChange!();
+                            }
+                          },
+                        ))
                     ],
                   ),
                 ),
+            if (isAdmin)  Container(
+                color: Colors.black54, // Background for better visibility
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Text(
+                  "Cover Photo: 1080x504 pixels",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                  ),
+                ),
+              ),
             ],
           );
         });

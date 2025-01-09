@@ -149,70 +149,7 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                         height: 15.h,
                       ),
 
-                         Obx(() {
-                         return 
-                            NewInputCard(
-                            controller: _controller.key1Controller.value,
-                            title: "Key 1",
-                            label: "Enter key one",
-                            showValidator: true,
-                            validatorMessage: "",
-                            
-                            onChange: (va) {
-                              _controller.keyCheckExistFunction(va);
-                            },
-                            errorText: _controller.isNameValid.value==false?"Key already exists":null,
-                          );
-                        }
-                      ),
-                        Obx(() {
-                         return 
-                          Text  (_controller.isNameValid.value==false?"Key already exists":"",style: TextStyle(color: AppColors.red),
-                           
-                          );
-                        }
-                      ),
-
-
-
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: NewInputCard(
-                              controller: _controller.key2Controller.value,
-                              title: "Key2",
-                              label: "Enter key two",
-                              // showValidator: true,
-                              // validatorMessage: "",
-                              onChange: (va) {
-                                // _controller.extractKeys();
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20.w,
-                          ),
-                          Expanded(
-                            child: NewInputCard(
-                              controller: _controller.key3Controller.value,
-                              title: "Key3",
-                              label: "Enter key three",
-                              // showValidator: true,
-                              // validatorMessage: "",
-                              onChange: (va) {
-                                // _controller.extractKeys();
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(
-                        height: 15.h,
-                      ),
+                    
                       customDivider(padding: EdgeInsets.zero),
                       SizedBox(
                         height: 15.h,
