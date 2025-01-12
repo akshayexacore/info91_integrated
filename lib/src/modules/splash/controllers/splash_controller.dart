@@ -47,6 +47,13 @@ class SplashController extends GetxController {
 
       
       Variables.userContact = contacts.toList();
+   Variables.userContactnum =    Variables.userContact
+        .where((contact) => contact.phones.isNotEmpty) // Filter contacts with at least one phone number
+        .expand((contact) => contact.phones.map((phone) => {
+              'name': contact.displayName, // Get the contact's display name
+              'number': phone.number, // Get the phone number
+            }))
+        .toList();
     } catch (e) {
       print('Error fetching contacts: $e');
     }

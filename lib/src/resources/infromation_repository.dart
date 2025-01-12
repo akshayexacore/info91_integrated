@@ -428,20 +428,24 @@ class InfromationRepository {
 
   Future<List<ContactAddGroupModel>> fetchInfo91Contacts(String groupId) async {
     List<ContactAddGroupModel> dataLIst = [];
+    try{
     final response = await _api.post(
       ApiConstants.contactSyncApi,
       headers: {},
       body: {
         "group_id": groupId,
-        "contacts": Variables.userContact,
+        "contacts": Variables.userContactnum,
       },
     );
-    try {
+     print("the error${response["data"]}");
       (response["data"] as List).forEach((element) {
         dataLIst.add(ContactAddGroupModel.fromJson(element));
       });
+        print("the error${response}");
+    
       return dataLIst;
     } catch (e) {
+      print("the error$e");
       throw e;
     }
   }

@@ -89,39 +89,7 @@ class LoginPage extends StatelessWidget {
                       onPressed: _loginController.verifyPhone);
                 }),
                 const Spacer(),
-                Text.rich(
-                  TextSpan(
-                    text: "By continuing you are agreeing to our\n",
-                    style: AppTextStyles.app12SB,
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: "Terms of use",
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Get.to(const TermsAndPrivacy());
-        
-                          },
-                        style: AppTextStyles.app12SB.copyWith(decoration: TextDecoration.underline,fontWeight: FontWeight.w800),
-                      ),
-                      const TextSpan(
-                        text: " and ",
-                      ),
-                      TextSpan(
-                        text: "Privacy policy",
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                              Get.to(const PrivacyPolicy());
-                            
-        
-        
-        
-                          },
-                        style: AppTextStyles.app12SB.copyWith(decoration: TextDecoration.underline,fontWeight: FontWeight.w800),
-                      ),
-                    ],
-                  ),
-                  textAlign: TextAlign.center,
-                )
+         
               ],
             ),
           ),

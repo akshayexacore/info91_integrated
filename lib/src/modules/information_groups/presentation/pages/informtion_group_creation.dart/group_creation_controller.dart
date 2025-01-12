@@ -109,7 +109,7 @@ class GroupCreationController extends GetxController {
         groupName: groupNameController.value.text,
         planId: planId.value,
         purpose: purposeController.value.text,
-        type: typeController.value,
+        type: typeController.value.toLowerCase(),
         email: emailCotroller.value.text);
     debugPrint("the model is Here${model.tagKey1}  ");
     try {

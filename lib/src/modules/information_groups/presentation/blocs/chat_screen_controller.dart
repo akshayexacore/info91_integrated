@@ -317,7 +317,8 @@ class ChatScreenController extends GetxController {
 
   void startFetchingChats() {
     chatFetchTimer = Timer.periodic(
-      Duration(seconds: fetchIntervalSeconds),
+      Duration(microseconds
+      : fetchIntervalSeconds),
       (_) =>
       viewMessage(),
     );

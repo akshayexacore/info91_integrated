@@ -96,7 +96,7 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                             // if(_controller.typeController.value=="business" && _controller.planList.isNotEmpty)
                             _controller.getPlanList();
                           },
-                          itemList: const ["business", "non-business"],
+                          itemList: const ["Business", "Non-Business"],
                           selectedItem: _controller.typeController.value,
                         );
                       }),
@@ -251,7 +251,7 @@ class _InformGroupCreationScreenState extends State<InformGroupCreationScreen> {
                         height: 15.h,
                       ),
                       Obx(() {
-                        return _controller.typeController.value == "business"
+                        return _controller.typeController.value.toLowerCase() == "business"
                             ? Column(
                                 children: [
                                   CustomArrowTextbutton(

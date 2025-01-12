@@ -54,14 +54,14 @@ class GroupInfo extends StatelessWidget {
                             controller: controller.mobileNumberController,
                             title: "Mobile Number",
                             keyType: TextInputType.phone,
-                             suffixIcon: Icons.call,
+                            suffixIcon: Icons.call,
                             ontap: () {
                               controller.saveContact(
                                   controller.mobileNumberController.text);
                             },
                           ),
                           commonGap,
-                          
+
                           NewInputCard(
                             controller:
                                 controller.alterNativeMobileNumberController,
@@ -70,72 +70,67 @@ class GroupInfo extends StatelessWidget {
                           ),
                           commonGap,
                           Obx(() {
-                         return 
-                            NewInputCard(
-                            controller: controller.key1Controller.value,
-                            title: "Key 1",
-                            label: "Enter key one",
-                            showValidator: true,
-                            validatorMessage: "",
-                            
-                            onChange: (va) {
-                              controller.keyCheckExistFunction(va);
-                            },
-                            errorText: controller.isNameValid.value==false?"Key already exists":null,
-                          );
-                        }
-                      ),
-                        Obx(() {
-                         return 
-                          Text  (controller.isNameValid.value==false?"Key already exists":"",style: TextStyle(color: AppColors.red),
-                           
-                          );
-                        }
-                      ),
-
-
-
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: NewInputCard(
-                              controller: controller.key2Controller.value,
-                              title: "Key2",
-                              label: "Enter key two",
-                              // showValidator: true,
-                              // validatorMessage: "",
+                            return NewInputCard(
+                              controller: controller.key1Controller.value,
+                              title: "Key 1",
+                              label: "Enter key one",
+                              showValidator: true,
+                              validatorMessage: "",
                               onChange: (va) {
-                                // _controller.extractKeys();
+                                controller.keyCheckExistFunction(va);
                               },
-                            ),
-                          ),
+                              errorText: controller.isNameValid.value == false
+                                  ? "Key already exists"
+                                  : null,
+                            );
+                          }),
+                          Obx(() {
+                            return Text(
+                              controller.isNameValid.value == false
+                                  ? "Key already exists"
+                                  : "",
+                              style: TextStyle(color: AppColors.red),
+                            );
+                          }),
+
                           SizedBox(
-                            width: 20.w,
+                            height: 15.h,
                           ),
-                          Expanded(
-                            child: NewInputCard(
-                              controller: controller.key3Controller.value,
-                              title: "Key3",
-                              label: "Enter key three",
-                              // showValidator: true,
-                              // validatorMessage: "",
-                              onChange: (va) {
-                                // _controller.extractKeys();
-                              },
-                            ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: NewInputCard(
+                                  controller: controller.key2Controller.value,
+                                  title: "Key2",
+                                  label: "Enter key two",
+                                  // showValidator: true,
+                                  // validatorMessage: "",
+                                  onChange: (va) {
+                                    // _controller.extractKeys();
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                              Expanded(
+                                child: NewInputCard(
+                                  controller: controller.key3Controller.value,
+                                  title: "Key3",
+                                  label: "Enter key three",
+                                  // showValidator: true,
+                                  // validatorMessage: "",
+                                  onChange: (va) {
+                                    // _controller.extractKeys();
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
 
-                      SizedBox(
-                        height: 15.h,
-                      ),
-
-
-
+                          SizedBox(
+                            height: 15.h,
+                          ),
 
                           // commonGap,
                           // NewInputCard(
@@ -162,7 +157,7 @@ class GroupInfo extends StatelessWidget {
                             controller: controller.websiteLinkController,
                             title: "Website link",
                             isLink: true,
-                             suffixIcon:Icons.visibility,
+                            suffixIcon: Icons.visibility,
                             ontap: () {
                               controller.launchURL(
                                   controller.websiteLinkController.text);
@@ -173,7 +168,7 @@ class GroupInfo extends StatelessWidget {
                             controller: controller.youtubeLinkController,
                             title: "Youtube link",
                             isLink: true,
-                            suffixIcon:Icons.visibility,
+                            suffixIcon: Icons.visibility,
                             ontap: () {
                               controller.launchURL(
                                   controller.youtubeLinkController.text);
@@ -185,7 +180,7 @@ class GroupInfo extends StatelessWidget {
                                 controller.googleMapControllerController,
                             title: "Google map link",
                             isLink: true,
-                             suffixIcon: Icons.visibility,
+                            suffixIcon: Icons.visibility,
                             ontap: () {
                               controller.launchURL(controller
                                   .googleMapControllerController.text);
@@ -206,6 +201,20 @@ class GroupInfo extends StatelessWidget {
                               "Alternative Number",
                               controller
                                   .alterNativeMobileNumberController.text),
+                          groupInfoDoubleText(
+                              "Key1", controller.key1Controller.value.text),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: groupInfoDoubleText("Key2",
+                                    controller.key2Controller.value.text),
+                              ),
+                              Expanded(
+                                child: groupInfoDoubleText("key3",
+                                    controller.key3Controller.value.text),
+                              ),
+                            ],
+                          ),
                           // groupInfoDoubleText("Whatsapp Number",
                           //     controller.whatsappNumberController.text),
                           blusHeading("Timings and Holidays"),
@@ -223,21 +232,22 @@ class GroupInfo extends StatelessWidget {
                           }),
                           groupInfoDoubleText("Youtube link",
                               controller.youtubeLinkController.text, onTap: () {
-                                if(controller.youtubeLinkController.text.trim().isNotEmpty){
-                               
-                                    controller.launchURL(
-                                controller.youtubeLinkController.text);
-                                }
-                          
+                            if (controller.youtubeLinkController.text
+                                .trim()
+                                .isNotEmpty) {
+                              controller.launchURL(
+                                  controller.youtubeLinkController.text);
+                            }
                           }),
                           groupInfoDoubleText("Google map link",
                               controller.googleMapControllerController.text,
                               onTap: () {
-                                if(  controller.googleMapControllerController.text.trim().isNotEmpty){
-                                    controller.launchURL(
-                                controller.googleMapControllerController.text);
-                                }
-                          
+                            if (controller.googleMapControllerController.text
+                                .trim()
+                                .isNotEmpty) {
+                              controller.launchURL(controller
+                                  .googleMapControllerController.text);
+                            }
                           }),
                         ],
                         commonGap,

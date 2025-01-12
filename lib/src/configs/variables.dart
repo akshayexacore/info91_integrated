@@ -3,6 +3,7 @@
 import 'package:info91/src/models/user.dart';
 class Variables{
   static   List<Contact> userContact=[];
+   static   List<Map<String, String>> userContactnum=[];
  static  User? user = User();
 
 

@@ -30,7 +30,7 @@ class LoginController extends GetxController {
   final int timerDuration2 = 180;
 
   final int timerDuration1 = 60;
-
+   var isAgree=false.obs;
   late final textControllerPhone = TextEditingController();
   late final textControllerOtp = TextEditingController();
 
@@ -194,9 +194,10 @@ class LoginController extends GetxController {
   }
 
   void verifyOtp() async {
-    busy(true);
-    try {
-      if (textControllerOtp.text.isNotEmpty &&
+  try {
+      if(isAgree.value){
+           busy(true); 
+           if (textControllerOtp.text.isNotEmpty &&
           textControllerOtp.text.length == 4) {
         final response = await _authRepository.verifyOtp(
             phone.value, textControllerOtp.text);
@@ -228,6 +229,10 @@ class LoginController extends GetxController {
         AppDialog.showSnackBar('Invalid OTP', 'Please enter a valid OTP');
         busy(false);
       }
+      }else{
+         AppDialog.showSnackBar('Error', "You must agree to the terms and conditions to proceed.");
+      }
+   
     } catch (e) {
       print("the error is here$e");
       busy(false);

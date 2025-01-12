@@ -53,79 +53,83 @@ class _AddMembersScreenState extends State<AddMembersScreen> {
 ;                        })
                     ],
                   ),
-                  Expanded(
-                    child: _controller.filterContacts.isEmpty
-            ?const  Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 10.h,),
-                          Padding(
-                            padding:  EdgeInsets.symmetric(horizontal: marginWidth),
-                            child: greyBoldText("Contacts on Info91"),
-                          ),
-                           SizedBox(height: 10.h,),
-                          ListView.builder(physics:   const ScrollPhysics() ,
-                          padding: EdgeInsets.zero,
-                            itemCount: _controller.existingContacts.length,
-
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              final contact = _controller.existingContacts[index];
-                         
-                          
-                              return ContactListCard(
-                                avatar: Uint8List(0),
-                                isInactive: contact.existGoup??false,
-                                contactName: contact.displayName ?? '',
-                                subtitle: contact.existGoup==true?"All ready added to the group":contact.about,
-                                value: _controller.selectedContacts.contains(contact),
-                                onCange: () {
-                                  _controller.toggleContactSelection(contact);
-                                  if (_controller.controller.text.isNotEmpty) {
-                                  _controller.controller.clear();
-                                    _controller.filterContactsFunc();
-                                  }
-                                 
+                  Obx(
+                     () {
+                      return Expanded(
+                        child: _controller.isLoading.value
+                                  ?const  Center(child: CircularProgressIndicator())
+                                  : SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 10.h,),
+                              Padding(
+                                padding:  EdgeInsets.symmetric(horizontal: marginWidth),
+                                child: greyBoldText("Contacts on Info91"),
+                              ),
+                               SizedBox(height: 10.h,),
+                              ListView.builder(physics:   const ScrollPhysics() ,
+                              padding: EdgeInsets.zero,
+                                itemCount: _controller.existingContacts.length,
+                      
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  final contact = _controller.existingContacts[index];
+                             
+                              
+                                  return ContactListCard(
+                                    avatar: Uint8List(0),
+                                    isInactive: contact.existGoup??false,
+                                    contactName: contact.displayName ?? '',
+                                    subtitle: contact.existGoup==true?"All ready added to the group":contact.about,
+                                    value: _controller.selectedContacts.contains(contact),
+                                    onCange: () {
+                                      _controller.toggleContactSelection(contact);
+                                      if (_controller.controller.text.isNotEmpty) {
+                                      _controller.controller.clear();
+                                        _controller.filterContactsFunc();
+                                      }
+                                     
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                           
-                          ),    SizedBox(height: 10.h,),
-                          Padding(
-                            padding:  EdgeInsets.symmetric(horizontal: marginWidth),
-                            child: greyBoldText("Invite to Info91"),
-                          ),
-                           SizedBox(height: 10.h,),
-                             ListView.separated(physics:   const ScrollPhysics() ,
-                          padding: EdgeInsets.zero,
-                            itemCount: _controller.nonexistingContacts.length,
-
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              final contact = _controller.nonexistingContacts[index];
-                          
-                              return ContactListCard(
-                                avatar: Uint8List(0),
-                                contactName: contact.displayName ?? '',
-                                value: _controller.selectedContacts.contains(contact),
-                                leadingWidget:const SizedBox(),
-                                onCange: () {
-                                  // _controller.toggleContactSelection(contact);
-                                  // if (_controller.controller.text.isNotEmpty) {
-                                  // _controller.controller.clear();
-                                  //   _controller.filterContactsFunc();
-                                  // }
-                                 
+                               
+                              ),    SizedBox(height: 10.h,),
+                              Padding(
+                                padding:  EdgeInsets.symmetric(horizontal: marginWidth),
+                                child: greyBoldText("Invite to Info91"),
+                              ),
+                               SizedBox(height: 10.h,),
+                                 ListView.separated(physics:   const ScrollPhysics() ,
+                              padding: EdgeInsets.zero,
+                                itemCount: _controller.nonexistingContacts.length,
+                      
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  final contact = _controller.nonexistingContacts[index];
+                              
+                                  return ContactListCard(
+                                    avatar: Uint8List(0),
+                                    contactName: contact.displayName ?? '',
+                                    value: _controller.selectedContacts.contains(contact),
+                                    leadingWidget:const SizedBox(),
+                                    onCange: () {
+                                      // _controller.toggleContactSelection(contact);
+                                      // if (_controller.controller.text.isNotEmpty) {
+                                      // _controller.controller.clear();
+                                      //   _controller.filterContactsFunc();
+                                      // }
+                                     
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                            separatorBuilder: (context, index) => customDivider(),
-                          ),    SizedBox(height: 10.h,),
-                        ],
-                      ),
-                    ),
+                                separatorBuilder: (context, index) => customDivider(),
+                              ),    SizedBox(height: 10.h,),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
                   ),
                   if (_controller.selectedContacts.isNotEmpty)
                     Container(

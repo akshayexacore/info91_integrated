@@ -1,9 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:info91/src/configs/app_styles.dart';
+import 'package:info91/src/modules/auth/login/privacy_policy.dart';
+import 'package:info91/src/modules/auth/login/terms_and%20_privacy_policy.dart';
 import 'package:info91/src/widgets/tiny/app_button.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:pinput/pinput.dart';
 // import 'package:pinput/pinput.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
@@ -25,13 +29,13 @@ class _OtpPageState extends State<OtpPage> {
   @override
   void initState() {
     super.initState();
-   
+
     _smsAutoFill = SmsAutoFill();
-     requestSmsPermission();
+    requestSmsPermission();
     listenForOtp();
   }
 
- Future<void> requestSmsPermission() async {
+  Future<void> requestSmsPermission() async {
     var status = await Permission.sms.request();
     if (status.isGranted) {
       print("SMS permission granted.");
@@ -42,14 +46,15 @@ class _OtpPageState extends State<OtpPage> {
     }
   }
 
-   void codeUpdated(String code) {
+  void codeUpdated(String code) {
     print("Code received: $code");
     setState(() {
-      _loginController.textControllerOtp.text = code; 
+      _loginController.textControllerOtp.text = code;
       // Update the OTP TextField
     });
   }
-   void listenForOtp() async {
+
+  void listenForOtp() async {
     try {
       await _smsAutoFill.listenForCode();
       print("Started listening for OTP code.");
@@ -105,51 +110,126 @@ class _OtpPageState extends State<OtpPage> {
                   const SizedBox(
                     height: AppSpacings.medium,
                   ),
-                  // Pinput(
-                  //   defaultPinTheme: PinTheme(
-                  //     width: 55,
-                  //     height: 55,
-                  //     textStyle: AppTextStyles.inputText,
-                  //     decoration: BoxDecoration(
-                  //         border: Border.all(color: AppColors.border, width: 1),
-                  //         borderRadius: BorderRadius.circular(AppRadii.small),
-                  //         color: AppColors.white),
-                  //   ),
-                  //   pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                  //   showCursor: true,
-                  //   length: 4,
-                  //   androidSmsAutofillMethod:
-                  //       AndroidSmsAutofillMethod.smsRetrieverApi,
-                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //   controller: _loginController.textControllerOtp,
-                  //   onChanged: (pin) {
-                  //     _loginController.isOtpValid(pin.length == 6);
-                  //   },
-                  // ),
-                  PinFieldAutoFill(
-                    controller: _loginController.textControllerOtp,
-                    codeLength: 4,
-                    onCodeChanged: (pin) {
-                      _loginController.isOtpValid(
-                          pin?.length == 4); // Check if OTP length is valid
-                    },
-                    decoration: BoxLooseDecoration(
-                      textStyle: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.black,
-                      ),
-                      strokeColorBuilder: PinListenColorBuilder(
-                        Colors.grey, // Color when not focused
-                        Colors.blue, // Color when focused
-                      ),
-                      gapSpace: 10.0,
-                      // pinTextStyle: TextStyle(
-                      //   fontSize: 20.0,
-                      //   color: Colors.black,
-                      // ),
+                  Pinput(
+                    defaultPinTheme: PinTheme(
+                      width: 55,
+                      height: 55,
+                      textStyle: AppTextStyles.inputText,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.border, width: 1),
+                          borderRadius: BorderRadius.circular(AppRadii.small),
+                          color: AppColors.white),
                     ),
+                    pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                    showCursor: true,
+                    length: 4,
+                    androidSmsAutofillMethod:
+                        AndroidSmsAutofillMethod.smsRetrieverApi,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    controller: _loginController.textControllerOtp,
+                    onChanged: (pin) {
+                      _loginController.isOtpValid(pin.length == 6);
+                    },
                   ),
-               Spacer(),
+                  const SizedBox(
+                    height: AppSpacings.medium,
+                  ),
+                  Column(mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                         Obx(() {
+                              return Checkbox(
+                                
+                                value: _loginController.isAgree.value,
+                                activeColor: AppColors.primary,
+                                side: BorderSide( color: _loginController.isAgree.value ? AppColors.primary : Colors.grey, width: 1.5, ),
+                                onChanged: (value) {
+                                 _loginController.isAgree.value=!_loginController.isAgree.value;
+                                },
+                              );
+                            }
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text.rich(
+                                  textAlign: TextAlign.start,
+                                  TextSpan(
+                                    text: "I agree to the ",
+                                    style: AppTextStyles.app14N.copyWith(
+                                      fontSize: 14.sp
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: "Terms and Conditions",
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            Get.to(const TermsAndPrivacy());
+                                          },
+                                        style: AppTextStyles.app12SB.copyWith(
+                                          color: Color(0xff5573D8),
+                                          fontSize: 14.sp,
+                                          // decoration: TextDecoration.underline,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                       TextSpan(
+                                        text: " & ",
+                                        style: AppTextStyles.app12SB.copyWith(
+                                          color: Color(0xff5573D8),
+                                          fontSize: 14.sp,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "Privacy policy",
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            Get.to(const PrivacyPolicy());
+                                          },
+                                        style: AppTextStyles.app12SB.copyWith(
+                                          color: Color(0xff5573D8),
+                                          fontSize: 14.sp,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  // PinFieldAutoFill(
+                  //   controller: _loginController.textControllerOtp,
+                  //   codeLength: 4,
+                  //   onCodeChanged: (pin) {
+                  //     _loginController.isOtpValid(
+                  //         pin?.length == 4); // Check if OTP length is valid
+                  //   },
+                  //   decoration: BoxLooseDecoration(
+                  //     textStyle: TextStyle(
+                  //       fontSize: 20.0,
+                  //       color: Colors.black,
+                  //     ),
+                  //     strokeColorBuilder: PinListenColorBuilder(
+                  //       Colors.grey, // Color when not focused
+                  //       Colors.blue, // Color when focused
+                  //     ),
+                  //     gapSpace: 10.0,
+                  //     // pinTextStyle: TextStyle(
+                  //     //   fontSize: 20.0,
+                  //     //   color: Colors.black,
+                  //     // ),
+                  //   ),
+                  // ),
+                  Spacer(),
                   const SizedBox(
                     height: 10,
                   ),

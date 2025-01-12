@@ -12,7 +12,7 @@ class AddmemberController extends GetxController {
   var nonexistingContacts = <ContactAddGroupModel>[].obs;
   TextEditingController controller = TextEditingController();
   String selectedGroupId = "";
-
+var isLoading=false.obs;
   @override
   void onInit() {
     if (Get.arguments != null) {
@@ -29,17 +29,24 @@ class AddmemberController extends GetxController {
 
   Future<void> fetchInfo91Contacts() async {
     try {
+      isLoading.value=true;
       final response = await _infromationRepository.fetchInfo91Contacts(
         selectedGroupId,
       );
+      print("the response is here${response}");
       if (response != null) {
+        isLoading.value=false;
         filterContacts.value = response;
-        existingContacts.value =
-            filterContacts.where((contact) => contact.exists == true).toList();
-        nonexistingContacts.value =
-            filterContacts.where((contact) => contact.exists == false).toList();
+     for (var contact in filterContacts) {
+  if (contact.exists == true) {
+    existingContacts.value.add(contact);
+  } else {
+    nonexistingContacts.value.add(contact);
+  }
+}
       }
     } catch (e) {
+      isLoading.value=false;
       print('Error fetching contacts: $e');
     }
   }
