@@ -180,7 +180,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       chatController.selectedGroupId = widget.selectedGroupId ?? "";
     }
     chatController.isLoading.value = true;
-    // chatController.startFetchingChats();
+    chatController.startFetchingChats();
   }
 
   String formatMessageTimestamp(DateTime timestamp, int index) {
@@ -1007,6 +1007,7 @@ Expanded(
                 },
               ),
               Obx(() => IconButton(
+<<<<<<< HEAD
                     icon: !chatController.isTextFieldEmpty.value ||
                             chatController.isRecording.value
                         ? Icon(
@@ -1015,16 +1016,32 @@ Expanded(
                             size: 24.sp,
                           )
                         : Icon(
+=======
+                    icon: !chatController.isTextFieldEmpty.value ||chatController.isRecording.value
+                        ?Icon(
+                            Icons.send,
+                            color: AppColors.primary,
+                            size: 24.sp,
+                          ): Icon(
+>>>>>>> 1899b4d (before using websocket)
                             Icons.photo_camera_outlined,
                             color: AppColors.primary,
                             size: 24.sp,
                           ),
+<<<<<<< HEAD
                     onPressed: () async {
                       chatController.isRecording.value
                           ? _onRelease()
                           : chatController.isTextFieldEmpty.value
                               ? filePickerHelper.pickFiles("image", context, "")
                               : onSend();
+=======
+                      
+                    onPressed: ()async {
+                chatController.isRecording.value?_onRelease():      chatController.isTextFieldEmpty.value
+                          ? filePickerHelper.pickFiles("image", context, "")
+                          : onSend();
+>>>>>>> 1899b4d (before using websocket)
                       chatController
                           .checkTextFieldEmpty(controller.text.trim());
                     },
@@ -1035,6 +1052,7 @@ Expanded(
       ],
     );
   }
+<<<<<<< HEAD
 
   void _onRelease() async {
     if (chatController.isRecording.value) {
@@ -1046,6 +1064,19 @@ Expanded(
         chatController.fileUpload(chatController.filePath.value, "audio");
       }
     }
+=======
+  void _onRelease() async {
+     if (chatController.isRecording.value) {
+                    final String? path = await _recorder.stop();
+                    if (path != null) {
+                      chatController.isRecording.value = false;
+                      chatController.filePath.value = path;
+                      chatController.stopRecordingTimer();
+                      chatController.fileUpload(
+                          chatController.filePath.value, "audio");
+                    }
+                  }
+>>>>>>> 1899b4d (before using websocket)
   }
 }
 
