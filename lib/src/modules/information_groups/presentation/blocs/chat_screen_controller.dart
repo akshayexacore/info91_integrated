@@ -13,6 +13,7 @@ import 'package:info91/src/models/informationgroup/chat_model.dart';
 import 'package:info91/src/models/informationgroup/group_profile.dart';
 import 'package:info91/src/modules/chat_info/chat_info_page.dart';
 import 'package:info91/src/modules/forward/forward_page.dart';
+import 'package:info91/src/modules/information_groups/presentation/blocs/websocket_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/pages/chat_screen/info_group_chat_screen.dart';
 import 'package:info91/src/resources/infromation_repository.dart';
 import 'package:info91/src/widgets/custom/app_dialog.dart';
@@ -33,7 +34,7 @@ class ChatScreenController extends GetxController {
   String selectedGroupId = '';
   final _infromationRepository = InfromationRepository();
   get selectedMoreThanOne => selectedMessage.length != 1;
-
+final WebSocketController _webSocketController = Get.find();
   var isRecording = false.obs;
   var isDragging = false.obs;
   var isDelete = false.obs;
@@ -45,215 +46,7 @@ class ChatScreenController extends GetxController {
   Timer? _recordingTimer;
 
   List<Map<String, dynamic>> messagesData = [
-    {
-      "message_id": "20241107140957348901b9",
-      "user_id": "31",
-      "type": "text",
-      "message": "vh",
-      "message_status": "send",
-      "created_at": "2024-11-07 14:09:57",
-      "reply_flag": false,
-      "reaction_flag": false,
-      "image":
-          "https://info91.co.in/public/profile_pic/31_1730007041_image_cropper_1730007004159.jpg",
-      "phone_number": "9567441600",
-      "name": "Akshay",
-      "reply_user_id": null,
-      "reply_type": null,
-      "reply_user_name": null,
-      "reply_user_phone_number": null,
-      "contact_list": [],
-      "date": "2024-11-07",
-      "time": "02:09 PM",
-      "is_me": true,
-      "filesize": null,
-      "filename": null,
-      "filetype": null,
-      "filepages": 0,
-      "reply_details": {
-        "message_id": null,
-        "message": null,
-        "type": null,
-        "user_id": null,
-        "name": null,
-        "phone_number": null,
-        "reply_is_me": false
-      }
-    },
-    {
-      "message_id": "2024110709320493135299",
-      "user_id": "31",
-      "type": "image",
-      "message": "https://info91.co.in/public/upload_files/1730952124_31.jpg",
-      "message_status": "send",
-      "created_at": "2024-11-07 09:32:04",
-      "reply_flag": false,
-      "reaction_flag": false,
-      "image":
-          "https://info91.co.in/public/profile_pic/31_1730007041_image_cropper_1730007004159.jpg",
-      "phone_number": "9567441600",
-      "name": "Akshay",
-      "reply_user_id": null,
-      "reply_type": null,
-      "reply_user_name": null,
-      "reply_user_phone_number": null,
-      "contact_list": [],
-      "date": "2024-11-07",
-      "time": "09:32 AM",
-      "is_me": true,
-      "filesize": "0.02 MB",
-      "filename": "1730952124_31.jpg",
-      "filetype": "jpg",
-      "filepages": 0,
-      "reply_details": {
-        "message_id": null,
-        "message": null,
-        "type": null,
-        "user_id": null,
-        "name": null,
-        "phone_number": null,
-        "reply_is_me": false
-      }
-    },
-    {
-      "message_id": "2024110709314983467050",
-      "user_id": "31",
-      "type": "text",
-      "message": "hhh",
-      "message_status": "send",
-      "created_at": "2024-11-07 09:31:49",
-      "reply_flag": false,
-      "reaction_flag": false,
-      "image":
-          "https://info91.co.in/public/profile_pic/31_1730007041_image_cropper_1730007004159.jpg",
-      "phone_number": "9567441600",
-      "name": "Akshay",
-      "reply_user_id": null,
-      "reply_type": null,
-      "reply_user_name": null,
-      "reply_user_phone_number": null,
-      "contact_list": [],
-      "date": "2024-11-07",
-      "time": "09:31 AM",
-      "is_me": true,
-      "filesize": null,
-      "filename": null,
-      "filetype": null,
-      "filepages": 0,
-      "reply_details": {
-        "message_id": null,
-        "message": null,
-        "type": null,
-        "user_id": null,
-        "name": null,
-        "phone_number": null,
-        "reply_is_me": false
-      }
-    },
-    {
-      "message_id": "20241107093145178070bd",
-      "user_id": "31",
-      "type": "text",
-      "message": "hello",
-      "message_status": "send",
-      "created_at": "2024-11-07 09:31:45",
-      "reply_flag": false,
-      "reaction_flag": false,
-      "image":
-          "https://info91.co.in/public/profile_pic/31_1730007041_image_cropper_1730007004159.jpg",
-      "phone_number": "9567441600",
-      "name": "Akshay",
-      "reply_user_id": null,
-      "reply_type": null,
-      "reply_user_name": null,
-      "reply_user_phone_number": null,
-      "contact_list": [],
-      "date": "2024-11-07",
-      "time": "09:31 AM",
-      "is_me": true,
-      "filesize": null,
-      "filename": null,
-      "filetype": null,
-      "filepages": 0,
-      "reply_details": {
-        "message_id": null,
-        "message": null,
-        "type": null,
-        "user_id": null,
-        "name": null,
-        "phone_number": null,
-        "reply_is_me": false
-      }
-    },
-    {
-      "message_id": "2024110214155447420bb",
-      "user_id": "47",
-      "type": "text",
-      "message": "tata bye bye",
-      "message_status": "send",
-      "created_at": "2024-11-02 02:45:55",
-      "reply_flag": false,
-      "reaction_flag": false,
-      "image": "https://info91.co.in/public/profile_pic/47_1729923603_2.png",
-      "phone_number": "9633719888",
-      "name": "Sandeep",
-      "reply_user_id": null,
-      "reply_type": null,
-      "reply_user_name": null,
-      "reply_user_phone_number": null,
-      "contact_list": [],
-      "date": "2024-11-02",
-      "time": "02:45 AM",
-      "is_me": false,
-      "filesize": null,
-      "filename": null,
-      "filetype": null,
-      "filepages": 0,
-      "reply_details": {
-        "message_id": null,
-        "message": null,
-        "type": null,
-        "user_id": null,
-        "name": null,
-        "phone_number": null,
-        "reply_is_me": false
-      }
-    },
-    {
-      "message_id": "20241102131450486602f3",
-      "user_id": "31",
-      "type": "text",
-      "message": "Muthumani",
-      "message_status": "send",
-      "created_at": "2024-11-02 02:44:50",
-      "reply_flag": false,
-      "reaction_flag": false,
-      "image":
-          "https://info91.co.in/public/profile_pic/31_1730007041_image_cropper_1730007004159.jpg",
-      "phone_number": "9567441600",
-      "name": "Akshay",
-      "reply_user_id": null,
-      "reply_type": null,
-      "reply_user_name": null,
-      "reply_user_phone_number": null,
-      "contact_list": [],
-      "date": "2024-11-02",
-      "time": "02:44 AM",
-      "is_me": true,
-      "filesize": null,
-      "filename": null,
-      "filetype": null,
-      "filepages": 0,
-      "reply_details": {
-        "message_id": null,
-        "message": null,
-        "type": null,
-        "user_id": null,
-        "name": null,
-        "phone_number": null,
-        "reply_is_me": false
-      }
-    },
+    
   ];
 
   RxList<ChatMessage> messages = <ChatMessage>[].obs;
@@ -317,7 +110,7 @@ class ChatScreenController extends GetxController {
 
   void startFetchingChats() {
     chatFetchTimer = Timer.periodic(
-      Duration(microseconds
+      Duration(seconds
       : fetchIntervalSeconds),
       (_) =>
       viewMessage(),

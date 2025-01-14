@@ -4,8 +4,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import 'package:info91/firebase_options.dart';
+import 'package:info91/src/modules/information_groups/presentation/blocs/websocket_controller.dart';
 
 import 'package:sms_autofill/sms_autofill.dart';
 
@@ -23,7 +25,8 @@ void main() async {
   FirebaseMessaging.instance.subscribeToTopic("all");
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   //  await FirebaseApi().initNotification();
-
+final WebSocketController webSocketController = Get.put(WebSocketController()); 
+// webSocketController.connect('wss://info91.exacore.co.in:6001');
   SmsAutoFill().listenForCode;
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

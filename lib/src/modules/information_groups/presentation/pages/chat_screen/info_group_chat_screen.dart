@@ -111,7 +111,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       chatController.selectedGroupId = widget.selectedGroupId ?? "";
     }
     chatController.isLoading.value = true;
-    // chatController.startFetchingChats();
+    chatController.startFetchingChats();
   }
 
   String formatMessageTimestamp(DateTime timestamp, int index) {
@@ -890,34 +890,34 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   }
                 },
                 onLongPressEnd: () async {
-                  debugPrint(
-                      "recording end${chatController.isRecording.value}");
-                  if (chatController.isRecording.value) {
-                    final String? path = await _recorder.stop();
-                    if (path != null) {
-                      chatController.isRecording.value = false;
-                      chatController.filePath.value = path;
-                      chatController.stopRecordingTimer();
-                      chatController.fileUpload(
-                          chatController.filePath.value, "audio");
-                    }
-                  }
+                  // debugPrint(
+                  //     "recording end${chatController.isRecording.value}");
+                  // if (chatController.isRecording.value) {
+                  //   final String? path = await _recorder.stop();
+                  //   if (path != null) {
+                  //     chatController.isRecording.value = false;
+                  //     chatController.filePath.value = path;
+                  //     chatController.stopRecordingTimer();
+                  //     chatController.fileUpload(
+                  //         chatController.filePath.value, "audio");
+                  //   }
+                  // }
                 },
               ),
               Obx(() => IconButton(
-                    icon: chatController.isTextFieldEmpty.value
-                        ? Icon(
-                            Icons.photo_camera_outlined,
-                            color: AppColors.primary,
-                            size: 24.sp,
-                          )
-                        : Icon(
+                    icon: !chatController.isTextFieldEmpty.value ||chatController.isRecording.value
+                        ?Icon(
                             Icons.send,
                             color: AppColors.primary,
                             size: 24.sp,
+                          ): Icon(
+                            Icons.photo_camera_outlined,
+                            color: AppColors.primary,
+                            size: 24.sp,
                           ),
-                    onPressed: () {
-                      chatController.isTextFieldEmpty.value
+                      
+                    onPressed: ()async {
+                chatController.isRecording.value?_onRelease():      chatController.isTextFieldEmpty.value
                           ? filePickerHelper.pickFiles("image", context, "")
                           : onSend();
                       chatController
@@ -929,6 +929,18 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         ),
       ],
     );
+  }
+  void _onRelease() async {
+     if (chatController.isRecording.value) {
+                    final String? path = await _recorder.stop();
+                    if (path != null) {
+                      chatController.isRecording.value = false;
+                      chatController.filePath.value = path;
+                      chatController.stopRecordingTimer();
+                      chatController.fileUpload(
+                          chatController.filePath.value, "audio");
+                    }
+                  }
   }
 }
 

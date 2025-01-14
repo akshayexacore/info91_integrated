@@ -11,6 +11,7 @@ import 'package:info91/src/modules/information_groups/presentation/widgets/custo
 
 import 'package:info91/src/widgets/custom/custom_common_appbar.dart';
 import 'package:info91/src/widgets/custom/custom_divider.dart';
+import 'package:info91/src/widgets/tiny/app_button.dart';
 
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -125,20 +126,39 @@ class _InfoGroupChatListScreen extends State<InfoGroupChatListScreen> {
               // setState(() {});
             },
             actionWidget: [
-              CustomPopupmenu(
-                onSelected: (val) {
-                  if (val == 1) {
-                    // Get.off(InformGroupCreationScreen);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const InformGroupCreationScreen(),
-                        )).then((value) {
-                      controller.grtInfoGroupList();
-                    });
-                  }
-                },
-                itemList: [popupMenuModel(name: "Create group", value: 1)],
+              Obx(
+                () {
+                  return controller.toggleValue.value == 1?
+                  customTextButton("Create Group",
+                fontSize: 12.sp,
+                   onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const InformGroupCreationScreen(),
+                            )).then((value) {
+                          controller.grtInfoGroupList();
+                        });
+                  }): CustomPopupmenu(
+                    iconWidget:Icon(
+                            Icons.more_vert,
+                            color: AppColors.white,
+                    ),
+                    onSelected: (val) {
+                      if (val == 1) {
+                        // Get.off(InformGroupCreationScreen);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const InformGroupCreationScreen(),
+                            )).then((value) {
+                          controller.grtInfoGroupList();
+                        });
+                      }
+                    },
+                    itemList: [popupMenuModel(name: "Create group", value: 1)],
+                  );
+                }
               )
             ],
           );

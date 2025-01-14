@@ -70,7 +70,7 @@ class AppButton extends StatelessWidget {
     );
   }
 }
-TextButton customTextButton(String buttonName, {required Function onTap,Color? clr,TextStyle? style}) =>
+TextButton customTextButton(String buttonName, {required Function onTap,Color? clr,TextStyle? style,  double? fontSize}) =>
     TextButton(
         onPressed:(){onTap();} ,
         child: Text(
@@ -78,5 +78,5 @@ TextButton customTextButton(String buttonName, {required Function onTap,Color? c
           style: style??GoogleFonts.poppins(
               fontWeight: FontWeight.bold,
               color:clr?? AppColors.white,
-              fontSize: 15.sp),
+              fontSize:fontSize?? 15.sp),
         ));
