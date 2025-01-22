@@ -1,6 +1,6 @@
 class AppConfig {
-  static const String baseUrl = 'http://info91.co.in';
-  static const String baseUrlStaging = 'http://info91.exacore.co.in';
+  // static const String baseUrl = 'http://info91.co.in';
+  static const String baseUrl = 'http://info91.exacore.co.in';
 
   static const String baseApiUrl = '$baseUrl/api';
   static const Map<String, String> headers = {

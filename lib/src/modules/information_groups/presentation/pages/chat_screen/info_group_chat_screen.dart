@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 
@@ -34,6 +36,8 @@ import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:record/record.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatScreen extends StatefulWidget {
   final String? selectedGroupId;
@@ -59,13 +63,19 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   Duration _audioDuration = Duration.zero;
   Duration _currentPosition = Duration.zero;
+  late WebSocketChannel _channel;
+  final TextEditingController _messageController = TextEditingController();
+  List<Map<String, dynamic>> _messages = [];
+  bool _isConnected = false;
 
   GroupProfileModel model = GroupProfileModel();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+      _connectWebSocket();
     getProfileData();
+  
 
     // this for to get contact litinitial,to avoid lag
     searchFocusnOde.addListener(() {
@@ -99,6 +109,65 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     });
   }
 
+  void _connectWebSocket() {
+    try {
+
+ _channel = WebSocketChannel.connect(
+  Uri.parse('wss://info91.exacore.co.in:6001/app/ee05afa2c6beccb3299f?protocol=7&client=js&version=4.4.0&flash=false'),
+);
+      // _channel = IOWebSocketChannel.connect(
+      //   Uri.parse('wss://info91.exacore.co.in:6001'),
+      // );
+
+      // _channel.stream.listen(
+      //   (event) {
+      //     print("Received event: $event");
+      //     final data = jsonDecode(event);
+      //     if (data.containsKey('message') && data.containsKey('senderId')) {
+      //       setState(() {
+      //         // _messages.add(data);
+      //       });
+      //     } else {
+      //       print("Invalid message format: $data");
+      //     }
+      //   },
+      //   onDone: () {
+      //     print("WebSocket closed.");
+      //     setState(() {
+      //       _isConnected = false;
+      //     });
+      //     _reconnectWebSocket();
+      //   },
+      //   onError: (error) {
+      //     print("WebSocket error: $error");
+      //     setState(() {
+      //       _isConnected = false;
+      //     });
+      //     _reconnectWebSocket();
+      //   },
+      // );
+
+      setState(() {
+        _isConnected = true;
+      });
+    } catch (e) {
+      print("WebSocket connection failed: $e");
+      setState(() {
+        _isConnected = false;
+      });
+      _reconnectWebSocket();
+    }
+  }
+
+  void _reconnectWebSocket() {
+    Future.delayed(Duration(seconds: 5), () {
+      if (!_isConnected) {
+        print("Reconnecting WebSocket...");
+        _connectWebSocket();
+      }
+    });
+  }
+
   getProfileData() async {
     chatController.addMessages();
     if (widget.model == null) {
@@ -111,7 +180,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       chatController.selectedGroupId = widget.selectedGroupId ?? "";
     }
     chatController.isLoading.value = true;
-    chatController.startFetchingChats();
+    // chatController.startFetchingChats();
   }
 
   String formatMessageTimestamp(DateTime timestamp, int index) {
@@ -242,162 +311,181 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                             chatController.selectedMessage.length.toString()),
               ),
 
-              Expanded(
-                child: Obx(() {
-                  debugPrint(chatController.messages.isEmpty.toString());
-                  return chatController.isLoading.value
-                      ? const Center(child: CircularProgressIndicator())
-                      : GroupedList<ChatMessage, DateTime>(
-                          controller: chatController.scrollController,
-                          elements: chatController.messages,
-                          groupBy: (element) {
-                            print("searching date${element.date}");
-                            return DateTime.parse(element.date ?? "");
-                          },
+Expanded(
+  child: StreamBuilder(
+    stream: _channel.stream,
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      }
+      if (snapshot.hasError) {
+        return Center(child: Text('Connection error: ${snapshot.error}'));
+      }
+      if (snapshot.hasData) {
+        final data = json.decode(snapshot.data);
+        // Process data and update UI
+      }
+      return Center(child: Text('No data received.'));
+    },
+  ),
+)
+,
 
-                          // element.date,
+              // Expanded(
+              //   child: Obx(() {
+              //     debugPrint(chatController.messages.isEmpty.toString());
+              //     return chatController.isLoading.value
+              //         ? const Center(child: CircularProgressIndicator())
+              //         : GroupedList<ChatMessage, DateTime>(
+              //             controller: chatController.scrollController,
+              //             elements: chatController.messages,
+              //             groupBy: (element) {
+              //               print("searching date${element.date}");
+              //               return DateTime.parse(element.date ?? "");
+              //             },
 
-                          groupComparator: (value1, value2) =>
-                              value1.compareTo(value2),
-                          groupHeaderBuilder: (index) => Column(
-                                children: [
-                                  const SizedBox(
-                                    height: AppSpacings.small10,
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: AppColors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: AppPaddings.xSmall,
-                                      vertical: AppPaddings.xxxSmall4,
-                                    ),
-                                    child: Text(
-                                      AppFormatter.isCurrentDate(chatController
-                                                  .messages[index].date ??
-                                              "")
-                                          ? "Today"
-                                          : chatController
-                                                  .messages[index].date ??
-                                              "",
-                                      // DateFormat("MMM dd, yyyy").format(
-                                      //     chatController.messages[index].dateTime),
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: AppSpacings.small10,
-                                  ),
-                                ],
-                              ),
-                          indexedItemBuilder: (context, index) {
-                            debugPrint(
-                                "chatController.messages[index]${chatController.messages[index].message}$index");
-                            final message = chatController.messages[index];
-                            bool isMe = message.isMe ?? false;
-                            msgdate = message.date ?? "";
-                            // formatMessageTimestamp(message.dateTime, index);
-                            bool isSameUser =
-                                index + 1 <= chatController.messages.length - 1
-                                    ? message.userId !=
-                                            chatController
-                                                .messages[index + 1].userId
-                                        ? false
-                                        : true
-                                    : false;
+              //             // element.date,
 
-                            return LayoutBuilder(
-                                builder: (context, constraints) {
-                              return InkWell(
-                                highlightColor: AppColors.transparent,
-                                splashColor: AppColors.transparent,
-                                onTap: () {
-                                  print(
-                                      "message.isReplay${!chatController.checkSelcetionExist()}");
+              //             groupComparator: (value1, value2) =>
+              //                 value1.compareTo(value2),
+              //             groupHeaderBuilder: (index) => Column(
+              //                   children: [
+              //                     const SizedBox(
+              //                       height: AppSpacings.small10,
+              //                     ),
+              //                     Container(
+              //                       decoration: BoxDecoration(
+              //                           color: AppColors.white,
+              //                           borderRadius:
+              //                               BorderRadius.circular(20)),
+              //                       padding: const EdgeInsets.symmetric(
+              //                         horizontal: AppPaddings.xSmall,
+              //                         vertical: AppPaddings.xxxSmall4,
+              //                       ),
+              //                       child: Text(
+              //                         AppFormatter.isCurrentDate(chatController
+              //                                     .messages[index].date ??
+              //                                 "")
+              //                             ? "Today"
+              //                             : chatController
+              //                                     .messages[index].date ??
+              //                                 "",
+              //                         // DateFormat("MMM dd, yyyy").format(
+              //                         //     chatController.messages[index].dateTime),
+              //                         style: const TextStyle(
+              //                           fontSize: 10,
+              //                           color: AppColors.primary,
+              //                         ),
+              //                       ),
+              //                     ),
+              //                     const SizedBox(
+              //                       height: AppSpacings.small10,
+              //                     ),
+              //                   ],
+              //                 ),
+              //             indexedItemBuilder: (context, index) {
+              //               debugPrint(
+              //                   "chatController.messages[index]${chatController.messages[index].message}$index");
+              //               final message = chatController.messages[index];
+              //               bool isMe = message.isMe ?? false;
+              //               msgdate = message.date ?? "";
+              //               // formatMessageTimestamp(message.dateTime, index);
+              //               bool isSameUser =
+              //                   index + 1 <= chatController.messages.length - 1
+              //                       ? message.userId !=
+              //                               chatController
+              //                                   .messages[index + 1].userId
+              //                           ? false
+              //                           : true
+              //                       : false;
 
-                                  if (!chatController.checkSelcetionExist()) {
-                                    if (message.reactionFlag == true) {
-                                      chatController.scrollToMessage(
-                                          message.replyDetails?.messageId ??
-                                              "0");
-                                    }
-                                  } else {
-                                    chatController.messageOntapfunction(index,
-                                        isOntap: true);
-                                  }
-                                },
-                                onLongPress: () {
-                                  var position;
-                                  RenderBox? box =
-                                      context.findRenderObject() as RenderBox?;
-                                  if (box != null) {
-                                    position = box.localToGlobal(Offset.zero);
-                                  }
-                                  chatController.messageOntapfunction(index,
-                                      position: position);
-                                },
-                                child: Stack(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: isMe
-                                          ? MainAxisAlignment.end
-                                          : MainAxisAlignment.start,
-                                      children: [
-                                        if (message.type == "image" &&
-                                            isSameUser)
-                                          buildOption('ic_forward.svg',
-                                              iconClr: AppColors.primary,
-                                              Paddings: EdgeInsets.zero,
-                                              onPressed: () {
-                                            chatController
-                                                .onMediaForward([message]);
-                                          }),
-                                        Align(
-                                            alignment: isMe
-                                                ? Alignment.centerRight
-                                                : Alignment.centerLeft,
-                                            child: Skeletonizer(
-                                              enabled: false,
-                                              child: BuildMessageWidget(
-                                                messageModel: message,
-                                                isSameUser: isSameUser,
-                                                groupId: chatController
-                                                    .selectedGroupId,
-                                              ),
-                                            )),
-                                              if (message.type == "image" &&
-                                            !isSameUser)
-                                          buildOption('ic_forward.svg',
-                                              iconClr: AppColors.primary,
-                                              Paddings: EdgeInsets.zero,
-                                              onPressed: () {
-                                            chatController
-                                                .onMediaForward([message]);
-                                          }),
-                                            
-                                      ],
-                                    ),
-                                    if (chatController.selectedMessage.any(
-                                        (contact) =>
-                                            contact.messageId ==
-                                            chatController
-                                                .messages[index].messageId))
-                                      Positioned.fill(
-                                        child: Container(
-                                            color: AppColors.primary
-                                                .withOpacity(0.1)),
-                                      )
-                                  ],
-                                ),
-                              );
-                            });
-                          });
-                }),
-              ),
+              //               return LayoutBuilder(
+              //                   builder: (context, constraints) {
+              //                 return InkWell(
+              //                   highlightColor: AppColors.transparent,
+              //                   splashColor: AppColors.transparent,
+              //                   onTap: () {
+              //                     print(
+              //                         "message.isReplay${!chatController.checkSelcetionExist()}");
+
+              //                     if (!chatController.checkSelcetionExist()) {
+              //                       if (message.reactionFlag == true) {
+              //                         chatController.scrollToMessage(
+              //                             message.replyDetails?.messageId ??
+              //                                 "0");
+              //                       }
+              //                     } else {
+              //                       chatController.messageOntapfunction(index,
+              //                           isOntap: true);
+              //                     }
+              //                   },
+              //                   onLongPress: () {
+              //                     var position;
+              //                     RenderBox? box =
+              //                         context.findRenderObject() as RenderBox?;
+              //                     if (box != null) {
+              //                       position = box.localToGlobal(Offset.zero);
+              //                     }
+              //                     chatController.messageOntapfunction(index,
+              //                         position: position);
+              //                   },
+              //                   child: Stack(
+              //                     children: [
+              //                       Row(
+              //                         mainAxisAlignment: isMe
+              //                             ? MainAxisAlignment.end
+              //                             : MainAxisAlignment.start,
+              //                         children: [
+              //                           if (message.type == "image" &&
+              //                               isSameUser)
+              //                             buildOption('ic_forward.svg',
+              //                                 iconClr: AppColors.primary,
+              //                                 Paddings: EdgeInsets.zero,
+              //                                 onPressed: () {
+              //                               chatController
+              //                                   .onMediaForward([message]);
+              //                             }),
+              //                           Align(
+              //                               alignment: isMe
+              //                                   ? Alignment.centerRight
+              //                                   : Alignment.centerLeft,
+              //                               child: Skeletonizer(
+              //                                 enabled: false,
+              //                                 child: BuildMessageWidget(
+              //                                   messageModel: message,
+              //                                   isSameUser: isSameUser,
+              //                                   groupId: chatController
+              //                                       .selectedGroupId,
+              //                                 ),
+              //                               )),
+              //                           if (message.type == "image" &&
+              //                               !isSameUser)
+              //                             buildOption('ic_forward.svg',
+              //                                 iconClr: AppColors.primary,
+              //                                 Paddings: EdgeInsets.zero,
+              //                                 onPressed: () {
+              //                               chatController
+              //                                   .onMediaForward([message]);
+              //                             }),
+              //                         ],
+              //                       ),
+              //                       if (chatController.selectedMessage.any(
+              //                           (contact) =>
+              //                               contact.messageId ==
+              //                               chatController
+              //                                   .messages[index].messageId))
+              //                         Positioned.fill(
+              //                           child: Container(
+              //                               color: AppColors.primary
+              //                                   .withOpacity(0.1)),
+              //                         )
+              //                     ],
+              //                   ),
+              //                 );
+              //               });
+              //             });
+              //   }),
+              // ),
 
               // Expanded(
               //   child:
@@ -471,7 +559,21 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                           chatController.searchController,
                           searchFocusnOde,
                           () {
-                            chatController.sendMessage1("text");
+                            void _sendImageMessage() {
+                              final imageMessage = {
+                                {
+                                  "group_id": chatController.selectedGroupId,
+                                  "type": "audio",
+                                  "message": "1733137724_19.wav",
+                                  "reply_flag": false,
+                                  "reply_message_id": null
+                                }
+                              };
+                              _channel.sink
+                                  .add(json.encode(imageMessage));
+                            }
+
+                            // chatController.sendMessage1("text");
                             chatController.searchController.clear();
 
                             setState(() {});
@@ -905,21 +1007,24 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 },
               ),
               Obx(() => IconButton(
-                    icon: !chatController.isTextFieldEmpty.value ||chatController.isRecording.value
-                        ?Icon(
+                    icon: !chatController.isTextFieldEmpty.value ||
+                            chatController.isRecording.value
+                        ? Icon(
                             Icons.send,
                             color: AppColors.primary,
                             size: 24.sp,
-                          ): Icon(
+                          )
+                        : Icon(
                             Icons.photo_camera_outlined,
                             color: AppColors.primary,
                             size: 24.sp,
                           ),
-                      
-                    onPressed: ()async {
-                chatController.isRecording.value?_onRelease():      chatController.isTextFieldEmpty.value
-                          ? filePickerHelper.pickFiles("image", context, "")
-                          : onSend();
+                    onPressed: () async {
+                      chatController.isRecording.value
+                          ? _onRelease()
+                          : chatController.isTextFieldEmpty.value
+                              ? filePickerHelper.pickFiles("image", context, "")
+                              : onSend();
                       chatController
                           .checkTextFieldEmpty(controller.text.trim());
                     },
@@ -930,17 +1035,17 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       ],
     );
   }
+
   void _onRelease() async {
-     if (chatController.isRecording.value) {
-                    final String? path = await _recorder.stop();
-                    if (path != null) {
-                      chatController.isRecording.value = false;
-                      chatController.filePath.value = path;
-                      chatController.stopRecordingTimer();
-                      chatController.fileUpload(
-                          chatController.filePath.value, "audio");
-                    }
-                  }
+    if (chatController.isRecording.value) {
+      final String? path = await _recorder.stop();
+      if (path != null) {
+        chatController.isRecording.value = false;
+        chatController.filePath.value = path;
+        chatController.stopRecordingTimer();
+        chatController.fileUpload(chatController.filePath.value, "audio");
+      }
+    }
   }
 }
 
