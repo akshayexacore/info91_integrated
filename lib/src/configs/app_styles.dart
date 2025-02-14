@@ -94,7 +94,7 @@ class AppThemes {
     fontFamily: AppFonts.primaryFontFamily,
     textTheme: textDefault,
        textSelectionTheme: TextSelectionThemeData(
-      cursorColor: AppColors.white, // Set the active cursor color globally
+      cursorColor: AppColors.primary, // Set the active cursor color globally
     ),
     primaryColor: AppColors.primary,
     primarySwatch: AppColors.primaryAppSwatch,

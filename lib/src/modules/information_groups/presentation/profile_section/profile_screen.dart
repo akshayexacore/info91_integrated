@@ -405,7 +405,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             width: 400.w,
                                             child: Text(
                                               controller.profilledataModel.value
-                                                      .members?[index].about ??
+                                                      .members?[index].id.toString() ??
                                                   "",
                                               overflow: TextOverflow.ellipsis,
                                             )),

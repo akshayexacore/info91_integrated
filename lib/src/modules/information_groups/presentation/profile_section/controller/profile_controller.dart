@@ -93,6 +93,7 @@ class InfoProfileController extends GetxController {
       tertiaryText: "cancel",
       arrangeButtonVertically: true,
       onPrimaryPressed: () {
+        print("ontapping");
         memberpopuFunction(value, model);
         Get.back();
       },
@@ -108,15 +109,16 @@ class InfoProfileController extends GetxController {
 
   Future<void> memberpopuFunction(int value, Member model) async {
     try {
-      await pr.show();
-        pr.update(message: "Updating ...");
+      // await pr.show();
+      //   pr.update(message: "Updating ...");
       final response = await _infromationRepository.changeGroupUserStatuse(
           status: value.toString(),
           role: model.role == "0" ? "1" : "0",
           groupid: groupId,
           userId: model.userId ?? "");
-      pr.hide();
+      // pr.hide();
       if (response.data1) {
+        AppDialog.showToast("Success", isSucess: response.data1);
         getGroupInfoDetails(groupId);
       } else {
         // Get.back();

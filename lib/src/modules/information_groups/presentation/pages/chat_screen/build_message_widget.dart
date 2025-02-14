@@ -21,6 +21,7 @@ import 'package:info91/src/modules/information_groups/presentation/pages/chat_sc
 import 'package:info91/src/modules/information_groups/presentation/pages/startscreen/start_controller.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/VideoPlayerScreen2.dart';
 import 'package:info91/src/modules/information_groups/presentation/widgets/custom_popupmenu.dart';
+import 'package:info91/src/modules/information_groups/presentation/widgets/gallery_page.dart';
 
 import 'package:info91/src/modules/information_groups/presentation/widgets/texts.dart';
 import 'package:info91/src/resources/infromation_repository.dart';
@@ -513,7 +514,7 @@ class BuildMessageWidget extends StatelessWidget {
         children: [
           if (!isSameUser && !isMe)
             Text(message.name ?? "",
-                style:const TextStyle(
+                style: const TextStyle(
                     color: AppColors.primary, fontWeight: FontWeight.bold)),
           message.replyFlag == true
               ? Container(
@@ -557,8 +558,9 @@ class BuildMessageWidget extends StatelessWidget {
                                           ? Icon(Icons.mic, size: 16)
                                           : message.replyDetails?.type ==
                                                   "document"
-                                              ?const Icon(Icons.file_copy, size: 16)
-                                              :const SizedBox()),
+                                              ? const Icon(Icons.file_copy,
+                                                  size: 16)
+                                              : const SizedBox()),
                           message.replyDetails?.type == "text" ||
                                   message.replyDetails?.type ==
                                       MessageType.mention
@@ -728,20 +730,23 @@ class _BuildChatImageState extends State<BuildChatImage> {
       final filePath = '$_localPath/${imageUrl.split('/').last}';
       final file = File(filePath);
       await file.writeAsBytes(response.bodyBytes);
- final val=     await GallerySaver.saveImage(filePath);
- debugPrint("the value of downlaoded file is here$val");
- debugPrint("the value of downlaoded file is here${widget.message.fileDownloadFlag}");
-  //  await ImageGallerySaver.saveImage(
-  //       Uint8List.fromList(response.bodyBytes),
-  //       quality: 80,
-  //       name: imageUrl.split('/').last,
-  //     );
+      final val = await GallerySaver.saveImage(filePath);
+      debugPrint("the value of downlaoded file is here$val");
+      debugPrint(
+          "the value of downlaoded file is here${widget.message.fileDownloadFlag}");
+      //  await ImageGallerySaver.saveImage(
+      //       Uint8List.fromList(response.bodyBytes),
+      //       quality: 80,
+      //       name: imageUrl.split('/').last,
+      //     );
 
-      if (widget.message.fileDownloadFlag != true){      final data = await _repository.downLoadFiles(
+      if (widget.message.fileDownloadFlag != true) {
+        final data = await _repository.downLoadFiles(
             messageids: widget.message.messageId ?? "",
             groupId: widget.groupId);
-             debugPrint("the value of downlaoded file is here$data");}
-  
+        debugPrint("the value of downlaoded file is here$data");
+      }
+
       setState(() {
         _downloadloading[imageUrl] = false;
         _downloadStatus[imageUrl] = true;
@@ -898,148 +903,171 @@ class _BuildChatImageState extends State<BuildChatImage> {
         message: widget.message,
         isMe: isMe,
         isSameUser: widget.isSameUser,
-        child: Container(
-          width: 250.w,
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Stack(children: [
-                  Image(
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return const SizedBox(
-                          child: Center(
-                              child: CircularProgressIndicator(
-                                  color: Colors.white)),
-                        );
-                      },
-                      // width: 200,
-                      // height: 200,
-                      fit: BoxFit.contain,
-                      image: ResizeImage(
-                        NetworkImage(
-                          widget.message.message ?? "",
-                        ),
-                        width: 350,
-                        height: 250,
-                        allowUpscaling: true,
-                      )),
-                  if (widget.message.fileDownloadFlag == true)
-                    Positioned(
-                      top: 0, // Adjust as needed for padding
-                      right: 8, // Adjust as needed for padding
-                      child: GestureDetector(
-                        onTap: () {
-                          // Handle tap on AdminTableDotIcon
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              Get.context!,
+              MaterialPageRoute(
+                builder: (context) => GalleryPhotoViewWrapper(
+                  galleryItems: [
+                    GalleryItem(
+                        id: "id:1", resource: widget.message.message ?? "")
+                  ],
+                  backgroundDecoration: const BoxDecoration(
+                    color: Colors.black,
+                  ),
+                  initialIndex: 0,
+                  scrollDirection: Axis.horizontal,
+                ),
+              ),
+            );
+          },
+          child: SizedBox(
+            width: 250.w,
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Stack(children: [
+                    Image(
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const SizedBox(
+                            child: Center(
+                                child: CircularProgressIndicator(
+                                    color: Colors.white)),
+                          );
                         },
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: isMe ? Colors.white : Colors.black,
-                            shape: BoxShape.circle,
+                        // width: 200,
+                        // height: 200,
+                        fit: BoxFit.contain,
+                        image: ResizeImage(
+                          NetworkImage(
+                            widget.message.message ?? "",
                           ),
-                          child: Center(
-                            child: AdminTableDotIcon(
-                              height: 30,
-                              clr: Colors.transparent,
-                              iconClr: Colors.black,
-                              icons: Icons.expand_more,
-                              iconSize: 20,
-                              mouseHoverFunc: (val) {},
-                              valueList: item,
-                              onTap: (val) {
-                                _downloadImage(widget.message.message ?? "");
-                                // Handle popup menu item selection
-                              },
+                          width: 350,
+                          height: 250,
+                          allowUpscaling: true,
+                        )),
+                    if (widget.message.fileDownloadFlag == true)
+                      Positioned(
+                        top: 0, // Adjust as needed for padding
+                        right: 8, // Adjust as needed for padding
+                        child: GestureDetector(
+                          onTap: () {
+                            // Handle tap on AdminTableDotIcon
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: isMe ? Colors.white : Colors.black,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: AdminTableDotIcon(
+                                height: 30,
+                                clr: Colors.transparent,
+                                iconClr: Colors.black,
+                                icons: Icons.expand_more,
+                                iconSize: 20,
+                                mouseHoverFunc: (val) {},
+                                valueList: item,
+                                onTap: (val) {
+                                  _downloadImage(widget.message.message ?? "");
+                                  // Handle popup menu item selection
+                                },
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  Positioned(
-                      child: widget.message.fileDownloadFlag != true
-                          ? BlurryContainer(
-                              color: Colors.transparent,
-                              height: 200.h,
-                              width: 250.w,
-                              child: SizedBox(
-                                  height: 20,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          _downloadImage(
-                                              widget.message.message ?? "");
-                                        },
-                                        child: _downloadloading[
-                                                    widget.message.message] !=
-                                                true
-                                            ? const Card(
-                                                color: Color.fromARGB(
-                                                    147, 255, 255, 255),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.download,
-                                                      size: 36,
-                                                    ),
-                                                    Text(
-                                                      "download",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 2,
-                                                    )
-                                                  ],
-                                                ))
-                                            : const CircularProgressIndicator(),
-                                      ),
-                                    ],
-                                  )),
-                            )
-                          : SizedBox()),
-                ]),
-              ),
-
-              //if content hase in image*******************************************************************
-              // Linkify(
-              //   linkStyle: GoogleFonts.poppins(decorationColor: Colors.blue),
-              //   onOpen: (link) async {
-              //     if (!await launchUrl(Uri.parse(link.url))) {
-              //       throw Exception('Could not launch ${link.url}');
-              //     }
-              //   },
-              //   text: widget.message.message ?? "",
-              //   textAlign: TextAlign.left,
-              //   style: chatTextstyle,
-              // ),
-              Align(
-                alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      widget.message.time ?? "",
-                      style: GoogleFonts.poppins(
-                          color: Color(0xff666666),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 11.sp),
-                    ),
-                    SizedBox(
-                      width: 1.w,
-                    ),
-                    if (isMe)
-                      _buildMessageStatus(
-                          widget.message.messageStatus ?? "sent"),
-                  ],
+                    Positioned(
+                        child: widget.message.fileDownloadFlag != true
+                            ? BlurryContainer(
+                                color: Colors.transparent,
+                                height: 200.h,
+                                width: 250.w,
+                                child: SizedBox(
+                                    height: 20,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            _downloadImage(
+                                                widget.message.message ?? "");
+                                          },
+                                          child: _downloadloading[
+                                                      widget.message.message] !=
+                                                  true
+                                              ? const Card(
+                                                  color: Color.fromARGB(
+                                                      147, 255, 255, 255),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.download,
+                                                        size: 36,
+                                                      ),
+                                                      Text(
+                                                        "download",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 2,
+                                                      )
+                                                    ],
+                                                  ))
+                                              : const CircularProgressIndicator(),
+                                        ),
+                                      ],
+                                    )),
+                              )
+                            : SizedBox()),
+                  ]),
                 ),
-              ),
-            ],
+
+                //if content hase in image*******************************************************************
+                // Linkify(
+                //   linkStyle: GoogleFonts.poppins(decorationColor: Colors.blue),
+                //   onOpen: (link) async {
+                //     if (!await launchUrl(Uri.parse(link.url))) {
+                //       throw Exception('Could not launch ${link.url}');
+                //     }
+                //   },
+                //   text: widget.message.message ?? "",
+                //   textAlign: TextAlign.left,
+                //   style: chatTextstyle,
+                // ),
+                Align(
+                  alignment:
+                      isMe ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.message.time ?? "",
+                        style: GoogleFonts.poppins(
+                            color: Color(0xff666666),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 11.sp),
+                      ),
+                      SizedBox(
+                        width: 1.w,
+                      ),
+                      if (isMe)
+                        _buildMessageStatus(
+                            widget.message.messageStatus ?? "sent"),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ));
   }

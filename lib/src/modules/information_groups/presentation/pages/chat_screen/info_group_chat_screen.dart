@@ -369,7 +369,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                                     .selectedGroupId,
                                               ),
                                             )),
-                                              if (message.type == "image" &&
+                                        if (message.type == "image" &&
                                             !isSameUser)
                                           buildOption('ic_forward.svg',
                                               iconClr: AppColors.primary,
@@ -378,7 +378,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                             chatController
                                                 .onMediaForward([message]);
                                           }),
-                                            
                                       ],
                                     ),
                                     if (chatController.selectedMessage.any(
@@ -802,6 +801,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     : TextField(
                         controller: controller,
                         focusNode: focusnode,
+                        maxLines: null,
                         onTap: () {
                           chatController.hideEmojiPicker();
                           chatController.hideGallery();
@@ -809,8 +809,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         onChanged: (val) {
                           chatController.checkTextFieldEmpty(val);
                         },
-                        style: const TextStyle(
+                        style:  TextStyle(
                           decoration: TextDecoration.none,
+                          fontSize: 17.sp,
                           decorationThickness: 0,
                         ),
                         decoration: InputDecoration(
@@ -905,21 +906,32 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 },
               ),
               Obx(() => IconButton(
-                    icon: !chatController.isTextFieldEmpty.value ||chatController.isRecording.value
-                        ?Icon(
+                    icon: !chatController.isTextFieldEmpty.value ||
+                            chatController.isRecording.value
+                        ? Icon(
                             Icons.send,
                             color: AppColors.primary,
                             size: 24.sp,
-                          ): Icon(
+                          )
+                        : Icon(
                             Icons.photo_camera_outlined,
                             color: AppColors.primary,
                             size: 24.sp,
                           ),
-                      
-                    onPressed: ()async {
-                chatController.isRecording.value?_onRelease():      chatController.isTextFieldEmpty.value
-                          ? filePickerHelper.pickFiles("image", context, "")
-                          : onSend();
+                    onPressed: () async {
+                      if (chatController.isRecording.value) {
+                        _onRelease();
+                      } else if (chatController.isTextFieldEmpty.value) {
+                        final response = await filePickerHelper.pickFiles(
+                      "image", context, "camera",
+                      groupId: widget.selectedGroupId);
+
+                  if (response.isNotEmpty) {
+                    chatController.fileUpload(response, "image");
+                  }
+                      } else {
+                        onSend();
+                      }
                       chatController
                           .checkTextFieldEmpty(controller.text.trim());
                     },
@@ -930,17 +942,17 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       ],
     );
   }
+
   void _onRelease() async {
-     if (chatController.isRecording.value) {
-                    final String? path = await _recorder.stop();
-                    if (path != null) {
-                      chatController.isRecording.value = false;
-                      chatController.filePath.value = path;
-                      chatController.stopRecordingTimer();
-                      chatController.fileUpload(
-                          chatController.filePath.value, "audio");
-                    }
-                  }
+    if (chatController.isRecording.value) {
+      final String? path = await _recorder.stop();
+      if (path != null) {
+        chatController.isRecording.value = false;
+        chatController.filePath.value = path;
+        chatController.stopRecordingTimer();
+        chatController.fileUpload(chatController.filePath.value, "audio");
+      }
+    }
   }
 }
 

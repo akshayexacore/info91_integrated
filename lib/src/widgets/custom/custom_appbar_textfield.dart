@@ -25,11 +25,11 @@ import 'package:info91/src/widgets/custom/image_view.dart';
             color: Colors.white.withOpacity(.1),
             borderRadius: BorderRadius.circular(AppRadii.xSmall),),
         child: TextFormField(
-          controller: widget.cntroler,
+          controller: widget.cntroler, cursorColor: Colors.black,
         
           style:const TextStyle(
       decoration: TextDecoration.none,
-      decorationThickness: 0,color: AppColors.white
+      decorationThickness: 0,color: Colors.black
     ),
           onChanged: (String va) {
             if (widget.onChangeFunction != null) {

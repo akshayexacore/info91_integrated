@@ -222,7 +222,7 @@ class ExpiredTokenRetryPolicy extends RetryPolicy {
 
   @override
   Future<bool> shouldAttemptRetryOnResponse(BaseResponse response) async {
-    if (response.statusCode == 401 &&
+    if (response.statusCode == 401 ||response.statusCode == 400 &&
         !response.request!.url.toString().contains(ApiConstants.verifyOtp)) {
       log("Retrying request...");
       // call refresh api

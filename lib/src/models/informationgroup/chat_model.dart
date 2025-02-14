@@ -236,11 +236,13 @@ class ContactModel {
   final String id;
   final String displayName;
   final Uint8List? thumbnail;
+  final List<Phone>?phones;
 
   ContactModel({
     required this.id,
     required this.displayName,
     required this.thumbnail,
+    this.phones,
   });
 
   // Factory constructor to create an instance from JSON
@@ -251,6 +253,9 @@ class ContactModel {
         thumbnail: json['thumbnail'] != null
           ? Uint8List.fromList(List<int>.from(json['thumbnail']))
           : null,
+       phones: (json['phones'] as List)
+          .map((contact) => Phone.fromJson(contact))
+          .toList(),
     );
   }
 
@@ -260,6 +265,43 @@ class ContactModel {
       'id': id,
       'displayName': displayName,
       'thumbnail': thumbnail,
+    };
+  }
+}
+class Phone {
+  final String? number;
+  final String? normalizedNumber;
+  final String? label;
+  final String? customLabel;
+  final bool? isPrimary;
+
+  Phone({
+    this.number,
+    this.normalizedNumber,
+    this.label,
+    this.customLabel,
+    this.isPrimary,
+  });
+
+  // Factory method to parse from JSON
+  factory Phone.fromJson(Map<String, dynamic> json) {
+    return Phone(
+      number: json['number'] as String?,
+      normalizedNumber: json['normalizedNumber'] as String?,
+      label: json['label'] as String?,
+      customLabel: json['customLabel'] as String?,
+      isPrimary: json['isPrimary'] as bool?,
+    );
+  }
+
+  // Method to convert back to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'number': number,
+      'normalizedNumber': normalizedNumber,
+      'label': label,
+      'customLabel': customLabel,
+      'isPrimary': isPrimary,
     };
   }
 }

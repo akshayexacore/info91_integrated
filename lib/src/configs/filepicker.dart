@@ -45,35 +45,31 @@ class FilePickerHelper {
   Future<String> _handleImageSelection(
       BuildContext context, String? source, Function(dynamic)? onDone,
       {String? groupId}) async {
-    final FilePickerResult = await FilePicker.platform.pickFiles(
-      type: FileType.media, // This allows picking both images and videos
-      // allowMultiple: true,
-    );
-
-    if (FilePickerResult == null) {
-      //  if (Navigator.canPop(context)) {
-      //     Navigator.pop(context); // Only pop if the dialog is open
-      //   }
+    XFile? pickedFile;
+    if (source == 'camera') {
+      pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    } else {
+      final FilePickerResult = await FilePicker.platform.pickFiles(
+        type: FileType.media,
+      );
+      if (FilePickerResult != null) {
+        pickedFile = XFile(FilePickerResult.files.single.path!);
+      }
+    }
+    if (pickedFile == null) {
       return "";
     }
-    List<File> files =
-        FilePickerResult.paths.map((path) => File(path!)).toList();
-
-    print("files$files");
-    _imageFile = files[0];
+    File _imageFile = File(pickedFile.path);
     if (_isVideo(_imageFile)) {
       _showImagePreviewDialog(context, source, _imageFile, onDone,
           groupId: groupId);
-      // return _imageFile.path;
     } else {
       var compressedImage = await compressFile(_imageFile);
       _imageFile = File(compressedImage.path);
-
       if (await _isFileSizeWithinLimit(
         compressedImage,
       )) {
         return compressedImage.path;
-        // _showImagePreviewDialog(context, source, _imageFile, onDone);
       } else {
         _showSizeExceedDialog(context);
         return "";
@@ -456,16 +452,18 @@ class _NetworkVideoPlayerWidgetState extends State<NetworkVideoPlayerWidget> {
               height: MediaQuery.of(context).size.height / 1.5,
               child: _controller.value.isInitialized
                   ? VideoPlayer(_controller)
-                  :const Center(
-                    child: SizedBox(
-                              height: 30, // Desired height for the CircularProgressIndicator
-                              width: 30,  // Desired width for the CircularProgressIndicator
-                              child: const CircularProgressIndicator(
-                                color: AppColors.white,
-                                strokeWidth: 2, // Optional: make the stroke thinner
-                              ),
-                            ),
-                  )),
+                  : const Center(
+                      child: SizedBox(
+                        height:
+                            30, // Desired height for the CircularProgressIndicator
+                        width:
+                            30, // Desired width for the CircularProgressIndicator
+                        child: const CircularProgressIndicator(
+                          color: AppColors.white,
+                          strokeWidth: 2, // Optional: make the stroke thinner
+                        ),
+                      ),
+                    )),
           const SizedBox(height: 10),
           Row(
             children: [

@@ -19,7 +19,7 @@ class SelectedContactListView extends StatelessWidget {
   final List<ContactModel> contactList;
   const SelectedContactListView({super.key, required this.contactList});
   void saveContact(ContactModel contact) async {
-    final String url = 'tel:${contact.displayName}';
+    final String url = 'tel:${contact.phones?[0].number}';
 
     if (await canLaunch(url)) {
       await launch(url);

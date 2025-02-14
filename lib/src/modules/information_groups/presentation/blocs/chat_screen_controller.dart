@@ -109,13 +109,13 @@ final WebSocketController _webSocketController = Get.find();
   }
 
   void startFetchingChats() {
-    chatFetchTimer = Timer.periodic(
-      Duration(seconds
-      : fetchIntervalSeconds),
-      (_) =>
-      viewMessage(),
-    );
-    // viewMessage();
+    // chatFetchTimer = Timer.periodic(
+    //   Duration(seconds
+    //   : fetchIntervalSeconds),
+    //   (_) =>
+    //   viewMessage(),
+    // );
+    viewMessage();
   }
 
   onLongPress(AudioRecorder _recorder) async {
